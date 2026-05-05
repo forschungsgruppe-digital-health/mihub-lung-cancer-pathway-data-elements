@@ -49,8 +49,9 @@ data-elements/
 │   ├── surveillance/                      ← Verlaufsbeobachtung unter Systemtherapie
 │   ├── palliative/                        ← Palliativversorgung
 │   └── <weitere phasen>/                  ← additiv: diagnostics, treatment, rehab, …
-├── catalog/
-│   └── data-dictionary.csv                ← Flache Übersicht (autogeneriert; Pflicht-Marker im Header)
+├── catalog/                               ← autogenerierte Vollsicht (22 Spalten)
+│   ├── data-dictionary.csv                ← CSV (Excel/REDCap-kompatibel)
+│   └── data-dictionary.md                 ← 1:1-Markdown-Spiegel (für PR-Diffs, Web-UI)
 ├── scripts/
 │   ├── validate.py                        ← Schema-Validierung
 │   ├── build-catalog.py                   ← YAML → CSV Aggregator
@@ -94,8 +95,9 @@ Drei kohärente Repräsentationen desselben Inhalts (Single Source of Truth = YA
 | --- | --- | --- |
 | **YAML pro Element** (`elements/<phase>/<id>.yaml`) | kanonische Form, ein Datenelement = eine Datei → klare Diff-Geschichte, fokussierte PRs | sehr gut |
 | **JSON-Schema** (`schemas/data-element.schema.json`) | Vertragsdefinition, CI-Validierung | sehr gut |
-| **CSV-Data-Dictionary** (`catalog/data-dictionary.csv`) | flache Sicht für Domänenexpert:innen (Excel); Pflicht-Marker `*` (mandatory) / `+` (recommended) im Header | gut (semicolon-separiert, stabil im Diff) |
-| **Markdown-Phasenübersicht** (`docs/phases-overview.md`) | lesefreundlicher Überblick je Phase | sehr gut |
+| **CSV-Data-Dictionary** (`catalog/data-dictionary.csv`) | flache Vollsicht für Domänenexpert:innen (Excel/REDCap); Pflicht-Marker `*` (mandatory) / `+` (recommended) im Header; 22 Spalten | gut (semicolon-separiert, stabil im Diff) |
+| **Markdown-Mirror der CSV** (`catalog/data-dictionary.md`) | 1:1-Markdown-Spiegelung der CSV — gleiche 22 Spalten, gleiche Reihenfolge — für GitHub-PR-Diffs (rendert nativ), Web-UI-Suche, Direktverlinkung | sehr gut |
+| **Markdown-Phasenübersicht** (`docs/phases-overview.md`) | lesefreundliche, kuratierte Untermenge (8 Spalten) je Phase, gruppiert + erläutert; **Zielgruppe Klinik-Reviewer:innen** | sehr gut |
 
 ## 5 Mitwirken / Datenelement hinzufügen
 

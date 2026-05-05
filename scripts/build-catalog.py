@@ -101,18 +101,57 @@ def row(doc: dict[str, Any]) -> dict[str, str]:
     }
 
 
+def md_escape(value: str) -> str:
+    """Escape Markdown-Tabellen-Zellinhalt (Pipe + Newlines)."""
+    if value is None:
+        return ""
+    s = str(value)
+    s = s.replace("|", "\\|").replace("\n", " ").replace("\r", " ")
+    return s.strip()
+
+
+def write_markdown(rows: list[dict], total: int) -> Path:
+    """Schreibt 1:1-Markdown-Spiegelung der CSV (gleiche Spalten, gleiche Reihenfolge)."""
+    md_path = OUT.with_suffix(".md")
+    lines: list[str] = []
+    lines.append("# Data Dictionary — Markdown-Mirror der `data-dictionary.csv`")
+    lines.append("")
+    lines.append("> **Auto-generiert** durch `scripts/build-catalog.py`. 1:1-Spiegelung der CSV in Markdown-Form für GitHub-PR-Diffs, Web-UI-Suche und Element-Direktverlinkung.")
+    lines.append("")
+    lines.append("> **Zielgruppe:** technische Nutzer:innen (volles Data-Dictionary, 22 Spalten). Lesefreundliche Phasen-Übersicht für Klinik-Reviewer:innen unter `docs/phases-overview.md` (kuratierte Untermenge).")
+    lines.append("")
+    lines.append("Pflicht-Marker im Header: `*` = mandatory · `+` = recommended · (kein Suffix) = optional. Stand: " + str(total) + " Datenelemente.")
+    lines.append("")
+    lines.append("| " + " | ".join(HEADER) + " |")
+    lines.append("| " + " | ".join(["---"] * len(HEADER)) + " |")
+    for r in rows:
+        cells = [md_escape(r[k]) for k in KEYS]
+        lines.append("| " + " | ".join(cells) + " |")
+    lines.append("")
+    md_path.write_text("\n".join(lines), encoding="utf-8")
+    return md_path
+
+
 def main() -> int:
     files = sorted((ROOT / "elements").glob("*/*.yaml"))
     OUT.parent.mkdir(parents=True, exist_ok=True)
+    rows: list[dict] = []
+    for fp in files:
+        with fp.open(encoding="utf-8") as g:
+            doc = yaml.safe_load(g)
+        rows.append(row(doc))
+
+    # 1) CSV
     with OUT.open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(HEADER)
-        for fp in files:
-            with fp.open(encoding="utf-8") as g:
-                doc = yaml.safe_load(g)
-            r = row(doc)
+        for r in rows:
             w.writerow([r[k] for k in KEYS])
     print(f"Wrote {OUT.relative_to(ROOT)} ({len(files)} elements)")
+
+    # 2) 1:1-Markdown-Mirror
+    md_path = write_markdown(rows, len(files))
+    print(f"Wrote {md_path.relative_to(ROOT)} ({len(files)} elements, mirror)")
     return 0
 
 
