@@ -31,6 +31,9 @@ value_set:
   - system: kdl
     code: SD110105
     display: Palliativmedizinische Komplexbehandlungsdokumentation
+  - system: icd-10-gm
+    code: Z51.5
+    display: Palliativbehandlung
 care_process:
   trigger: nach Komplexitätsbewertung
   frequency_pattern: ad-hoc / re-evaluierbar

@@ -141,7 +141,45 @@ Der KDL-Code spielt im FHIR-Mapping in `DocumentReference.type` bzw. `Compositio
 
 **Wichtig — KDL und FHIR-Resource-Trennung:** Bei Datenelementen, die *Werte* in einem Dokument sind (z. B. FEV1-Wert im Lungenfunktionsbefund), bezieht sich der KDL-Code auf das *enthaltende Dokument*. Im FHIR-Mapping wird der KDL-Code dort als `DocumentReference.type` gesetzt, während der FEV1-Wert selbst eine `Observation` mit LOINC `20150-9` ist. Diese Mehrebenenlogik ist im Logical Model durch das Coexistieren mehrerer Codings im selben `value_set.codings[]`-Array sauber abgebildet.
 
-## 7 Limitationen
+## 7 v0.1.4 — ICD-O-3 + ICF aufgenommen, Bestandselemente geprüft
+
+Auf explizite Nachfrage zur Klassifikations-Abdeckung wurden zwei zusätzliche Coding-Systeme registriert und punktuell auf passende Bestandselemente angewendet:
+
+### Neu registriert (in `scripts/build-fhir-logical-models.py` SYSTEM_URL)
+
+| System | Kanonische URL | Begründung |
+| --- | --- | --- |
+| `icd-o-3` | `urn:oid:2.16.840.1.113883.6.43.1` | Onkologische Histologie/Topographie. **Pflicht im oBDS** für Tumor-Histologie (M-Codes) und Topographie (T-Codes). |
+| `icf` | `http://fhir.de/CodeSystem/bfarm/icf` | Funktion / Aktivität / Partizipation. Anwendbar bei Funktions- und Symptom-Elementen. |
+
+**Nicht aufgenommen:** ICD-11 — in DE nicht produktiv (oBDS bleibt mittelfristig auf ICD-10/ICD-O-3); aktuelle Aufnahme würde Verwirrung erzeugen.
+
+### Bindings auf Bestandselemente (Auswahl-Logik: nur direkte fachliche Anwendbarkeit)
+
+| Element | Phase | Neu ergänzte Codings |
+| --- | --- | --- |
+| `recurrenceOrSecondPrimary` | followup | ICD-O-3 M-Codes 8140/3 (Adeno), 8070/3 (Plattenepithel), 8041/3 (Kleinzeller), 8012/3 (Großzelliges); ICD-O-3 T-Code C34.9 (Topographie) |
+| `functionalStatus` | palliative | ICF d4 (Mobilität), d5 (Selbstversorgung) |
+| `dyspneaIntensityNrs` | palliative | ICF b440 (Funktionen der Atmung) |
+| `painIntensityNrs` | palliative | ICF b280 (Schmerz) |
+| `dyingPhaseDiagnosed` | palliative | ICD-10-GM Z51.5 (Palliativbehandlung) |
+| `palliativeCareTier` | palliative | ICD-10-GM Z51.5 (Palliativbehandlung) |
+| `tobaccoCessationCounselling` | followup | ICD-10-GM Z71.6 (Beratung bei Tabakkonsum) |
+
+### Bewusst nicht aufgenommen
+
+- `painType` (nozizeptiv/neuropathisch): ICD-10-GM-Diagnosen (M79.2, R52, F45.4) wären semantisch ein anderes Konzept (Diagnose vs. Klassifikation des Schmerztyps).
+- `phq9DepressionScore`: PHQ-9 ist Score-Wert, nicht F32-Diagnose; ICD-10-GM nicht direkt anwendbar.
+- ECOG/Karnofsky/Barthel: keine direkten ICF-Codes verfügbar.
+- Symptom-/PROM-Elemente ohne direkten ICF-Bezug: keine künstlichen Mappings.
+
+### Auswirkung auf Schema und Pipeline
+
+- **Schema unverändert** (Felder bleiben gleich; `value_set.codings.system` ist `string`, nicht enum-restringiert).
+- `SYSTEM_URL` im FSH-Generator erweitert; alle FSH-Instances tragen die korrekten kanonischen URLs.
+- CSV + Markdown-Mirror neu erzeugt.
+
+## 8 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.

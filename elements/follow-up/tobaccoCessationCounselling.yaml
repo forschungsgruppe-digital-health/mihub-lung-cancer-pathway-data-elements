@@ -12,6 +12,7 @@ datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
+  standard_binding_status: mapped
   codings:
   - system: snomed-ct
     code: '710081004'
@@ -25,6 +26,9 @@ value_set:
   - system: atc
     code: N07BA01
     display: Nikotinersatz
+  - system: icd-10-gm
+    code: Z71.6
+    display: Beratung bei Tabakkonsum
 care_process:
   trigger: bei Status 'Smoker' / 'Occasional smoker'
   frequency_pattern: per-encounter-if-indicated

@@ -211,6 +211,7 @@ Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) 
 | v0.1 CSV-Marker | CSV-Header mit Pflicht-Markern `*` (mandatory) / `+` (recommended) | — |
 | v0.1 Ergebnisartefakte | unverändert | +7 Result-Datenelemente (Bildbefunde, Lungenfunktion, Mutation, CTCAE-Grad, Zarit-Score) → 51 |
 | v0.1 KDL-Mapping | unverändert | +20 KDL-Codings (DG020103 CT-Befund, DG020107 MRT-Befund, DG060108 Lungenfunktion, PT130102 Molekularpathologiebefund, AD060106 Tumorkonferenzprotokoll, SD150101 Follow up-Bogen, AM160104 Patientenverfügung, SD110105 Palliativmed. Komplexbeh., VL010103 Schmerzerhebungsbogen) |
+| v0.1 ICD-O-3 + ICF | `SYSTEM_URL` erweitert (`icd-o-3`, `icf`) | Codings ergänzt: ICD-O-3 M-/T-Codes für Lungenkarzinom-Histologie auf `recurrenceOrSecondPrimary`; ICF b440/b280/d4/d5 auf Atemnot/Schmerz/Funktion; ICD-10-GM Z51.5/Z71.6 auf Palliativ-/Tabakberatung-Elementen |
 
 Detaillierter Audit-Trail je Element: `verification-log.md`.
 

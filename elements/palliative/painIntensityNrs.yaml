@@ -21,6 +21,9 @@ value_set:
   - system: kdl
     code: VL010103
     display: Schmerzerhebungsbogen
+  - system: icf
+    code: b280
+    display: Schmerz
 care_process:
   trigger: bei jeder Visite + bei jeder schmerztherapeutischen Maßnahme
   frequency_pattern: per-encounter

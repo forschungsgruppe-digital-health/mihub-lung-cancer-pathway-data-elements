@@ -377,6 +377,8 @@ SYSTEM_URL = {
     "snomed-ct": "http://snomed.info/sct",
     "loinc": "http://loinc.org",
     "icd-10-gm": "http://fhir.de/CodeSystem/bfarm/icd-10-gm",
+    "icd-o-3": "urn:oid:2.16.840.1.113883.6.43.1",
+    "icf": "http://fhir.de/CodeSystem/bfarm/icf",
     "ops": "http://fhir.de/CodeSystem/bfarm/ops",
     "atc": "http://fhir.de/CodeSystem/bfarm/atc",
     "ucum": "http://unitsofmeasure.org",
