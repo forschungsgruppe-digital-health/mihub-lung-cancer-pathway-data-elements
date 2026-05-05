@@ -4,6 +4,8 @@
 
 > Status: **Author Draft v0.1** · Sprache: Deutsch (Inhalte) / Englisch (Feldnamen) · Lizenz: CC-BY-4.0 (Inhalte) · Apache-2.0 (Skripte)
 
+> ⚠️ **KI-gestützt erstellt** — siehe [`DISCLAIMER.md`](DISCLAIMER.md). Inhalte sind als Author Draft zu betrachten und vor produktivem Einsatz klinisch zu reviewen. Pflege erfolgt über konsens-basierte Sub-Agenten (siehe [`AGENTS.md`](AGENTS.md)).
+
 ## 1 Zweck
 
 Das Repository dient der nachvollziehbaren, intersektoral abgestimmten Erhebung *aller* Datenelemente, die im Verlauf des onkologischen Patientenpfads (Lungenkarzinom) klinisch erforderlich, leitlinien-belegt und für den intersektoralen Austausch (Onkologie ↔ Hausarzt ↔ Palliativ-Team ↔ Forschung ↔ Krebsregister ↔ ePA) relevant sind.
@@ -30,6 +32,8 @@ Das Repository folgt etablierten Mustern der Medizininformatik:
 ```
 data-elements/
 ├── README.md                              ← dieses Dokument
+├── DISCLAIMER.md                          ← KI-gestützte Erstellung, unterstützte Aufgaben
+├── AGENTS.md                              ← Sub-Agenten-Übersicht (Cross-Tool-Konvention)
 ├── CONTRIBUTING.md                        ← Beitragsregeln (zwei Spuren)
 ├── docs/
 │   ├── methodology.md                     ← Methodik, Gap-Analyse, Designentscheidungen, Iterations-Log
@@ -47,10 +51,13 @@ data-elements/
 │   └── <weitere phasen>/                  ← additiv: diagnostics, treatment, rehab, …
 ├── catalog/
 │   └── data-dictionary.csv                ← Flache Übersicht (autogeneriert; Pflicht-Marker im Header)
-└── scripts/
-    ├── validate.py                        ← Schema-Validierung
-    ├── build-catalog.py                   ← YAML → CSV Aggregator
-    └── build-fhir-logical-models.py       ← YAML → FHIR Logical Model (optional, on-demand)
+├── scripts/
+│   ├── validate.py                        ← Schema-Validierung
+│   ├── build-catalog.py                   ← YAML → CSV Aggregator
+│   └── build-fhir-logical-models.py       ← YAML → FHIR Logical Model (optional, on-demand)
+└── .claude/agents/
+    ├── data-element-analyzer.md           ← Sub-Agent: Doku-Analyse, datenelementweise Konsultation
+    └── data-element-validator.md          ← Sub-Agent: YAML-Verifikation + Katalog-Regeneration
 ```
 
 ## 3 Standard-Mappings — nationale & internationale Ziele
