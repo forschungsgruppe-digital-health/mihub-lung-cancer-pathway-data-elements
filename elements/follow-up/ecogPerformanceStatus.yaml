@@ -1,0 +1,66 @@
+id: mihub.lung.followup.ecogPerformanceStatus.v0.1
+uuid: 23efddf4-86f7-5300-8f5d-cdeae1327f35
+name: ecogPerformanceStatus
+label_de: ECOG Performance Status
+definition_de: Eastern Cooperative Oncology Group Performance Status (0–4). Funktionsstatus zur Risiko-
+  und Therapieabwägung.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..1
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 89262-0
+    display: ECOG Performance Status
+  - system: snomed-ct
+    code: '423740007'
+    display: Eastern Cooperative Oncology Group performance status finding
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-allgemeiner-leistungszustand-ecog
+  resource: Observation
+  path: Observation.valueInteger
+constraints_de: Wertebereich 0..4. Bei Sterbephase ggf. nicht erfassbar.
+care_process:
+  trigger: bei jeder Visite
+  frequency_pattern: per-encounter
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.6 Allgemeinzustand und Komorbidität — ECOG PS als Standard-Erfassung
+      im onkologischen Kontext
+    recommendation_grade: Statement
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 6 (Funktionsstatus, ECOG als anerkanntes Instrument)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

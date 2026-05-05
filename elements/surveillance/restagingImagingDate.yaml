@@ -1,0 +1,56 @@
+id: mihub.lung.surveillance.restagingImagingDate.v0.1
+uuid: 5f2a77d9-6070-5f17-b5bf-968329ee7319
+name: restagingImagingDate
+label_de: Restaging-Bildgebung Datum
+definition_de: Datum des CT Thorax/Abdomen/Becken zur Verlaufskontrolle unter laufender Systemtherapie.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '169069000'
+    display: CT of thorax
+  - system: ops
+    code: 3-225
+    display: Native CT, Thorax/Abdomen/Becken
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+care_process:
+  trigger: alle 6–9 Wochen unter Systemtherapie
+  frequency_pattern: Q6-9W
+  responsible_role: Radiologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

@@ -1,0 +1,73 @@
+id: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.1
+uuid: 0da2cffb-e8ad-5cd6-b6ed-bea3a1adea4a
+name: adverseEventCtcaeGrade
+label_de: CTCAE-Grad
+definition_de: Schweregrad eines therapieassoziierten unerwünschten Ereignisses nach NCI Common Terminology
+  Criteria for Adverse Events (CTCAE) v5.0/v6.0. Wertebereich 1 (mild) bis 5 (Tod). Ergänzt das Datenelement
+  'adverseEventCtcae'.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '255604002'
+    display: Mild (severity modifier)
+  - system: snomed-ct
+    code: '6736007'
+    display: Moderate (severity modifier)
+  - system: snomed-ct
+    code: '24484000'
+    display: Severe (severity modifier)
+  - system: snomed-ct
+    code: '442452003'
+    display: Life threatening severity
+  uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  resource: Observation
+constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod).
+care_process:
+  trigger: bei jedem Auftreten eines unerwünschten Ereignisses
+  frequency_pattern: per-event
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9 (EK, Toxizitäten)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1
+- relation: specializes
+  target: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1

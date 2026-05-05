@@ -1,0 +1,64 @@
+id: mihub.lung.palliative.symptomAssessmentInstrument.v0.1
+uuid: 4aa8311c-adfe-5514-afa6-a61e642b5b0c
+name: symptomAssessmentInstrument
+label_de: Symptomerfassungs-Instrument
+definition_de: Standardisiertes Instrument zur multidimensionalen Symptomerfassung in der Palliativversorgung
+  (MIDOS2, ESAS-r, IPOS / POS, Distress-Thermometer).
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Codes für deutsche Palliativ-Assessmentinstrumente (MIDOS2 — Klinik für Palliativmedizin TU Dresden;
+    ESAS-r). LOINC kennt einzelne Items von ESAS und IPOS sowie den Distress-Thermometer-Score, jedoch
+    nicht MIDOS2 oder ESAS-r als Instrumente. Die LOINC-/projekt-lokalen Codes sind hier gemischt; explizit
+    gekennzeichnet sind nur die nicht-standardisierten.
+  codings:
+  - system: local-no-standard-binding
+    code: MIDOS2
+    display: Minimales Dokumentationssystem 2
+  - system: local-no-standard-binding
+    code: ESAS-r
+    display: Edmonton Symptom Assessment System - Revised
+  - system: loinc
+    code: 89200-0
+    display: IPOS Integrated Palliative Care Outcome Scale
+  - system: loinc
+    code: 63994-4
+    display: NCCN Distress Thermometer
+care_process:
+  trigger: Aufnahme + regelmäßig
+  frequency_pattern: Q1W in SPV; per-encounter in APV
+  responsible_role: Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 6 Probleme/Bedürfnisse Patient:in
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

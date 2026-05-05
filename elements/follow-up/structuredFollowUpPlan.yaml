@@ -1,0 +1,56 @@
+id: mihub.lung.followup.structuredFollowUpPlan.v0.1
+uuid: 772e3e32-bc74-59e5-adbb-27cde597980f
+name: structuredFollowUpPlan
+label_de: Strukturierter Nachsorgeplan vorhanden
+definition_de: Dokumentiert, ob nach Abschluss einer multimodalen Therapie mit kurativem Anspruch (Stadium
+  I–IIIC, OMD) ein strukturierter, schriftlicher Nachsorgeplan erstellt wurde, der Rezidive, Zweitkarzinome,
+  Komplikationen, Toxizitäten sowie Bedarf an Psychoonkologie und Sozialberatung erfassen kann.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 1..1
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan
+  path: CarePlan.intent='plan'
+care_process:
+  trigger: Erstellung bei Therapieabschluss; Vorlage in der Erstvorstellung 8 Wochen nach Therapieende.
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Lead-Clinician (Onkologe / Pneumologe / Thoraxchirurg)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.1 (Konsensbasiert, EK, geprüft 2025)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: SD150101
+    display: Follow up-Bogen

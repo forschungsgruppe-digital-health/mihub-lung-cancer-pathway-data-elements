@@ -1,0 +1,59 @@
+id: mihub.lung.palliative.caregiverBurdenScore.v0.1
+uuid: b7c0a67b-7c14-5192-8a8f-bc914a131292
+name: caregiverBurdenScore
+label_de: Belastungsscore Angehörige (Zarit / CAREPAL)
+definition_de: 'Numerischer Score aus dem im Element ''caregiverBurden'' referenzierten Instrument: Zarit
+  Burden Interview (Wertebereich 0–88) oder CAREPAL (multi-dimensional, Summenscore variiert).'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 62133-0
+    display: Total score [Zarit Burden Interview]
+constraints_de: 'Wertebereich abhängig vom Instrument: Zarit ZBI 0–88 (höher = höhere Belastung); ZBI
+  Cut-offs 21 (mild)/40 (mittel)/61 (schwer). CAREPAL ist multi-dimensional; bitte das verwendete Instrument
+  explizit in den begleitenden Notizen vermerken.'
+care_process:
+  trigger: bei Aufnahme + bei Verschlechterung
+  frequency_pattern: Q1M in SPV
+  responsible_role: Palliativ-Team / Sozialdienst
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 7.4 Bedarfserfassung; Tab. 6
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.palliative.caregiverBurden.v0.1

@@ -1,0 +1,55 @@
+id: mihub.lung.palliative.painType.v0.1
+uuid: 41a4cfba-e46f-562c-9c29-16ef87dadd34
+name: painType
+label_de: Schmerztyp
+definition_de: 'Klassifikation des Schmerztyps: nozizeptiv, neuropathisch, mixed.'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 0..*
+value_set:
+  binding_strength: required
+  codings:
+  - system: snomed-ct
+    code: '410429000'
+    display: Nociceptive pain
+  - system: snomed-ct
+    code: '247398009'
+    display: Neuropathic pain
+  - system: snomed-ct
+    code: '278860009'
+    display: Chronic mixed pain
+care_process:
+  trigger: Erstanamnese + bei Therapie-Anpassung
+  frequency_pattern: ad-hoc
+  responsible_role: Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 10.2 (Basisdiagnostik Schmerz)
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

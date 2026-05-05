@@ -1,0 +1,52 @@
+id: mihub.lung.surveillance.ecogPerformanceStatusSurveillance.v0.1
+uuid: cb09f206-ca6b-5904-a684-4a722069fb88
+name: ecogPerformanceStatusSurveillance
+label_de: ECOG Performance Status (Surveillance)
+definition_de: Funktionsstatus nach ECOG während der laufenden Systemtherapie.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 89262-0
+    display: ECOG Performance Status
+care_process:
+  trigger: vor jedem Therapiezyklus
+  frequency_pattern: per-cycle
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.ecogPerformanceStatus.v0.1

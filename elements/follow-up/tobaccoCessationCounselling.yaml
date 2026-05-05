@@ -1,0 +1,65 @@
+id: mihub.lung.followup.tobaccoCessationCounselling.v0.1
+uuid: eda1c29f-a2a0-5a4f-9dfe-8a17f620094b
+name: tobaccoCessationCounselling
+label_de: Raucherentwöhnungsangebot
+definition_de: Dokumentation der Vermittlung wirksamer Hilfen zur Tabakentwöhnung (Beratung, medikamentöse
+  Unterstützung, Verhaltensintervention).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: snomed-ct
+    code: '710081004'
+    display: Smoking cessation therapy
+  - system: snomed-ct
+    code: '171055004'
+    display: Anti-smoking education
+  - system: atc
+    code: N07BA03
+    display: Vareniclin
+  - system: atc
+    code: N07BA01
+    display: Nikotinersatz
+care_process:
+  trigger: bei Status 'Smoker' / 'Occasional smoker'
+  frequency_pattern: per-encounter-if-indicated
+  responsible_role: Onkologe / Hausarzt
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.3 (B)
+    recommendation_grade: B
+    evidence_level: 2b
+  - source: S3-LL Tabakentwöhnung
+    version: 1.0 (03/2021, AWMF 076-006l)
+    url: https://register.awmf.org/de/leitlinien/detail/076-006
+    section: Behandlung (medikamentös + verhaltenstherapeutisch)
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

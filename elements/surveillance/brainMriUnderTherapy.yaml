@@ -1,0 +1,54 @@
+id: mihub.lung.surveillance.brainMriUnderTherapy.v0.1
+uuid: 3accdd74-433b-5f83-ae6a-c7f266f3a50b
+name: brainMriUnderTherapy
+label_de: Schädel-MRT bei Verdacht auf Hirnmetastasen
+definition_de: MRT Schädel bei klinischem Verdacht oder protokollarisch bei oncogene-addicted NSCLC (EGFR/ALK/ROS1)
+  sowie SCLC ED bei Watch-and-Wait nach Verzicht auf PCI.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 24590-2
+    display: MR Brain
+  - system: kdl
+    code: DG020107
+    display: MRT-Befund
+care_process:
+  trigger: klinischer Verdacht ODER Hochrisiko-Genotyp ODER SCLC ED Watch-and-Wait
+  frequency_pattern: Q3M (SCLC ED W&W); ad-hoc bei Symptomen
+  responsible_role: Radiologie / Onkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.3.4 (NSCLC EGFR/ALK/ROS1; SCLC ED Watch-and-Wait)
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

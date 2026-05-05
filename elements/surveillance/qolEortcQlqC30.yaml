@@ -1,0 +1,63 @@
+id: mihub.lung.surveillance.qolEortcQlqC30.v0.1
+uuid: 76bc24d6-e661-50f2-a5f5-0621de7071de
+name: qolEortcQlqC30
+label_de: EORTC QLQ-C30 Globalskala
+definition_de: Globaler Lebensqualitätsscore aus EORTC QLQ-C30 (0–100, höher = besser).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: loinc
+    code: 73831-0
+    display: EORTC QLQ-C30 questionnaire
+care_process:
+  trigger: in jeder Linie, bei Restaging
+  frequency_pattern: Q6-9W oder Q3M
+  responsible_role: Onkologie / PROM-Plattform
+evidence:
+  guideline_references:
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 5.4.1 Supportive care; Principle 4 (PROM/QoL als Standard im
+      Survivorship-Phase)
+    recommendation_grade: Statement
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.6 Forschungsbedarf — Lebensqualität bei verschiedenen Nachsorgestrategien
+    recommendation_grade: Statement
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 9 (EORTC-QLQ-C15-Pal als anerkanntes Instrument)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

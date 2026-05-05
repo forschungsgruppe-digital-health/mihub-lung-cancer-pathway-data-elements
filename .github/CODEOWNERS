@@ -1,0 +1,15 @@
+# Default owners
+*                               @mihub-ap8/lead
+
+# Schema and tooling
+/schemas/                       @mihub-ap8/lead-mi
+/scripts/                       @mihub-ap8/lead-mi
+/.github/                       @mihub-ap8/lead-mi
+
+# Phase-specific clinical owners
+/elements/follow-up/            @mihub-ap8/lead-onko
+/elements/surveillance/         @mihub-ap8/lead-onko
+/elements/palliative/           @mihub-ap8/lead-pall
+
+# Documentation
+/docs/                          @mihub-ap8/lead @mihub-ap8/lead-mi

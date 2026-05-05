@@ -1,0 +1,50 @@
+id: mihub.lung.palliative.anxietyHadsScore.v0.1
+uuid: 95b025b6-9d13-5c8b-9769-a360756c8dbb
+name: anxietyHadsScore
+label_de: HADS-A Angstscore
+definition_de: Hospital Anxiety and Depression Scale, Subscale A (Angst), 0–21.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 62106-6
+    display: HADS Anxiety score
+care_process:
+  trigger: Aufnahme + Verlauf
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team / Psychoonkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 17.2 Erfassung Angst
+    recommendation_grade: B
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

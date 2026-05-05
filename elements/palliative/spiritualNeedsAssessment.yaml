@@ -1,0 +1,50 @@
+id: mihub.lung.palliative.spiritualNeedsAssessment.v0.1
+uuid: 3f0afa4e-1e47-557e-b464-a408b0ec665a
+name: spiritualNeedsAssessment
+label_de: Spiritueller Bedarf erfasst
+definition_de: Wahrnehmung und Erfassung spiritueller Bedürfnisse (spiritual needs) der Patient:in / Angehörigen.
+  Dokumentation inkl. Spiritual-Care-Interventionen.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '248058001'
+    display: Spiritual concern
+care_process:
+  trigger: Aufnahme + bei Phasenwechsel
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team / Seelsorge
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 19.3 Wahrnehmung/Erfassung; 19.5 Dokumentation
+    recommendation_grade: B
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

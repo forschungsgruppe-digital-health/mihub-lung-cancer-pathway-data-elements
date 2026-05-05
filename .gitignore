@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+.idea/
+.vscode/
+
+# Auto-generierte FHIR-Logical-Model-Artefakte (siehe scripts/build-fhir-logical-models.py).
+# Nicht im Repo-Tree; bei Bedarf on-demand generieren.
+/derived/

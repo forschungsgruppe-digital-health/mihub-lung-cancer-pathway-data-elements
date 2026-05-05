@@ -1,0 +1,68 @@
+id: mihub.lung.palliative.illnessPhase.v0.1
+uuid: 0df5c457-d366-5c12-b0f4-73d61c24393b
+name: illnessPhase
+label_de: Krankheitsphase
+definition_de: 'Phase im Krankheitsverlauf gemäß Australian Palliative Care Phases: stabil, instabil,
+  verschlechternd, sterbend.'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Krankheitsphasen-Konzept der Australian Palliative Care Phases (stable / unstable / deteriorating
+    / dying / bereaved), in der deutschen S3-LL Palliativ Kap. 5.3 + Tab. 6 übernommen. SNOMED CT International
+    hat keine entsprechenden Codes; die Australian SNOMED-CT-Edition pflegt eigene Codes (z. B. Stable
+    phase, Unstable phase) — Migration auf Australian-Edition oder Refset-Vorschlag in nachgelagerter
+    Iteration.
+  codings:
+  - system: local-no-standard-binding
+    code: stable
+    display: stabil
+  - system: local-no-standard-binding
+    code: unstable
+    display: instabil
+  - system: local-no-standard-binding
+    code: deteriorating
+    display: verschlechternd
+  - system: local-no-standard-binding
+    code: dying
+    display: sterbend (terminal)
+  - system: kdl
+    code: SD110105
+    display: Palliativmedizinische Komplexbehandlungsdokumentation
+care_process:
+  trigger: bei jeder Visite
+  frequency_pattern: per-encounter (täglich in Sterbephase)
+  responsible_role: Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.3 / Tab. 6 (Krankheitsphasen)
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

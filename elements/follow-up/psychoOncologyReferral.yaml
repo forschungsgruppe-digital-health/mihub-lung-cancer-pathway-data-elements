@@ -1,0 +1,55 @@
+id: mihub.lung.followup.psychoOncologyReferral.v0.1
+uuid: ec8d4dcd-eff3-537a-be4a-9410126c4aa0
+name: psychoOncologyReferral
+label_de: Psychoonkologische Anbindung
+definition_de: Identifizierter Bedarf und Vermittlung psychoonkologischer Versorgung im Rahmen der Nachsorge.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '385763009'
+    display: Psycho-oncology counselling
+care_process:
+  trigger: Distress-Screening positiv
+  frequency_pattern: ad-hoc
+  responsible_role: Onkologe / Psychoonkolog:in
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.1 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 5.4.1 Supportive care
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

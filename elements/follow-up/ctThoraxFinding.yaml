@@ -1,0 +1,84 @@
+id: mihub.lung.followup.ctThoraxFinding.v0.1
+uuid: 74231537-e826-5758-91c5-1e9bb3fa1be7
+name: ctThoraxFinding
+label_de: CT Thorax — radiologischer Befund
+definition_de: Befund-Kategorisierung des CT Thorax in der Nachsorge. Ergebnisartefakt zum prozeduralen
+  Datenelement 'ctThoraxScan'. Erfasst, ob ein Rezidiv, Zweittumor, neue Läsion oder eine stabile Situation
+  vorliegt.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '359746009'
+    display: Stable disease (finding)
+  - system: snomed-ct
+    code: '417798001'
+    display: Recurrent neoplasm (finding)
+  - system: snomed-ct
+    code: '128462008'
+    display: Secondary malignant neoplastic disease
+  - system: snomed-ct
+    code: '419984006'
+    display: Inconclusive (qualifier value)
+  - system: loinc
+    code: 59776-5
+    display: Procedure findings Narrative
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/
+  resource: DiagnosticReport
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Verlaufsmodul / Tumorstatus_Lokoregionaeres
+  notes: Pflichtmeldung gem. §65c SGB V
+- standard: mcode
+  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
+  resource: CancerDiseaseStatus
+instruction_de: Bei Mehrfachbefunden Mehrfacheintrag (Cardinality 0..*). Quantitativer Ergänzungsbefund
+  (Größenmessung Zielläsion) gehört in eine separate Beobachtung; freier Befundtext gehört in das DiagnosticReport-Dokument.
+care_process:
+  trigger: nach jedem CT Thorax in der Nachsorge
+  frequency_pattern: per-imaging-event
+  responsible_role: Radiologie / Onkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 42 (CT Thorax: Tumorkinetik); Empf. 16.7 (EK)'
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.ctThoraxScan.v0.1

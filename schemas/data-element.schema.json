@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mihub.de/schemas/data-element.schema.json",
+  "title": "MiHUB Patientenpfad — Data Element Definition (Onkologie / Lungenkarzinom)",
+  "description": "Schema für die strukturierte, versionierbare Erhebung von Datenelementen entlang des gesamten onkologischen Patientenpfads (Lungenkarzinom: NSCLC, SCLC) — initial befüllte Versorgungsphasen: Onkologische Nachsorge, Verlaufsbeobachtung/Surveillance, Palliativversorgung; weitere Phasen (Diagnostik, Therapie, Rehabilitation u. a.) können additiv ergänzt werden. Strukturiert gemäß ISO 13972:2022 §6+§7 (CIM), kompatibel zu ISO 13606-2 §6.2 (archetype description), HL7 HSRA und nationalen wie internationalen Implementation Guides (MII KDS, gematik ePA, KBV MIO, oBDS, mCODE, OMOP CDM u. a.). Feldnamen Englisch, Inhalte Deutsch.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "label_de",
+    "definition_de",
+    "phase",
+    "datatype",
+    "cardinality",
+    "iso13972_metadata",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stabiler, lesbarer Identifier. Konvention: mihub.lung.<phase>.<element>.v<major>.<minor>",
+      "pattern": "^mihub\\.lung\\.(followup|surveillance|palliative)\\.[a-zA-Z][a-zA-Z0-9]*\\.v[0-9]+\\.[0-9]+$"
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier (ISO 13606-2 §6.2.1.1 / ISO 13972 metadata #3 'Identification', mandatory)."
+    },
+    "name": {
+      "type": "string",
+      "description": "Englischer Kurzname (camelCase), maschinenfreundlich (ISO 13972 §6.6.3 Data Element Name).",
+      "pattern": "^[a-z][A-Za-z0-9]*$"
+    },
+    "label_de": {
+      "type": "string",
+      "description": "Deutsche Anzeigebezeichnung (klinisch verständlich)."
+    },
+    "label_en": {
+      "type": "string",
+      "description": "Optionales englisches Anzeigelabel."
+    },
+    "definition_de": {
+      "type": "string",
+      "description": "Klinisch-semantische Definition in Deutsch (ISO 13972 §6.6.4)."
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["followup", "surveillance", "palliative"],
+      "description": "Versorgungsphase im Patientenpfad. Initial befüllt: followup = Onkologische Nachsorge nach kurativer Therapie; surveillance = Verlaufsbeobachtung unter Systemtherapie; palliative = Palliativversorgung. Weitere Phasen können additiv ergänzt werden (z. B. screening, diagnostics, treatment, rehabilitation, transition)."
+    },
+    "tumor_entity": {
+      "type": "array",
+      "description": "Geltungsbereich Tumorentität (ICD-10-GM C34.*).",
+      "items": {
+        "type": "string",
+        "enum": ["NSCLC", "SCLC", "lung_cancer_any"]
+      },
+      "minItems": 1
+    },
+    "datatype": {
+      "type": "string",
+      "description": "Datentyp gemäß ISO 21090 / FHIR R4 primitive types.",
+      "enum": [
+        "boolean",
+        "code",
+        "Coding",
+        "CodeableConcept",
+        "Quantity",
+        "Range",
+        "Ratio",
+        "integer",
+        "decimal",
+        "string",
+        "text",
+        "date",
+        "dateTime",
+        "Period",
+        "Reference",
+        "Attachment",
+        "Annotation"
+      ]
+    },
+    "cardinality": {
+      "type": "string",
+      "description": "Häufigkeit nach ISO 13606-2 / FHIR-Konvention (z. B. 0..1, 1..1, 0..*, 1..*).",
+      "pattern": "^[01\\*]\\.\\.[1\\*]$"
+    },
+    "unit": {
+      "type": "string",
+      "description": "UCUM-Einheit (z. B. mg, mm, %, /min, mo)."
+    },
+    "value_set": {
+      "type": "object",
+      "description": "Wertebereich / Binding (ISO 13972 §6.6.5 Semantic coding & §6.6.8 Value set expression). Wenn keine etablierte Standardisierung gefunden werden konnte, wird dies über 'standard_binding_status' explizit gekennzeichnet (kein versteckter Pseudo-CodeSystem).",
+      "properties": {
+        "binding_strength": {
+          "type": "string",
+          "enum": ["required", "extensible", "preferred", "example"],
+          "description": "FHIR-Binding-Strength. Bei standard_binding_status='no-standard-found' soll 'example' gewählt werden (kein verbindliches Standard-Binding)."
+        },
+        "standard_binding_status": {
+          "type": "string",
+          "enum": ["mapped", "no-standard-found", "pending-mapping", "n/a"],
+          "description": "Status der semantischen Standardbindung. mapped = mind. ein Coding stammt aus einer etablierten Terminologie (SNOMED CT, LOINC, ICD-10-GM, OPS, ATC, UCUM, HL7); no-standard-found = es konnte keine geeignete standardisierte Repräsentation identifiziert werden, die Codes sind projekt-lokal und Platzhalter (System 'local-no-standard-binding'); pending-mapping = ein Standard existiert, aber das Mapping ist offen; n/a = der Datentyp benötigt keine Codierung. Default-Annahme bei Vorhandensein von Codings ohne explizite Angabe: 'mapped'."
+        },
+        "uri": {
+          "type": "string",
+          "description": "FHIR ValueSet URL (z. B. http://snomed.info/sct, urn:oid:1.2.276.0.76.5.* für KDL)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Erläuterung — insbesondere bei standard_binding_status='no-standard-found' Begründung, warum kein Standard gefunden wurde, sowie Hinweis auf perspektivische Standardisierungspfade (z. B. SNOMED-CT-DE-Edition, Refset-Vorschlag, openEHR-Archetyp)."
+        },
+        "codings": {
+          "type": "array",
+          "description": "Beispielhafte Codings.",
+          "items": {
+            "type": "object",
+            "required": ["system", "code"],
+            "properties": {
+              "system": {
+                "type": "string",
+                "description": "Codesystem-Identifier. Etablierte Standards: snomed-ct, loinc, icd-10-gm, ops, kdl, atc, ucum, hl7-v3, meddra. Wenn keine Standardbindung existiert: 'local-no-standard-binding' (zwingend in Kombination mit standard_binding_status='no-standard-found' verwenden)."
+              },
+              "code": { "type": "string" },
+              "display": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "standard_mappings": {
+      "type": "array",
+      "description": "Liste der Mappings auf etablierte Standards. Mehrere parallele Bindings sind zulässig (z. B. ein Datenelement gleichzeitig oBDS, MII-KDS, KBV-MIO und mCODE). Konvention: nationale (DE) Mapping-Ziele zuerst, dann internationale. Volles Profile-Authoring ist Aufgabe der nachgelagerten Implementierungs-Iteration — hier nur Hinweis-/Verweis-Charakter.",
+      "items": {
+        "type": "object",
+        "required": ["standard"],
+        "additionalProperties": false,
+        "properties": {
+          "standard": {
+            "type": "string",
+            "enum": [
+              "obds",
+              "gekid-adt",
+              "gematik-epa-fhir",
+              "gematik-erezept-fhir",
+              "kbv-mio",
+              "fhir-mii-kds",
+              "fhir-isik",
+              "fhir-r4-base",
+              "fhir-genomics",
+              "mcode",
+              "openehr-archetype",
+              "omop-cdm",
+              "cdisc-sdtm",
+              "hl7-v2",
+              "dicom-sr",
+              "hl7-cda",
+              "ihe-xds",
+              "other"
+            ],
+            "description": "Standard-Identifier. Reihung von 'national-spezifisch' nach 'international': obds = onkologischer Basisdatensatz §65c SGB V (DE Pflichtmeldung Krebsregister); gekid-adt = ADT/GEKID-Tumorbasisdokumentation (Vorgänger / Subset oBDS); gematik-epa-fhir = gematik ePA für alle FHIR IGs (DE, ePA-Plattform inkl. ePA Basic Functions / Medication Service / MHD Service); gematik-erezept-fhir = gematik eRezept FHIR IG (DE Verordnung); kbv-mio = KBV MIO-Bundles (DE Patientenkurzakte/Impfpass/u. a., ePA-Wallet); fhir-mii-kds = MII Kerndatensatz (DE Forschung/FDPG); fhir-isik = gematik ISiK (DE KIS/AIS-Primärsysteme); fhir-r4-base = FHIR R4 Vanilla; fhir-genomics = HL7 FHIR Genomics IG (international, molekulare Diagnostik); mcode = HL7 minimal Common Oncology Data Elements IG (international, derzeit STU4); openehr-archetype = openEHR Archetyp/Template (CKM); omop-cdm = OHDSI OMOP Common Data Model inkl. Onkologie-Extension (international Versorgungsforschung); cdisc-sdtm = CDISC Study Data Tabulation Model (international klinische Studien); hl7-v2 = Legacy ADT/Labor; dicom-sr = DICOM Structured Report (Bildbefunde); hl7-cda = HL7 CDA (z. B. eArztbrief); ihe-xds = IHE XDS Affinity Domain. Konvention: nationale Mapping-Ziele werden bevorzugt notiert."
+          },
+          "profile_or_url": {
+            "type": "string",
+            "description": "URL/URI des Profils, Archetyps, MIO-Bundles oder oBDS-Datenfeldes."
+          },
+          "resource": {
+            "type": "string",
+            "description": "Ziel-Ressource im jeweiligen Standard (z. B. FHIR Observation, openEHR EVALUATION, oBDS-Modul Tumorhistorie)."
+          },
+          "path": {
+            "type": "string",
+            "description": "Pfad-Hinweis (FHIRPath, Archetypen-Pfad, oBDS-Feldname, DICOM-Tag)."
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "instruction_de": {
+      "type": "string",
+      "description": "Erfassungs-/Interpretationshinweis (ISO 13972 §6.10 Instructions for use)."
+    },
+    "constraints_de": {
+      "type": "string",
+      "description": "Einschränkungen, Ausschlüsse (ISO 13972 §6.9)."
+    },
+    "care_process": {
+      "type": "object",
+      "description": "Bezug zum Versorgungsprozess (ISO 13972 §6.11; ISO 13940 ContSys Business Process).",
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "description": "Ereignis/Zeitpunkt der Erfassung (z. B. 'Erstvorstellung 8 Wochen nach Therapieabschluss', 'Routinekontrolle Monat 3/6/12', 'bei jedem Palliativ-Kontakt')."
+        },
+        "frequency_pattern": {
+          "type": "string",
+          "description": "Erhebungsfrequenz (z. B. Q3M-Y1-Y2; Q6M-Y3-Y5; per-encounter)."
+        },
+        "responsible_role": {
+          "type": "string",
+          "description": "Verantwortliche Rolle (Onkolog:in, Hausarzt:ärztin, Pflegefachperson, Palliativteam)."
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Evidenzbasis (ISO 13972 §6.5 Evidence base + §6.14 References).",
+      "properties": {
+        "guideline_references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source", "version", "section"],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "S3-LL Lungenkarzinom",
+                  "S3-LL Palliativmedizin",
+                  "S3-LL Tabakentwöhnung",
+                  "Onkopedia NSCLC",
+                  "Onkopedia SCLC",
+                  "OCP Lung (AU)",
+                  "AG LONKO / Survivorship",
+                  "ESMO",
+                  "ASCO",
+                  "andere"
+                ]
+              },
+              "version": { "type": "string" },
+              "section": { "type": "string", "description": "Kapitel/Empfehlung/Tabelle." },
+              "recommendation_grade": {
+                "type": "string",
+                "enum": ["A", "B", "0", "EK", "Statement", "n/a"]
+              },
+              "evidence_level": { "type": "string", "description": "z. B. 1a, 1b, 2b, 3, 4." },
+              "url": { "type": "string", "format": "uri" }
+            }
+          }
+        }
+      }
+    },
+    "iso13972_metadata": {
+      "type": "object",
+      "description": "Metadaten gemäß ISO 13972:2022 Tabelle 2 (mandatory subset).",
+      "required": [
+        "version_number",
+        "creation_date",
+        "publication_status",
+        "publisher",
+        "language"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["observation", "procedure", "evaluation", "plan", "condition", "medication", "social"],
+          "description": "ISO 13972 metadata #2 (Type)."
+        },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "ISO 13972 metadata #4 (Keywords) — 1..*, mandatory."
+        },
+        "authors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "ISO 13972 metadata #5 (Authors)."
+        },
+        "endorsing_authority": {
+          "type": "string",
+          "description": "ISO 13972 metadata #6/7 — z. B. 'MiHUB AP8'."
+        },
+        "version_number": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+          "description": "ISO 13972 metadata #8 — SemVer-style."
+        },
+        "creation_date": { "type": "string", "format": "date" },
+        "publication_date": { "type": "string", "format": "date" },
+        "expiration_date": { "type": "string", "format": "date" },
+        "next_revision_date": { "type": "string", "format": "date" },
+        "publication_status": {
+          "type": "string",
+          "enum": ["AuthorDraft", "CommitteeDraft", "Submitted", "ApprovedForTesting", "ApprovedForProductionUse", "Withdrawn", "Superseded", "Rejected"],
+          "description": "ISO 13972 metadata #17."
+        },
+        "publisher": { "type": "string", "default": "MiHUB Konsortium AP8" },
+        "language": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z]{2,3}$" },
+          "description": "ISO 639 codes (de, en)."
+        },
+        "license": { "type": "string", "default": "CC-BY-4.0" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Herkunft / Bearbeitungs-Audit (ISO 13606-2 §6.2.6).",
+      "required": ["created_by"],
+      "properties": {
+        "created_by": { "type": "string" },
+        "reviewers": { "type": "array", "items": { "type": "string" } },
+        "git_commit": { "type": "string" }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "description": "Offene Punkte / Diskussion (ISO 13972 §6.12).",
+      "items": { "type": "string" }
+    },
+    "related_elements": {
+      "type": "array",
+      "description": "Beziehungen zu anderen Datenelementen (ISO 13972 §6.6.9).",
+      "items": {
+        "type": "object",
+        "required": ["relation", "target"],
+        "properties": {
+          "relation": {
+            "type": "string",
+            "enum": ["isPartOf", "hasPart", "specializes", "generalizes", "dependsOn", "supersedes", "supersededBy"]
+          },
+          "target": { "type": "string" }
+        }
+      }
+    }
+  }
+}

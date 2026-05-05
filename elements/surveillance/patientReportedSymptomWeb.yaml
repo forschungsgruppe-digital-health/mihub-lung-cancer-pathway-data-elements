@@ -1,0 +1,57 @@
+id: mihub.lung.surveillance.patientReportedSymptomWeb.v0.1
+uuid: 54cec7c1-16f4-538b-bad8-c4bbcf0d4935
+name: patientReportedSymptomWeb
+label_de: Web-basierte Selbsteinschätzung von Symptomen (PROM)
+definition_de: Wöchentliche, web-basierte Selbsteinschätzung von Symptomen (z. B. Atemnot, Schmerz, Husten,
+  Müdigkeit) durch den Patienten zwischen Restaging-Untersuchungen. Verbessert OS bei NSCLC (Denis 2017).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: snomed-ct
+    code: '364712001'
+    display: Symptom severity
+  - system: loinc
+    code: 89204-2
+    display: Patient reported outcome
+standard_mappings:
+- standard: fhir-r4-base
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item
+care_process:
+  trigger: wöchentliche Selbsterfassung
+  frequency_pattern: weekly
+  responsible_role: Patient (PROM); Onkologie-Triage
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.2 (web-basierte Nachsorge, Denis 2017)
+    recommendation_grade: Statement
+    evidence_level: 1b
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

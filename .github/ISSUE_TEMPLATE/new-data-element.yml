@@ -1,0 +1,187 @@
+name: "📋 Neues Datenelement vorschlagen (Klinik-Spur)"
+description: "Schlagen Sie ein neues Datenelement für eine Versorgungsphase vor. Diese Vorlage ist für klinische Expertise gedacht — kein YAML, kein Git nötig. Das MI-Team übernimmt die technische Umsetzung."
+title: "[Datenelement] <Bezeichnung>"
+labels: ["data-element", "needs-triage", "klinik-spur"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Vielen Dank für Ihren Vorschlag
+
+        Bitte füllen Sie nur die Felder aus, zu denen Sie etwas Sinnvolles beitragen können.
+        Felder, die das MI-Team selbst recherchiert (z. B. SNOMED-CT-Codes, FHIR-Profile), dürfen Sie leer lassen.
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Versorgungsphase
+      description: In welcher Phase wird dieses Datenelement erfasst?
+      options:
+        - Onkologische Nachsorge (kurativ behandelt)
+        - Verlaufsbeobachtung / Surveillance (unter Systemtherapie)
+        - Palliativversorgung
+        - Andere / neue Phase (bitte unten angeben)
+    validations:
+      required: true
+
+  - type: input
+    id: phase_other
+    attributes:
+      label: "Phase (falls 'Andere'): Name"
+      placeholder: "z. B. Rehabilitation, Diagnostik, Therapie"
+    validations:
+      required: false
+
+  - type: input
+    id: label_de
+    attributes:
+      label: Bezeichnung (Deutsch)
+      description: Klinisch verständliche Kurzbezeichnung
+      placeholder: "z. B. Schluckbeschwerden-Intensität (NRS 0–10)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition_de
+    attributes:
+      label: Klinische Definition (1–3 Sätze)
+      description: Was genau wird gemessen/dokumentiert? Welcher Zeitraum, welche Skala, was wird ein- und ausgeschlossen?
+      placeholder: |
+        Selbstbeurteilung der Schluckbeschwerden auf einer numerischen Rating-Skala 0–10
+        innerhalb der letzten 24 Stunden. Bei kognitiver Einschränkung Fremdeinschätzung
+        durch Pflegepersonal.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tumor_entity
+    attributes:
+      label: Tumorentität
+      description: Für welche Entität gilt das Datenelement?
+      options:
+        - label: NSCLC (nicht-kleinzelliges Lungenkarzinom)
+        - label: SCLC (kleinzelliges Lungenkarzinom)
+        - label: Lungenkarzinom unspezifisch / beide
+    validations:
+      required: true
+
+  - type: dropdown
+    id: datatype_layperson
+    attributes:
+      label: Datentyp (laienverständlich)
+      description: Welcher Wert wird erfasst?
+      options:
+        - Ja/Nein (boolean)
+        - Skalenwert / Zahl (z. B. NRS, Score, Anzahl)
+        - Datum oder Zeitstempel
+        - Codierter Begriff aus Liste (z. B. SNOMED, ICD)
+        - Freitext / Anmerkung
+        - Dosis mit Einheit (z. B. mg, mg/d)
+        - Verweis auf Dokument/Befund
+        - Sonstiges (bitte in 'Anmerkungen' angeben)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cardinality
+    attributes:
+      label: Häufigkeit
+      description: Wie oft kommt dieses Element pro Patient:in vor?
+      options:
+        - Genau einmal (z. B. ECOG bei Aufnahme)
+        - Höchstens einmal (kann fehlen)
+        - Mehrfach möglich (z. B. wiederholte Symptommessungen)
+    validations:
+      required: true
+
+  - type: input
+    id: trigger
+    attributes:
+      label: Wann wird das Element erfasst?
+      placeholder: "z. B. 'bei jeder Visite', 'Erstvorstellung 8 Wochen nach Therapieende', 'bei Progression unter zielgerichteter Therapie'"
+    validations:
+      required: true
+
+  - type: input
+    id: frequency
+    attributes:
+      label: Erhebungsfrequenz (optional)
+      placeholder: "z. B. Q3M-Y1-Y2; Q6M-Y3-Y5; per-encounter; weekly; ad-hoc"
+    validations:
+      required: false
+
+  - type: input
+    id: role
+    attributes:
+      label: Verantwortliche Rolle
+      placeholder: "z. B. Onkolog:in, Hausarzt/-ärztin, Palliativ-Team, Pflege, Patient:in (Selbsteinschätzung)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: guideline
+    attributes:
+      label: Leitlinien-/Quellen-Bezug (Pflicht)
+      description: Welche Quelle belegt das Element? Bitte Kapitel / Empfehlungs-Nr. / Tabelle angeben.
+      placeholder: |
+        S3-LL Lungenkarzinom v4.0 (2025), Kap. 16, Empf. 16.x
+        ODER Onkopedia NSCLC (Stand 03/2026), Kap. 8.1 Tab. 12
+        ODER Klein A-A et al., Die Onkologie 32:91–99 (2026)
+    validations:
+      required: true
+
+  - type: input
+    id: recommendation_grade
+    attributes:
+      label: Empfehlungsgrad / Evidenzlevel (optional)
+      placeholder: "z. B. A / 1a, B / 2b, EK, Statement"
+    validations:
+      required: false
+
+  - type: textarea
+    id: codes
+    attributes:
+      label: Codierungs-Vorschläge (optional)
+      description: Bekannte SNOMED-CT- / LOINC- / ICD-10-GM- / OPS-Codes, falls vorhanden
+      placeholder: |
+        SNOMED CT: 267036007 (Dyspnea)
+        LOINC: 89283-6 (Dyspnea severity)
+    validations:
+      required: false
+
+  - type: textarea
+    id: standards
+    attributes:
+      label: Standard-Anbindung (optional)
+      description: Hinweis auf bestehende MII-KDS-Profile, KBV-MIO, oBDS-Felder, openEHR-Archetypen
+      placeholder: |
+        MII-KDS: Modul Onkologie, Profil 'mii-pr-onko-...'
+        oBDS: Verlaufsmodul / Symptomdokumentation
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anmerkungen, Beziehungen, offene Fragen
+      description: Verweis auf bestehende Elemente (z. B. „spezialisiert ecogPerformanceStatus"), Sensitivitäts-Hinweise, alles, was Reviewer:innen wissen sollten.
+    validations:
+      required: false
+
+  - type: input
+    id: contact
+    attributes:
+      label: Kontakt für Rückfragen (optional)
+      placeholder: "Name + Klinik / Fachgesellschaft"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: "Ich bestätige, dass ich diesen Vorschlag im Rahmen der MiHUB-Mitarbeit unter CC-BY-4.0 einbringe."
+          required: true

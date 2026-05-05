@@ -1,0 +1,60 @@
+id: mihub.lung.palliative.caregiverBurden.v0.1
+uuid: b6662975-5d43-57e0-9e6a-1bf2564ba684
+name: caregiverBurden
+label_de: Belastung der Angehörigen
+definition_de: Erfassung der multidimensionalen Belastung pflegender Angehöriger (Zarit Burden Interview,
+  CAREPAL, häusliche Pflegeskala HPS-DEGAM).
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Codes für deutschsprachige Angehörigenbelastungs-Instrumente CAREPAL und HPS-DEGAM. LOINC kennt
+    Zarit Burden Interview (62133-0, oben verwendet), nicht aber CAREPAL oder die Häusliche Pflegeskala
+    der DEGAM. Nur diese beiden Codes sind projekt-lokal.
+  codings:
+  - system: loinc
+    code: 62133-0
+    display: Zarit Burden Interview
+  - system: local-no-standard-binding
+    code: CAREPAL
+    display: Multidimensionaler CAREPAL-Fragebogen
+  - system: local-no-standard-binding
+    code: HPS-DEGAM
+    display: Häusliche Pflegeskala (HPS)
+care_process:
+  trigger: Aufnahme + bei Verschlechterung
+  frequency_pattern: Q1M in SPV
+  responsible_role: Palliativ-Team / Sozialdienst
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 7.4 Bedarfserfassung bei Angehörigen; Tab. 6
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

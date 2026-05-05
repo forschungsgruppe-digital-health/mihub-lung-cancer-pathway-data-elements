@@ -1,0 +1,73 @@
+id: mihub.lung.palliative.complexityLevel.v0.1
+uuid: 3d3d3296-edb9-574a-bc4f-f0b236341d76
+name: complexityLevel
+label_de: Komplexität der Versorgungssituation
+definition_de: Einstufung der Komplexität der Patient:innen- und Angehörigensituation (niedrig, mittel,
+  hoch) basierend auf Symptomen, psychosozialen/spirituellen/ethischen Belastungen und Funktionsstatus
+  + Krankheitsphase.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Komplexitätsstufen der Palliativversorgung gemäß S3-LL Palliativ Kap. 5.3. Es gibt keine direkt
+    zutreffenden SNOMED-CT- oder LOINC-Codes für genau dieses palliativ-kontextuelle Komplexitätskonstrukt.
+    Allgemeine SNOMED-Severity-Codes (255604002 mild, 6736007 moderate, 24484000 severe) sind kontextfremd
+    und decken Patient:innen-/Angehörigensituation, Funktionsstatus und Krankheitsphase nicht vollständig
+    ab. Mapping in nachgelagerter Iteration prüfen.
+  codings:
+  - system: local-no-standard-binding
+    code: low
+    display: niedrig
+  - system: local-no-standard-binding
+    code: medium
+    display: mittel
+  - system: local-no-standard-binding
+    code: high
+    display: hoch
+  - system: kdl
+    code: SD110105
+    display: Palliativmedizinische Komplexbehandlungsdokumentation
+instruction_de: Hohe Komplexität → SPV-Indikation. Bewertung anhand Bedürfnissen, Belastungen Angehörige,
+  Funktionsstatus, Krankheitsphase.
+care_process:
+  trigger: bei Aufnahme + bei Phasenwechsel
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.3 Komplexitätsbestimmung; Tab. 6
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.illnessPhase.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.functionalStatus.v0.1

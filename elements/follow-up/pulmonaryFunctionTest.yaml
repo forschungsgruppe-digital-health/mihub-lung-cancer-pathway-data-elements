@@ -1,0 +1,70 @@
+id: mihub.lung.followup.pulmonaryFunctionTest.v0.1
+uuid: f409fdca-e879-5257-aad6-987ce95bd6e6
+name: pulmonaryFunctionTest
+label_de: Lungenfunktionsprüfung in der Nachsorge
+definition_de: Spirometrie und CO-Diffusionskapazität zur Überwachung von Lungenfunktionseinschränkung
+  und Pneumonitis nach RTx/CTx-RTx.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '23426006'
+    display: Pulmonary function test (procedure)
+  - system: loinc
+    code: 20143-5
+    display: Diffusing capacity.carbon monoxide
+  - system: ops
+    code: 1-712
+    display: Ganzkörperplethysmographie
+  - system: kdl
+    code: DG060108
+    display: Dokumentationsbogen Lungenfunktionsprüfung
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation
+  path: Observation.code
+care_process:
+  trigger: Nach Strahlentherapie/Radiochemotherapie; bis Ende Pneumonitis-Risiko fortführen
+  frequency_pattern: Q3M-Y1; ab Y2 individuell
+  responsible_role: Pneumologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Tab. 42 (Lungenfunktion bei Pneumonitis-Risiko)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Tab. 12
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

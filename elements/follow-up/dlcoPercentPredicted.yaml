@@ -1,0 +1,67 @@
+id: mihub.lung.followup.dlcoPercentPredicted.v0.1
+uuid: 9853026d-63f2-5a2c-9847-5c9a01116994
+name: dlcoPercentPredicted
+label_de: DLCO (% vom Soll)
+definition_de: Diffusionskapazität für Kohlenmonoxid (DLCO/TLCO), in Prozent des altersnormierten Sollwerts.
+  Marker für Strahlen-/Pneumonitis-Folgen. Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: decimal
+cardinality: 0..*
+unit: '%'
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 17129-7
+    display: Carbon monoxide diffusing capacity
+  - system: snomed-ct
+    code: '252464004'
+    display: Carbon monoxide diffusing capacity (procedure)
+  - system: kdl
+    code: DG060108
+    display: Dokumentationsbogen Lungenfunktionsprüfung
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/
+  resource: Observation
+constraints_de: Wertebereich realistisch 0..150. UCUM-Einheit '%'. Bei Strahlentherapie verlaufsentscheidend.
+care_process:
+  trigger: bei jeder Lungenfunktionsprüfung mit DLCO-Bestimmung
+  frequency_pattern: per-procedure
+  responsible_role: Pneumologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Tab. 42 (CO-Diffusionskapazität); Kap. 16.3.1 (Pneumonitis-Risiko)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.pulmonaryFunctionTest.v0.1

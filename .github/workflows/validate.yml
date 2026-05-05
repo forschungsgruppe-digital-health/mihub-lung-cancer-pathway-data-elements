@@ -1,0 +1,35 @@
+name: Validate Data Elements
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'elements/**/*.yaml'
+      - 'schemas/**'
+      - 'scripts/**'
+  pull_request:
+    paths:
+      - 'elements/**/*.yaml'
+      - 'schemas/**'
+      - 'scripts/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install --quiet pyyaml jsonschema
+      - name: Validate YAML against JSON-Schema
+        run: python scripts/validate.py
+      - name: Rebuild catalog and detect drift
+        run: |
+          python scripts/build-catalog.py
+          if ! git diff --quiet -- catalog/data-dictionary.csv; then
+            echo "::error::catalog/data-dictionary.csv is out of date. Run 'python scripts/build-catalog.py' locally and commit the result."
+            git diff -- catalog/data-dictionary.csv
+            exit 1
+          fi

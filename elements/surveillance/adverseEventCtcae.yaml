@@ -1,0 +1,56 @@
+id: mihub.lung.surveillance.adverseEventCtcae.v0.1
+uuid: a8826e92-f2ff-5f96-9e1f-cddf2377edfb
+name: adverseEventCtcae
+label_de: Unerwünschtes Ereignis (CTCAE)
+definition_de: Therapieassoziiertes unerwünschtes Ereignis nach NCI CTCAE v5.0/v6.0 mit Grad 1–5.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+  codings:
+  - system: meddra
+    code: '10025598'
+    display: Lung infection
+  - system: meddra
+    code: '10037087'
+    display: Pneumonitis
+  - system: meddra
+    code: '10010726'
+    display: Confusion
+care_process:
+  trigger: bei jedem Kontakt unter Therapie
+  frequency_pattern: per-encounter
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9 (Toxizitäten)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

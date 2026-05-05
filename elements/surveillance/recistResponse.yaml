@@ -1,0 +1,82 @@
+id: mihub.lung.surveillance.recistResponse.v0.1
+uuid: d0d56712-9555-5c36-ae5f-96f45795d1d0
+name: recistResponse
+label_de: RECIST-1.1-Therapieansprechen
+definition_de: Bewertung des Therapieansprechens nach RECIST 1.1 (CR, PR, SD, PD, NE).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 0..*
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '182840001'
+    display: Complete response (CR)
+  - system: snomed-ct
+    code: '268910001'
+    display: Partial response (PR)
+  - system: snomed-ct
+    code: '359746009'
+    display: Stable disease (SD)
+  - system: snomed-ct
+    code: '271879005'
+    display: Progressive disease (PD)
+  - system: kdl
+    code: AD060106
+    display: Tumorkonferenzprotokoll
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Verlaufsmodul (oBDS 2021)
+  path: Verlauf / Beurteilung Tumorstatus
+  notes: Pflichtmeldung gem. §65c SGB V; oBDS-Codes für 'Vollremission/Teilremission/Stable Disease/Progress/Befund
+    unklar'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  resource: Observation
+  notes: MII-KDS Modul Onkologie (Verlaufs-Observation; ggf. Profil neu zu definieren)
+- standard: mcode
+  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
+  resource: CancerDiseaseStatus
+  path: Observation.valueCodeableConcept
+  notes: mCODE STU4 — Cancer Disease Status mit eviganceType (clinical, imaging, pathology, lab)
+- standard: omop-cdm
+  profile_or_url: https://ohdsi.github.io/CommonDataModel/cdm54.html
+  resource: MEASUREMENT / OBSERVATION (Onkologie-Extension)
+  notes: OHDSI Onkologie-Extension; FHIR-OMOP-Brücke via mCODE↔OMOP
+care_process:
+  trigger: Restaging-CT alle 6–9 Wo unter Systemtherapie
+  frequency_pattern: Q6-9W
+  responsible_role: Onkologe / Radiologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9 (EK, modifiziert 2025)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

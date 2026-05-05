@@ -1,0 +1,81 @@
+id: mihub.lung.surveillance.systemicTherapyRegimen.v0.1
+uuid: 948cb11a-1e41-550d-bc52-0b2fd3c348b0
+name: systemicTherapyRegimen
+label_de: Aktuelles Systemtherapie-Regime
+definition_de: Codiertes aktuelles tumorspezifisches Systemtherapie-Regime (Chemotherapie, zielgerichtete
+  Therapie, Checkpoint-Inhibitor, Kombination).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: atc
+    code: L01XC18
+    display: Pembrolizumab
+  - system: atc
+    code: L01XC32
+    display: Atezolizumab
+  - system: atc
+    code: L01XC44
+    display: Durvalumab
+  - system: atc
+    code: L01XE13
+    display: Afatinib
+  - system: atc
+    code: L01XE35
+    display: Osimertinib
+  - system: atc
+    code: L01XE36
+    display: Alectinib
+  - system: atc
+    code: L01CD01
+    display: Paclitaxel
+  - system: atc
+    code: L01XA02
+    display: Carboplatin
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
+  resource: MedicationStatement
+care_process:
+  trigger: Therapieinitiierung / Linienwechsel
+  frequency_pattern: per-line
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.4 / Empf. 16.9
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 6 Therapie
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: medication
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

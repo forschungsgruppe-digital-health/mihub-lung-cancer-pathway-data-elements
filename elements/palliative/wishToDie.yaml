@@ -1,0 +1,52 @@
+id: mihub.lung.palliative.wishToDie.v0.1
+uuid: 7680930b-1dfb-51d2-a687-842ecb799a21
+name: wishToDie
+label_de: Todeswunsch
+definition_de: Erfasster Todeswunsch der Patient:in, inkl. Differenzierung (Lebensmüdigkeit, Wunsch nach
+  Sterbehilfe, Suizidalität).
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '224943005'
+    display: Wish to die
+care_process:
+  trigger: Sensitiv erfragen bei psychosozialer Belastung; bei Verschlechterung
+  frequency_pattern: ad-hoc
+  responsible_role: Palliativ-Team / Psychoonkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 20.3 Screening und Erfassung Todeswunsch
+    recommendation_grade: B
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+issues:
+- Schutzbedürftige Information — restriktive Zugriffsrechte / Consent-Behandlung erforderlich.

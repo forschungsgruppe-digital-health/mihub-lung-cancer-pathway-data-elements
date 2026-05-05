@@ -1,0 +1,71 @@
+id: mihub.lung.followup.smokingStatus.v0.1
+uuid: 0e39538d-7ac1-5c78-a7aa-ee553e5bf28e
+name: smokingStatus
+label_de: Rauchstatus
+definition_de: Aktueller Tabakkonsumstatus. Aktive Raucher haben höheres Risiko für Komplikationen, Zweittumoren
+  und schlechteres Überleben.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: required
+  uri: http://hl7.org/fhir/ValueSet/smoking-status
+  codings:
+  - system: snomed-ct
+    code: '266919005'
+    display: Never smoked tobacco
+  - system: snomed-ct
+    code: '8517006'
+    display: Ex-smoker
+  - system: snomed-ct
+    code: '77176002'
+    display: Smoker
+  - system: snomed-ct
+    code: '428041000124106'
+    display: Occasional tobacco smoker
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Raucher
+  resource: Observation
+  path: Observation.valueCodeableConcept
+care_process:
+  trigger: bei jeder Vorstellung
+  frequency_pattern: per-encounter
+  responsible_role: Onkologe / Hausarzt / Pflege
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.3 (B, 2b)
+    recommendation_grade: B
+    evidence_level: 2b
+  - source: S3-LL Tabakentwöhnung
+    version: 1.0 (03/2021, AWMF 076-006l)
+    url: https://register.awmf.org/de/leitlinien/detail/076-006
+    section: Screening und Diagnostik
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

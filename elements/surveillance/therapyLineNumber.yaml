@@ -1,0 +1,44 @@
+id: mihub.lung.surveillance.therapyLineNumber.v0.1
+uuid: 486f2b80-a2c1-59ca-8ea7-baf8c1204ba6
+name: therapyLineNumber
+label_de: Therapielinie
+definition_de: Nummer der aktuellen Systemtherapielinie (1 = Erstlinie).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..1
+constraints_de: Wertebereich 1..n; Linienwechsel (PD oder Toxizität) erhöht den Zähler.
+care_process:
+  trigger: bei Therapiestart
+  frequency_pattern: per-line
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.1 'real-world vs. Studie'
+    recommendation_grade: Statement
+    evidence_level: 2a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

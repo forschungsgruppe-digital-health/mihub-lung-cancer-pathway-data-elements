@@ -1,0 +1,50 @@
+id: mihub.lung.palliative.dyingPhaseDiagnosed.v0.1
+uuid: 745ccd2c-b07e-5444-9993-522d9888ce68
+name: dyingPhaseDiagnosed
+label_de: Sterbephase diagnostiziert
+definition_de: Klinische Diagnose der Sterbephase (Tod innerhalb der nächsten Tage wahrscheinlich), inkl.
+  Datum/Zeitpunkt.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '419099009'
+    display: Dying
+care_process:
+  trigger: klinisches Sterbephasen-Assessment
+  frequency_pattern: tägliche Re-Evaluation
+  responsible_role: Palliativ-Team / Lead-Clinician
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 21.2 Sterben diagnostizieren
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

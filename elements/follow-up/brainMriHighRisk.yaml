@@ -1,0 +1,73 @@
+id: mihub.lung.followup.brainMriHighRisk.v0.1
+uuid: 371370d3-c946-5219-a108-5e5867b9ec94
+name: brainMriHighRisk
+label_de: Schädel-MRT bei Hochrisiko
+definition_de: 'MRT des Schädels zur ZNS-Metastasen-Detektion bei Patient:innen mit erhöhtem Risiko (NSCLC:
+  EGFR+, ALK+, ROS1+, Adenokarzinom Stadium III, großzellige/undifferenzierte/seltene Histologie; SCLC
+  LD ohne PCI).'
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 24590-2
+    display: MR Brain
+  - system: snomed-ct
+    code: '241601008'
+    display: MRI of brain (procedure)
+  - system: ops
+    code: 3-820
+    display: MRT Schädel
+  - system: kdl
+    code: DG020107
+    display: MRT-Befund
+care_process:
+  trigger: Bei Hochrisiko-Subgruppen; SCLC LD ohne PCI standardmäßig in Nachsorge.
+  frequency_pattern: Q3M-Y1 (SCLC LD ohne PCI); Q6-9M-Y1-Y3 (NSCLC Hochrisiko)
+  responsible_role: Radiologie / Onkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.8 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand 09/2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Tab. 9 (MRT Schädel bei LD ohne PCI)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1 (Hochrisiko EGFR/ALK/ROS1)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

@@ -1,0 +1,79 @@
+id: mihub.lung.surveillance.molecularResistanceFinding.v0.1
+uuid: 96f79ba3-fbf4-58bf-a603-1ea0eff06d2a
+name: molecularResistanceFinding
+label_de: Molekulares Resistenzergebnis
+definition_de: Ergebnisartefakt der ctDNA- oder Re-Biopsie-Untersuchung bei Progression unter zielgerichteter
+  Therapie. Erfasst Resistenzmechanismen (z. B. EGFR T790M, EGFR C797S, ALK G1202R, KRAS G12C, MET-Amplifikation).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 21678-9
+    display: EGFR gene mutations [Identifier]
+  - system: loinc
+    code: 81238-6
+    display: KRAS gene targeted mutation analysis
+  - system: snomed-ct
+    code: '55446002'
+    display: Genetic mutation
+  - system: snomed-ct
+    code: '55342001'
+    display: Neoplasm (morphologic abnormality)
+  - system: kdl
+    code: PT130102
+    display: Molekularpathologiebefund
+standard_mappings:
+- standard: fhir-genomics
+  profile_or_url: https://hl7.org/fhir/uv/genomics-reporting/
+  resource: Observation (variant)
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/
+  resource: Observation
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Genetische Veränderungen
+instruction_de: Variant-spezifische Notation (HGVS) gehört in den freien Befundtext oder in eine MolecularSequence-Resource.
+  Hier nur Konzept-Ebene (Gen + Mutationstyp).
+care_process:
+  trigger: nach ctDNA- oder Re-Biopsie-Test bei Progression
+  frequency_pattern: ad-hoc
+  responsible_role: Molekularpathologie / Onkologie
+evidence:
+  guideline_references:
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 6.1 (re-biopsy / ctDNA bei Rezidiv)
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.surveillance.molecularRetestingCtdna.v0.1

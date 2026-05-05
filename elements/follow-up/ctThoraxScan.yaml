@@ -1,0 +1,77 @@
+id: mihub.lung.followup.ctThoraxScan.v0.1
+uuid: b96e8fbc-9e63-5b85-aaa1-83b5f60a087c
+name: ctThoraxScan
+label_de: CT Thorax in der Nachsorge
+definition_de: Computertomographie des Thorax als Verlaufsdiagnostik in der Nachsorge. Beurteilung von
+  Lokalrezidiv, Zweittumoren, Pneumonitis, Fibrose.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 30688-4
+    display: CT Thorax
+  - system: snomed-ct
+    code: '169069000'
+    display: CT of thorax (procedure)
+  - system: ops
+    code: 3-202
+    display: Native CT, Thorax
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  resource: ImagingStudy
+  path: ImagingStudy.started
+care_process:
+  trigger: gemäß Nachsorgeintervall (Tab. 12 Onkopedia / Tab. 9 SCLC); zusätzlich nach Strahlentherapie
+  frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
+  responsible_role: Radiologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Tab. 42 / Empf. 16.6 (A, 1a)
+    recommendation_grade: A
+    evidence_level: 1a
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Tab. 12
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand 09/2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Tab. 9
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

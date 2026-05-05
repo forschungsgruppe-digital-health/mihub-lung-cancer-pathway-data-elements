@@ -1,0 +1,59 @@
+id: mihub.lung.palliative.functionalStatus.v0.1
+uuid: 3416e88d-dd6c-5487-9952-4670930e892e
+name: functionalStatus
+label_de: Funktionsstatus (AKPS / ECOG)
+definition_de: 'Quantifizierung des Allgemeinzustandes und der Aktivitäten des täglichen Lebens. Empfohlene
+  Instrumente: AKPS, ECOG, ADL (Barthel).'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: loinc
+    code: 89262-0
+    display: ECOG Performance Status
+  - system: snomed-ct
+    code: '373802001'
+    display: Karnofsky Performance Status score
+  - system: loinc
+    code: 70924-1
+    display: Australian-modified Karnofsky Performance Status (AKPS)
+  - system: loinc
+    code: 65488-5
+    display: Barthel Index
+care_process:
+  trigger: bei jeder Visite
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team / Pflege
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 6 (Funktionsstatus)
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

@@ -1,0 +1,56 @@
+id: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1
+uuid: 80f92429-8ac9-5868-bbb5-4a6362a8d988
+name: immuneRelatedAdverseEvent
+label_de: Immunvermittelte Nebenwirkung (irAE)
+definition_de: Spezifische immunvermittelte Toxizität unter Checkpoint-Inhibitor-Therapie (Pneumonitis,
+  Kolitis, Hepatitis, Endokrinopathie, Hautreaktion).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: snomed-ct
+    code: '1217138004'
+    display: Immune-related adverse event
+  - system: snomed-ct
+    code: '233604007'
+    display: Pneumonitis
+  - system: snomed-ct
+    code: '190787008'
+    display: Autoimmune hepatitis
+care_process:
+  trigger: Verdachtsfall unter Checkpoint-Inhibitor
+  frequency_pattern: per-encounter
+  responsible_role: Onkologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.3.1 (immun-bezogene Komplikationen)
+    recommendation_grade: EK
+    evidence_level: 1b
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

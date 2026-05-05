@@ -1,0 +1,66 @@
+id: mihub.lung.followup.survivorshipCarePlan.v0.1
+uuid: b59aa65d-a6a0-572a-845a-b71f6807cfa0
+name: survivorshipCarePlan
+label_de: Survivorship Care Plan / Onkologischer Abschlussbericht
+definition_de: Strukturierter Abschluss-/Survivorship-Care-Plan, der Diagnose, Stadium, erhaltene Therapien,
+  mögliche Lang- und Spätfolgen, Kontrollintervalle, red flags, Impfstatus und Kontaktdaten enthält und
+  an die Hausarztpraxis übergeben wird.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: Reference
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '736378000'
+    display: Cancer survivorship care plan
+  - system: kdl
+    code: SD150101
+    display: Follow up-Bogen
+standard_mappings:
+- standard: fhir-r4-base
+  resource: DocumentReference
+  path: DocumentReference.type
+care_process:
+  trigger: Abschluss strukturierte Nachsorge / Übergang Hausarzt
+  frequency_pattern: once-per-transition
+  responsible_role: Onkologe + Hausarzt
+evidence:
+  guideline_references:
+  - source: AG LONKO / Survivorship
+    version: 2021/2022; Klein 2026
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: Empfehlungsliste; Klein 2026 Ergebnisse 'Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik, Format'
+    recommendation_grade: Statement
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 5.1/5.2 Treatment summary & follow-up care plan
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

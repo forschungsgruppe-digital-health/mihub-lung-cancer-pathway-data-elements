@@ -1,0 +1,61 @@
+id: mihub.lung.palliative.advanceDirectiveDocument.v0.1
+uuid: 0b05e1d0-3899-5f6e-ac84-af21a2dd0010
+name: advanceDirectiveDocument
+label_de: Patientenverfügung / Vorsorgevollmacht
+definition_de: Vorhandensein einer wirksamen Patientenverfügung und/oder Vorsorgevollmacht inkl. Verweis
+  auf das Dokument.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '371538006'
+    display: Advance directive
+  - system: snomed-ct
+    code: '470611000124106'
+    display: Healthcare proxy
+  - system: kdl
+    code: AM160104
+    display: Patientenverfügung
+standard_mappings:
+- standard: fhir-r4-base
+  resource: DocumentReference
+  path: DocumentReference.type
+care_process:
+  trigger: ACP-Prozess
+  frequency_pattern: per-update
+  responsible_role: Lead-Clinician / Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 ACP
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

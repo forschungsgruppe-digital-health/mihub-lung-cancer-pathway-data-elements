@@ -1,0 +1,65 @@
+id: mihub.lung.palliative.palliativeCareTier.v0.1
+uuid: 4463b28d-e3dd-529e-ad16-2ee0d75cae22
+name: palliativeCareTier
+label_de: Stufe der Palliativversorgung
+definition_de: 'Indikationsbasierte Stufe der Palliativversorgung: Palliativmedizinische Basisversorgung
+  durch Primärbehandelnde (PBP), Allgemeine Palliativversorgung (APV) oder Spezialisierte Palliativversorgung
+  (SPV).'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Versorgungsstufen-Konzept der deutschen S3-LL Palliativmedizin (PBP / APV / SPV). SNOMED CT
+    International hat keine deckungsgleichen Codes; die DACH-spezifische Strukturierung der Palliativversorgung
+    ist nicht international standardisiert. Mögliche Standardisierungspfade: SNOMED-CT-DE-Edition (BfArM),
+    nationaler Refset, oder Aufnahme in Onkopedia-/AWMF-Strukturierung als kontrolliertes Vokabular.'
+  codings:
+  - system: local-no-standard-binding
+    code: PBP
+    display: Palliativmed. Basisversorgung
+  - system: local-no-standard-binding
+    code: APV
+    display: Allgemeine Palliativversorgung
+  - system: local-no-standard-binding
+    code: SPV
+    display: Spezialisierte Palliativversorgung
+  - system: kdl
+    code: SD110105
+    display: Palliativmedizinische Komplexbehandlungsdokumentation
+care_process:
+  trigger: nach Komplexitätsbewertung
+  frequency_pattern: ad-hoc / re-evaluierbar
+  responsible_role: Palliativ-Team / MDT
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.4 Drei Stufen der Palliativversorgung
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

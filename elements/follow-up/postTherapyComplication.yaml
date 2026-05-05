@@ -1,0 +1,60 @@
+id: mihub.lung.followup.postTherapyComplication.v0.1
+uuid: 7a0cabf4-6853-5562-8e6c-d42815f41d89
+name: postTherapyComplication
+label_de: Posttherapeutische Komplikation
+definition_de: 'Erfassung von Komplikationen nach lokal-ablativer Therapie: nach OP (Schmerz, Infektion,
+  Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom), nach RTx (Ösophagitis, Pneumonitis, Strahlenfibrose,
+  Hautreaktion, kardiale, myelitische Affektionen).'
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  codings:
+  - system: snomed-ct
+    code: '233604007'
+    display: Pneumonitis (disorder)
+  - system: snomed-ct
+    code: '16348002'
+    display: Radiation oesophagitis
+  - system: icd-10-gm
+    code: T66
+    display: Strahlenschäden, nicht näher bezeichnet
+  - system: icd-10-gm
+    code: J70.1
+    display: Chronische pulmonale Manifestation Strahlentherapie
+care_process:
+  trigger: Bei Erstvorstellung 8 Wo nach Therapieende und bei jeder Folgevisite
+  frequency_pattern: per-encounter
+  responsible_role: Onkologe / Pneumologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.4 (EK), 16.5 (A/B, 1a); Kap. 16.3.1
+    recommendation_grade: A
+    evidence_level: 1a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

@@ -1,0 +1,52 @@
+id: mihub.lung.palliative.phq9DepressionScore.v0.1
+uuid: 2abc7a8b-6b84-5639-b883-e7215c09087a
+name: phq9DepressionScore
+label_de: PHQ-9 Depressionsscore
+definition_de: Patient Health Questionnaire 9 (PHQ-9), 0–27, zur Diagnose und Schweregrad-Einschätzung
+  einer Depression.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 44261-6
+    display: PHQ-9 total score
+constraints_de: Wertebereich 0..27. Cut-off ≥10 = mittelschwere Depression.
+care_process:
+  trigger: Screening bei Aufnahme + Verlauf
+  frequency_pattern: per-encounter / monthly
+  responsible_role: Palliativ-Team / Psychoonkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 18.3 Screening Depression
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

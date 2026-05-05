@@ -1,0 +1,55 @@
+id: mihub.lung.palliative.advanceCarePlanning.v0.1
+uuid: 6713f560-7a57-5804-a980-d35b1dcc2e0e
+name: advanceCarePlanning
+label_de: Vorausschauende Versorgungsplanung (Advance Care Planning)
+definition_de: Strukturierter Prozess der vorausschauenden Versorgungsplanung mit Patient:in (und ggf.
+  Angehörigen) inkl. Therapieziel-Findung und Dokumentation. Patientenverfügung, Vorsorgevollmacht und
+  Behandlungsentscheidungen werden dokumentiert.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 1..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '713600000'
+    display: Advance care planning
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Consent
+  path: Consent.scope='advance-directive'
+care_process:
+  trigger: Diagnose unheilbar; bei jeder substanziellen Verschlechterung erneut
+  frequency_pattern: ongoing
+  responsible_role: Lead-Clinician + Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.x
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

@@ -1,0 +1,51 @@
+id: mihub.lung.surveillance.weightChangePercent.v0.1
+uuid: e93e44ed-2832-5d5c-b0b5-aae4f9a586ab
+name: weightChangePercent
+label_de: Gewichtsverlust (%)
+definition_de: Relativer Gewichtsverlust gegenüber Baseline (Therapiebeginn) in Prozent. Marker für Mangelernährung,
+  Tumorkachexie.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: decimal
+cardinality: 0..*
+unit: '%'
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: loinc
+    code: 8341-0
+    display: Body weight change
+care_process:
+  trigger: bei jeder Visite
+  frequency_pattern: per-encounter
+  responsible_role: Onkologie / Ernährungsmedizin
+evidence:
+  guideline_references:
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Section 5.4 (malnutrition)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

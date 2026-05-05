@@ -1,0 +1,57 @@
+id: mihub.lung.palliative.opioidDailyOmme.v0.1
+uuid: 84577caa-8265-50fa-8808-7a628e28878a
+name: opioidDailyOmme
+label_de: Opioid-Tagesdosis (oMME)
+definition_de: Berechnete tägliche orale Morphin-Äquivalenzdosis (oMME) zur Steuerung der Opioid-Therapie.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: Quantity
+cardinality: 0..*
+unit: mg/d
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: atc
+    code: N02A
+    display: Opioide
+  - system: snomed-ct
+    code: '412130007'
+    display: Oral morphine equivalent (substance)
+standard_mappings:
+- standard: fhir-r4-base
+  resource: MedicationStatement
+  path: MedicationStatement.dosage.doseAndRate
+care_process:
+  trigger: Titration + Dauerregime
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 10.4 Opioid-Titration; 10.6 Opioid-Wechsel
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: medication
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

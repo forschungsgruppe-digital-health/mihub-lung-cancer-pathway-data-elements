@@ -1,0 +1,49 @@
+id: mihub.lung.followup.firstFollowUpVisitDate.v0.1
+uuid: 3948c905-5fd2-5899-85b7-d2de5114bc4c
+name: firstFollowUpVisitDate
+label_de: Datum Erstvorstellung in der Nachsorge
+definition_de: Datum der ersten klinischen Vorstellung nach Abschluss der lokal-ablativen Therapie. Soll
+  innerhalb von 8 Wochen nach Therapieende erfolgen.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: dateTime
+cardinality: 1..1
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Encounter
+  path: Encounter.period.start
+constraints_de: Verzögerung > 8 Wochen ist als Abweichung zu dokumentieren.
+care_process:
+  trigger: Innerhalb 8 Wochen nach Therapieende
+  frequency_pattern: once
+  responsible_role: Onkologe / Pneumologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.4/16.5 (EK / B), geprüft 2025
+    recommendation_grade: B
+    evidence_level: 1a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

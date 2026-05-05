@@ -1,0 +1,57 @@
+id: mihub.lung.followup.distressThermometerScore.v0.1
+uuid: 26e70089-9670-5e8d-b91b-384495857b99
+name: distressThermometerScore
+label_de: Distress-Thermometer Gesamtscore
+definition_de: Score aus dem Distress-Thermometer (NCCN) zur Identifikation psychosozialer Belastung.
+  Cut-off ≥5 typischerweise als Indikation zur weiteren Diagnostik.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..1
+unit: '{score}'
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 63994-4
+    display: Distress thermometer NCCN
+care_process:
+  trigger: regelmäßig in Nachsorge
+  frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
+  responsible_role: Onkologe / Psychoonkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 6 (Distress-Thermometer mit Problemliste)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Principle 4 Supportive care
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

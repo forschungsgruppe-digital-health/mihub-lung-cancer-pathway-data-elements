@@ -1,0 +1,76 @@
+id: mihub.lung.followup.followUpInterval.v0.1
+uuid: 2fb0d5b0-de90-514f-ab0e-204c5831ba0a
+name: followUpInterval
+label_de: Nachsorgeintervall
+definition_de: Festgelegtes Untersuchungsintervall in der strukturierten Nachsorge nach lokal-ablativer
+  Therapie.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Keine etablierte Standardisierung für Nachsorge-Intervall-Pattern dieser Granularität (SNOMED
+    CT, LOINC, oBDS kennen keine deckungsgleichen Codes). Die Codes sind projekt-lokale Platzhalter, abgeleitet
+    aus S3-LL Lungenkarzinom Empf. 16.7 sowie Onkopedia NSCLC Tab. 12 / SCLC Tab. 9. Perspektivisch entweder
+    als FHIR Timing/Period datatypisiert oder als kontrolliertes ValueSet im 'mihub'-Namensraum publiziert.
+  codings:
+  - system: local-no-standard-binding
+    code: Q3M-Y1-Y2
+    display: alle 3 Monate, Jahr 1–2
+  - system: local-no-standard-binding
+    code: Q6M-Y3-Y5
+    display: alle 6 Monate, Jahr 3–5
+  - system: local-no-standard-binding
+    code: Q12M-PostY5
+    display: jährlich (Screening) ab Jahr 6
+  - system: local-no-standard-binding
+    code: Q6-9M
+    display: alle 6–9 Wochen (palliativ unter Systemtherapie)
+care_process:
+  trigger: Festlegung im Nachsorgeplan
+  frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5;Q12M-PostY5
+  responsible_role: Onkologe / Pneumologe
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.7 (EK, geprüft 2025)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand 03/2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1, Tabelle 12 (NSCLC: 3,6,12,18,24,36,48,60 Mo)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand 09/2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2, Tabelle 9 (SCLC: 3,6,9,12,18,24,36,48,60 Mo)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

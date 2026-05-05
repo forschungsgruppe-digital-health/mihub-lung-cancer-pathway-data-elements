@@ -1,0 +1,77 @@
+id: mihub.lung.followup.brainMriFinding.v0.1
+uuid: 380a4f95-544d-5848-9438-cdc316b0763c
+name: brainMriFinding
+label_de: Schädel-MRT — Befund
+definition_de: Befund-Kategorisierung der Schädel-MRT. Ergebnisartefakt zur Prozedur 'brainMriHighRisk'
+  (Nachsorge) bzw. 'brainMriUnderTherapy' (Surveillance). Erfasst Hirnmetastasen-Status (neu, persistierend,
+  regredient, kein Befund).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '94225009'
+    display: Secondary malignant neoplasm of brain
+  - system: snomed-ct
+    code: '359746009'
+    display: Stable disease (finding)
+  - system: snomed-ct
+    code: '260413007'
+    display: None (qualifier value)
+  - system: snomed-ct
+    code: '419984006'
+    display: Inconclusive (qualifier value)
+  - system: kdl
+    code: DG020107
+    display: MRT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/
+  resource: DiagnosticReport
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Verlaufsmodul / ZNS-Metastasierung
+care_process:
+  trigger: nach jeder Schädel-MRT
+  frequency_pattern: per-imaging-event
+  responsible_role: Radiologie / Onkologie
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 4.0 (April 2025)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.8 (EK); Kap. 16.3.4 (Watch-and-Wait, MRT alle 3 Mo bei SCLC ED)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  - result-artifact
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.brainMriHighRisk.v0.1
+- relation: specializes
+  target: mihub.lung.surveillance.brainMriUnderTherapy.v0.1

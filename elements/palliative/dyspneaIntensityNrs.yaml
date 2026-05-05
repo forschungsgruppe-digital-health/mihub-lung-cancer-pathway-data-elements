@@ -1,0 +1,55 @@
+id: mihub.lung.palliative.dyspneaIntensityNrs.v0.1
+uuid: ffde437e-0827-5903-8c6a-34b86ac59c40
+name: dyspneaIntensityNrs
+label_de: Atemnot-Intensität (NRS 0–10)
+definition_de: 'Selbst eingeschätzte Atemnot-Intensität auf einer numerischen Rating-Skala 0–10. Bei kognitiver
+  Einschränkung: Fremdeinschätzung (RDOS).'
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: required
+  codings:
+  - system: loinc
+    code: 89283-6
+    display: Dyspnea severity
+  - system: snomed-ct
+    code: '267036007'
+    display: Dyspnea (finding)
+constraints_de: 'Wertebereich 0..10. In Sterbephase: RDOS-Fremdeinschätzung.'
+care_process:
+  trigger: bei jeder Visite + nach Therapie-Anpassung
+  frequency_pattern: per-encounter
+  responsible_role: Palliativ-Team / Pflege / Patient (Selbsteinschätzung)
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Empf. 9.1 (A); Tab. 9 Dimensionen Atemnot
+    recommendation_grade: A
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

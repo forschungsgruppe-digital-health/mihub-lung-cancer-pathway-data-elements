@@ -1,0 +1,57 @@
+id: mihub.lung.surveillance.molecularRetestingCtdna.v0.1
+uuid: 4563f447-9bd5-531d-a0e5-dd88e2d1f2b5
+name: molecularRetestingCtdna
+label_de: Molekulares Retesting (ctDNA / Re-Biopsie)
+definition_de: Erneute molekulare Charakterisierung (Liquid-Biopsy ctDNA oder Re-Biopsie) bei Progression
+  unter zielgerichteter Therapie zur Identifikation von Resistenzmechanismen.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 84141-0
+    display: Circulating tumor DNA panel
+  - system: snomed-ct
+    code: '765168009'
+    display: Liquid biopsy
+  - system: kdl
+    code: PT130102
+    display: Molekularpathologiebefund
+care_process:
+  trigger: bei Progression unter zielgerichteter Therapie
+  frequency_pattern: ad-hoc
+  responsible_role: Onkologe / Pathologie / Molekularpathologie
+evidence:
+  guideline_references:
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 6.1 (re-biopsy / ctDNA bei Rezidiv)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''

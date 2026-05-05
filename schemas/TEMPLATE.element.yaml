@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=../../schemas/data-element.schema.json
+# =====================================================================
+# MiHUB Patientenpfad — Datenelement-Vorlage (YAML)
+# Strukturiert nach ISO 13972:2022 §6+§7 / ISO 13606-2 §6.2 / HL7 HSRA.
+# Feldnamen = Englisch (HL7-/FHIR-anschlussfähig), Inhalte = Deutsch.
+# Schema:  ../schemas/data-element.schema.json
+# Tipp: Mit VS Code + 'YAML' Extension validiert die Zeile oben in Echtzeit.
+# =====================================================================
+
+id: mihub.lung.<followup|surveillance|palliative>.<element>.v0.1
+uuid: 00000000-0000-0000-0000-000000000000   # neu erzeugen (uuidgen)
+name: <camelCaseTechnicalName>
+label_de: <deutsche Anzeigebezeichnung>
+label_en: <english display label>             # optional
+definition_de: |
+  <klinisch-semantische Definition>
+
+phase: <followup | surveillance | palliative>
+tumor_entity:                                  # 1..*; lung_cancer_any wenn unspezifisch
+  - NSCLC
+  - SCLC
+
+datatype: <z. B. CodeableConcept | Quantity | code | dateTime | boolean>
+cardinality: 0..1                              # Pattern: [01*]..[1*]
+unit: <UCUM, falls Quantity>                   # optional
+
+value_set:                                     # ISO 13972 §6.6.5 / §6.6.8
+  binding_strength: extensible                 # required | extensible | preferred | example
+  standard_binding_status: mapped              # mapped | no-standard-found | pending-mapping | n/a
+  uri: <FHIR ValueSet URL>                     # optional
+  notes: <falls no-standard-found: warum kein Standard, ggf. perspektivische Pfade>
+  codings:
+    - system: snomed-ct                        # bevorzugt internationale Standards
+      code: "<SCTID>"
+      display: <englisches Display>
+    - system: icd-10-gm
+      code: <Cxx.x>
+      display: <Klartext>
+  # Bei standard_binding_status: no-standard-found:
+  #   - system: local-no-standard-binding      # zwingend in Kombination mit dem Status-Flag
+  #     code: <project-internal>
+  #     display: <Klartext>
+
+standard_mappings:                             # 0..* parallele Bindings; nationale Ziele zuerst
+  - standard: fhir-mii-kds                     # fhir-r4-base | fhir-mii-kds | fhir-isik | kbv-mio | obds | openehr-archetype | hl7-v2 | dicom-sr | hl7-cda | ihe-xds
+    profile_or_url: <https://www.medizininformatik-initiative.de/fhir/...>
+    resource: Observation                      # Ressource im jeweiligen Standard
+    path: Observation.valueQuantity            # FHIRPath / Archetypen-Pfad / oBDS-Feld
+    notes: <freier Hinweis>
+  # Beispiel für Mehrfach-Mapping:
+  # - standard: obds
+  #   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  #   resource: Verlaufsmodul
+  #   notes: Pflichtmeldung §65c SGB V
+  # - standard: kbv-mio
+  #   profile_or_url: https://mio.kbv.de/
+  #   resource: Patientenkurzakte
+
+instruction_de: |
+  <Wann/wie wird das Element erfasst?>
+constraints_de: |
+  <Einschränkungen, Ausschlüsse>
+
+care_process:                                  # ISO 13972 §6.11 / ISO 13940
+  trigger: <z. B. „Erstvorstellung 8 Wochen nach Therapieabschluss"|"je Kontakt"|"Routinekontrolle Monat 3">
+  frequency_pattern: <z. B. Q3M-Y1-Y2;Q6M-Y3-Y5 | per-encounter | ad-hoc>
+  responsible_role: <Onkologe | Hausarzt | Palliativ-Team | Pflege | MDT>
+
+evidence:
+  guideline_references:
+    - source: S3-LL Lungenkarzinom
+      version: "4.0 (April 2025)"
+      section: <Kap./Empfehlungs-Nr./Tabelle>
+      recommendation_grade: <A|B|0|EK|Statement|n/a>
+      evidence_level: <1a|1b|2b|3|4|n/a>
+      url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+
+iso13972_metadata:                             # ISO 13972 Tabelle 2 (mandatory subset)
+  type: observation                            # observation|procedure|evaluation|plan|condition|medication|social
+  keywords:
+    - Lungenkarzinom
+    - Nachsorge
+  authors:
+    - "MiHUB AP8 (TBD)"
+  endorsing_authority: "MiHUB Konsortium AP8"
+  version_number: "0.1.0"
+  creation_date: 2026-05-04
+  publication_status: AuthorDraft
+  publisher: "MiHUB Konsortium AP8"
+  language: [de, en]
+  license: CC-BY-4.0
+
+provenance:
+  created_by: "<Person/Organisation>"
+  reviewers: []
+  git_commit: ""                               # füllt CI
+
+issues: []                                     # offene Punkte
+related_elements: []                           # Beziehungen

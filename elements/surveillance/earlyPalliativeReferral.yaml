@@ -1,0 +1,56 @@
+id: mihub.lung.surveillance.earlyPalliativeReferral.v0.1
+uuid: d0e10eac-70a7-53f8-9f8f-47c9e7e21673
+name: earlyPalliativeReferral
+label_de: Frühzeitige palliativmedizinische Mitbetreuung
+definition_de: Anbindung an Palliativversorgung parallel zur tumorspezifischen Therapie (frühzeitig, gemäß
+  S3-LL Palliativmedizin).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+datatype: boolean
+cardinality: 1..1
+value_set:
+  binding_strength: preferred
+  codings:
+  - system: snomed-ct
+    code: '103735009'
+    display: Palliative care
+care_process:
+  trigger: Diagnose Stadium IV / unheilbar
+  frequency_pattern: once-then-ongoing
+  responsible_role: Onkologe + Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.5 Gleichzeitigkeit Palliativversorgung & tumorspezifische Therapie
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/OCP
+    section: Step 6 (palliative care from diagnosis)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Datenelement-Erhebung
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-05-04'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
+  reviewers: []
+  git_commit: ''
