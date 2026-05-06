@@ -238,7 +238,45 @@ Die eigentlichen Schreib-Operationen wurden gemäß §6 der Analyzer-Agent-Spec 
 - Erneuter Analyzer-Lauf nach Veröffentlichung der finalen v5 ist empfohlen — insbesondere zur Prüfung, ob Empf. 4.5 (Screening + Tabakentwöhnung) zusammen mit der Phase `screening` befüllt wird.
 - Empfehlungsnummern in v5.01 haben sich teilweise verschoben (z. B. 8.11→8.10) — semantisch wurde die Empfehlung erhalten; Sektion-Referenzen bleiben gültig, sind aber im Validator-Lauf zu prüfen.
 
-## 9 Limitationen
+## 9 v0.1.6 — README-Neufassung (Projektkontext-Anpassung)
+
+Datum: 2026-05-06 · Auslöser: Nutzer-Anweisung zur Angleichung an die README-Struktur des Schwester-Repositorys [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway) und Auswertung des MiHUB-Projektantrags (`MiHUB_final.pdf`).
+
+### 9.1 Geänderte Datei
+
+| Datei | Änderungs-Typ | Begründung |
+| --- | --- | --- |
+| `README.md` | Komplettüberarbeitung | Strukturelle Angleichung an das Pathway-Repo; explizite Verankerung im MiHUB-Projektantrag (drei strategische Use Cases, Palliativ-Anchor in AP3/AP7/AP8); Entfernung aller schnell veraltenden „Bezug zu diesem Repository"-Inhalte (konkrete Element-Listen, Phasen-Stückzahlen, hartcodierte YAML-Pfade) |
+| `README.proposal.md` | gelöscht | Zwischenstand für Review; nach Freigabe in `README.md` übernommen |
+
+### 9.2 Inhaltliche Verifikation gegen MiHUB-Projektantrag (`MiHUB_final.pdf`, 61 S.)
+
+| Aussage in der README | Antrags-Beleg |
+| --- | --- |
+| Drei strategische Use Cases | §3 Overall Objectives: „Prevention/Lung Cancer Screening, Cooperative Cancer Care (including palliative care), Follow-up/Long-Term Survivors (including palliative care)" |
+| Palliativversorgung in AP7 (kooperativ) | §8.8 WP7: „patients in **advanced and palliative** lung cancer care"; Task 7.2 „palliative care requirements"; Task 7.3 „focusing on palliative care" |
+| Palliativversorgung in AP8 (Nachsorge) | Abbildung 1: „Aftercare > Palliative Care"; §8.9 Task 8.1 „through stakeholder workshops (with WP9)" |
+| Palliativversorgung als Phase im AP3-Pfad | §8.4 WP3: Pfad umfasst „screening, treatment, follow-up, **palliative**, and primary care" |
+| Konsortialpartner | §1.2: TUD/ZMI · MUL Carl Thiem Cottbus · Klinikum Chemnitz · HSMW Mittweida |
+| Cross-Hub Use Case Lungenkrebs | §8.1 + Abbildung 1: „Cross-Hub Use Case: Digital Support in Complex Patient Journeys — Lung Cancer" |
+| Deliverables D6.2, D7.1–7.3, D8.1–8.5 | §§8.7–8.9 entsprechend; Fälligkeiten verifiziert (M9, M12, M24, M32, M36) |
+| AP9-Klammer (User-Centered Design / ISO 9241-210) | §8.10 WP9; AP8 Task 8.1 „with WP9" |
+
+### 9.3 Bewusst nicht aus dem Antrag übernommen
+
+- **Förderkennzeichen `01ZZ2506A`** — im Antrag nicht enthalten (wird erst nach Bewilligung vergeben). Aus dem Pathway-Repo-README übernommen; Bestätigung durch das Konsortium ausstehend.
+- **Repo-Name** — als Platzhalter `<repo-name>` belassen, da der finale Repo-Name auf der MiHUB-GitHub-Organisation noch nicht festgelegt ist.
+
+### 9.4 Wartungs-Hinweis
+
+Die README ist nun bewusst **frei von zustandsabhängigen Inhalten** (Element-Anzahl, Phasen-Stückzahlen, konkrete YAML-Beispielpfade, einzelne Score-Namen pro AP). Aktuelle Element-Bestände finden Reviewer:innen über die generierten Sichten:
+
+- `docs/phases-overview.md` (lesefreundlich, autogeneriert)
+- `catalog/data-dictionary.csv` und `.md` (vollständig, autogeneriert)
+
+Damit reduziert sich der README-Pflegebedarf bei künftigen Datenelement-Änderungen auf null — Updates fließen automatisch in die generierten Sichten.
+
+## 10 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.
