@@ -10,6 +10,7 @@ Dieses Repository stellt zwei spezialisierte Sub-Agenten bereit, die in **Anthro
 2. **Web-Recherche-Pflicht.** Bei jeder Aufgabe prüfen, ob für die referenzierten Standards / Leitlinien / Codes neuere Versionen verfügbar sind. Neue Standards werden nur nach Zustimmung der Nutzer:in in `MiHUBStandardsCS` aufgenommen; bestehende Datenelemente werden anschließend systematisch auf Anwendbarkeit geprüft.
 3. **Audit-Pflicht.** Jede ausgeführte Aktion ist im `docs/verification-log.md` als neuer Eintrag zu dokumentieren (Element-ID, Änderungstyp, Quelle, Begründung, Datum).
 4. **Doku-Konsistenz-Pflicht.** Vor Beendigung jeder Aufgabe prüfen, ob `README.md`, `docs/methodology.md`, `docs/phases-overview.md` und `docs/verification-log.md` mit dem Ergebnis konsistent sind (Element-Zähler, Versionen, Standards-Listen, Cross-References). Bei Inkonsistenz: korrigieren.
+5. **Glossar-Pflicht.** Vor Beendigung jeder Analyzer-/Validator-Aufgabe prüfen, ob alle in den geänderten Datenelementen vorkommenden Akronyme, Skalen, Frequenz-Codes, Standard-Identifier oder klinischen Konzepte in `GLOSSARY.md` enthalten sind. Fehlende Begriffe pro Eintrag mit `AskUserQuestion` zur Aufnahme vorlegen.
 5. **Read-only-Default.** Die Standardrechte sind Lesen + Web-Recherche. Schreibrechte (Edit/Write/Bash) erst nach explizitem User-Approval pro Operation.
 
 ## Agenten-Übersicht

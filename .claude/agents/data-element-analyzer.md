@@ -37,6 +37,8 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 
 **7. Doku-Konsistenz-Check vor Beendigung.** Vor Abschluss der Aufgabe prüfst du, ob `README.md`, `docs/methodology.md`, `docs/phases-overview.md` und `docs/verification-log.md` mit dem Ergebnis konsistent sind (Element-Zähler, Standards-Listen, Versions-Pins, Cross-References). Bei Inkonsistenzen: schlage Korrekturen vor (analog zu §2 mit Zustimmung).
 
+**8. Glossar-Pflege.** `GLOSSARY.md` ist die zentrale Begriffs-Referenz. Bei jedem Lauf prüfst du, ob in den vorgeschlagenen Änderungen oder neu identifizierten Datenelementen **Akronyme, Skalen, Frequenz-Codes, Standard-Identifier oder klinische Konzepte** vorkommen, die noch nicht in `GLOSSARY.md` enthalten sind. Pro fehlendem Begriff: separate `AskUserQuestion` mit Optionen `Aufnehmen in Sektion <X>` / `Aufnehmen in neuer Sektion` / `Verwerfen` / `Zurückstellen`. Beispiel-Pflichtbegriffe pro Vorschlag-Typ: bei neuer Skala → Akronym + Wertebereich + ggf. Cut-off; bei neuem Frequenz-Code → Pattern-Erklärung; bei neuem Standard → Geltungsraum + URL/OID. Der Glossar-Patch wird wie alle Schreib-Operationen an den Validator delegiert.
+
 ## Arbeitsablauf
 
 1. **Eingabe parsen** — Quelldokument lesen (PDF via `Read`, URL via `WebFetch`); Sektionen/Empfehlungen/Codes extrahieren.
@@ -46,7 +48,13 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 5. **Pro Element: AskUserQuestion** mit Optionen `Hinzufügen` / `Bestehendes ergänzen (Element X)` / `Verwerfen` / `Zurückstellen` und kurzer Begründung pro Option.
 6. **Audit-Eintrag** in `docs/verification-log.md` schreiben (per Edit, falls Schreibrechte freigegeben — sonst als Patch-Vorschlag liefern).
 7. **Doku-Konsistenz-Check** durchführen.
-8. **Zusammenfassung** an die Nutzer:in: was wurde angenommen, was abgelehnt, was an den Validator-Agent delegiert.
+8. **Glossar-Pflege** (`GLOSSARY.md`):
+   - Identifiziere alle in den vorgeschlagenen Element-Änderungen vorkommenden **Akronyme, Skalen, Frequenz-Codes, Standard-Identifier, klinische Konzepte, ICD-O-3/ICF-Subkategorien**.
+   - Per `Grep` prüfen, ob jeder Begriff bereits in `GLOSSARY.md` aufgeführt ist.
+   - Für jeden noch nicht aufgenommenen Begriff: **separate `AskUserQuestion`** mit Optionen `Aufnehmen in Sektion <X>` / `Aufnehmen in neuer Sektion` / `Verwerfen` / `Zurückstellen`.
+   - Aufgenommene Begriffe als Patch-Vorschlag in passende Sektion einfügen (delegiert an Validator wie alle Schreib-Operationen).
+   - Audit-Eintrag in `verification-log.md` mit Liste der hinzugefügten Begriffe.
+9. **Zusammenfassung** an die Nutzer:in: was wurde angenommen, was abgelehnt, was an den Validator-Agent delegiert.
 
 ## Sicherheits-Regeln
 

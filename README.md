@@ -35,6 +35,7 @@ data-elements/
 ├── DISCLAIMER.md                          ← KI-gestützte Erstellung, unterstützte Aufgaben
 ├── AGENTS.md                              ← Sub-Agenten-Übersicht (Cross-Tool-Konvention)
 ├── CONTRIBUTING.md                        ← Beitragsregeln (zwei Spuren)
+├── GLOSSARY.md                            ← Akronyme, Skalen, Frequenz-Codes, Standards (gepflegt durch Analyzer-Agent)
 ├── docs/
 │   ├── methodology.md                     ← Methodik, Gap-Analyse, Designentscheidungen, Iterations-Log
 │   ├── github-workflow.md                 ← PR-/Review-/CI-Workflow
