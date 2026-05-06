@@ -42,13 +42,19 @@ Das MI-Team konvertiert das Issue in ein valides YAML (siehe §B), öffnet einen
 
 **Voraussetzung:** Git-Grundlagen, Editor mit YAML-Highlighting (z. B. VS Code), Python ≥ 3.10.
 
-### Schritt B1 — Repository klonen
+### Schritt B1 — Repository klonen + Python-Umgebung einrichten
 
 ```bash
 git clone <repo-url>
 cd data-elements
-pip install pyyaml jsonschema
+
+# einmaliges Setup einer isolierten Python-Umgebung (.venv ist gitignored)
+python3 -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+pip install -r requirements.txt      # pyyaml + jsonschema
 ```
+
+Bei späteren Terminal-Sessions reicht `source .venv/bin/activate`.
 
 ### Schritt B2 — Branch anlegen
 

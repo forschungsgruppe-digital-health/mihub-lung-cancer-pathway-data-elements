@@ -52,6 +52,7 @@ data-elements/
 ├── catalog/                               ← autogenerierte Vollsicht (22 Spalten)
 │   ├── data-dictionary.csv                ← CSV (Excel/REDCap-kompatibel)
 │   └── data-dictionary.md                 ← 1:1-Markdown-Spiegel (für PR-Diffs, Web-UI)
+├── requirements.txt                       ← Python-Abhängigkeiten (pyyaml, jsonschema)
 ├── scripts/
 │   ├── validate.py                        ← Schema-Validierung
 │   ├── build-catalog.py                   ← YAML → CSV Aggregator

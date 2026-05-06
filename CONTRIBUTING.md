@@ -19,6 +19,25 @@ Sie sind Medizininformatiker:in oder hinreichend technisch:
 
 → Folgen Sie der ausführlichen Anleitung in [`docs/howto-add-element.md`](docs/howto-add-element.md).
 
+#### Einmaliges Setup der Python-Umgebung
+
+```bash
+cd data-elements
+python3 -m venv .venv
+source .venv/bin/activate            # Linux/macOS · Windows: .venv\Scripts\activate
+pip install -r requirements.txt      # pyyaml + jsonschema
+```
+
+Anschließend stehen die drei Skripte zur Verfügung:
+
+```bash
+python scripts/validate.py                       # YAML-Schema-Validierung
+python scripts/build-catalog.py                  # CSV + Markdown + phases-overview
+python scripts/build-fhir-logical-models.py      # FHIR Logical Model (FSH, optional)
+```
+
+Bei späteren Terminal-Sessions reicht `source .venv/bin/activate`. Das Verzeichnis `.venv/` ist gitignored.
+
 ## Allgemeine Regeln
 
 - Pro Pull Request möglichst **ein** Datenelement (atomare Reviews).

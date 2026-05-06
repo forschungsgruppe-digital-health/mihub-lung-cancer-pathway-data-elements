@@ -1,0 +1,12 @@
+# Python-Abhängigkeiten für die Generator- und Validierungs-Skripte unter scripts/.
+#
+# Installation in eine lokale virtuelle Umgebung:
+#   python3 -m venv .venv
+#   source .venv/bin/activate          # Linux/macOS
+#   .venv\Scripts\activate             # Windows PowerShell
+#   pip install -r requirements.txt
+#
+# Versionen sind als Mindest-Versionen gepinnt (kompatibel mit Python ≥ 3.10).
+
+pyyaml>=6.0
+jsonschema>=4.20
