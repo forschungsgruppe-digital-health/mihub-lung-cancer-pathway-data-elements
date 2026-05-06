@@ -128,7 +128,7 @@ PR-/CI-/CODEOWNERS-Workflow: [`docs/github-workflow.md`](docs/github-workflow.md
 
 ## 6 Quellenbasis (initiale Befüllung der drei Phasen)
 
-- Leitlinienprogramm Onkologie: **S3-Leitlinie Lungenkarzinom**, Langversion 4.0, April 2025. Kapitel 16 *Nachsorge / Verlauf / Follow-up*; Kapitel 15 Rehabilitation; Tabelle 42.
+- Leitlinienprogramm Onkologie: **S3-Leitlinie Lungenkarzinom**, Langversion **5.01**, Konsultationsfassung 04/2026 (AWMF 020-007OL, Kommentarfrist bis 2026-05-02; bisherige finale Version 4.0 04/2025 ist abgelöst). Kapitel 4 *Tabakentwöhnung* (modifiziert/neu 2026), Kapitel 16 *Nachsorge / Verlauf / Follow-up* (Empfehlungen 16.1–16.9 Aufwertung EK→B 2025), Kapitel 15 Rehabilitation; Tabelle 42; Tabelle 48 (Übersicht der Änderungen v4 → v5).
 - Leitlinienprogramm Onkologie: **S3-Leitlinie Palliativmedizin**, Langversion 3.01 Konsultationsfassung 03/2026.
 - AWMF: **S3-LL Rauchen / Tabakabhängigkeit** 076-006l, 03/2021.
 - **Onkopedia** Lungenkarzinom NSCLC (Stand 03/2026, Kap. 8 Nachsorge, Tab. 12) und SCLC (Stand 09/2025, Kap. 10 Nachsorge, Tab. 9).

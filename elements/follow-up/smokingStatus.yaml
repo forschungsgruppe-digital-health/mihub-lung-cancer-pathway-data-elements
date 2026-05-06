@@ -2,8 +2,10 @@ id: mihub.lung.followup.smokingStatus.v0.1
 uuid: 0e39538d-7ac1-5c78-a7aa-ee553e5bf28e
 name: smokingStatus
 label_de: Rauchstatus
-definition_de: Aktueller Tabakkonsumstatus. Aktive Raucher haben höheres Risiko für Komplikationen, Zweittumoren
-  und schlechteres Überleben.
+definition_de: Aktueller Tabakkonsumstatus inkl. E-Zigaretten-Konsum (Vaping) und Passivrauchexposition.
+  Aktive Raucher und E-Zigaretten-Konsumenten haben höheres Risiko für Komplikationen, Zweittumoren und
+  schlechteres Überleben; Passivrauchexposition ist eigenständiger Risikofaktor und in v5.01 explizit
+  Teil der Tabakanamnese.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -12,6 +14,7 @@ datatype: CodeableConcept
 cardinality: 1..1
 value_set:
   binding_strength: required
+  standard_binding_status: mapped
   uri: http://hl7.org/fhir/ValueSet/smoking-status
   codings:
   - system: snomed-ct
@@ -26,6 +29,12 @@ value_set:
   - system: snomed-ct
     code: '428041000124106'
     display: Occasional tobacco smoker
+  - system: snomed-ct
+    code: '722498003'
+    display: Smokes electronic cigarettes (finding)
+  - system: snomed-ct
+    code: '43381005'
+    display: Passive smoker (finding)
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Raucher
@@ -38,7 +47,7 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 4.0 (April 2025)
+    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.3 (B, 2b)
     recommendation_grade: B

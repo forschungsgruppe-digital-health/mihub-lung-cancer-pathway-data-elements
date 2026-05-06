@@ -34,10 +34,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 4.0 (April 2025)
+    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (EK)
-    recommendation_grade: EK
+    section: Empf. 16.8 (B, geprüft 2025)
+    recommendation_grade: B
     evidence_level: n/a
   - source: Onkopedia SCLC
     version: Stand 09/2025

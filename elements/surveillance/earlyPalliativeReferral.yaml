@@ -2,8 +2,10 @@ id: mihub.lung.surveillance.earlyPalliativeReferral.v0.1
 uuid: d0e10eac-70a7-53f8-9f8f-47c9e7e21673
 name: earlyPalliativeReferral
 label_de: Frühzeitige palliativmedizinische Mitbetreuung
-definition_de: Anbindung an Palliativversorgung parallel zur tumorspezifischen Therapie (frühzeitig, gemäß
-  S3-LL Palliativmedizin).
+definition_de: 'Anbindung an Palliativversorgung parallel zur tumorspezifischen Therapie (frühzeitig,
+  gemäß S3-LL Palliativmedizin Kap. 5.5). Empfehlung 8.6 S3-LL Lungenkarzinom v5.01 (modifiziert 2026):
+  begleitend ist ein **standardisiertes Symptomassessment** regelmäßig durchzuführen, um eine bedarfsorientierte
+  Integration der Palliativversorgung zu ermöglichen.'
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -54,3 +56,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1

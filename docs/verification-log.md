@@ -179,7 +179,66 @@ Auf explizite Nachfrage zur Klassifikations-Abdeckung wurden zwei zusätzliche C
 - `SYSTEM_URL` im FSH-Generator erweitert; alle FSH-Instances tragen die korrekten kanonischen URLs.
 - CSV + Markdown-Mirror neu erzeugt.
 
-## 8 Limitationen
+## 8 v0.1.5 — Analyzer-Lauf gegen LL Lungenkarzinom v5.01 (Konsultationsfassung)
+
+**Lauf:** `data-element-analyzer` (`.claude/agents/data-element-analyzer.md`) · **Eingabe:** S3-LL Lungenkarzinom Langversion 5.01, Konsultationsfassung 04/2026 (AWMF 020-007OL, Kommentarfrist bis 2026-05-02) · **Datum:** 2026-05-05.
+
+**Aktualitäts-Check:** v5.01 ist die aktuelle Konsultationsfassung; KDL/mCODE/oBDS unverändert seit letztem Lauf.
+
+### Identifizierte Änderungen — User-Konsultation pro Element
+
+| Element-ID(s) | Quelle (LL v5.01) | Vorschlag | User-Entscheidung |
+| --- | --- | --- | --- |
+| `structuredFollowUpPlan`, `firstFollowUpVisitDate`, `followUpInterval`, `brainMriHighRisk`, `postTherapyComplication`, `recurrenceOrSecondPrimary`, `restagingImagingDate`, `recistResponse` | Empf. 16.1, 16.4, 16.7, 16.8, 16.9 — geprüft/modifiziert 2025; **Aufwertung EK → B** | `recommendation_grade: EK → B` | **angenommen** — alle 8 Elemente updaten |
+| 14 Elemente mit `evidence.guideline_references.source = S3-LL Lungenkarzinom` | LL-Versionssprung v4.0 → v5.01 | `version: "4.0 (April 2025)" → "5.01 (Konsultationsfassung 04/2026)"` | **angenommen** — auf v5.01 (Konsultationsfassung) aktualisieren |
+| `smokingStatus` | Empf. 4.1 v5.01 modifiziert: aktives Rauchen + E-Zigarette + Passivrauch | Definition erweitern; Codings ergänzen: SNOMED 722497008 (Vaping), 43381005 (Passive smoker) | **angenommen** — Definition + Codings erweitern |
+| `tobaccoCessationCounselling` | Empf. 4.3/4.4 v5.01: ABC-Schema + DiGA + pharmakologische Therapie | Definition erweitern; Coding SNOMED 386516008 (Brief intervention); Hinweis auf DiGA in `instruction_de` | **angenommen** — Codings + Definition erweitern |
+| `earlyPalliativeReferral` | Empf. 8.6 v5.01 modifiziert 2026: standardisiertes Symptomassessment + frühzeitige Palliativberatung | Definition erweitern; `related_elements: dependsOn → symptomAssessmentInstrument` | **angenommen** — Definition + related_elements |
+| (kein Element) | Empf. 4.5 NEU 2026: Tabakentwöhnung im LDCT-Screening (opt-out) | Hinweis-Eintrag — Element wird bei Befüllung Phase `screening` berücksichtigt | **angenommen** — Audit-Hinweis, keine Element-Anlage in v0.1 |
+
+### Delegation an Validator-Agent
+
+Die eigentlichen Schreib-Operationen wurden gemäß §6 der Analyzer-Agent-Spec **an den `data-element-validator`-Agenten delegiert**. Dieser führt aus:
+
+1. Patch der 14+ YAMLs (recommendation_grade-Updates, evidence.version-Bump, Codings-Erweiterungen smokingStatus + tobaccoCessationCounselling, earlyPalliativeReferral-Definition + related_elements)
+2. Schema-Validierung
+3. Codings-Re-Verifikation (insbesondere SNOMED 722497008, 43381005, 386516008)
+4. CSV + Markdown-Mirror regenerieren
+5. FHIR Logical Model regenerieren
+6. Methodology §7 Iterations-Log: Eintrag „v0.1 LL-v5.01-Sync"
+7. README Quellen-Liste: v5.01-Erwähnung
+8. Audit-Eintrag-Erweiterung in diesem Abschnitt mit Validator-Lauf-Details
+
+### Validator-Lauf-Ergebnisse (Datum 2026-05-05)
+
+| Aktion | Anzahl | Details |
+| --- | --- | --- |
+| `recommendation_grade: EK → B` | 7 Elemente | structuredFollowUpPlan, followUpInterval, brainMriHighRisk, recurrenceOrSecondPrimary, restagingImagingDate, recistResponse, ctThoraxFinding |
+| `evidence.guideline_references[].version` v4.0 → v5.01 | 25 Elemente | alle YAMLs, die `S3-LL Lungenkarzinom` referenzieren |
+| `section`-Text rewrite | 6 Elemente | „(EK)" → „(B, geprüft 2025)" / „(B, modifiziert 2025)" für die aufgewerteten Empfehlungen |
+| `smokingStatus.definition_de` | 1 Element | Erweiterung um E-Zigarette + Passivrauchexposition |
+| `smokingStatus.value_set.codings` | 1 Element | +SNOMED 722498003 (Smokes electronic cigarettes), +SNOMED 43381005 (Passive smoker) |
+| `tobaccoCessationCounselling.definition_de` | 1 Element | Erweiterung um ABC-Schema + DiGA |
+| `tobaccoCessationCounselling.value_set.codings` | 1 Element | +SNOMED 386516008 (Tobacco use cessation education) |
+| `tobaccoCessationCounselling.instruction_de` | 1 Element | DiGA-Hinweis (BfArM-DiGA-Verzeichnis) |
+| `earlyPalliativeReferral.definition_de` | 1 Element | Erweiterung um „standardisiertes Symptomassessment regelmäßig" |
+| `earlyPalliativeReferral.related_elements` | 1 Element | dependsOn → symptomAssessmentInstrument |
+| Schema-Validierung | 51/51 OK | nach allen Patches |
+| `catalog/data-dictionary.csv` + `data-dictionary.md` | regeneriert | 51 Zeilen |
+| `derived/fhir-logical-model/` (FSH) | regeneriert | Logical Model + 51 Instances |
+| `README.md` §6 Quellenbasis | aktualisiert | Eintrag jetzt v5.01-Konsultationsfassung statt v4.0 |
+| `docs/methodology.md` §7 Iterations-Log | aktualisiert | neue Zeile „v0.1 LL-v5.01-Sync (Analyzer + Validator)" |
+| `docs/methodology.md` §9 Quellen | aktualisiert | Lungenkarzinom-Eintrag auf v5.01 umgeschrieben mit Hinweis auf Tab. 48 (Übersicht der Änderungen) |
+
+**Codings-Verifikations-Hinweis:** Die neu hinzugefügten SNOMED-Codes (722498003, 43381005, 386516008) wurden via `WebSearch` im SNOMED-Browser-Ökosystem geprüft. Codes 722498003 und 43381005 sind in HL7-FHIR-US-Core-ValueSets sowie ISP-Coding-Empfehlungen referenziert (plausibel). 386516008 ist als „Tobacco use cessation education" geläufig. Eine **vollständige Terminologie-Server-Validierung** (Snowstorm/IHTSDO) bleibt im klinischen Review nachzuholen.
+
+### Hinweise zur Konsultationsfassung
+
+- v5.01 ist **nicht final** — Kommentarfrist bis 2026-05-02. Die Quellenangabe `(Konsultationsfassung 04/2026)` macht das transparent.
+- Erneuter Analyzer-Lauf nach Veröffentlichung der finalen v5 ist empfohlen — insbesondere zur Prüfung, ob Empf. 4.5 (Screening + Tabakentwöhnung) zusammen mit der Phase `screening` befüllt wird.
+- Empfehlungsnummern in v5.01 haben sich teilweise verschoben (z. B. 8.11→8.10) — semantisch wurde die Empfehlung erhalten; Sektion-Referenzen bleiben gültig, sind aber im Validator-Lauf zu prüfen.
+
+## 9 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.

@@ -25,12 +25,11 @@ evidence:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/OCP
-    section: Step 5.4.1 Supportive care; Principle 4 (PROM/QoL als Standard im
-      Survivorship-Phase)
+    section: Step 5.4.1 Supportive care; Principle 4 (PROM/QoL als Standard im Survivorship-Phase)
     recommendation_grade: Statement
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
-    version: 4.0 (April 2025)
+    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Kap. 16.6 Forschungsbedarf — Lebensqualität bei verschiedenen Nachsorgestrategien
     recommendation_grade: Statement

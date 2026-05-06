@@ -2,8 +2,10 @@ id: mihub.lung.followup.tobaccoCessationCounselling.v0.1
 uuid: eda1c29f-a2a0-5a4f-9dfe-8a17f620094b
 name: tobaccoCessationCounselling
 label_de: Raucherentwöhnungsangebot
-definition_de: Dokumentation der Vermittlung wirksamer Hilfen zur Tabakentwöhnung (Beratung, medikamentöse
-  Unterstützung, Verhaltensintervention).
+definition_de: 'Strukturierte Tabakentwöhnungs-Beratung (z. B. nach ABC-Schema: Ask – Brief advice – Cessation
+  support) inkl. Vermittlung an wirksame Hilfen (Tabakentwöhnungskurse, Telefonberatung, DiGA) und ggf.
+  pharmakologische Therapie (Nikotinersatz, Vareniclin). Bei rauchenden Lungenkarzinom-Patient:innen soll
+  eine pharmakologische Therapie angeboten werden.'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -29,6 +31,9 @@ value_set:
   - system: icd-10-gm
     code: Z71.6
     display: Beratung bei Tabakkonsum
+  - system: snomed-ct
+    code: '386516008'
+    display: Tobacco use cessation education (procedure)
 care_process:
   trigger: bei Status 'Smoker' / 'Occasional smoker'
   frequency_pattern: per-encounter-if-indicated
@@ -36,7 +41,7 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 4.0 (April 2025)
+    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.3 (B)
     recommendation_grade: B
@@ -67,3 +72,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+instruction_de: Beratung nach ABC-Schema empfohlen (S3-LL Lungenkarzinom v5.01 Empf. 4.3). DiGA-Optionen
+  (Digitale Gesundheitsanwendungen, BfArM-DiGA-Verzeichnis) können als Vermittlungsweg in instruction_de
+  oder im Versorgungs-Setup konkretisiert werden.

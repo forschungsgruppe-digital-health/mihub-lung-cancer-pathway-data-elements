@@ -212,6 +212,7 @@ Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) 
 | v0.1 Ergebnisartefakte | unverändert | +7 Result-Datenelemente (Bildbefunde, Lungenfunktion, Mutation, CTCAE-Grad, Zarit-Score) → 51 |
 | v0.1 KDL-Mapping | unverändert | +20 KDL-Codings (DG020103 CT-Befund, DG020107 MRT-Befund, DG060108 Lungenfunktion, PT130102 Molekularpathologiebefund, AD060106 Tumorkonferenzprotokoll, SD150101 Follow up-Bogen, AM160104 Patientenverfügung, SD110105 Palliativmed. Komplexbeh., VL010103 Schmerzerhebungsbogen) |
 | v0.1 ICD-O-3 + ICF | `SYSTEM_URL` erweitert (`icd-o-3`, `icf`) | Codings ergänzt: ICD-O-3 M-/T-Codes für Lungenkarzinom-Histologie auf `recurrenceOrSecondPrimary`; ICF b440/b280/d4/d5 auf Atemnot/Schmerz/Funktion; ICD-10-GM Z51.5/Z71.6 auf Palliativ-/Tabakberatung-Elementen |
+| v0.1 LL-v5.01-Sync (Analyzer + Validator) | unverändert | Quellen-Pin S3-LL Lungenkarzinom v4.0→v5.01 in 25 Elementen; recommendation_grade EK→B in 7 Nachsorge-/Surveillance-Elementen (Empf. 16.1, 16.4, 16.7, 16.8, 16.9 in v5.01 aufgewertet); smokingStatus erweitert (E-Zigarette + Passivrauch); tobaccoCessationCounselling erweitert (ABC-Schema + DiGA); earlyPalliativeReferral erweitert (standardisiertes Symptomassessment + dependsOn → symptomAssessmentInstrument). Audit-Trail in `verification-log.md` §8. |
 
 Detaillierter Audit-Trail je Element: `verification-log.md`.
 
@@ -227,7 +228,7 @@ Die Datenelemente füttern die drei Säulen des MiHUB-Zielbilds:
 
 ### Klinische Leitlinien (initiale Befüllung)
 
-- S3-Leitlinie **Lungenkarzinom** (Langversion 4.0, 04/2025) — insbesondere Kap. 16 *Nachsorge / Verlauf / Follow-up* (Empfehlungen 16.1–16.9, Tabelle 42), Kap. 15 Rehabilitation.
+- S3-Leitlinie **Lungenkarzinom** (Langversion **5.01, Konsultationsfassung 04/2026**, AWMF 020-007OL; Kommentarfrist bis 2026-05-02) — insbesondere Kap. 4 *Tabakentwöhnung* (Empf. 4.1–4.5 modifiziert/neu 2026, inkl. E-Zigarette, Passivrauch, ABC-Schema, DiGA, Screening-Opt-out), Kap. 16 *Nachsorge / Verlauf / Follow-up* (Empfehlungen 16.1–16.9 mit Aufwertung EK→B in 2025, Tabelle 42), Kap. 15 Rehabilitation, Tabelle 48 (Übersicht der Änderungen v4 → v5).
 - S3-Leitlinie **Palliativmedizin** (Langversion 3.01, Konsultationsfassung 03/2026) — Kap. 5, 6, 9, 10, 17, 18, 19, 20, 21; Tabellen 6 und 9.
 - S3-Leitlinie **Tabakentwöhnung** AWMF 076-006l, 03/2021.
 - **Onkopedia** Lungenkarzinom NSCLC, Stand 03/2026, Kap. 8 Nachsorge, Tab. 12. Onkopedia SCLC, Stand 09/2025, Kap. 10 Nachsorge, Tab. 9.

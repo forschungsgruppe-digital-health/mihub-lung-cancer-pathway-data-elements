@@ -132,6 +132,70 @@ def write_markdown(rows: list[dict], total: int) -> Path:
     return md_path
 
 
+def write_phases_overview(files: list[Path]) -> Path:
+    """Schreibt die kuratierte Phasen-Übersicht (8 Spalten, Klinik-Zielgruppe)."""
+    phases = [
+        ("follow-up", "Onkologische Nachsorge (kurativ behandelt)",
+         "Datenelemente nach kurativ-intendierter multimodaler Therapie. "
+         "Mit Ergebnis-Artefakten zu Bildgebung und Lungenfunktion."),
+        ("surveillance", "Verlaufsbeobachtung / Surveillance (unter Systemtherapie)",
+         "Datenelemente unter laufender palliativer Systemtherapie. "
+         "Mit Ergebnis-Artefakten zu Mutationstest und CTCAE-Grad."),
+        ("palliative", "Palliativversorgung",
+         "Datenelemente in der spezialisierten und allgemeinen Palliativversorgung."),
+    ]
+    out: list[str] = []
+    out.append("# Phasenübersicht — Datenelemente")
+    out.append("")
+    out.append("Lesefreundliche, kuratierte 8-Spalten-Sicht je Versorgungsphase. "
+               "Quelle: `elements/<phase>/*.yaml` (autogeneriert durch `scripts/build-catalog.py`).")
+    out.append("")
+    out.append(f"Stand: **{len(files)} Datenelemente** · für die volle 22-Spalten-Sicht "
+               "siehe `catalog/data-dictionary.csv` bzw. `catalog/data-dictionary.md` (1:1-Mirror).")
+    out.append("")
+    for phase_dir, title, desc in phases:
+        out.append(f"## {title}")
+        out.append("")
+        out.append(desc)
+        out.append("")
+        rows_md: list[dict] = []
+        for fp in sorted((ROOT / "elements" / phase_dir).glob("*.yaml")):
+            with fp.open(encoding="utf-8") as f:
+                d = yaml.safe_load(f)
+            codings = (d.get("value_set") or {}).get("codings") or []
+            coding_str = ", ".join(
+                [f"{c.get('system','')}:{c.get('code','')}" for c in codings[:3]]
+            ) or "—"
+            refs = (d.get("evidence") or {}).get("guideline_references") or []
+            ref_str = "; ".join(
+                [f"{r.get('source','')} {r.get('section','')}" for r in refs[:2]]
+            ) or "—"
+            cp = d.get("care_process") or {}
+            rows_md.append({
+                "label": d.get("label_de", ""),
+                "name": d.get("name", ""),
+                "datatype": d.get("datatype", ""),
+                "card": d.get("cardinality", ""),
+                "coding": coding_str,
+                "trigger": cp.get("trigger", "") or "—",
+                "freq": cp.get("frequency_pattern", "") or "—",
+                "role": cp.get("responsible_role", "") or "—",
+                "refs": ref_str,
+            })
+        out.append("| Bezeichnung (DE) | name | Datentyp · Card | Beispiel-Codings | "
+                  "Trigger | Frequenz | Rolle | Quelle |")
+        out.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        for r in rows_md:
+            out.append(f"| {r['label']} | `{r['name']}` | {r['datatype']} · {r['card']} | "
+                       f"{r['coding']} | {r['trigger']} | {r['freq']} | {r['role']} | "
+                       f"{r['refs']} |")
+        out.append("")
+    overview_path = ROOT / "docs" / "phases-overview.md"
+    overview_path.parent.mkdir(parents=True, exist_ok=True)
+    overview_path.write_text("\n".join(out), encoding="utf-8")
+    return overview_path
+
+
 def main() -> int:
     files = sorted((ROOT / "elements").glob("*/*.yaml"))
     OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -149,9 +213,13 @@ def main() -> int:
             w.writerow([r[k] for k in KEYS])
     print(f"Wrote {OUT.relative_to(ROOT)} ({len(files)} elements)")
 
-    # 2) 1:1-Markdown-Mirror
+    # 2) 1:1-Markdown-Mirror (volle 22 Spalten)
     md_path = write_markdown(rows, len(files))
     print(f"Wrote {md_path.relative_to(ROOT)} ({len(files)} elements, mirror)")
+
+    # 3) Kuratierte Phasen-Übersicht (8 Spalten, Klinik-Zielgruppe)
+    overview_path = write_phases_overview(files)
+    print(f"Wrote {overview_path.relative_to(ROOT)} ({len(files)} elements, kuratiert)")
     return 0
 
 
