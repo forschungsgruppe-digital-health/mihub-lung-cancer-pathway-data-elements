@@ -6,9 +6,9 @@
 [![Lizenz Skripte: Apache 2.0](https://img.shields.io/badge/Lizenz%20Skripte-Apache%202.0-lightgrey.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Projekt: MiHUB](https://img.shields.io/badge/Projekt-MiHUB-blue)](https://mihubx.de/mihub/)
 [![Projekt: MII](https://img.shields.io/badge/Projekt-MII-blue)](https://www.medizininformatik-initiative.de/)
-[![Erstellung: KI-gestützt](https://img.shields.io/badge/Erstellung-KI--gest%C3%BCtzt-yellow)](DISCLAIMER.md)
+[![Erstellung: KI-gestützt](https://img.shields.io/badge/Erstellung-KI--gest%C3%BCtzt-yellow)](AI_USAGE.md)
 
-> ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`DISCLAIMER.md`](DISCLAIMER.md). Pflege erfolgt über konsens-basierte Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
+> ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
 
 ---
 
@@ -117,7 +117,7 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 | [`catalog/data-dictionary.md`](./catalog/data-dictionary.md)                       | 1:1-Markdown-Spiegel der CSV (für PR-Diffs, Web-Browsing) |
 | [`docs/phases-overview.md`](./docs/phases-overview.md)                             | Lesefreundliche Phasen-Übersicht (8 Spalten, gruppiert)   |
 | [`docs/methodology.md`](./docs/methodology.md)                                     | Methodik, Gap-Analyse, Designentscheidungen               |
-| [`docs/verification-log.md`](./docs/verification-log.md)                           | Audit-Trail (Quellen, Codings, Iterationen)               |
+| [`docs/audit-log.md`](./docs/audit-log.md)                           | Audit-Trail (Quellen, Codings, Iterationen)               |
 | [`GLOSSARY.md`](./GLOSSARY.md)                                                     | Akronyme, Skalen, Frequenz-Codes, Standard-Identifier     |
 
 ### Skripte

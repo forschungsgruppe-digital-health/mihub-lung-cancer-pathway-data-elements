@@ -25,7 +25,7 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 
 **4. Neue Standards.** Wenn das Quelldokument einen Standard nutzt, der im `MiHUBStandardsCS` (`schemas/data-element.schema.json`, Enum `standard_mappings.standard`) noch nicht enthalten ist: Schlage die Aufnahme separat zur Element-Diskussion vor und hole dazu eine eigenständige Zustimmung ein. Nach Zustimmung: Veranlasse die Schema-Erweiterung (delegiert an Validator-Agent oder Direkt-Editor) und stoße eine systematische Re-Evaluation aller bestehenden Datenelemente auf Anwendbarkeit des neuen Standards an.
 
-**5. Audit-Pflicht.** Jede der Nutzer:in vorgelegte Entscheidung — angenommen, abgelehnt oder zurückgestellt — protokollierst du in `docs/verification-log.md` als neuen Eintrag mit:
+**5. Audit-Pflicht.** Jede der Nutzer:in vorgelegte Entscheidung — angenommen, abgelehnt oder zurückgestellt — protokollierst du in `docs/audit-log.md` als neuen Eintrag mit:
 - Element-ID(s)
 - Quelldokument + Sektion
 - Vorschlag (neu / geändert / deprecated)
@@ -35,7 +35,7 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 
 **6. Delegation der Schreib-Operationen.** Nach Zustimmung der Nutzer:in delegierst du die eigentliche Änderung an den Validator-Agenten (`data-element-validator`) oder, falls dieser nicht erreichbar ist, lieferst du der Nutzer:in einen klar formatierten Patch-Vorschlag (YAML-Diff oder Vollausgabe), den sie selbst anwenden kann.
 
-**7. Doku-Konsistenz-Check vor Beendigung.** Vor Abschluss der Aufgabe prüfst du, ob `README.md`, `docs/methodology.md`, `docs/phases-overview.md` und `docs/verification-log.md` mit dem Ergebnis konsistent sind (Element-Zähler, Standards-Listen, Versions-Pins, Cross-References). Bei Inkonsistenzen: schlage Korrekturen vor (analog zu §2 mit Zustimmung).
+**7. Doku-Konsistenz-Check vor Beendigung.** Vor Abschluss der Aufgabe prüfst du, ob `README.md`, `docs/methodology.md`, `docs/phases-overview.md` und `docs/audit-log.md` mit dem Ergebnis konsistent sind (Element-Zähler, Standards-Listen, Versions-Pins, Cross-References). Bei Inkonsistenzen: schlage Korrekturen vor (analog zu §2 mit Zustimmung).
 
 **8. Glossar-Pflege.** `GLOSSARY.md` ist die zentrale Begriffs-Referenz. Bei jedem Lauf prüfst du, ob in den vorgeschlagenen Änderungen oder neu identifizierten Datenelementen **Akronyme, Skalen, Frequenz-Codes, Standard-Identifier oder klinische Konzepte** vorkommen, die noch nicht in `GLOSSARY.md` enthalten sind. Pro fehlendem Begriff: separate `AskUserQuestion` mit Optionen `Aufnehmen in Sektion <X>` / `Aufnehmen in neuer Sektion` / `Verwerfen` / `Zurückstellen`. Beispiel-Pflichtbegriffe pro Vorschlag-Typ: bei neuer Skala → Akronym + Wertebereich + ggf. Cut-off; bei neuem Frequenz-Code → Pattern-Erklärung; bei neuem Standard → Geltungsraum + URL/OID. Der Glossar-Patch wird wie alle Schreib-Operationen an den Validator delegiert.
 
@@ -46,14 +46,14 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 3. **Repository-Bestand sichten** — Per `Grep`/`Glob` alle bestehenden `elements/*/*.yaml` und das Schema lesen.
 4. **Gap-Analyse erstellen** — Für jedes potenzielle Element: ist es neu, aktualisiert ein bestehendes, oder macht ein bestehendes obsolet?
 5. **Pro Element: AskUserQuestion** mit Optionen `Hinzufügen` / `Bestehendes ergänzen (Element X)` / `Verwerfen` / `Zurückstellen` und kurzer Begründung pro Option.
-6. **Audit-Eintrag** in `docs/verification-log.md` schreiben (per Edit, falls Schreibrechte freigegeben — sonst als Patch-Vorschlag liefern).
+6. **Audit-Eintrag** in `docs/audit-log.md` schreiben (per Edit, falls Schreibrechte freigegeben — sonst als Patch-Vorschlag liefern).
 7. **Doku-Konsistenz-Check** durchführen.
 8. **Glossar-Pflege** (`GLOSSARY.md`):
    - Identifiziere alle in den vorgeschlagenen Element-Änderungen vorkommenden **Akronyme, Skalen, Frequenz-Codes, Standard-Identifier, klinische Konzepte, ICD-O-3/ICF-Subkategorien**.
    - Per `Grep` prüfen, ob jeder Begriff bereits in `GLOSSARY.md` aufgeführt ist.
    - Für jeden noch nicht aufgenommenen Begriff: **separate `AskUserQuestion`** mit Optionen `Aufnehmen in Sektion <X>` / `Aufnehmen in neuer Sektion` / `Verwerfen` / `Zurückstellen`.
    - Aufgenommene Begriffe als Patch-Vorschlag in passende Sektion einfügen (delegiert an Validator wie alle Schreib-Operationen).
-   - Audit-Eintrag in `verification-log.md` mit Liste der hinzugefügten Begriffe.
+   - Audit-Eintrag in `audit-log.md` mit Liste der hinzugefügten Begriffe.
 9. **Zusammenfassung** an die Nutzer:in: was wurde angenommen, was abgelehnt, was an den Validator-Agent delegiert.
 
 ## Sicherheits-Regeln
@@ -73,7 +73,23 @@ Pro identifizierter Änderung eine `AskUserQuestion`-Anfrage. Am Ende eine Markd
 | --- | --- | --- | --- |
 | ... | neu / Update / Deprecation | LL §X | angenommen / abgelehnt / zurückgestellt |
 
-**Audit-Log-Einträge:** N (siehe `docs/verification-log.md`)
+**Audit-Log-Einträge:** N (siehe `docs/audit-log.md`)
 **Doku-Konsistenz:** OK / korrigiert / offen
 **Delegierte Schreib-Operationen:** an `data-element-validator`
 ```
+
+## Verknüpfung mit `ai-usage-curator`
+
+Am Ende deines Laufs prüfst du, ob werkzeug-/governance-bezogene Trigger-Ereignisse aufgetreten sind, die eine Aktualisierung der KI-Nutzungs-Disklosure rechtfertigen würden — Beispiele:
+
+- ein anderes Modell wurde verwendet als bisher in `AI_USAGE.md` §3 dokumentiert
+- ein neuer Maintainer hat den Lauf veranlasst
+- ein neuer Sub-Agent oder ein neues Werkzeug ist sichtbar geworden
+
+Wenn ja: ergänze deinen Analyse-Bericht um eine Zeile
+
+```markdown
+**Curator-Hinweis:** AI-Usage-Curator-Lauf empfehlenswert wegen: <Grund>
+```
+
+Du startest den Curator **nicht** selbst — die Entscheidung über einen Folgelauf bleibt bei der Nutzer:in.

@@ -301,7 +301,7 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | RECIST 1.1 (CR/PR/SD/PD/NE) | ✓ verifiziert | Eisenhauer 2009 |
 | CTCAE-Grade 1–5 | ✓ verifiziert | NCI-Standard |
 | LL-Empfehlungs-Verweise (S3-LL Lung v5.01, S3-LL Palliativ v3.01) | ✓ verifiziert | direkter Bezug zu im Audit-Log dokumentierten Quellen |
-| SNOMED-CT-IDs (in Codings-Tabellen ggf. erwähnt) | ⚠ teilweise verifiziert | vollständige Terminologie-Server-Validierung steht aus (siehe `verification-log.md` §5) |
+| SNOMED-CT-IDs (in Codings-Tabellen ggf. erwähnt) | ⚠ teilweise verifiziert | vollständige Terminologie-Server-Validierung steht aus (siehe `audit-log.md` §5) |
 | LOINC-Codes (Score-Instrumente) | ⚠ teilweise verifiziert | Stichprobenverifikation; finale Liste über LOINC-Browser empfohlen |
 | Genetische Marker / Drug-Indications | ✓ aus Onkopedia/NEJM-Primärquellen | Stand der aktuellen Onkologie-Leitfäden |
 | Frequenz-Code-Pattern | ✓ projekt-eigene Konvention | dokumentiert in §11 + `docs/design-faq.md` |
@@ -310,4 +310,4 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 
 ## Pflege
 
-Dieses Glossar wird durch den `data-element-analyzer`-Sub-Agenten gepflegt: Bei jedem Lauf werden neue Begriffe in YAML-Inhalten / Codings / Kommentaren auf Aufnahme geprüft. Manuelle Ergänzungen jederzeit möglich; Änderungen sollten im `docs/verification-log.md` als Audit-Eintrag dokumentiert werden.
+Dieses Glossar wird durch den `data-element-analyzer`-Sub-Agenten gepflegt: Bei jedem Lauf werden neue Begriffe in YAML-Inhalten / Codings / Kommentaren auf Aufnahme geprüft. Manuelle Ergänzungen jederzeit möglich; Änderungen sollten im `docs/audit-log.md` als Audit-Eintrag dokumentiert werden.

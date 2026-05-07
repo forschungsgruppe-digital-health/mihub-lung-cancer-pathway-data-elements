@@ -1,6 +1,11 @@
-# Quellen-Verifikation — Stichprobenprotokoll
+# Audit-Log — Quellen-Verifikation und Iterations-Protokoll
 
-Dieses Dokument protokolliert die Re-Verifikation der erhobenen Datenelemente gegen die zitierten Primärquellen. Ziel: nachvollziehbar belegen, dass jede `evidence.guideline_references[]`-Angabe einem Belegtext in der zitierten Leitlinie / Onkopedia / OCP / Veröffentlichung entspricht.
+Dieses Dokument bündelt zwei Audit-Funktionen:
+
+1. **Quellen-Verifikation** der erhobenen Datenelemente gegen die zitierten Primärquellen — nachvollziehbar belegen, dass jede `evidence.guideline_references[]`-Angabe einem Belegtext in der zitierten Leitlinie / Onkopedia / OCP / Veröffentlichung entspricht (§§1–7).
+2. **Iterations-Protokoll** der ausgeführten Pflege-Aktionen (Analyzer-/Validator-Läufe, Doku-Anpassungen, strukturelle Repository-Änderungen) — pro Iteration mit Datum, Auslöser, betroffenen Dateien und Verifikations-Ergebnissen (ab §8).
+
+Beide Funktionen erfüllen gemeinsam die Audit-Pflicht aus `AGENTS.md` §3 und dienen als operative Evidenz menschlicher Aufsicht im Sinne der EU-AI-Act-Transparenzpflichten (siehe `AI_USAGE.md` §4).
 
 Stand: 2026-05-04 · Befüllungs-Iteration v0.1 · **51 Datenelemente** (44 Erhebungs- + 7 Ergebnis-Artefakte)
 
@@ -276,7 +281,91 @@ Die README ist nun bewusst **frei von zustandsabhängigen Inhalten** (Element-An
 
 Damit reduziert sich der README-Pflegebedarf bei künftigen Datenelement-Änderungen auf null — Updates fließen automatisch in die generierten Sichten.
 
-## 10 Limitationen
+## 10 v0.1.7 — Audit-Log-Rename + neuer Sub-Agent `ai-usage-curator`
+
+Datum: 2026-05-06 · Auslöser: Nutzer-Anweisungen zur Begriffsangleichung und zur Separation of Concerns für KI-Nutzungs-Disklosure.
+
+### 10.1 Rename `verification-log.md` → `audit-log.md`
+
+| Aktion | Anzahl Treffer |
+| --- | --- |
+| Datei umbenannt | 1 (`docs/verification-log.md` → `docs/audit-log.md`) |
+| Referenz-Updates in 8 Dateien | `README.md`, `AGENTS.md`, `DISCLAIMER.md`, `GLOSSARY.md`, `AI_USAGE.proposal.md`, `docs/methodology.md`, `.claude/agents/data-element-analyzer.md`, `.claude/agents/data-element-validator.md` |
+| H1-Überschrift angepasst | „Quellen-Verifikation — Stichprobenprotokoll" → „Audit-Log — Quellen-Verifikation und Iterations-Protokoll" |
+| Untertitel | erweitert um Doppelfunktion (1) Quellen-Verifikation, (2) Iterations-Protokoll; expliziter Verweis auf `AGENTS.md` §3 und `AI_USAGE.md` §4 |
+
+**Begründung:** Der bisherige Titel deckte den faktischen Inhalt nicht mehr vollständig ab — das Dokument hat sich von einem reinen Quellen-Belegtext-Audit zu einem allgemeinen Iterations- und Pflege-Audit entwickelt (Validator-Läufe, README-Anpassungen, Glossar-Patches, strukturelle Repository-Änderungen). Der neutralere Name `audit-log.md` ist besser anschlussfähig an die Compliance-Sprache (EU AI Act §50, COPE).
+
+### 10.2 Neuer Sub-Agent `ai-usage-curator`
+
+| Aktion | Beleg |
+| --- | --- |
+| Datei `.claude/agents/ai-usage-curator.md` neu angelegt | YAML-Frontmatter + System-Prompt; Format konsistent mit Analyzer/Validator |
+| `AGENTS.md` aktualisiert | „zwei" → „drei" Sub-Agenten; neue Tabellenzeile; neuer Abschnitt „Trennung der Konzerne (Separation of Concerns)" mit disjunkter Zuständigkeits-Matrix |
+| `.claude/agents/data-element-analyzer.md` ergänzt | neue Sektion „Verknüpfung mit `ai-usage-curator`" — leichter Hinweis-Mechanismus, kein automatischer Aufruf |
+| `.claude/agents/data-element-validator.md` ergänzt | analoge Sektion |
+
+**Begründung (Separation of Concerns):**
+
+- **Unterschiedliche Trigger-Ereignisse:** Analyzer/Validator reagieren auf klinisch-inhaltliche Quellen (LL-/Onkopedia-Updates); Curator reagiert auf werkzeug-/governance-bezogene Ereignisse (Modell-Releases, Maintainer-Wechsel, EU-Guidance, Backlog-Erledigung).
+- **Unterschiedliche Audit-Ebenen:** Analyzer/Validator-Audit ist element-/iterations-spezifisch; Curator-Audit ist repo-weit-strukturell. Eine Vermischung würde die Konsultations-Disziplin der bestehenden Agenten verwässern.
+- **Spezialisiertes Compliance-Wissen:** Curator muss EU AI Act Art. 50, COPE, ICMJE, Linux-Kernel-/Red-Hat-Konventionen kennen — diese Last bleibt von den klinisch-inhaltlichen Agenten getrennt.
+
+**Verknüpfungs-Mechanismus:** Analyzer und Validator dürfen am Ende eines Laufs einen `**Curator-Hinweis:**`-Eintrag in ihren Bericht aufnehmen, wenn sie ein werkzeug-/governance-bezogenes Trigger-Ereignis bemerken. Ein automatischer Curator-Lauf erfolgt nicht — die Entscheidung bleibt bei der Nutzer:in.
+
+### 10.3 Konsistenz-Check
+
+| Datei | Status |
+| --- | --- |
+| `README.md` | aktualisiert (Verweis auf Audit-Log) |
+| `AGENTS.md` | aktualisiert (drei Agenten + Trennungs-Abschnitt) |
+| `DISCLAIMER.md` | aktualisiert (Verweis auf Audit-Log) |
+| `GLOSSARY.md` | aktualisiert (Verweis auf Audit-Log) |
+| `AI_USAGE.proposal.md` | aktualisiert (Verweis auf Audit-Log) |
+| `docs/methodology.md` | aktualisiert (Verweis auf Audit-Log) |
+| `.claude/agents/data-element-analyzer.md` | aktualisiert (Verweis + Curator-Hinweis-Sektion) |
+| `.claude/agents/data-element-validator.md` | aktualisiert (Verweis + Curator-Hinweis-Sektion) |
+
+Letzter Repo-weiter Grep auf `verification-log`: **0 Treffer**.
+
+## 11 v0.1.8 — `AI_USAGE.md` final übernommen + `DISCLAIMER.md` entfernt
+
+Datum: 2026-05-06 · Auslöser: Nutzer-Anweisung zur finalen Übernahme der `AI_USAGE.proposal.md` und Entfernung redundanter, ausschließlich referenzierender Dokumente. Erledigt damit das Backlog-Item §11.3 aus dem AI_USAGE-Vorschlag.
+
+### 11.1 Geänderte Dateien
+
+| Aktion | Datei | Beleg |
+| --- | --- | --- |
+| `AI_USAGE.md` final überschrieben | `AI_USAGE.md` | aus `AI_USAGE.proposal.md` übernommen; §10 (DISCLAIMER-Subsumierungs-Tabelle) und §11.3 (DISCLAIMER-Backlog-Item) entfernt, da nicht mehr aktuell; Pflege-Hinweis im Header auf `ai-usage-curator`-Sub-Agent verweist |
+| `DISCLAIMER.md` gelöscht | `DISCLAIMER.md` | inhaltlich vollständig in `AI_USAGE.md` aufgegangen — siehe Subsumierungs-Mapping aus dem Proposal-Stand v1 |
+| `AI_USAGE.proposal.md` gelöscht | `AI_USAGE.proposal.md` | Zwischenstand für Review, nach Übernahme nicht mehr benötigt |
+| `README.md` Badge umgelinkt | `README.md` | `[![Erstellung: KI-gestützt](…)](DISCLAIMER.md)` → `(AI_USAGE.md)`; Subtitle-Text analog |
+| `AGENTS.md` Disclaimer-Sektion neu | `AGENTS.md` | Heading „Disclaimer" → „KI-Nutzungs-Disklosure"; Verweis auf `AI_USAGE.md` + `ai-usage-curator`; Curator-Tabellenzeile von DISCLAIMER-Cross-Konsistenz-Erwähnung bereinigt |
+| `ai-usage-curator.md` bereinigt | `.claude/agents/ai-usage-curator.md` | Frontmatter-Description, §2 Konsultations-Pflicht und §3 Cross-Konsistenz: alle DISCLAIMER-Erwähnungen entfernt; README-Badge-Bullet vereinfacht („zeigt auf AI_USAGE.md") |
+
+### 11.2 Konsistenz-Befund (Repo-weiter Grep)
+
+| Pattern | Treffer | Status |
+| --- | --- | --- |
+| `verification-log` (lebende Refs) | 0 | ✓ vollständig migriert (siehe §10) |
+| `DISCLAIMER` in Live-Doku | 0 | ✓ entfernt |
+| `DISCLAIMER` in Audit-Log (historisch) | 3 | ✓ bewusst belassen (§10 Iterationshistorie, §11 vorliegender Eintrag) |
+| `AI_USAGE.proposal` | 0 | ✓ entfernt |
+
+### 11.3 Backlog-Stand `AI_USAGE.md` §11
+
+| # | Maßnahme | Status nach diesem Lauf |
+| --- | --- | --- |
+| ehem. 3 | DISCLAIMER.md auf AI_USAGE.md umlenken oder entfernen | **erledigt** — Backlog-Item entfernt |
+| 1 (neu) | PR-Template KI-Disclosure-Feld | offen |
+| 2 (neu) | `Assisted-by:`-Commit-Trailer in CONTRIBUTING.md | offen |
+| 3 (neu) | GitHub-Repo-Topic `ai-assisted` | offen |
+| 4 (neu) | Datei-Header-Konvention für Markdown | offen |
+| 5 (neu) | `git notes`-Rückannotation prüfen | offen |
+| 6 (neu) | Klinisches Review-Board konstituieren | offen |
+| 7 (neu) | EU-Guidance Q2 2026 gegenprüfen | laufend |
+
+## 12 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.
