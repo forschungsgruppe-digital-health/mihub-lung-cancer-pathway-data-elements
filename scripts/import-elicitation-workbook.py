@@ -83,7 +83,23 @@ def build_flows(flow_rows: list[dict], local_id: str) -> list[dict]:
     return flows
 
 
-def to_element(er: dict, flow_rows: list[dict], today: str) -> dict:
+def build_codings(code_rows: list[dict], local_id: str) -> list[dict]:
+    """value_set.codings[] aus dem Blatt 'Codes' (System + Code Pflicht)."""
+    codings = []
+    for cr in code_rows:
+        if cr.get("local_id") != local_id:
+            continue
+        system, code = cr.get("terminology_system", "").strip(), cr.get("code", "").strip()
+        if not (system and code):
+            continue
+        c = {"system": system, "code": code}
+        if cr.get("display"):
+            c["display"] = cr["display"]
+        codings.append(c)
+    return codings
+
+
+def to_element(er: dict, flow_rows: list[dict], code_rows: list[dict], today: str) -> dict:
     phase = E.map_value(er.get("phase"), E.PHASE_LAYMEN, default="")
     if phase == "other" or not phase:
         phase = re.sub(r"[^a-z]", "", (er.get("phase_other") or "newphase").lower()) or "newphase"
@@ -107,6 +123,22 @@ def to_element(er: dict, flow_rows: list[dict], today: str) -> dict:
     if er.get("unit"):
         doc["unit"] = er["unit"]
 
+    # value_set: Binding + Status (Roh-Enums aus strikten Dropdowns) + Codings (Blatt 'Codes')
+    codings = build_codings(code_rows, er.get("local_id", ""))
+    vs: dict = {}
+    if er.get("binding_strength"):
+        vs["binding_strength"] = er["binding_strength"]
+    if er.get("standard_binding_status"):
+        vs["standard_binding_status"] = er["standard_binding_status"]
+    if codings:
+        vs["codings"] = codings
+    if vs:
+        doc["value_set"] = vs
+
+    # standard_mappings: primäres Ziel (MI-Team ergänzt Profil/Pfad)
+    if er.get("standard_primary"):
+        doc["standard_mappings"] = [{"standard": er["standard_primary"]}]
+
     care: dict = {}
     for k_src, k_dst in (("trigger", "trigger"), ("frequency_pattern", "frequency_pattern"),
                          ("responsible_role", "responsible_role")):
@@ -128,12 +160,7 @@ def to_element(er: dict, flow_rows: list[dict], today: str) -> dict:
             ref["evidence_level"] = er["evidence_level"]
         doc["evidence"] = {"guideline_references": [ref]}
 
-    notes = [n for n in (er.get("codings"), er.get("standards_hint"), er.get("notes")) if n]
     issues = []
-    if er.get("codings"):
-        issues.append(f"Codierungs-Vorschlag (Klinik-Spur): {er['codings']}")
-    if er.get("standards_hint"):
-        issues.append(f"Standard-Hinweis (Klinik-Spur): {er['standards_hint']}")
     if er.get("notes"):
         issues.append(er["notes"])
     issues.append("Aus Excel-Erhebung importiert — Codes/Mappings/Definition durch MI-Team zu finalisieren.")
@@ -169,16 +196,20 @@ def main() -> int:
         return 2
     elem_rows = _rows(wb["Datenelemente"], E.ELEMENT_COLUMNS)
     flow_rows = _rows(wb["Datennutzung"], E.FLOW_COLUMNS) if "Datennutzung" in wb.sheetnames else []
+    code_rows = _rows(wb["Codes"], E.CODE_COLUMNS) if "Codes" in wb.sheetnames else []
     today = datetime.now(timezone.utc).date().isoformat()
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
     for er in elem_rows:
+        if E.is_example(er.get("local_id")):
+            print(f"  ignoriert (Beispielzeile): {er.get('local_id')}")
+            continue
         if not (er.get("label_de") and er.get("definition_de")):
             print(f"  übersprungen (Pflichtfelder fehlen): {er.get('local_id') or er.get('label_de')}")
             continue
-        doc = to_element(er, flow_rows, today)
+        doc = to_element(er, flow_rows, code_rows, today)
         fp = out_dir / f"{doc['phase']}__{doc['name']}.yaml"
         fp.write_text(yaml.safe_dump(doc, allow_unicode=True, sort_keys=False), encoding="utf-8")
         written.append(fp)

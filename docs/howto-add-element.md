@@ -55,13 +55,17 @@ Die Dropdown-Listen sind aus dem Schema erzeugt — Sie wählen also immer gült
 
 ### Schritt A2.2 — Ausfüllen
 
-- Blatt **»Anleitung«** lesen.
-- Blatt **»Datenelemente«**: eine Zeile je Element; Pflichtspalten sind rot hinterlegt und mit `*`
-  markiert. Vergeben Sie je Zeile eine kurze **lokale ID** (z. B. `DE-001`).
+- Blatt **»Anleitung«** lesen. Jedes Blatt hat oben eine **grau-kursive Beispielzeile**
+  (lokale ID = `BEISPIEL`), die eine vollständige Erfassung zeigt und **beim Import ignoriert wird**
+  (überschreiben oder löschen). Spalten-Erklärungen erscheinen als Kommentar in der Kopfzeile.
+- Blatt **»Datenelemente«**: eine Zeile je Element; Pflichtspalten sind rosa hinterlegt und mit `*`
+  markiert; Dropdowns nutzen. Vergeben Sie je Zeile eine kurze **lokale ID** (z. B. `DE-001`).
 - Blatt **»Datennutzung«**: WO (System) · WER (Rolle) · WIE (Nutzung) — mehrere Zeilen je
   Datenelement, verknüpft über die lokale ID. Beispiel »Rauchstatus«: PVS · Hausärzt:in · erfasst;
   KIS · Onkolog:in · gelesen; Forschungs-DWH · Forscher:in · Forschung.
-- Felder, die Sie nicht kennen (z. B. SNOMED-Codes), dürfen leer bleiben.
+- Blatt **»Codes«** (optional): bekannte Codes je Element — **Terminologie-System** (SNOMED CT,
+  LOINC, ICD-10-GM …) als Dropdown, dazu Code + Anzeigetext.
+- Felder, die Sie nicht kennen (z. B. SNOMED-Codes, Standard-Mapping), dürfen leer bleiben.
 
 ### Schritt A2.3 — Abgeben
 

@@ -2,14 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 """Erzeugt die Excel-Erhebungs-Vorlage für die Klinik-Spur (ohne Git/YAML).
 
-Die Vorlage ist schema-getrieben: alle Dropdown-Werte stammen aus den Enums in
-`schemas/data-element.schema.json` bzw. den laienverständlichen Abbildungen in
-`scripts/_elicitation.py` — sie kann daher nicht vom Schema abdriften.
+Schema-getrieben: alle Dropdown-Werte stammen aus den Enums in
+`schemas/data-element.schema.json` bzw. den Listen in `scripts/_elicitation.py` — die Vorlage
+kann daher nicht vom Schema abdriften. Selbsterklärend durch Anleitung, Spalten-Kommentare,
+Pflicht-Markierung und eine Beispielzeile (wird beim Import ignoriert).
 
 Aufruf:
   pip install openpyxl
-  python scripts/build-elicitation-workbook.py                       # -> templates/datenelement-erhebung.xlsx
-  python scripts/build-elicitation-workbook.py --out /pfad/x.xlsx --rows 80
+  python scripts/build-elicitation-workbook.py                 # -> templates/datenelement-erhebung.xlsx
+  python scripts/build-elicitation-workbook.py --out x.xlsx --rows 80
 
 Ausgefüllte Mappen werden mit `scripts/import-elicitation-workbook.py` zu YAML-Entwürfen.
 """
@@ -19,6 +20,7 @@ import argparse
 from pathlib import Path
 
 from openpyxl import Workbook
+from openpyxl.comments import Comment
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -27,19 +29,26 @@ import _elicitation as E
 
 HEADER_FILL = PatternFill("solid", fgColor="1A5DAB")
 HEADER_FONT = Font(bold=True, color="FFFFFF")
-MAND_FILL = PatternFill("solid", fgColor="FCE8E6")  # zarte Markierung für Pflichtspalten
+MAND_FILL = PatternFill("solid", fgColor="FCE8E6")   # zarte Markierung für Pflichtspalten
+EXAMPLE_FILL = PatternFill("solid", fgColor="EFEFEF")  # graue Beispielzeile
+EXAMPLE_FONT = Font(italic=True, color="666666")
 WRAP = Alignment(wrap_text=True, vertical="top")
 TITLE_FONT = Font(bold=True, size=14)
 
 
-def _style_header(ws, ncols: int) -> None:
-    for c in range(1, ncols + 1):
+def _style_header(ws, columns, help_map) -> None:
+    for c, (key, _h, _m, _l) in enumerate(columns, start=1):
         cell = ws.cell(row=1, column=c)
         cell.fill = HEADER_FILL
         cell.font = HEADER_FONT
         cell.alignment = Alignment(wrap_text=True, vertical="center")
+        tip = help_map.get(key)
+        if tip:
+            cmt = Comment(tip, "MiHUB")
+            cmt.width, cmt.height = 320, 170
+            cell.comment = cmt
     ws.freeze_panes = "A2"
-    ws.row_dimensions[1].height = 30
+    ws.row_dimensions[1].height = 34
 
 
 def _write_codelists(ws, lists: dict[str, list[str]]) -> dict[str, str]:
@@ -51,77 +60,104 @@ def _write_codelists(ws, lists: dict[str, list[str]]) -> dict[str, str]:
         for r, val in enumerate(values, start=2):
             ws.cell(row=r, column=idx, value=val)
         ranges[name] = f"=Codelisten!${col}$2:${col}${len(values) + 1}"
-        ws.column_dimensions[col].width = max(18, min(48, max((len(v) for v in values), default=10) + 2))
+        ws.column_dimensions[col].width = max(18, min(52, max((len(v) for v in values), default=10) + 2))
     ws.sheet_state = "hidden"
     return ranges
 
 
-def _add_table(wb, sheet_name: str, columns, rows: int, ranges: dict[str, str],
-               extra_list_validations=None) -> None:
+def _add_table(wb, sheet_name, columns, data_rows, ranges, extra_list_validations=None):
+    """Legt ein Tabellenblatt an (Kopf + Kommentare + Pflicht-Fills + Dropdowns über die Datenzeilen)."""
     ws = wb.create_sheet(sheet_name)
     for ci, (_key, header, mandatory, _list) in enumerate(columns, start=1):
         ws.cell(row=1, column=ci, value=header)
-        width = 40 if header.startswith(("Klinische_Definition", "Anmerkungen")) else 22
-        ws.column_dimensions[get_column_letter(ci)].width = width
+        wide = header.startswith(("Klinische_Definition", "Anmerkungen", "Hinweis"))
+        ws.column_dimensions[get_column_letter(ci)].width = 42 if wide else 24
         if mandatory:
-            for r in range(2, rows + 2):
+            for r in range(2, data_rows + 2):
                 ws.cell(row=r, column=ci).fill = MAND_FILL
-    _style_header(ws, len(columns))
-    last = rows + 1
+    _style_header(ws, columns, E.HELP)
+    last = data_rows + 1
     for ci, (_key, _header, _mandatory, listname) in enumerate(columns, start=1):
         if not listname:
             continue
         formula = ranges.get(listname) or (extra_list_validations or {}).get(listname)
         if not formula:
             continue
-        dv = DataValidation(type="list", formula1=formula, allow_blank=True)
+        suggestion = listname in E.SUGGESTION_LISTS
+        dv = DataValidation(type="list", formula1=formula, allow_blank=True,
+                            showErrorMessage=not suggestion)
+        if not suggestion:
+            dv.errorTitle = "Ungültige Eingabe"
+            dv.error = "Bitte einen Wert aus der Dropdown-Liste wählen."
+            dv.errorStyle = "stop"
         col = get_column_letter(ci)
         dv.add(f"{col}2:{col}{last}")
         ws.add_data_validation(dv)
     return ws
 
 
+def _write_example_row(ws, columns, row_idx, example: dict) -> None:
+    """Schreibt eine grau-kursive Beispielzeile + Hinweis-Kommentar auf der lokalen ID."""
+    for ci, (key, _h, _m, _l) in enumerate(columns, start=1):
+        cell = ws.cell(row=row_idx, column=ci, value=example.get(key, ""))
+        cell.fill = EXAMPLE_FILL
+        cell.font = EXAMPLE_FONT
+        cell.alignment = WRAP
+    note = Comment(
+        "BEISPIELZEILE — wird beim Import IGNORIERT (lokale ID beginnt mit 'BEISPIEL').\n"
+        "Sie können sie löschen oder einfach stehen lassen. Eigene Einträge in die Zeilen "
+        "darunter (DE-001, DE-002, …).", "MiHUB")
+    note.width, note.height = 340, 130
+    ws.cell(row=row_idx, column=1).comment = note
+
+
 def _write_intro(ws) -> None:
     ws.sheet_view.showGridLines = False
-    ws.column_dimensions["A"].width = 4
-    ws.column_dimensions["B"].width = 110
+    ws.column_dimensions["A"].width = 3
+    ws.column_dimensions["B"].width = 118
+    B = Font(bold=True, size=12)
     lines = [
         ("MiHUB Lungenkrebs — Datenelement-Erhebung (Klinik-Spur)", TITLE_FONT),
         ("", None),
-        ("Mit dieser Mappe können klinische Expert:innen neue Datenelemente für den "
-         "Lungenkrebs-Patientenpfad vorschlagen — ohne GitHub, ohne YAML.", None),
-        ("Das MI-Team übernimmt anschließend die technische Umsetzung (Codes, FHIR-Mappings) "
-         "und bittet Sie, das Ergebnis inhaltlich zu bestätigen.", None),
+        ("Mit dieser Mappe schlagen klinische Expert:innen neue Datenelemente für den "
+         "Lungenkrebs-Patientenpfad vor — ohne GitHub, ohne YAML. Das MI-Team übernimmt danach "
+         "die technische Umsetzung (Codes, FHIR-Mappings) und bittet Sie um inhaltliche Bestätigung.", None),
         ("", None),
-        ("So füllen Sie die Mappe aus:", Font(bold=True, size=12)),
-        ("1. Blatt »Datenelemente«: eine Zeile je Datenelement. Pflichtspalten sind rot "
-         "hinterlegt und mit * markiert. Felder mit Dropdown bitte aus der Liste wählen.", None),
-        ("2. Vergeben Sie je Zeile eine kurze »lokale ID« (z. B. DE-001) — sie dient nur dazu, "
-         "die Datennutzung im zweiten Blatt zuzuordnen.", None),
-        ("3. Blatt »Datennutzung«: WO (System) · WER (Rolle) · WIE (Nutzung) wird das "
-         "Datenelement genutzt? Mehrere Zeilen je Datenelement sind möglich und erwünscht.", None),
-        ("4. Felder, zu denen Sie nichts beitragen können (z. B. SNOMED-Codes), dürfen leer "
-         "bleiben — das MI-Team recherchiert sie.", None),
+        ("Die Blätter dieser Mappe", B),
+        ("• »Datenelemente« — eine Zeile je Datenelement (Hauptblatt).", None),
+        ("• »Datennutzung« — WO (System) · WER (Rolle) · WIE (Nutzung); mehrere Zeilen je Element.", None),
+        ("• »Codes« (optional) — bekannte Codes je Element, inkl. Terminologie-System (Dropdown).", None),
+        ("• »Codelisten« — ausgeblendet; speist nur die Dropdowns (bitte nicht bearbeiten).", None),
         ("", None),
-        ("Beispiel »Rauchstatus« (Datennutzung):", Font(bold=True, size=12)),
-        ("   • PVS · Hausärzt:in · erfasst (ambulant)", None),
-        ("   • KIS · Onkolog:in · gelesen (stationär)", None),
-        ("   • Forschungs-DWH/DIZ · Forscher:in · Forschung/Sekundärnutzung", None),
+        ("Legende", B),
+        ("• Spalten mit * und rosa Hintergrund sind PFLICHT.", None),
+        ("• Die erste, grau-kursive Zeile (lokale ID = BEISPIEL) ist ein BEISPIEL und wird beim "
+         "Import IGNORIERT — gerne überschreiben oder löschen.", None),
+        ("• Felder mit Dropdown: Pfeil rechts in der Zelle. Manche Listen sind verbindlich, "
+         "andere nur Vorschläge (dann ist auch Freitext erlaubt).", None),
+        ("• Erklärung je Spalte: Mauszeiger über die Kopfzeile (rotes Eck = Kommentar).", None),
         ("", None),
-        ("Andere Wege beizutragen: GitHub-Issue-Formular (online) oder YAML+Pull-Request "
-         "(technisch). Siehe CONTRIBUTING.md / docs/howto-add-element.md.", None),
+        ("So füllen Sie aus", B),
+        ("1. »Datenelemente«: je Element eine Zeile; Pflichtfelder ausfüllen, Dropdowns nutzen.", None),
+        ("2. Vergeben Sie je Zeile eine kurze »lokale ID« (z. B. DE-001) — sie verknüpft die "
+         "Blätter »Datennutzung« und »Codes« mit dem Datenelement.", None),
+        ("3. Optional »Datennutzung« und »Codes« je lokale ID befüllen.", None),
+        ("4. Was Sie nicht wissen (z. B. SNOMED-Codes, Standard-Mapping), darf leer bleiben — "
+         "das MI-Team recherchiert es.", None),
+        ("5. Mappe an digital-health@tu-dresden.de senden oder an ein GitHub-Issue anhängen.", None),
         ("", None),
-        ("Beiträge erfolgen unter CC BY 4.0. Bitte keine personenbezogenen / realen "
-         "Patientendaten eintragen — nur die abstrakte Datenelement-Definition.", Font(italic=True)),
-        ("Kontakt: digital-health@tu-dresden.de", None),
+        ("Die ausgefüllte Beispielzeile »Rauchstatus« in jedem Blatt zeigt eine vollständige Erfassung.", Font(italic=True)),
+        ("", None),
+        ("Beiträge erfolgen unter CC BY 4.0. Bitte KEINE personenbezogenen / realen Patientendaten "
+         "eintragen — nur die abstrakte Datenelement-Definition.", Font(italic=True)),
+        ("Andere Wege: GitHub-Issue-Formular (online) oder YAML+Pull-Request (technisch) — "
+         "siehe CONTRIBUTING.md. Kontakt: digital-health@tu-dresden.de", None),
     ]
-    r = 1
-    for text, font in lines:
+    for r, (text, font) in enumerate(lines, start=1):
         cell = ws.cell(row=r, column=2, value=text)
         cell.alignment = WRAP
         if font:
             cell.font = font
-        r += 1
 
 
 def build(out_path: Path, rows: int) -> Path:
@@ -132,28 +168,45 @@ def build(out_path: Path, rows: int) -> Path:
     _write_intro(wb.active)
     wb.active.title = "Anleitung"
 
-    code_ws = wb.create_sheet("Codelisten")  # zunächst leer; befüllt nach den Tabellen
-    elem_ws = _add_table(wb, "Datenelemente", E.ELEMENT_COLUMNS, rows, {})
-    # local_id vorbefüllen (DE-001 …) zur einfachen Verknüpfung
+    code_src = wb.create_sheet("Codelisten")  # zunächst leer; nach den Tabellen befüllt
+
+    # --- Datenelemente: 1 Beispielzeile + `rows` echte Zeilen ---
+    elem_rows = rows + 1
+    elem_ws = _add_table(wb, "Datenelemente", E.ELEMENT_COLUMNS, elem_rows, {})
+    _write_example_row(elem_ws, E.ELEMENT_COLUMNS, 2, E.EXAMPLE_ELEMENT)
     for i in range(rows):
-        elem_ws.cell(row=2 + i, column=1, value=f"DE-{i + 1:03d}")
+        elem_ws.cell(row=3 + i, column=1, value=f"DE-{i + 1:03d}")
 
-    ranges = _write_codelists(code_ws, lists)
-    # Datennutzung: local_id als Liste auf die vorbefüllten Datenelement-IDs
-    id_range = {"element_ids": f"=Datenelemente!$A$2:$A${rows + 1}"}
-    flow_ws = _add_table(wb, "Datennutzung", E.FLOW_COLUMNS, rows * 3, ranges,
-                         extra_list_validations=id_range)
-    dv = DataValidation(type="list", formula1=id_range["element_ids"], allow_blank=True)
-    dv.add(f"A2:A{rows * 3 + 1}")
-    flow_ws.add_data_validation(dv)
+    ranges = _write_codelists(code_src, lists)
+    id_range = {"element_ids": f"=Datenelemente!$A$2:$A${elem_rows + 1}"}
 
-    # Data-Validation der Datenelemente-Dropdowns nachziehen (Codelisten gibt es jetzt)
-    last = rows + 1
+    # --- Datennutzung + Codes (local_id als Liste der Datenelement-IDs) ---
+    flow_rows = rows * 3 + len(E.EXAMPLE_FLOWS)
+    flow_ws = _add_table(wb, "Datennutzung", E.FLOW_COLUMNS, flow_rows, ranges, id_range)
+    for i, ex in enumerate(E.EXAMPLE_FLOWS):
+        _write_example_row(flow_ws, E.FLOW_COLUMNS, 2 + i, ex)
+
+    code_rows = rows * 2 + len(E.EXAMPLE_CODES)
+    codes_ws = _add_table(wb, "Codes", E.CODE_COLUMNS, code_rows, ranges, id_range)
+    for i, ex in enumerate(E.EXAMPLE_CODES):
+        _write_example_row(codes_ws, E.CODE_COLUMNS, 2 + i, ex)
+
+    # local_id-Dropdowns auf den verknüpften Blättern
+    for ws, n in ((flow_ws, flow_rows), (codes_ws, code_rows)):
+        dv = DataValidation(type="list", formula1=id_range["element_ids"], allow_blank=True)
+        dv.add(f"A2:A{n + 1}")
+        ws.add_data_validation(dv)
+
+    # Dropdowns der Datenelemente nachziehen (Codelisten existieren jetzt)
     for ci, (_k, _h, _m, listname) in enumerate(E.ELEMENT_COLUMNS, start=1):
         if listname and listname in ranges:
-            d = DataValidation(type="list", formula1=ranges[listname], allow_blank=True)
+            suggestion = listname in E.SUGGESTION_LISTS
+            d = DataValidation(type="list", formula1=ranges[listname], allow_blank=True,
+                               showErrorMessage=not suggestion)
+            if not suggestion:
+                d.errorTitle, d.error, d.errorStyle = "Ungültige Eingabe", "Bitte aus der Liste wählen.", "stop"
             col = get_column_letter(ci)
-            d.add(f"{col}2:{col}{last}")
+            d.add(f"{col}2:{col}{elem_rows + 1}")
             elem_ws.add_data_validation(d)
 
     wb.move_sheet("Codelisten", offset=len(wb.sheetnames))  # ans Ende
@@ -165,10 +218,10 @@ def build(out_path: Path, rows: int) -> Path:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default=str(E.ROOT / "templates" / "datenelement-erhebung.xlsx"))
-    ap.add_argument("--rows", type=int, default=60, help="Anzahl Eingabezeilen im Blatt 'Datenelemente'")
+    ap.add_argument("--rows", type=int, default=60, help="Echte Eingabezeilen im Blatt 'Datenelemente'")
     args = ap.parse_args()
     out = build(Path(args.out), args.rows)
-    print(f"Wrote {out} (Datenelemente: {args.rows} Zeilen, Datennutzung: {args.rows * 3} Zeilen)")
+    print(f"Wrote {out} (Datenelemente: 1 Beispiel + {args.rows} Zeilen; Datennutzung + Codes inkl. Beispiel)")
     return 0
 
 
