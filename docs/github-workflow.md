@@ -32,7 +32,15 @@ Aktive Workflows (`.github/workflows/`):
    (`python3 .github/scripts/validate-agent-skills.py`).
 3. **`duplicate-check.yml`** — kommentiert bei neuen „data-element"-Issues mögliche Dubletten
    (`scripts/check-duplicates.py --from-issue-file`).
-4. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
+4. **`citation-validate.yml`** — validiert `CITATION.cff` gegen das CFF-Schema (blockierend; ein
+   ungültiges CFF bricht den Zenodo-Publish still ab).
+5. **`link-check.yml`** — lychee-Prüfung der Markdown-Links (intern + Attributions-/Förder-URLs;
+   non-blocking, wöchentlich + bei PRs).
+6. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
+
+> Runner: alle Workflows nutzen `ubuntu-latest`. Solange das Repo privat ist, ist GitHub-hosted
+> org-weit geblockt — siehe [`../RUNNERS.md`](../RUNNERS.md) (self-hosted-Fallback; beim
+> Public-Schalten auf `ubuntu-latest` zurück).
 
 ## 4 Releases
 
