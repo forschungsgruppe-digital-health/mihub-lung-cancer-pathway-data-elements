@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: "If you use these data elements, please cite them as below."
+title: "Lungenkrebs-Datenelemente – MiHUB (Datenelement-Katalog)"
+abstract: >-
+  Structured, versionable catalog of clinical data elements along the lung-cancer
+  patient pathway (NSCLC, SCLC), developed in the MiHUB project (TU Dresden /
+  Forschungsgruppe Digital Health). Each data element is modelled per ISO 13972:2022 /
+  ISO 13606-2 with clinical definition, terminology bindings, parallel standard mappings
+  (oBDS, MII-KDS, KBV-MIO, mCODE, openEHR …) and guideline evidence. A research,
+  education and interoperability-reference artifact — an author draft, not clinically
+  validated and not for use in direct patient care (see DISCLAIMER.md).
+type: dataset
+# Author order: first author Susky, senior (last) author Schlieter; add further contributors as needed.
+authors:
+  - given-names: Marcel
+    family-names: Susky
+    affiliation: "Forschungsgruppe Digital Health, Technische Universität Dresden"
+    orcid: "https://orcid.org/0000-0002-3906-0452"
+  - given-names: Rebecca
+    family-names: Scheel
+    affiliation: "Forschungsgruppe Digital Health, Technische Universität Dresden"
+    orcid: "https://orcid.org/0009-0001-6054-7812"
+  - given-names: Hannes
+    family-names: Schlieter
+    affiliation: "Forschungsgruppe Digital Health, Technische Universität Dresden"
+    orcid: "https://orcid.org/0000-0002-6513-9017"
+license: CC-BY-4.0
+# TODO (Veröffentlichungs-Checkliste): nach der ersten Zenodo-Archivierung den Concept-DOI
+# (alle Versionen) hier eintragen, z. B.:  doi: "10.5281/zenodo.XXXXXXXX"
+repository-code: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
+url: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
+version: "0.1.0"
+date-released: "2026-06-30"
+keywords:
+  - data elements
+  - clinical information model
+  - ISO 13972
+  - data dictionary
+  - lung cancer
+  - oncology
+  - FHIR
+  - MiHUB
+  - Medical Informatics Initiative
+contact:
+  - name: "Forschungsgruppe Digital Health, Technische Universität Dresden"
+    email: "digital-health@tu-dresden.de"
