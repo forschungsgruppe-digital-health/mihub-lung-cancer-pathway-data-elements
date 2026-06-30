@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
 """Aggregiert alle YAML-Datenelemente zu catalog/data-dictionary.csv (Semicolon-CSV)."""
 from __future__ import annotations
 
@@ -32,6 +33,7 @@ COLUMNS = [
     ("trigger+", "trigger"),
     ("frequency_pattern+", "frequency_pattern"),
     ("responsible_role+", "responsible_role"),
+    ("care_process_data_flows", "care_process_data_flows"),
     ("guideline_source+", "guideline_source"),
     ("guideline_section+", "guideline_section"),
     ("recommendation_grade", "recommendation_grade"),
@@ -67,6 +69,20 @@ def first_standard_mapping(doc: dict[str, Any]) -> tuple[str, str]:
     return "", ""
 
 
+def data_flows_summary(cp: dict[str, Any]) -> str:
+    """Flacht care_process.data_flows[] zu 'System/Rolle:Nutzung; …' (eine CSV-Zelle)."""
+    parts: list[str] = []
+    for fl in cp.get("data_flows") or []:
+        seg = fl.get("system_label") or fl.get("system", "")
+        if fl.get("actor_role"):
+            seg += f"/{fl['actor_role']}"
+        if fl.get("usage_type"):
+            seg += f":{fl['usage_type']}"
+        if seg:
+            parts.append(seg)
+    return " · ".join(parts)
+
+
 def row(doc: dict[str, Any]) -> dict[str, str]:
     vs = doc.get("value_set") or {}
     cp = doc.get("care_process") or {}
@@ -92,6 +108,7 @@ def row(doc: dict[str, Any]) -> dict[str, str]:
         "trigger": cp.get("trigger", ""),
         "frequency_pattern": cp.get("frequency_pattern", ""),
         "responsible_role": cp.get("responsible_role", ""),
+        "care_process_data_flows": data_flows_summary(cp),
         "guideline_source": g.get("source", ""),
         "guideline_section": g.get("section", ""),
         "recommendation_grade": g.get("recommendation_grade", ""),
@@ -118,7 +135,7 @@ def write_markdown(rows: list[dict], total: int) -> Path:
     lines.append("")
     lines.append("> **Auto-generiert** durch `scripts/build-catalog.py`. 1:1-Spiegelung der CSV in Markdown-Form für GitHub-PR-Diffs, Web-UI-Suche und Element-Direktverlinkung.")
     lines.append("")
-    lines.append("> **Zielgruppe:** technische Nutzer:innen (volles Data-Dictionary, 22 Spalten). Lesefreundliche Phasen-Übersicht für Klinik-Reviewer:innen unter `docs/phases-overview.md` (kuratierte Untermenge).")
+    lines.append(f"> **Zielgruppe:** technische Nutzer:innen (volles Data-Dictionary, {len(HEADER)} Spalten). Lesefreundliche Phasen-Übersicht für Klinik-Reviewer:innen unter `docs/phases-overview.md` (kuratierte Untermenge).")
     lines.append("")
     lines.append("Pflicht-Marker im Header: `*` = mandatory · `+` = recommended · (kein Suffix) = optional. Stand: " + str(total) + " Datenelemente.")
     lines.append("")
@@ -150,7 +167,7 @@ def write_phases_overview(files: list[Path]) -> Path:
     out.append("Lesefreundliche, kuratierte 8-Spalten-Sicht je Versorgungsphase. "
                "Quelle: `elements/<phase>/*.yaml` (autogeneriert durch `scripts/build-catalog.py`).")
     out.append("")
-    out.append(f"Stand: **{len(files)} Datenelemente** · für die volle 22-Spalten-Sicht "
+    out.append(f"Stand: **{len(files)} Datenelemente** · für die volle {len(HEADER)}-Spalten-Sicht "
                "siehe `catalog/data-dictionary.csv` bzw. `catalog/data-dictionary.md` (1:1-Mirror).")
     out.append("")
     for phase_dir, title, desc in phases:
@@ -213,7 +230,7 @@ def main() -> int:
             w.writerow([r[k] for k in KEYS])
     print(f"Wrote {OUT.relative_to(ROOT)} ({len(files)} elements)")
 
-    # 2) 1:1-Markdown-Mirror (volle 22 Spalten)
+    # 2) 1:1-Markdown-Mirror (volle Spaltenzahl = len(HEADER))
     md_path = write_markdown(rows, len(files))
     print(f"Wrote {md_path.relative_to(ROOT)} ({len(files)} elements, mirror)")
 

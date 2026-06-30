@@ -2,7 +2,7 @@
 
 Lesefreundliche, kuratierte 8-Spalten-Sicht je Versorgungsphase. Quelle: `elements/<phase>/*.yaml` (autogeneriert durch `scripts/build-catalog.py`).
 
-Stand: **51 Datenelemente** · für die volle 22-Spalten-Sicht siehe `catalog/data-dictionary.csv` bzw. `catalog/data-dictionary.md` (1:1-Mirror).
+Stand: **51 Datenelemente** · für die volle 24-Spalten-Sicht siehe `catalog/data-dictionary.csv` bzw. `catalog/data-dictionary.md` (1:1-Mirror).
 
 ## Onkologische Nachsorge (kurativ behandelt)
 

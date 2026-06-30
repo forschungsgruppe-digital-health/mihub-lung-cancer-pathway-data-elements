@@ -121,6 +121,22 @@ body:
       required: true
 
   - type: textarea
+    id: data_flows
+    attributes:
+      label: "Datennutzung — WO / WER / WIE (optional, aber sehr hilfreich)"
+      description: >-
+        Wo (in welchem System) wird dieses Datenelement von wem (Rolle) wie genutzt?
+        Ein Datenelement kann mehrere Stationen durchlaufen. Eine Zeile je System/Rolle/Nutzung.
+        WIE = erfasst | gelesen | aktualisiert | geprüft | übermittelt | Forschung | im Patientenportal angezeigt | von Patient:in selbst erfasst.
+      placeholder: |
+        Beispiel „Rauchstatus":
+        - Hausarztpraxis-System (PVS) · Hausärzt:in · erfasst
+        - Krankenhaus-IS (KIS) · Onkolog:in · gelesen
+        - Forschungsdatenbank (DIZ) · Forscher:in · Forschung/Sekundärnutzung
+    validations:
+      required: false
+
+  - type: textarea
     id: guideline
     attributes:
       label: Leitlinien-/Quellen-Bezug (Pflicht)
