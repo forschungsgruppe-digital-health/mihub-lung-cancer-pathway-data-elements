@@ -1,11 +1,14 @@
 # HOWTO — Ein neues Datenelement aufnehmen
 
-Diese Anleitung erklärt **Schritt für Schritt**, wie ein neu identifiziertes Datenelement in eine bestehende oder neue Versorgungsphase aufgenommen wird. Es gibt zwei Spuren — wählen Sie die für Sie passende:
+Diese Anleitung erklärt **Schritt für Schritt**, wie ein neu identifiziertes Datenelement in eine bestehende oder neue Versorgungsphase aufgenommen wird. Es gibt **drei gleichwertige Wege** — wählen Sie den für Sie passenden (Vergleichstabelle: [`../CONTRIBUTING.md`](../CONTRIBUTING.md)):
 
-- **Klinik-Spur (niederschwellig):** Sie befüllen ein Web-Formular auf GitHub. Das MI-Team übernimmt die technische Umsetzung. → [Sprung zu §A](#a-klinik-spur-ohne-yaml--ohne-git)
-- **MI-Spur (vollständig):** Sie editieren das YAML direkt, validieren lokal und öffnen einen Pull Request. → [Sprung zu §B](#b-mi-spur-yaml--git--pr)
+- **🟢 Klinik-Spur · Issue (niederschwellig):** Sie befüllen ein Web-Formular auf GitHub. Das MI-Team übernimmt die technische Umsetzung. → **Abschnitt A** unten.
+- **🟡 Klinik-Spur · Excel (viele Elemente, auch offline/Workshop):** Sie füllen eine Excel-Mappe aus; das MI-Team importiert sie automatisch. → **Abschnitt A2** unten.
+- **🔵 MI-Spur · YAML (vollständig):** Sie editieren das YAML direkt, validieren lokal und öffnen einen Pull Request. → **Abschnitt B** unten.
 
-Wer welche Spur nutzt, ist im PR-Template festgehalten — *beides* ist legitim.
+Welcher Weg genutzt wurde, ist im PR-Template festgehalten — **alle drei** sind legitim. Vor der
+Aufnahme prüft das MI-Team neue Kandidaten auf **Dubletten** (`scripts/check-duplicates.py` bzw.
+Skill [`check-duplicate-data-element`](../skills/check-duplicate-data-element/SKILL.md)).
 
 ---
 
@@ -35,6 +38,47 @@ Das MI-Team bekommt das Issue automatisch zugewiesen (CODEOWNERS), prüft Vollst
 Das MI-Team konvertiert das Issue in ein valides YAML (siehe §B), öffnet einen PR, **markiert die Klinik-Spur-Person als Reviewer:in für inhaltliche Bestätigung**. Sie reviewen den Klartext-Diff, geben „Approve". Fertig.
 
 > **Aufwand für Klinik-Person: 10–20 min pro Element (Formular ausfüllen + späteres Approve im PR).** Kein YAML, kein `git`, keine CLI.
+
+---
+
+## A2 · Excel-Spur (ohne Git, viele Elemente)
+
+**Voraussetzung:** Excel, LibreOffice Calc oder Numbers. Kein GitHub-Account nötig.
+
+Ideal, wenn Sie **mehrere Datenelemente am Stück** erheben (z. B. in einem Stakeholder-Workshop)
+oder lieber offline arbeiten.
+
+### Schritt A2.1 — Vorlage holen
+
+`templates/datenelement-erhebung.xlsx` herunterladen (siehe [`../templates/README.md`](../templates/README.md)).
+Die Dropdown-Listen sind aus dem Schema erzeugt — Sie wählen also immer gültige Werte.
+
+### Schritt A2.2 — Ausfüllen
+
+- Blatt **»Anleitung«** lesen.
+- Blatt **»Datenelemente«**: eine Zeile je Element; Pflichtspalten sind rot hinterlegt und mit `*`
+  markiert. Vergeben Sie je Zeile eine kurze **lokale ID** (z. B. `DE-001`).
+- Blatt **»Datennutzung«**: WO (System) · WER (Rolle) · WIE (Nutzung) — mehrere Zeilen je
+  Datenelement, verknüpft über die lokale ID. Beispiel »Rauchstatus«: PVS · Hausärzt:in · erfasst;
+  KIS · Onkolog:in · gelesen; Forschungs-DWH · Forscher:in · Forschung.
+- Felder, die Sie nicht kennen (z. B. SNOMED-Codes), dürfen leer bleiben.
+
+### Schritt A2.3 — Abgeben
+
+Mappe an `digital-health@tu-dresden.de` senden oder an ein GitHub-Issue anhängen.
+
+### Schritt A2.4 — MI-Team: Import (technisch)
+
+```bash
+pip install openpyxl
+python scripts/import-elicitation-workbook.py ausgefuellt.xlsx --validate   # -> elements/_incoming/*.yaml (Entwürfe)
+python scripts/check-duplicates.py --candidates elements/_incoming/         # Dubletten prüfen
+```
+
+Die Entwürfe (`publication_status: AuthorDraft`) werden vom MI-Team um Codes/Mappings ergänzt,
+dann nach `elements/<phase>/` verschoben und wie in §B per PR auf `dev` eingebracht.
+
+> **Aufwand für Klinik-Person:** Mappe ausfüllen — kein `git`, kein YAML, keine CLI.
 
 ---
 
@@ -99,6 +143,7 @@ Empfohlene Felder (im CSV mit `+` markiert):
 - `value_set` mit mind. einem Beispiel-Coding (SNOMED CT bevorzugt; LOINC für Skalen; ICD-10-GM für Diagnosen)
 - `standard_mappings` — mind. ein Eintrag (`fhir-mii-kds`, `fhir-r4-base`, `obds`, `kbv-mio`, `openehr-archetype`, …)
 - `care_process` (`trigger`, `frequency_pattern`, `responsible_role`)
+- `care_process.data_flows[]` — **WO/WER/WIE**: je Eintrag `system` (PVS/KIS/…), `actor_role`, `usage_type` (capture/read/…), optional `sector`/`mandatory`. Mehrere Einträge je Element (z. B. Hausarzt erfasst im PVS, Onkolog:in liest im KIS). Beispiel: `elements/follow-up/smokingStatus.yaml`.
 - `evidence.guideline_references` mit mind. einer LL-Quelle + Kapitel/Empfehlungs-Nr.
 - `iso13972_metadata.type` (`observation`, `procedure`, `evaluation`, `plan`, `condition`, `medication`, `social`)
 
@@ -116,9 +161,18 @@ Ergebnis muss `OK` sein. Bei `FAIL` zeigt das Skript den Pfad und die Schema-Ver
 python scripts/build-catalog.py
 ```
 
-Aktualisiert `catalog/data-dictionary.csv`. **Diese CSV gehört in den Commit** — die CI bricht sonst ab.
+Aktualisiert `catalog/data-dictionary.csv` (24 Spalten). **Diese CSV gehört in den Commit** — die CI bricht sonst ab.
 
-### Schritt B7 — Commit & Push & PR
+### Schritt B6.5 — Dubletten prüfen
+
+```bash
+python scripts/check-duplicates.py --candidates elements/<phase>/<elementName>.yaml
+```
+
+Bei Einstufung `DUBLETTE`/`NAH-DUBLETTE`: bestehendes Element verfeinern statt neu anlegen; bei
+`VERWANDT`: per `related_elements[]` verlinken. (Heuristik — Letztentscheidung beim Menschen.)
+
+### Schritt B7 — Commit & Push & PR (gegen `dev`)
 
 ```bash
 git add elements/<phase>/<elementName>.yaml catalog/data-dictionary.csv
@@ -126,7 +180,8 @@ git commit -m "feat(<phase>): add <elementName> (Quelle: <LL>)"
 git push -u origin feat/<phase>/<elementName>
 ```
 
-Auf GitHub erscheint die Schaltfläche „Compare & pull request" — anklicken, PR-Template ausfüllen, klinische:n Reviewer:in markieren.
+Auf GitHub einen **Pull Request gegen den `dev`-Branch** öffnen (nicht `main`), PR-Template
+ausfüllen, klinische:n Reviewer:in markieren. **`main`** ist die Release-Branch.
 
 ---
 

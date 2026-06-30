@@ -28,8 +28,8 @@
 > Die Datei ist bei wesentlichen Änderungen im KI-Einsatz zu aktualisieren.
 
 **Verantwortliche Person (Human Oversight):** Marcel Susky, Forschungsgruppe Digital Health (FGDH), Technische Universität Dresden — `marcel.susky@tu-dresden.de`
-**Letzte Aktualisierung:** 2026-05-06
-**Geltungsbereich:** Repository `data-elements/` — Erhebung, Strukturierung und Pflege der klinischen Datenelemente entlang der Lungenkrebs-Patient Journey im Rahmen von MiHUB (AP6/AP7/AP8 in Bezug auf AP3). Alle Branches.
+**Letzte Aktualisierung:** 2026-06-30
+**Geltungsbereich:** Repository `data-elements/` — Erhebung, Strukturierung und Pflege der klinischen Datenelemente entlang der Lungenkrebs-Patient Journey im Rahmen von MiHUB (AP6/AP7/AP8 in Bezug auf AP3); umfasst auch die Erhebungs-/Import-Werkzeuge (Excel), die Dubletten-Prüfung und die werkzeug-unabhängigen Agent Skills. Alle Branches.
 
 ---
 
@@ -45,8 +45,10 @@
 | **YAML-Datenelemente** (`elements/<phase>/*.yaml`) | Generated | Anthropic Claude (Sonnet 4.5 / Sonnet 4.6 / Opus 4.7) | Vollständige initiale Erstellung auf Basis bereitgestellter klinischer Leitlinien, Onkopedia-Stände und Fachpublikationen | Stichprobenartige Quellen-Verifikation gegen Primärbelege (siehe `docs/audit-log.md`); **klinisches Review durch Domänenexpert:innen ausstehend** (publication_status: AuthorDraft) |
 | **JSON-Schema** (`schemas/data-element.schema.json`) | Assisted | Anthropic Claude (Sonnet 4.5) | Schema-Design auf Basis ISO 13972/13606-Mustern; iterative Verfeinerung | Vollständig durch Repository-Maintainer geprüft; CI-validiert |
 | **Markdown-Dokumentation** (README, AGENTS, CONTRIBUTING, methodology, howto, GLOSSARY u. a.) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.7) | Strukturierung, Formulierung, Synthese aus Antrag/Leitlinien/Standards | Inhaltlich durch Repository-Maintainer geprüft und freigegeben |
-| **Sub-Agent-Spezifikationen** (`.claude/agents/*.md`, `AGENTS.md`) | Assisted | Anthropic Claude (Sonnet 4.5 / Opus 4.7) | Entwurf der System-Prompts; Workflow-Regeln; Separation-of-Concerns-Architektur | Durch Repository-Maintainer entworfen und auf Konsultations-Pflicht zugeschnitten |
-| **Python-Skripte** (`scripts/*.py`) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6) | Validierung, Aggregation, FHIR-Logical-Model-Generierung | Manuell ausgeführt und ergebnis-geprüft |
+| **Agent Skills / Sub-Agenten** (`skills/*/SKILL.md` als einzige Quelle; `.claude/agents` + `.claude/skills` + `.codex/skills` Symlinks; `AGENTS.md`, `.github/copilot-instructions.md`) | Assisted | Anthropic Claude (Sonnet 4.5 / Opus 4.7 / Opus 4.8) | Entwurf der System-Prompts; Workflow-Regeln; Separation-of-Concerns; vendor-neutrale Refaktorierung + neues Skill `check-duplicate-data-element` | Durch Repository-Maintainer entworfen und auf Konsultations-Pflicht zugeschnitten; `skill-lint` CI-validiert |
+| **Python-Skripte** (`scripts/*.py`) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.8) | Validierung, Aggregation, FHIR-Logical-Model-Generierung | Manuell ausgeführt und ergebnis-geprüft |
+| **Erhebungs-Werkzeuge** (`scripts/_elicitation.py`, `build-/import-elicitation-workbook.py`, `templates/`) | Assisted | Anthropic Claude (Opus 4.8) | Schema-getriebene Excel-Vorlage + Importer für die Klinik-Spur (Weg 2) | Manuell ausgeführt, Round-trip getestet |
+| **Dubletten-Prüfung** (`scripts/check-duplicates.py`, Skill `check-duplicate-data-element`) | Assisted | Anthropic Claude (Opus 4.8) | Heuristik + Skill für Dubletten/Ähnlichkeit neuer Kandidaten | Getestet (bekannte Dublette + Negativfall); Letztentscheidung Mensch |
 | **Glossar** (`GLOSSARY.md`) | Assisted | Anthropic Claude (Opus 4.7) | Sammlung, Strukturierung, Quellen-Verifikation | Web-stichprobenartige Quellen-Validierung (Primärpublikationen, Score-Cut-offs); §18 markiert Verifikations-Status explizit |
 | **Generierte Sichten** (`catalog/data-dictionary.csv`, `.md`; `derived/fhir-logical-model/*.fsh`; `docs/phases-overview.md`) | Generated (deterministisch) | Eigene Python-Skripte (kein direkter KI-Aufruf zur Laufzeit) | Vollständig autogeneriert aus den YAML-Quellen; jeder Lauf ist reproduzierbar | Schema-Validierung vor Generierung; Diff-Review durch Maintainer |
 | **Issue- und PR-Templates** (`.github/`) | Assisted | Anthropic Claude (Sonnet 4.5) | Strukturentwurf | Durch Maintainer angepasst |
@@ -73,6 +75,7 @@
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-sonnet-4-5` (`claude-sonnet-4-5-20251001`) | 2026-04 – 2026-05 (Erstbefüllung, Sub-Agenten, Skripte, Initial-Doku) | Recherche, Strukturierung, YAML-Erstellung, Skript-Entwicklung |
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-sonnet-4-6` | 2026-05 (Patches, README-Neufassung) | Doku-Anpassung, Antrags-Auswertung |
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-opus-4-7` | 2026-05 (Glossar-Verifikation, AI_USAGE-Befüllung, Curator-Sub-Agent) | Quellen-Verifikation, Compliance-Dokumentation, Sub-Agent-Architektur |
+| **Claude Code (Opus 4.8, 1M-Kontext)** | Anthropic | `claude-opus-4-8` | 2026-06 (Schema-`data_flows`, Excel-Erhebungs-Tooling, Dubletten-Checker, vendor-neutrale Skills-Refaktor, Go-public-Artefakte) | Schema-Erweiterung, Skript-/Skill-Entwicklung, Doku-Überarbeitung |
 | **Repo-eigene Sub-Agenten** (`.claude/agents/`) | basierend auf Claude | `data-element-analyzer`, `data-element-validator`, `ai-usage-curator` — siehe [`AGENTS.md`](AGENTS.md) | 2026-05 – laufend | Datenelementweise Analyse + Validation + KI-Nutzungs-Pflege |
 
 > **Hinweis zur Modellversionierung:** Die hier aufgeführten Modellkennungen entsprechen
@@ -241,6 +244,7 @@ Folgende Bereiche unterliegen **bewusst nicht** dem KI-Workflow (entspricht Scop
 | Datum | Änderung | Bearbeitet von |
 |---|---|---|
 | 2026-05-06 | Erstmalige inhaltliche Befüllung der Vorlage; vollständige Subsumierung des bisherigen `DISCLAIMER.md` (Datei entfernt); README-Badge auf `AI_USAGE.md` umgelinkt; `ai-usage-curator`-Sub-Agent etabliert | Marcel Susky (Repository-Maintainer) |
+| 2026-06-30 | Modell `claude-opus-4-8` ergänzt (§3); Schema-Erweiterung `care_process.data_flows[]`; Excel-Erhebungs-Werkzeuge + Importer; Dubletten-Prüfung + neues Skill `check-duplicate-data-element`; vendor-neutrale Skills-Refaktorierung (`skills/` als SSoT, `.claude`/`.codex`-Symlinks, Copilot-Brücke, `skill-lint`); Go-public-Artefakte (LICENSE/Apache, DISCLAIMER, CITATION, CoC); `dev`/`main`-Branching. Hinweis: eigenständige `DISCLAIMER.md` (Zweckbestimmung/MDR/Haftung) neu angelegt — ergänzt, ersetzt **nicht** diese KI-Disklosure. | Marcel Susky (Repository-Maintainer), KI-assistiert (Opus 4.8) |
 
 ---
 

@@ -308,6 +308,38 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 
 **Bei Aktualisierungen:** Der `data-element-validator`-Sub-Agent prüft pro Lauf, ob die hier aufgeführten LL-/Standard-Versionen noch aktuell sind, und schlägt Updates vor.
 
+## 19 Datennutzung / Datenfluss — `care_process.data_flows[]` (projekt-eigenes Vokabular)
+
+Erfasst je Datenelement **WO** (System), **WER** (Rolle) und **WIE** (Nutzung) — mehrere
+Einträge je Element möglich (ISO 13940 ContSys / HL7 HSRA Care Coordination).
+
+**`system` — Systemklasse (WO):**
+
+| Code | Bedeutung |
+| --- | --- |
+| `pvs` | Primärverwaltungssystem / Praxisverwaltungssystem (ambulant) |
+| `kis` | Krankenhausinformationssystem (KIS/AIS) |
+| `tumordokumentation` | Tumordokumentationssystem (z. B. Onkostar, GTDS, CREDOS) |
+| `krebsregister` | Klinisches/Epidemiologisches Krebsregister (oBDS §65c) |
+| `lis-patho` | Labor-/Pathologie-Informationssystem (LIS/LIMS) |
+| `ris-pacs` | Radiologie-Informationssystem / Bildarchiv (RIS/PACS) |
+| `epa` | elektronische Patientenakte (ePA / gematik TI) |
+| `patientenportal` | Patientenportal / PRO-App / CRPM |
+| `forschung-dwh-diz` | Forschungs-Data-Warehouse / Datenintegrationszentrum / FDPG |
+| `vernetzungsplattform` | sektorenübergreifende Vernetzungs-/Kooperationsplattform |
+| `other` | sonstiges System (`system_label` als Klartext setzen) |
+
+**`usage_type` — Nutzungsart (WIE):** `capture` (erfassen/eingeben) · `read` (lesen) ·
+`update` (aktualisieren) · `validate` (prüfen/freigeben) · `transmit` (übermitteln/austauschen) ·
+`store` (speichern/archivieren) · `derive` (ableiten/berechnen) · `secondary-use`
+(Sekundärnutzung/Forschung) · `display-to-patient` (Anzeige im Patientenportal) ·
+`patient-entered` (durch Patient:in selbst erfasst) · `other`.
+
+**`sector` — Versorgungssektor:** `ambulant` · `stationaer` · `sektorenuebergreifend` · `haeuslich`.
+
+> Beispiel `smokingStatus`: Hausärzt:in erfasst im `pvs` (capture, ambulant); Onkolog:in liest im
+> `kis` (read, stationär); Forscher:in nutzt im `forschung-dwh-diz` (secondary-use).
+
 ## Pflege
 
 Dieses Glossar wird durch den `data-element-analyzer`-Sub-Agenten gepflegt: Bei jedem Lauf werden neue Begriffe in YAML-Inhalten / Codings / Kommentaren auf Aufnahme geprüft. Manuelle Ergänzungen jederzeit möglich; Änderungen sollten im `docs/audit-log.md` als Audit-Eintrag dokumentiert werden.

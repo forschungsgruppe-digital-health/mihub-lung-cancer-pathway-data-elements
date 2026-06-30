@@ -62,7 +62,7 @@ Die Norm liefert die Anforderungen an Archetypen — insbesondere Versionsmanage
 
 ### 3.3 ISO 13940 — ContSys (Continuity of Care)
 
-ISO 13940 definiert klinische Geschäftsprozesse. ISO 13972 §7.2 Tab. 2 bezieht sich explizit darauf: *„If ISO 13940 (ContSys) is used, then the type of Clinical Information Model will be identified from the business process as defined in that standard."* Das Repository nimmt das im Feld `care_process.trigger` (welches Ereignis im Geschäftsprozess löst die Erhebung aus) und `responsible_role` (welche Rolle erfasst es) auf.
+ISO 13940 definiert klinische Geschäftsprozesse. ISO 13972 §7.2 Tab. 2 bezieht sich explizit darauf: *„If ISO 13940 (ContSys) is used, then the type of Clinical Information Model will be identified from the business process as defined in that standard."* Das Repository nimmt das im Feld `care_process.trigger` (welches Ereignis im Geschäftsprozess löst die Erhebung aus) und `responsible_role` (welche Rolle erfasst es) auf. Die **vollständige Datennutzung** über mehrere Systeme/Rollen/Nutzungsarten je Datenelement wird in `care_process.data_flows[]` erfasst (WO/System · WER/Rolle · WIE/Nutzung) — z. B. Erfassung im PVS durch die Hausärzt:in, Lesen im KIS durch die Onkolog:in, Sekundärnutzung im Forschungs-DWH.
 
 ### 3.4 ISO 23903 — Interoperability and Integration Reference Architecture
 
@@ -169,7 +169,7 @@ Erweiterungen erfolgen iterativ; das Schema bleibt stabil (Phasen-Enum wird ggf.
 | Wie strukturiere ich ein Datenelement formal? | ISO 13972, ISO 13606-2 | vollständig |
 | Wie versioniere und governe ich? | ISO 13606-2, ISO 13972 §7 | vollständig |
 | Wie binde ich Terminologien? | HL7 HSRA Common Terminology, MII-KDS, SNOMED CT, LOINC | vollständig |
-| Wie verbinde ich mit dem Versorgungsprozess? | ISO 13940 (ContSys), HSRA Care Coordination | rudimentär; nicht onkologie-spezifisch |
+| Wie verbinde ich mit dem Versorgungsprozess? | ISO 13940 (ContSys), HSRA Care Coordination | adressiert über `care_process.trigger`/`responsible_role` **und** `care_process.data_flows[]` (System·Rolle·Nutzung je Element); onkologie-spezifische Tiefe wächst iterativ |
 | Wie technisch implementieren? | ISO 23903, FHIR R4, MII-KDS | klar (nachgelagerte Iteration) |
 
 ### 6.2 Was die Standards **nicht** abdecken — onkologie-spezifische Lücken
@@ -214,6 +214,7 @@ Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) 
 | v0.1 ICD-O-3 + ICF | `SYSTEM_URL` erweitert (`icd-o-3`, `icf`) | Codings ergänzt: ICD-O-3 M-/T-Codes für Lungenkarzinom-Histologie auf `recurrenceOrSecondPrimary`; ICF b440/b280/d4/d5 auf Atemnot/Schmerz/Funktion; ICD-10-GM Z51.5/Z71.6 auf Palliativ-/Tabakberatung-Elementen |
 | v0.1 LL-v5.01-Sync (Analyzer + Validator) | unverändert | Quellen-Pin S3-LL Lungenkarzinom v4.0→v5.01 in 25 Elementen; recommendation_grade EK→B in 7 Nachsorge-/Surveillance-Elementen (Empf. 16.1, 16.4, 16.7, 16.8, 16.9 in v5.01 aufgewertet); smokingStatus erweitert (E-Zigarette + Passivrauch); tobaccoCessationCounselling erweitert (ABC-Schema + DiGA); earlyPalliativeReferral erweitert (standardisiertes Symptomassessment + dependsOn → symptomAssessmentInstrument). Audit-Trail in `audit-log.md` §8. |
 | v0.1 FSH-Generator agnostisch | unverändert | `scripts/build-fhir-logical-models.py` projekt-agnostisch refaktoriert: CodeSystem/ValueSet-Namen ohne `MiHUB`-Präfix (PhasesCS/VS, StandardsCS/VS, …); CLI-Parameter `--namespace-base` für FHIR-URL-Basis (Default `https://mihub.de/fhir`) und `--title` für Logical-Model-Titel. Strukturen damit in anderen Projekten direkt wiederverwendbar; nur `--title` und ggf. die Codes in den CodeSystems sind projekt-spezifisch zu konfigurieren. |
+| v0.1 Datennutzung + Erhebungs-Tooling | `care_process.data_flows[]` ergänzt (System·Rolle·Nutzung je Element; additive Minor-Erweiterung, alle 51 YAMLs bleiben gültig); CSV nun 24 Spalten (`care_process_data_flows`) | Excel-Erhebungs-Vorlage + Importer (`build-/import-elicitation-workbook.py`) für eine niederschwellige dritte Beitrags-Spur; Dubletten-Prüfung (`check-duplicates.py` + Skill `check-duplicate-data-element`); Skills vendor-neutral (`skills/` als SSoT + `.claude`/`.codex`-Symlinks + Copilot-Brücke + `skill-lint`); Go-public-Artefakte (LICENSE/Apache, DISCLAIMER, CITATION, CoC); `dev`/`main`-Branching. |
 
 Detaillierter Audit-Trail je Element: `audit-log.md`.
 

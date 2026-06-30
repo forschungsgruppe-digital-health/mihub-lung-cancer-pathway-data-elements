@@ -365,7 +365,34 @@ Datum: 2026-05-06 · Auslöser: Nutzer-Anweisung zur finalen Übernahme der `AI_
 | 6 (neu) | Klinisches Review-Board konstituieren | offen |
 | 7 (neu) | EU-Guidance Q2 2026 gegenprüfen | laufend |
 
-## 12 Limitationen
+## 12 v0.1.9 — Datennutzung (`data_flows`), Erhebungs-/Dubletten-Tooling, vendor-neutrale Skills, Go-public-Artefakte
+
+**Datum:** 2026-06-30 · **Auslöser:** Maintainer-Auftrag (Vorbereitung Veröffentlichung privat → öffentlich) · **KI-Unterstützung:** Claude Code (Opus 4.8).
+
+**Schema (additive Minor-Erweiterung; alle 51 YAMLs bleiben gültig):**
+
+| Änderung | Detail |
+| --- | --- |
+| `care_process.data_flows[]` | je Datenelement WO (System) · WER (Rolle) · WIE (`usage_type`) + optional `sector`/`mandatory`/`notes`; kontrollierte Vokabulare (System-Klassen, Nutzungsarten, Sektoren) im Schema-Enum + `GLOSSARY.md` §19 |
+| Beispiel-Befüllung | `elements/follow-up/smokingStatus.yaml`: PVS/Hausärzt:in/capture · KIS/Onkolog:in/read · KIS/Pflege/update · DIZ/Forscher:in/secondary-use |
+| Catalog | `build-catalog.py`: neue Spalte `care_process_data_flows` (CSV nun **24 Spalten**); Spaltenzahl in den generierten Doku-Texten dynamisch (`len(HEADER)`) — behebt einen bestehenden „22 Spalten"-Off-by-one |
+| Issue-Formular | `.github/ISSUE_TEMPLATE/new-data-element.yml`: Feld „Datennutzung (WO/WER/WIE)" |
+
+**Werkzeuge / Governance:**
+
+| Artefakt | Zweck |
+| --- | --- |
+| `scripts/build-elicitation-workbook.py` + `import-elicitation-workbook.py` + `templates/datenelement-erhebung.xlsx` + `scripts/_elicitation.py` | Excel-Erhebungs-Vorlage (Klinik-Spur, Weg 2, schema-getrieben) + Import zu YAML-Entwürfen (`elements/_incoming/`, gitignored) |
+| `scripts/check-duplicates.py` + Skill `check-duplicate-data-element` (+ `.github/workflows/duplicate-check.yml`) | Dubletten-/Ähnlichkeitsprüfung neuer Kandidaten vor Aufnahme |
+| `skills/` als einzige Quelle + `.claude/skills`/`.claude/agents`/`.codex/skills`-Symlinks + `.github/copilot-instructions.md` + `.github/scripts/validate-agent-skills.py` + `skill-lint.yml`; `AGENTS.md` als vendor-neutraler Katalog | werkzeug-unabhängige Skill-/Sub-Agent-Bereitstellung; die 3 bestehenden Agenten nach `skills/` migriert |
+| `DISCLAIMER.md`, `LICENSE` (CC BY 4.0), `LICENSE-APACHE-2.0.txt`, `CITATION.cff`, `CODE_OF_CONDUCT.md`, `.gitattributes`, `docs/go-public-checklist.md` | fehlende Go-public-Artefakte ergänzt (Disclaimer **DRAFT**, ausstehend Justiziariat/DPO) |
+| Branches `dev` (Integration) / `main` (Release) | Beitrags-/Release-Workflow |
+
+**Verifikation:** `validate.py` (51/51 OK), `build-catalog.py` (Drift-frei), `skill-lint` (4 Skills + 4 Agenten OK), Excel-Round-trip (Vorlage → Import → valides YAML), `check-duplicates.py` (bekannte Dublette „Rauchstatus"→`smokingStatus` NAH-DUBLETTE; Negativfall EIGENSTÄNDIG).
+
+**Doku-Konsistenz:** README, CONTRIBUTING, `docs/howto-add-element.md`, `docs/github-workflow.md`, `docs/methodology.md`, `GLOSSARY.md`, `AI_USAGE.md` aktualisiert (3 Beitrags-Wege, 24 Spalten, `dev`/`main`, Skills, Disclaimer/Lizenz/Zitat).
+
+## 13 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.
