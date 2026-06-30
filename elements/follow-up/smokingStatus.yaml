@@ -44,6 +44,25 @@ care_process:
   trigger: bei jeder Vorstellung
   frequency_pattern: per-encounter
   responsible_role: Onkologe / Hausarzt / Pflege
+  data_flows:
+  - system: pvs
+    actor_role: Hausarzt:ärztin
+    usage_type: capture
+    sector: ambulant
+    mandatory: false
+    notes: Tabakanamnese im Rahmen der hausärztlichen Vorstellung
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+  - system: kis
+    actor_role: Pflege
+    usage_type: update
+    sector: stationaer
+  - system: forschung-dwh-diz
+    actor_role: Forscher:in
+    usage_type: secondary-use
+    sector: sektorenuebergreifend
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom

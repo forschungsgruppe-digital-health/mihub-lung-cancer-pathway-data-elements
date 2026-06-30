@@ -200,7 +200,73 @@
         },
         "responsible_role": {
           "type": "string",
-          "description": "Verantwortliche Rolle (Onkolog:in, Hausarzt:ärztin, Pflegefachperson, Palliativteam)."
+          "description": "Primär verantwortliche Rolle (Onkolog:in, Hausarzt:ärztin, Pflegefachperson, Palliativteam). Zusammenfassende Einzelangabe; die vollständige Datennutzung über mehrere Systeme/Rollen wird in 'data_flows[]' erfasst."
+        },
+        "data_flows": {
+          "type": "array",
+          "description": "Datennutzung entlang des Pfads (ISO 13940 ContSys: Akteur/Rolle im Geschäftsprozess; HL7 HSRA Care Coordination): pro Eintrag WO (System/Systemklasse), WER (Rolle/Verantwortung) und WIE (Nutzungsart) ein Datenelement erhoben, gelesen oder ausgetauscht wird. Mehrere Einträge je Element zulässig — z. B. 'patientName' wird vom Hausarzt im Primärverwaltungssystem (PVS) erfasst (capture) und von der Onkolog:in im Krankenhausinformationssystem (KIS) gelesen (read).",
+          "items": {
+            "type": "object",
+            "required": ["system", "usage_type"],
+            "additionalProperties": false,
+            "properties": {
+              "system": {
+                "type": "string",
+                "description": "Systemklasse, in der das Datenelement genutzt wird. 'other' für nicht gelistete Systeme (dann 'system_label' als Klartext setzen).",
+                "enum": [
+                  "pvs",
+                  "kis",
+                  "tumordokumentation",
+                  "krebsregister",
+                  "lis-patho",
+                  "ris-pacs",
+                  "epa",
+                  "patientenportal",
+                  "forschung-dwh-diz",
+                  "vernetzungsplattform",
+                  "other"
+                ]
+              },
+              "system_label": {
+                "type": "string",
+                "description": "Konkrete Produkt-/Systembezeichnung (z. B. 'Onkostar', 'medico', 'ePA für alle'); Pflicht-Klartext, wenn system = 'other'."
+              },
+              "actor_role": {
+                "type": "string",
+                "description": "Handelnde/verantwortliche Rolle in diesem Datenfluss (Freitext, analog responsible_role; z. B. 'Hausarzt:ärztin', 'Onkolog:in', 'Pflege', 'Tumordokumentar:in', 'Patient:in')."
+              },
+              "usage_type": {
+                "type": "string",
+                "description": "Art der Nutzung. capture=erfassen/eingeben; read=lesen/einsehen; update=aktualisieren/korrigieren; validate=prüfen/freigeben; transmit=übermitteln/austauschen; store=speichern/archivieren; derive=ableiten/berechnen; secondary-use=Sekundärnutzung/Forschung; display-to-patient=Anzeige im Patientenportal; patient-entered=durch Patient:in selbst erfasst; other=sonstige (in 'notes' erläutern).",
+                "enum": [
+                  "capture",
+                  "read",
+                  "update",
+                  "validate",
+                  "transmit",
+                  "store",
+                  "derive",
+                  "secondary-use",
+                  "display-to-patient",
+                  "patient-entered",
+                  "other"
+                ]
+              },
+              "sector": {
+                "type": "string",
+                "description": "Versorgungssektor des Datenflusses.",
+                "enum": ["ambulant", "stationaer", "sektorenuebergreifend", "haeuslich"]
+              },
+              "mandatory": {
+                "type": "boolean",
+                "description": "Ist die Erfassung/Nutzung in diesem System durch diese Rolle verpflichtend (z. B. gesetzliche Meldepflicht, Pflichtfeld im Primärsystem)?"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Freitext-Hinweis zum Datenfluss (z. B. Auslöser, Bedingung, Standard-Bezug)."
+              }
+            }
+          }
         }
       }
     },

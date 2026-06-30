@@ -65,6 +65,18 @@ care_process:                                  # ISO 13972 §6.11 / ISO 13940
   trigger: <z. B. „Erstvorstellung 8 Wochen nach Therapieabschluss"|"je Kontakt"|"Routinekontrolle Monat 3">
   frequency_pattern: <z. B. Q3M-Y1-Y2;Q6M-Y3-Y5 | per-encounter | ad-hoc>
   responsible_role: <Onkologe | Hausarzt | Palliativ-Team | Pflege | MDT>
+  data_flows:                                  # 0..*; WO (System) · WER (Rolle) · WIE (Nutzung)
+    - system: pvs                              # pvs|kis|tumordokumentation|krebsregister|lis-patho|ris-pacs|epa|patientenportal|forschung-dwh-diz|vernetzungsplattform|other
+      # system_label: <Klartext, Pflicht wenn system=other; sonst optional, z. B. "Onkostar">
+      actor_role: <z. B. Hausarzt:ärztin>
+      usage_type: capture                      # capture|read|update|validate|transmit|store|derive|secondary-use|display-to-patient|patient-entered|other
+      sector: ambulant                         # ambulant|stationaer|sektorenuebergreifend|haeuslich
+      mandatory: false
+      # notes: <Auslöser/Bedingung/Standard-Bezug>
+    # - system: kis
+    #   actor_role: Onkolog:in
+    #   usage_type: read
+    #   sector: stationaer
 
 evidence:
   guideline_references:
