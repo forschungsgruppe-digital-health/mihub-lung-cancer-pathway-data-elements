@@ -7,6 +7,9 @@
 [![Projekt: MiHUB](https://img.shields.io/badge/Projekt-MiHUB-blue)](https://mihubx.de/mihub/)
 [![Projekt: MII](https://img.shields.io/badge/Projekt-MII-blue)](https://www.medizininformatik-initiative.de/)
 [![Erstellung: KI-gestützt](https://img.shields.io/badge/Erstellung-KI--gest%C3%BCtzt-yellow)](AI_USAGE.md)
+[![Ergänzt: BPMN-Pfad](https://img.shields.io/badge/Erg%C3%A4nzt-BPMN--Pfad%20(mihub--lung--cancer--pathway)-1A5DAB)](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)
+
+> 🧩 **Ergänzung/Erweiterung des Schwester-Repositorys [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway) (AP3).** Der BPMN-Pfad beschreibt den Prozess (*wann, durch wen*); dieses Repository die Datenseite (*was wird dokumentiert/ausgetauscht*). Beide sind komplementär.
 
 > ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte, werkzeug-unabhängige Skills/Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
 

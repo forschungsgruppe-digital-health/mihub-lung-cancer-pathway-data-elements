@@ -8,7 +8,10 @@ abstract: >-
   ISO 13606-2 with clinical definition, terminology bindings, parallel standard mappings
   (oBDS, MII-KDS, KBV-MIO, mCODE, openEHR …) and guideline evidence. A research,
   education and interoperability-reference artifact — an author draft, not clinically
-  validated and not for use in direct patient care (see DISCLAIMER.md).
+  validated and not for use in direct patient care (see DISCLAIMER.md). This catalog is a
+  supplement/extension to the BPMN patient-pathway models in the sibling repository
+  `mihub-lung-cancer-pathway` (AP3): the pathway models define when and by whom steps occur,
+  these data elements define what is documented and exchanged at those steps.
 type: dataset
 # Author order: first author Susky, senior (last) author Schlieter; add further contributors as needed.
 authors:
@@ -44,3 +47,20 @@ keywords:
 contact:
   - name: "Forschungsgruppe Digital Health, Technische Universität Dresden"
     email: "digital-health@tu-dresden.de"
+# The BPMN patient-pathway model (AP3) that this data-element catalog supplements/extends.
+references:
+  - type: software
+    title: "Lungenkrebspatientenpfad – MiHUB (BPMN-Modell)"
+    doi: "10.5281/zenodo.20943916"
+    repository-code: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway"
+    notes: "Overarching BPMN patient-pathway model (AP3); this data-element catalog is its content-side supplement."
+    authors:
+      - given-names: Marcel
+        family-names: Susky
+        orcid: "https://orcid.org/0000-0002-3906-0452"
+      - given-names: Rebecca
+        family-names: Scheel
+        orcid: "https://orcid.org/0009-0001-6054-7812"
+      - given-names: Hannes
+        family-names: Schlieter
+        orcid: "https://orcid.org/0000-0002-6513-9017"

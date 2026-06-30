@@ -1,9 +1,15 @@
 # Mitwirken am MiHUB-Patientenpfad-Datenelement-Repository
 
 Vielen Dank für Ihr Interesse, das Datenelement-Repository mit Ihrer klinischen oder
-methodischen Expertise zu erweitern. Es gibt **drei gleichwertige Wege** beizutragen —
-wählen Sie den, der zu Ihnen passt. Alle drei landen am Ende als Pull Request auf dem
-`dev`-Branch und werden dort fachlich und technisch geprüft.
+methodischen Expertise zu erweitern.
+
+> Dieses Repository ist die **inhaltliche Ergänzung/Erweiterung** des BPMN-Pfad-Repositorys
+> [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)
+> (AP3): Der Pfad legt fest *wann und durch wen* etwas geschieht, die Datenelemente legen fest
+> *was dabei dokumentiert und ausgetauscht wird*.
+
+Es gibt **drei gleichwertige Wege** beizutragen — wählen Sie den, der zu Ihnen passt. Alle drei
+landen am Ende als Pull Request auf dem `dev`-Branch und werden dort fachlich und technisch geprüft.
 
 ## Welcher Weg passt zu mir?
 
