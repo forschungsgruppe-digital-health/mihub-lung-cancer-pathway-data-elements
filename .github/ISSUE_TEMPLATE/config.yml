@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Kontakt / Rückfragen (FGDH, TU Dresden)
+    url: https://tu-dresden.de/bu/wirtschaft/winf/digital-health
+    about: "Für Rückfragen abseits konkreter Vorschläge: E-Mail digital-health@tu-dresden.de — oder die Beitrags-Spuren in CONTRIBUTING.md nutzen (Issue · Excel · YAML)."
