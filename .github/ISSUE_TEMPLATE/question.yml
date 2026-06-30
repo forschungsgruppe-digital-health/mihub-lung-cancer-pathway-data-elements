@@ -1,0 +1,25 @@
+name: "❓ Frage"
+description: "Allgemeine Frage zur Mitwirkung, zu Datenelementen oder zum Schema."
+title: "[Frage] "
+labels: ["question", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Für den **Vorschlag eines neuen Datenelements** bitte das Formular
+        „📋 Neues Datenelement vorschlagen" verwenden (nicht dieses). Vergleich der drei
+        Beitrags-Wege: [`CONTRIBUTING.md`](../../blob/main/CONTRIBUTING.md).
+  - type: textarea
+    id: question
+    attributes:
+      label: Ihre Frage
+      description: Worum geht es?
+    validations:
+      required: true
+  - type: input
+    id: context
+    attributes:
+      label: Bezug (optional)
+      placeholder: "z. B. Element-ID, Phase, Schema-Feld oder Doku-Seite"
+    validations:
+      required: false
