@@ -25,10 +25,13 @@ which the **content** of this repository is published. The Python scripts under
 The data elements in this repository (YAML definitions, generated catalogs, the JSON
 schema, glossary, and documentation) are a **research, education, and
 interoperability-reference artifact** produced in the MiHUB project (TU Dresden /
-Forschungsgruppe Digital Health). They are intended for purposes such as: documenting and
-discussing which clinical data are captured, exchanged, and re-used along the lung-cancer
-patient pathway, teaching, and serving as input to downstream technical work (e.g. FHIR
-profile / terminology specification, FHIR logical models, synthetic-data generation, and
+Forschungsgruppe Digital Health). They are a **supplement/extension to the BPMN
+patient-pathway models** in the sibling repository
+[`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)
+(AP3) and share its intended-use and limitations. They are intended for purposes such as:
+documenting and discussing which clinical data are captured, exchanged, and re-used along the
+lung-cancer patient pathway, teaching, and serving as input to downstream technical work (e.g.
+FHIR profile / terminology specification, FHIR logical models, synthetic-data generation, and
 mapping to national/international implementation guides).
 
 ### 2. Not for clinical use
@@ -95,7 +98,10 @@ parties may not be used to imply endorsement without separate permission.
 Die Datenelemente in diesem Repository (YAML-Definitionen, generierte Kataloge, das
 JSON-Schema, Glossar und Dokumentation) sind ein **Forschungs-, Lehr- und
 Interoperabilitäts-Referenzartefakt** aus dem Projekt MiHUB (TU Dresden / Forschungsgruppe
-Digital Health). Sie sind etwa zur Dokumentation und Diskussion der Frage bestimmt, *welche*
+Digital Health). Sie sind eine **Ergänzung/Erweiterung der BPMN-Patientenpfad-Modelle** im
+Schwester-Repository
+[`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)
+(AP3) und teilen dessen Zweckbestimmung und Einschränkungen. Sie sind etwa zur Dokumentation und Diskussion der Frage bestimmt, *welche*
 klinischen Daten entlang des Lungenkrebs-Patientenpfads erhoben, ausgetauscht und sekundär
 genutzt werden, zur Lehre und als Grundlage für nachgelagerte technische Arbeiten (z. B.
 FHIR-Profil-/Terminologie-Spezifikation, FHIR-Logical-Models, Generierung synthetischer Daten,
