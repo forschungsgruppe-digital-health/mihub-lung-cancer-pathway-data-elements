@@ -7,19 +7,24 @@ ohne YAML**. Sie ist eine von **drei gleichwertigen Beitrags-Spuren**; siehe
 
 | Datei | Zweck |
 | --- | --- |
-| [`datenelement-erhebung.xlsx`](datenelement-erhebung.xlsx) | Ausfüll-Vorlage (Anleitung + Datenelemente + Datennutzung + Codelisten). Dropdowns sind aus dem JSON-Schema generiert. |
+| [`datenelement-erhebung.xlsx`](datenelement-erhebung.xlsx) | Ausfüll-Vorlage mit Blättern **Anleitung · Datenelemente · Datennutzung · Codes · Codelisten**. Selbsterklärend: Anleitung, Spalten-Kommentare (Mauszeiger über Kopfzeile), Pflicht-Markierung und eine **Beispielzeile**. Dropdowns sind aus dem JSON-Schema generiert. |
 
 ## Für klinische Beitragende
 
 1. `datenelement-erhebung.xlsx` herunterladen und öffnen (Excel, LibreOffice oder Numbers).
-2. Blatt **»Anleitung«** lesen, dann **»Datenelemente«** ausfüllen (eine Zeile je Element;
-   Pflichtspalten sind rot hinterlegt und mit `*` markiert; Dropdown-Felder aus der Liste wählen).
-3. Im Blatt **»Datennutzung«** je Datenelement eintragen, **wo** (System), **wer** (Rolle) und
-   **wie** (erfasst/gelesen/…) es genutzt wird — verknüpft über die »lokale ID« (z. B. `DE-001`).
-4. Mappe per E-Mail an `digital-health@tu-dresden.de` senden oder an einem GitHub-Issue anhängen.
+2. Blatt **»Anleitung«** lesen. Jedes Blatt enthält oben eine **grau-kursive Beispielzeile**
+   (lokale ID = `BEISPIEL`) — sie zeigt eine vollständige Erfassung und **wird beim Import
+   ignoriert** (gerne überschreiben oder löschen).
+3. Blatt **»Datenelemente«** ausfüllen (eine Zeile je Element; Pflichtspalten sind rosa hinterlegt
+   und mit `*` markiert; Dropdown-Felder aus der Liste wählen; Spalten-Erklärung per Kommentar in
+   der Kopfzeile). Je Zeile eine kurze **»lokale ID«** (z. B. `DE-001`) vergeben.
+4. Optional Blatt **»Datennutzung«** (WO/System · WER/Rolle · WIE/Nutzung) und Blatt **»Codes«**
+   (bekannte Codes inkl. **Terminologie-System** als Dropdown) je lokale ID befüllen.
+5. Mappe per E-Mail an `digital-health@tu-dresden.de` senden oder an einem GitHub-Issue anhängen.
 
-> Bitte **keine** personenbezogenen oder realen Patientendaten eintragen — nur die abstrakte
-> Datenelement-Definition. Beiträge erfolgen unter **CC BY 4.0**.
+> Was Sie nicht wissen (z. B. SNOMED-Codes, Standard-Mapping), darf leer bleiben — das MI-Team
+> recherchiert es. Bitte **keine** personenbezogenen oder realen Patientendaten eintragen — nur die
+> abstrakte Datenelement-Definition. Beiträge erfolgen unter **CC BY 4.0**.
 
 ## Für das MI-Team (technisch)
 
