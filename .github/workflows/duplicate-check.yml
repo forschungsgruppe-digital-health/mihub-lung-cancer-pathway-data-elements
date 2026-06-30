@@ -1,0 +1,41 @@
+name: Duplicate Check (new data-element issues)
+
+# Postet bei neuen/aktualisierten "data-element"-Issues (Klinik-Spur) einen Kommentar mit
+# möglichen Dubletten aus dem Bestand — deterministischer Vorlauf zum Skill
+# `check-duplicate-data-element`. Die Letztentscheidung trifft ein Mensch.
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  duplicate-check:
+    # nur für Datenelement-Vorschläge (Label aus dem Issue-Template)
+    if: contains(join(github.event.issue.labels.*.name, ','), 'data-element')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet pyyaml
+      - name: Run duplicate check on the issue body
+        id: dup
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          printf '%s' "$ISSUE_BODY" > /tmp/issue_body.md
+          python scripts/check-duplicates.py --from-issue-file /tmp/issue_body.md --top 5 > /tmp/report.md || true
+          {
+            echo "🔎 **Automatische Dubletten-Prüfung** (Heuristik — Letztentscheidung durch das MI-Team / Skill \`check-duplicate-data-element\`):"
+            echo
+            cat /tmp/report.md
+          } > /tmp/comment.md
+      - name: Comment on the issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body-file /tmp/comment.md
