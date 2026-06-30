@@ -2,6 +2,7 @@
 
 > **Strukturiertes, versionierbares Repository der klinischen Datenelemente entlang der Lungenkrebs-Patient Journey** im Rahmen des Medical Informatics Hub (MiHUB). Die Datenelemente operationalisieren den in [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway) (AP3) modellierten BPMN-Patientenpfad und werden in den Use-Case-Arbeitspaketen **AP6 (Krebsfrüherkennung)**, **AP7 (Kooperative Krebsversorgung _einschließlich Palliativversorgung_)** und **AP8 (Nachsorge und Langzeitbegleitung _einschließlich Palliativversorgung_)** erhoben — in der Wortwahl der drei strategischen Use-Cases des MiHUB-Antrags.
 
+[![DOI](https://zenodo.org/badge/1229623883.svg)](https://zenodo.org/badge/latestdoi/1229623883)
 [![Lizenz Inhalte: CC BY 4.0](https://img.shields.io/badge/Lizenz%20Inhalte-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Lizenz Skripte: Apache 2.0](https://img.shields.io/badge/Lizenz%20Skripte-Apache%202.0-lightgrey.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Projekt: MiHUB](https://img.shields.io/badge/Projekt-MiHUB-blue)](https://mihubx.de/mihub/)
@@ -272,9 +273,13 @@ Bei Weiterverwendung bitte folgende Angabe verwenden:
 
 ### Zitieren / Citation
 
-Maschinenlesbare Metadaten in [`CITATION.cff`](./CITATION.cff) (GitHub-Schaltfläche „Cite this
-repository"). _Hinweis:_ Der **Zenodo-Concept-DOI** wird mit der ersten archivierten Release
-ergänzt (siehe [`docs/go-public-checklist.md`](./docs/go-public-checklist.md)).
+Bitte über den **Zenodo-DOI** zitieren — der DOI-Badge oben verweist stets auf die neueste
+archivierte Release (Concept-DOI, alle Versionen). Maschinenlesbare Metadaten in
+[`CITATION.cff`](./CITATION.cff) (GitHub-Schaltfläche „Cite this repository").
+
+> _Hinweis:_ Die erste archivierte Fassung ist die **Release Candidate `v0.1.0-rc.1`** (Prerelease,
+> Author Draft). Sobald Zenodo sie archiviert hat, sollte der konkrete Concept-DOI zusätzlich in
+> [`CITATION.cff`](./CITATION.cff) eingetragen werden.
 
 ---
 

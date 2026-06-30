@@ -1,31 +1,38 @@
-# Controls the contents of the GitHub release source archive — and therefore a Zenodo deposit.
+# Controls the contents of the GitHub release source archive — and therefore the Zenodo deposit.
 #
 # GitHub builds the release tarball/zip with `git archive`, which honors `export-ignore`, and
-# Zenodo archives that tarball. So the published/archived release is trimmed to the citable
-# artifact — the data elements + schema + generated catalogs + the essential metadata — without
-# the development & tooling scaffolding.
+# Zenodo archives that tarball. The archive is trimmed to what is needed to UNDERSTAND, REPRODUCE
+# (extraction + generation) and USE the catalog — without the repo/CI/agent-config scaffolding.
 #
-# KEPT in the archive: elements/, schemas/, catalog/, docs/, GLOSSARY.md, README.md, LICENSE,
-# LICENSE-APACHE-2.0.txt, CITATION.cff, DISCLAIMER.md, CODE_OF_CONDUCT.md. Everything below is EXCLUDED.
+# KEPT (in the archive):
+#   elements/         data elements (YAML, single source of truth)
+#   schemas/          JSON schema + TEMPLATE
+#   catalog/          generated data dictionary (CSV + Markdown)
+#   scripts/          validate / build-catalog / FHIR model / Excel build+import / dedup
+#   templates/        Excel elicitation workbook
+#   skills/           portable Agent Skills (SKILL.md)
+#   docs/             methodology, how-to, glossary context, audit log, phases overview
+#   GLOSSARY.md  requirements.txt  version.txt  CHANGELOG.md
+#   README.md  LICENSE  LICENSE-APACHE-2.0.txt  CITATION.cff  DISCLAIMER.md  CODE_OF_CONDUCT.md
+#   AGENTS.md (capability catalog)  AI_USAGE.md (AI-usage transparency)
+#
+# EXCLUDED below: repo / CI / editor / agent-config meta and release tooling.
 #
 # NOTE: applies to FUTURE releases only — the file must be present in the tagged commit.
 
-# --- development & build tooling ---
-/scripts/                        export-ignore
-/requirements.txt                export-ignore
-/templates/                      export-ignore
-
-# --- editor / agent / repo meta ---
+# --- repo / CI / editor / agent-config meta ---
 /.github/                        export-ignore
 /.claude/                        export-ignore
 /.codex/                         export-ignore
-/skills/                         export-ignore
 /.gitignore                      export-ignore
 /.gitattributes                  export-ignore
-/AGENTS.md                       export-ignore
 /CLAUDE.md                       export-ignore
 /CONTRIBUTING.md                 export-ignore
-/AI_USAGE.md                     export-ignore
+/RUNNERS.md                      export-ignore
+
+# --- release tooling ---
+/release-please-config.json      export-ignore
+/.release-please-manifest.json   export-ignore
 
 # Treat the prebuilt Excel template as binary (no diff/merge noise).
 templates/*.xlsx                 binary
