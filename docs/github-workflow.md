@@ -2,7 +2,9 @@
 
 ## 1 Repository-Setup
 
-- **Default-Branch** `main` mit Branch-Protection (mindestens 1 Review, CI grün, lineare History).
+- **Branches:** `main` (Default + **Release**-Branch, Branch-Protection: mind. 1 Review, CI grün,
+  lineare History) und `dev` (**Integrations-/Review**-Branch). Beiträge per Pull Request gegen
+  **`dev`**; Freigabe in eine Release erfolgt via PR `dev` → `main`. Nicht direkt auf `main` pushen.
 - **CODEOWNERS** je Phase (klinisch-fachliche Reviewer:innen):
   ```
   /elements/follow-up/      @<lead-onko>
@@ -15,19 +17,22 @@
 
 ## 2 Branching-/Commit-Konvention
 
-- Feature-Branches: `feat/<phase>/<element-id>`, z. B. `feat/palliative/dyspneaIntensity`.
+- Feature-Branches: `feat/<phase>/<element-id>`, z. B. `feat/palliative/dyspneaIntensity`; **PR gegen `dev`**.
 - Conventional Commits: `feat(palliative): add dyspneaIntensity (NRS, S3-PalliativLL Empf. 9.1)`.
 - Pro PR ein **kohärentes thematisches Set** (z. B. „alle Bildgebungselemente Nachsorge“) — atomare Element-PRs sind besser, aber gruppierte PRs für initiale Bulk-Erfassung akzeptabel.
+- **Drei Beitrags-Wege** (Issue · Excel · YAML) — siehe [`../CONTRIBUTING.md`](../CONTRIBUTING.md); neue Kandidaten vor Aufnahme auf Dubletten prüfen (`scripts/check-duplicates.py`).
 
 ## 3 CI-Pipeline (GitHub Actions)
 
-Schritte:
+Aktive Workflows (`.github/workflows/`):
 
-1. **Schema-Validierung**: `python scripts/validate.py elements/**/*.yaml`
-2. **ID-Eindeutigkeit**: `python scripts/check-ids.py`
-3. **Catalog-Build**: `python scripts/build-catalog.py` → `catalog/data-dictionary.csv` (committed via PR-Bot oder als Pflicht-Schritt im PR).
-4. **Markdown-Lint** für `docs/*.md`.
-5. **Optional**: Pages-Deploy einer statischen Website (mkdocs/Material) als Browse-Oberfläche.
+1. **`validate.yml`** — Schema-Validierung (`python scripts/validate.py`) **und** Catalog-Drift-Check
+   (`build-catalog.py`; bricht ab, wenn `catalog/data-dictionary.csv` nicht aktuell committed ist).
+2. **`skill-lint.yml`** — prüft die Agent Skills + Sub-Agenten + Symlinks + Copilot-Brücke
+   (`python3 .github/scripts/validate-agent-skills.py`).
+3. **`duplicate-check.yml`** — kommentiert bei neuen „data-element"-Issues mögliche Dubletten
+   (`scripts/check-duplicates.py --from-issue-file`).
+4. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
 
 ## 4 Releases
 

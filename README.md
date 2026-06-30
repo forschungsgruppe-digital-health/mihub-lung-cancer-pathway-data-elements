@@ -8,7 +8,11 @@
 [![Projekt: MII](https://img.shields.io/badge/Projekt-MII-blue)](https://www.medizininformatik-initiative.de/)
 [![Erstellung: KI-gestützt](https://img.shields.io/badge/Erstellung-KI--gest%C3%BCtzt-yellow)](AI_USAGE.md)
 
-> ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
+> ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte, werkzeug-unabhängige Skills/Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
+
+> ⚠️ **Hinweis zur Zweckbestimmung / Haftungsausschluss.** Diese Datenelemente sind ein **Forschungs-, Lehr- und Interoperabilitäts-Referenzartefakt** (klinisches Informationsmodell / Datenkatalog), **nicht klinisch validiert** und **nicht** für die unmittelbare Patient:innenversorgung oder klinische Entscheidungsfindung bestimmt. Die Autor:innen weisen ihnen **keine medizinische Zweckbestimmung** im Sinne der EU-MDR (2017/745) zu. Es gelten [`DISCLAIMER.md`](DISCLAIMER.md) und Abschnitt 5 der [`LICENSE`](LICENSE).
+>
+> _These data elements are a research, education and interoperability-reference artifact — an author draft, **not** clinically validated and **not** for direct patient care. No medical intended purpose under EU MDR 2017/745. See [`DISCLAIMER.md`](DISCLAIMER.md)._
 
 ---
 
@@ -100,7 +104,7 @@ Die Datenelemente werden als **YAML-Single-Source-of-Truth** geführt; abgeleite
 
 Eine aktuelle, autogenerierte Übersicht über alle befüllten Phasen und Datenelemente liefert [`docs/phases-overview.md`](./docs/phases-overview.md). Die maschinenlesbare Vollsicht steht unter [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv) bzw. als Markdown-Spiegel [`catalog/data-dictionary.md`](./catalog/data-dictionary.md) zur Verfügung.
 
-Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen (siehe Abschnitt *Vorarbeiten und Grundlagen*).
+Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen (siehe Abschnitt *Vorarbeiten und Grundlagen*).
 
 ### Schema und Vorlagen
 
@@ -108,12 +112,13 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 | -------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [`schemas/data-element.schema.json`](./schemas/data-element.schema.json)                           | JSON-Schema (Single Source of Truth, CI-validiert) |
 | [`schemas/TEMPLATE.element.yaml`](./schemas/TEMPLATE.element.yaml)                                 | Vorlage zum Kopieren für neue Datenelemente        |
+| [`templates/datenelement-erhebung.xlsx`](./templates/README.md)                                   | Excel-Erhebungs-Vorlage (Klinik-Spur, ohne Git/YAML) |
 
 ### Aggregierte Sichten (autogeneriert)
 
 | Datei                                                                              | Beschreibung                                              |
 | ---------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv)                     | Vollsicht (22 Spalten); Excel-/REDCap-kompatibel          |
+| [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv)                     | Vollsicht (24 Spalten, inkl. `care_process_data_flows`); Excel-/REDCap-kompatibel |
 | [`catalog/data-dictionary.md`](./catalog/data-dictionary.md)                       | 1:1-Markdown-Spiegel der CSV (für PR-Diffs, Web-Browsing) |
 | [`docs/phases-overview.md`](./docs/phases-overview.md)                             | Lesefreundliche Phasen-Übersicht (8 Spalten, gruppiert)   |
 | [`docs/methodology.md`](./docs/methodology.md)                                     | Methodik, Gap-Analyse, Designentscheidungen               |
@@ -127,19 +132,43 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 | [`scripts/validate.py`](./scripts/validate.py)                                                     | YAML gegen JSON-Schema validieren                                |
 | [`scripts/build-catalog.py`](./scripts/build-catalog.py)                                           | YAML → CSV + Markdown + Phasen-Übersicht aggregieren            |
 | [`scripts/build-fhir-logical-models.py`](./scripts/build-fhir-logical-models.py)                   | YAML → FHIR Logical Model (FSH, on-demand, projekt-agnostisch)  |
+| [`scripts/build-elicitation-workbook.py`](./scripts/build-elicitation-workbook.py)                 | Excel-Erhebungs-Vorlage erzeugen (schema-getrieben; benötigt `openpyxl`) |
+| [`scripts/import-elicitation-workbook.py`](./scripts/import-elicitation-workbook.py)               | Ausgefüllte Excel-Mappe → YAML-Entwürfe (`elements/_incoming/`) |
+| [`scripts/check-duplicates.py`](./scripts/check-duplicates.py)                                      | Dubletten-/Ähnlichkeitsprüfung neuer Kandidaten gegen den Bestand |
 
-### Sub-Agenten (cross-tool kompatibel)
+### Agent Skills (werkzeug-unabhängig)
 
-| Datei                                                                                                                      | Zweck                                                                                                                |
-| -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| [`.claude/agents/data-element-analyzer.md`](./.claude/agents/data-element-analyzer.md) · [`AGENTS.md`](./AGENTS.md)        | Analysiert neue Leitlinien-/Onkopedia-Updates, schlägt datenelementweise Änderungen vor (Konsultations-Pflicht).      |
-| [`.claude/agents/data-element-validator.md`](./.claude/agents/data-element-validator.md) · [`AGENTS.md`](./AGENTS.md)      | Verifiziert YAML-Änderungen (Schema, Codings, Konsistenz), regeneriert Catalog + Phasen-Übersicht.                   |
+Die spezialisierten Fähigkeiten liegen als portable **Agent Skills** in [`skills/`](./skills) (eine
+Quelle, [agentskills.io](https://agentskills.io/specification)) und werden für jedes Werkzeug
+bereitgestellt: Claude Code (`.claude/skills` + `.claude/agents`), Codex/Cursor/Gemini
+(`.codex/skills`), GitHub Copilot (Brücke [`.github/copilot-instructions.md`](./.github/copilot-instructions.md)).
+Vendor-neutraler Katalog + Mechanik: [`AGENTS.md`](./AGENTS.md) · [`skills/SKILLS_SETUP.md`](./skills/SKILLS_SETUP.md).
+
+| Skill | Zweck |
+| --- | --- |
+| [`data-element-analyzer`](./skills/data-element-analyzer/SKILL.md) | Leitlinien/Onkopedia/Publikationen → datenelementweise Änderungsvorschläge (Konsultations-Pflicht). |
+| [`data-element-validator`](./skills/data-element-validator/SKILL.md) | YAML verifizieren (Schema, Codings, Konsistenz), Catalog + Phasen-Übersicht regenerieren. |
+| [`check-duplicate-data-element`](./skills/check-duplicate-data-element/SKILL.md) | Neue Kandidaten (Issue/Excel/YAML) vor Aufnahme auf Dubletten/Ähnlichkeit prüfen (read-only). |
+| [`ai-usage-curator`](./skills/ai-usage-curator/SKILL.md) | KI-Nutzungs-Disklosure `AI_USAGE.md` pflegen (EU AI Act Art. 50). |
 
 ---
 
 ## Verwendung
 
-### Voraussetzungen
+### Drei Wege beizutragen (klinisch wie technisch)
+
+Sie müssen **weder programmieren noch Git/YAML kennen**, um beizutragen. Vollständiger Vergleich
+in [`CONTRIBUTING.md`](./CONTRIBUTING.md):
+
+- **🟢 GitHub-Issue-Formular** — niederschwellig, online, ohne Git/YAML → [Neues Datenelement vorschlagen](../../issues/new/choose).
+- **🟡 Excel-Vorlage** — für viele Elemente / Workshops, ohne Git/YAML → [`templates/`](./templates/README.md).
+- **🔵 YAML + Pull Request** — technisch → [`docs/howto-add-element.md`](./docs/howto-add-element.md).
+
+Neue Kandidaten werden vor Aufnahme auf **Dubletten** geprüft (`scripts/check-duplicates.py`).
+Beiträge gehen per Pull Request gegen **`dev`** (Integrations-/Review-Branch); **`main`** ist die
+Release-Branch.
+
+### Voraussetzungen (für die YAML-/MI-Spur)
 
 - Python ≥ 3.10
 - Empfohlen: VS Code mit YAML-Erweiterung (Schema-Autocompletion, Echtzeit-Validierung)
@@ -147,12 +176,12 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 ### Einmaliges Setup
 
 ```bash
-git clone https://github.com/forschungsgruppe-digital-health/<repo-name>
-cd <repo-name>
+git clone https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements
+cd mihub-lung-cancer-pathway-data-elements
 
 python3 -m venv .venv
 source .venv/bin/activate            # Windows: .venv\Scripts\activate
-pip install -r requirements.txt      # pyyaml + jsonschema
+pip install -r requirements.txt      # pyyaml + jsonschema (+ openpyxl für die Excel-Vorlage)
 ```
 
 ### Tägliche Nutzung
@@ -164,13 +193,20 @@ python scripts/validate.py <pfad/zur/datei.yaml>
 # Aggregat-Sichten regenerieren (CSV + Markdown + Phasen-Übersicht)
 python scripts/build-catalog.py
 
+# Dubletten neuer Kandidaten gegen den Bestand prüfen
+python scripts/check-duplicates.py --candidates <pfad/zur/datei.yaml>
+
+# Excel-Erhebungs-Vorlage erzeugen bzw. ausgefüllte Mappe importieren (benötigt openpyxl)
+python scripts/build-elicitation-workbook.py
+python scripts/import-elicitation-workbook.py ausgefuellt.xlsx --validate
+
 # Optional: FHIR Logical Model generieren (FSH; on-demand, projekt-agnostisch)
 python scripts/build-fhir-logical-models.py --help
 ```
 
 Vollständige Schritt-für-Schritt-Anleitung: [`docs/howto-add-element.md`](./docs/howto-add-element.md).
 PR-/CI-/CODEOWNERS-Workflow: [`docs/github-workflow.md`](./docs/github-workflow.md).
-Beitrags-Spuren (Klinik vs. MI): [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+Drei Beitrags-Wege (Issue · Excel · YAML): [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ---
 
@@ -218,16 +254,24 @@ Das Repository folgt etablierten Mustern der klinischen Modellierung:
 
 Dieses Repository steht unter zwei abgestimmten Lizenzen:
 
-- **Inhalte** (YAML-Datenelemente, Markdown-Dokumentation, Glossar, Catalog) — **[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)**
-- **Skripte** (`scripts/*.py`) — **[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)**
+- **Inhalte** (YAML-Datenelemente, Markdown-Dokumentation, Glossar, Catalog) — **[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)** → [`LICENSE`](./LICENSE)
+- **Skripte** (`scripts/*.py`) — **[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)** → [`LICENSE-APACHE-2.0.txt`](./LICENSE-APACHE-2.0.txt)
 
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
+
+Zweckbestimmung/Haftung (kein Medizinprodukt, kein klinischer Einsatz): [`DISCLAIMER.md`](./DISCLAIMER.md).
 
 ### Attribution
 
 Bei Weiterverwendung bitte folgende Angabe verwenden:
 
-> _Forschungsgruppe Digital Health (FGDH), Technische Universität Dresden (2026). Lungenkrebs-Datenelemente – MiHUB. GitHub: https://github.com/forschungsgruppe-digital-health/<repo-name>. Lizenzen: CC BY 4.0 (Inhalte) / Apache 2.0 (Skripte)._
+> _Forschungsgruppe Digital Health (FGDH), Technische Universität Dresden (2026). Lungenkrebs-Datenelemente – MiHUB. GitHub: https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements. Lizenzen: CC BY 4.0 (Inhalte) / Apache 2.0 (Skripte)._
+
+### Zitieren / Citation
+
+Maschinenlesbare Metadaten in [`CITATION.cff`](./CITATION.cff) (GitHub-Schaltfläche „Cite this
+repository"). _Hinweis:_ Der **Zenodo-Concept-DOI** wird mit der ersten archivierten Release
+ergänzt (siehe [`docs/go-public-checklist.md`](./docs/go-public-checklist.md)).
 
 ---
 
