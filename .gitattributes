@@ -1,0 +1,31 @@
+# Controls the contents of the GitHub release source archive — and therefore a Zenodo deposit.
+#
+# GitHub builds the release tarball/zip with `git archive`, which honors `export-ignore`, and
+# Zenodo archives that tarball. So the published/archived release is trimmed to the citable
+# artifact — the data elements + schema + generated catalogs + the essential metadata — without
+# the development & tooling scaffolding.
+#
+# KEPT in the archive: elements/, schemas/, catalog/, docs/, GLOSSARY.md, README.md, LICENSE,
+# LICENSE-APACHE-2.0.txt, CITATION.cff, DISCLAIMER.md, CODE_OF_CONDUCT.md. Everything below is EXCLUDED.
+#
+# NOTE: applies to FUTURE releases only — the file must be present in the tagged commit.
+
+# --- development & build tooling ---
+/scripts/                        export-ignore
+/requirements.txt                export-ignore
+/templates/                      export-ignore
+
+# --- editor / agent / repo meta ---
+/.github/                        export-ignore
+/.claude/                        export-ignore
+/.codex/                         export-ignore
+/skills/                         export-ignore
+/.gitignore                      export-ignore
+/.gitattributes                  export-ignore
+/AGENTS.md                       export-ignore
+/CLAUDE.md                       export-ignore
+/CONTRIBUTING.md                 export-ignore
+/AI_USAGE.md                     export-ignore
+
+# Treat the prebuilt Excel template as binary (no diff/merge noise).
+templates/*.xlsx                 binary
