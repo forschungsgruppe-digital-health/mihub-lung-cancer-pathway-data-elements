@@ -50,25 +50,24 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 - [ ] Datenelemente bleiben `AuthorDraft` bis zum klinischen Review — im README/DISCLAIMER klar
       kommuniziert. Eine Veröffentlichung als **Entwurf** ist zulässig und transparent gekennzeichnet.
 
-## 7. Release-Automatisierung (release-please) — einrichten
+## 7. Release-Automatisierung (release-please) — eingerichtet ✅ (offen: Zenodo)
 
-Analog zum Schwester-Repo [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)
-einrichten, damit Releases + der Zenodo-DOI (siehe §3) reproduzierbar aus Conventional Commits
-entstehen (`feat`/`fix`/… → automatische Version + Changelog + Tag):
+Mirror des Schwester-Repos [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway):
+Releases entstehen reproduzierbar aus Conventional Commits (`feat`/`fix`/… → Version + CHANGELOG + Tag).
 
-- [ ] `release-please-config.json` + `.release-please-manifest.json` anlegen (Release-Type `simple`;
-      `version.txt`, `CITATION.cff` (`version`/`date-released`) und den README-Versions-/DOI-Badge als
-      `extra-files` mitpflegen lassen).
-- [ ] Workflow `.github/workflows/release-please.yml` (googleapis/release-please-action): Release-PRs
-      gegen **`main`** (Release-Branch); Entwicklung läuft auf `dev`. ⚠ GitHub-hosted Actions sind
-      org-seitig geblockt → denselben Runner wie die übrige CI verwenden (ggf. self-hosted, vgl.
-      `validate.yml`/`skill-lint.yml`).
-- [ ] SemVer an die Element-Reife koppeln: `v0.x` (AuthorDraft/CommitteeDraft) → `v1.0`
-      (ApprovedForProductionUse); vgl. `docs/github-workflow.md` §4.
-- [ ] RCs/konkrete Versionen über einen **`Release-As:`-COMMIT-FOOTER** schneiden — **nicht**
-      `release-as` in der Config pinnen (sticky Pin → Duplicate-Tag-Loop; Lehre aus dem Pathway-Repo).
-- [ ] Zenodo-GitHub-Integration aktivieren, sodass jedes von release-please erzeugte Tag archiviert
-      wird → resultierenden **Concept-DOI** in `CITATION.cff` und README-Badge eintragen (schließt §3).
+- [x] `release-please-config.json` + `.release-please-manifest.json` + `version.txt` (Release-Type
+      `simple`, `prerelease: true`, `bump-minor-pre-major`). *Hinweis:* `version.txt` ist die
+      Versionsquelle; `CITATION.cff` (`version`/`date-released`) + README-DOI-Badge werden vorerst
+      **manuell in der Release-PR** mitgepflegt (kein `extra-files`-Automatismus, analog Pathway-Repo).
+- [x] Workflow `.github/workflows/release-please.yml` (googleapis/release-please-action; Release-PRs
+      gegen **`main`**, Entwicklung auf `dev`). ⚠ `ubuntu-latest` ist im privaten Zustand geblockt
+      (siehe [`../RUNNERS.md`](../RUNNERS.md)); greift erst, wenn Commits `main` erreichen (dev→main).
+- [x] SemVer an die Element-Reife gekoppelt: `v0.x` (AuthorDraft/CommitteeDraft) → `v1.0`
+      (ApprovedForProductionUse); siehe `docs/github-workflow.md` §4.
+- [x] Konvention dokumentiert: RCs/konkrete Versionen über einen **`Release-As:`-COMMIT-FOOTER** auf
+      `main` — **nicht** `release-as` in der Config pinnen (sticky Pin → Duplicate-Tag-Loop).
+- [ ] **Zenodo-GitHub-Integration aktivieren** (offen): jedes erzeugte Tag archivieren →
+      resultierenden **Concept-DOI** in `CITATION.cff` und README-Badge eintragen (schließt §3).
 
 ---
 
