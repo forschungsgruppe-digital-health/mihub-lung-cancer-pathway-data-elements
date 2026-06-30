@@ -39,7 +39,11 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 - [ ] **Branches:** `main` = Release, `dev` = Integration; Default-Branch bleibt `main`.
 - [ ] Branch-Protection auf `main` (PRs erforderlich, CI grün) — soweit gewünscht.
 - [ ] `.github/CODEOWNERS`-Teams existieren in der Organisation (`@mihub-ap8/*`).
-- [ ] CI grün: `validate.yml` (Schema + Catalog-Drift), `skill-lint.yml`, `duplicate-check.yml`.
+- [ ] CI grün: `validate.yml` (Schema + Catalog-Drift), `skill-lint.yml`, `duplicate-check.yml`,
+      `citation-validate.yml`, `link-check.yml`.
+- [ ] **CI-Runner geklärt** ([`RUNNERS.md`](../RUNNERS.md)): solange privat ist GitHub-hosted org-weit
+      geblockt → self-hosted Runner *oder* lokal verifizieren; **beim Public-Schalten auf
+      `ubuntu-latest` (kostenlos + sandboxed) zurück** und self-hosted Runner entfernen.
 
 ## 6. Inhaltlicher Reifegrad (Hinweis, kein Blocker)
 
