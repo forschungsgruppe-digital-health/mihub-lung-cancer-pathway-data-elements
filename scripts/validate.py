@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
 """Validiert alle YAML-Datenelemente gegen schemas/data-element.schema.json.
 
 Aufruf:
@@ -16,6 +17,14 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = ROOT / "schemas" / "data-element.schema.json"
+
+
+def rel(path: Path) -> str:
+    """Pfad relativ zum Repo-Root, sonst der unveränderte Pfad (z. B. Staging-Verzeichnisse)."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def load_schema() -> dict:
@@ -51,11 +60,11 @@ def main(argv: list[str]) -> int:
         errors = validate_file(validator, f)
         if errors:
             failed += 1
-            print(f"FAIL  {f.relative_to(ROOT)}")
+            print(f"FAIL  {rel(f)}")
             for err in errors:
                 print(f"      - {err}")
         else:
-            print(f"OK    {f.relative_to(ROOT)}")
+            print(f"OK    {rel(f)}")
     print(f"\nValidiert: {len(files)} · OK: {len(files) - failed} · FAIL: {failed}")
     return 1 if failed else 0
 

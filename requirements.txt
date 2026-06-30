@@ -10,3 +10,8 @@
 
 pyyaml>=6.0
 jsonschema>=4.20
+
+# Nur für die Excel-Erhebungs-Vorlage (Klinik-Spur):
+#   scripts/build-elicitation-workbook.py / scripts/import-elicitation-workbook.py
+# Für validate.py + build-catalog.py NICHT nötig (die CI installiert nur pyyaml+jsonschema).
+openpyxl>=3.1
