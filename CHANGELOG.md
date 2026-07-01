@@ -4,6 +4,19 @@ All notable changes to this repository are documented here. Versions follow SemV
 **prerelease (release candidate)**. Detailed per-element provenance lives in
 [`docs/audit-log.md`](docs/audit-log.md).
 
+## [0.1.0-rc.2](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/compare/v0.1.0-rc.1...v0.1.0-rc.2) (2026-07-01)
+
+
+### Documentation & governance
+
+* **citation:** add co-authors Gräfe, Voigt, Klein (ORCIDs) ([e34c23c](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/commit/e34c23cda999965d08eca33f0f19efb6d0cbc0d2))
+* **citation:** add co-authors Gräfe, Voigt, Klein (with ORCIDs) ([651f8c9](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/commit/651f8c91f66b6971af0447f983784dc15d72701e))
+
+
+### Tooling & maintenance
+
+* release 0.1.0-rc.2 ([d10813a](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/commit/d10813a2238ff8b71d9121301ddc7cdbef4a73e4))
+
 ## [0.1.0-rc.1] - 2026-06-30
 
 First **release candidate** of the lung-cancer data-element catalog — a content-side supplement to
