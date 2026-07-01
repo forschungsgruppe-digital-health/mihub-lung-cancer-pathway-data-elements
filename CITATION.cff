@@ -41,8 +41,8 @@ license: CC-BY-4.0
 # (alle Versionen) hier eintragen, z. B.:  doi: "10.5281/zenodo.XXXXXXXX"
 repository-code: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
 url: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
-version: "0.1.0-rc.1"
-date-released: "2026-06-30"
+version: "0.1.0-rc.2" # x-release-please-version
+date-released: "2026-07-01"
 keywords:
   - data elements
   - clinical information model

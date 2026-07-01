@@ -5,7 +5,8 @@
       "release-type": "simple",
       "package-name": "mihub-lung-cancer-pathway-data-elements",
       "bump-minor-pre-major": true,
-      "prerelease": true
+      "prerelease": true,
+      "extra-files": ["CITATION.cff"]
     }
   },
   "include-component-in-tag": false,
