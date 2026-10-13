@@ -10,6 +10,7 @@
 /elements/follow-up/            @mihub-ap8/lead-onko
 /elements/surveillance/         @mihub-ap8/lead-onko
 /elements/palliative/           @mihub-ap8/lead-pall
+/elements/primary-care/         @mihub-ap8/lead-primarycare
 
 # Documentation
 /docs/                          @mihub-ap8/lead @mihub-ap8/lead-mi

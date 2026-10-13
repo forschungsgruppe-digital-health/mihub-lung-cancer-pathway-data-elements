@@ -19,6 +19,7 @@ COLUMNS = [
     ("id*", "id"),
     ("phase*", "phase"),
     ("tumor_entity+", "tumor_entity"),
+    ("category", "category"),
     ("label_de*", "label_de"),
     ("name*", "name"),
     ("datatype*", "datatype"),
@@ -94,6 +95,7 @@ def row(doc: dict[str, Any]) -> dict[str, str]:
         "id": doc.get("id", ""),
         "phase": doc.get("phase", ""),
         "tumor_entity": ",".join(doc.get("tumor_entity", []) or []),
+        "category": doc.get("category", ""),
         "label_de": doc.get("label_de", ""),
         "name": doc.get("name", ""),
         "datatype": doc.get("datatype", ""),
@@ -150,7 +152,7 @@ def write_markdown(rows: list[dict], total: int) -> Path:
 
 
 def write_phases_overview(files: list[Path]) -> Path:
-    """Schreibt die kuratierte Phasen-Übersicht (8 Spalten, Klinik-Zielgruppe)."""
+    """Schreibt die kuratierte Phasen-Übersicht (9 Spalten, Klinik-Zielgruppe)."""
     phases = [
         ("follow-up", "Onkologische Nachsorge (kurativ behandelt)",
          "Datenelemente nach kurativ-intendierter multimodaler Therapie. "
@@ -160,11 +162,14 @@ def write_phases_overview(files: list[Path]) -> Path:
          "Mit Ergebnis-Artefakten zu Mutationstest und CTCAE-Grad."),
         ("palliative", "Palliativversorgung",
          "Datenelemente in der spezialisierten und allgemeinen Palliativversorgung."),
+        ("primary-care", "Hausärztliche Versorgung / sektorenübergreifende Basisdaten",
+         "Datenelemente aus hausärztlicher Perspektive (Übergabe Onkologie ↔ Hausarztpraxis, Langzeitbegleitung; "
+         "Erhebung Allgemeinmedizin + LoTeCaS-GP). Phasenübergreifend nutzbar."),
     ]
     out: list[str] = []
     out.append("# Phasenübersicht — Datenelemente")
     out.append("")
-    out.append("Lesefreundliche, kuratierte 8-Spalten-Sicht je Versorgungsphase. "
+    out.append("Lesefreundliche, kuratierte 9-Spalten-Sicht je Versorgungsphase. "
                "Quelle: `elements/<phase>/*.yaml` (autogeneriert durch `scripts/build-catalog.py`).")
     out.append("")
     out.append(f"Stand: **{len(files)} Datenelemente** · für die volle {len(HEADER)}-Spalten-Sicht "
@@ -191,6 +196,7 @@ def write_phases_overview(files: list[Path]) -> Path:
             rows_md.append({
                 "label": d.get("label_de", ""),
                 "name": d.get("name", ""),
+                "category": d.get("category", "") or "—",
                 "datatype": d.get("datatype", ""),
                 "card": d.get("cardinality", ""),
                 "coding": coding_str,
@@ -199,11 +205,11 @@ def write_phases_overview(files: list[Path]) -> Path:
                 "role": cp.get("responsible_role", "") or "—",
                 "refs": ref_str,
             })
-        out.append("| Bezeichnung (DE) | name | Datentyp · Card | Beispiel-Codings | "
+        out.append("| Bezeichnung (DE) | name | Kategorie | Datentyp · Card | Beispiel-Codings | "
                   "Trigger | Frequenz | Rolle | Quelle |")
-        out.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        out.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- |")
         for r in rows_md:
-            out.append(f"| {r['label']} | `{r['name']}` | {r['datatype']} · {r['card']} | "
+            out.append(f"| {r['label']} | `{r['name']}` | {r['category']} | {r['datatype']} · {r['card']} | "
                        f"{r['coding']} | {r['trigger']} | {r['freq']} | {r['role']} | "
                        f"{r['refs']} |")
         out.append("")
@@ -234,7 +240,7 @@ def main() -> int:
     md_path = write_markdown(rows, len(files))
     print(f"Wrote {md_path.relative_to(ROOT)} ({len(files)} elements, mirror)")
 
-    # 3) Kuratierte Phasen-Übersicht (8 Spalten, Klinik-Zielgruppe)
+    # 3) Kuratierte Phasen-Übersicht (9 Spalten, Klinik-Zielgruppe)
     overview_path = write_phases_overview(files)
     print(f"Wrote {overview_path.relative_to(ROOT)} ({len(files)} elements, kuratiert)")
     return 0

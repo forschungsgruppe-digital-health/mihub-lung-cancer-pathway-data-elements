@@ -14,6 +14,7 @@ nie auseinanderlaufen. Die Schema-Enums werden zur Laufzeit direkt aus
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,7 @@ def load_schema_enums(schema_path: Path = SCHEMA_PATH) -> dict[str, list[str]]:
     gref = p["evidence"]["properties"]["guideline_references"]["items"]["properties"]
     return {
         "phase": p["phase"]["enum"],
+        "category": p["category"]["enum"],
         "tumor_entity": p["tumor_entity"]["items"]["enum"],
         "datatype": p["datatype"]["enum"],
         "binding_strength": p["value_set"]["properties"]["binding_strength"]["enum"],
@@ -60,7 +62,29 @@ PHASE_LAYMEN: dict[str, str] = {
     "Onkologische Nachsorge (kurativ behandelt)": "followup",
     "Verlaufsbeobachtung / Surveillance (unter Systemtherapie)": "surveillance",
     "Palliativversorgung": "palliative",
+    "Hausärztliche Versorgung / sektorenübergreifende Basisdaten": "primarycare",
     "Andere / neue Phase (rechts benennen)": "other",
+}
+
+# Klinische Kategorie (optional; Sortier-/Review-Hilfe) — Anzeigetext -> Schema-Code (`category`).
+CATEGORY_LAYMEN: dict[str, str] = {
+    "Befund": "befund",
+    "Bildgebung": "bildgebung",
+    "Assessment": "assessment",
+    "Messwert": "messwert",
+    "Kontakt/Visite": "kontakt-visite",
+    "Versorgungsplanung": "versorgungsplanung",
+    "Mitbetreuung": "mitbetreuung",
+    "Prozedur": "prozedur",
+    "Diagnose": "diagnose",
+    "Sozialanamnese": "sozialanamnese",
+    "Dokument": "dokument",
+    "Laborbefund": "laborbefund",
+    "PROM (Selbsteinschätzung)": "prom",
+    "Medikation": "medikation",
+    "Versorgungskontext": "versorgungskontext",
+    "Stammdaten": "stammdaten",
+    "Administrativ": "administrativ",
 }
 
 DATATYPE_LAYMEN: dict[str, str] = {
@@ -172,6 +196,7 @@ ELEMENT_COLUMNS: list[tuple[str, str, bool, str | None]] = [
     ("local_id", "lokale_ID*", True, None),
     ("label_de", "Bezeichnung_DE*", True, None),
     ("definition_de", "Klinische_Definition*", True, None),
+    ("category", "Kategorie", False, "category_laymen"),
     ("phase", "Versorgungsphase*", True, "phase"),
     ("phase_other", "Phase_falls_andere", False, None),
     ("tumor_entity", "Tumorentität", False, "tumor_entity_multi"),
@@ -219,6 +244,8 @@ HELP: dict[str, str] = {
                 "»Datennutzung« und »Codes«. Zeilen mit ID 'BEISPIEL' werden beim Import ignoriert.",
     "label_de": "Klinisch verständliche deutsche Kurzbezeichnung (z. B. 'Rauchstatus').",
     "definition_de": "Was genau wird gemessen/dokumentiert? 1–3 Sätze; Skala, Zeitraum, Ein-/Ausschluss.",
+    "category": "Optionale klinische Kategorie (Befund, Bildgebung, Assessment, …) — Sortier-/Review-Hilfe. "
+                "Aus der Liste wählen oder leer lassen.",
     "phase": "Versorgungsphase — aus der Liste wählen. 'Andere' → Spalte »Phase_falls_andere« nutzen.",
     "tumor_entity": "NSCLC, SCLC, lung_cancer_any oder 'NSCLC,SCLC'. Vorschlag — Freitext erlaubt.",
     "datatype": "Welcher Werttyp wird erfasst? Laienverständliche Auswahl; das MI-Team mappt auf FHIR-Typen.",
@@ -250,10 +277,50 @@ HELP: dict[str, str] = {
 }
 
 
+def _norm_header(text: Any) -> str:
+    """Normalisiert einen Spaltenkopf für den Abgleich: Kleinschreibung, ohne '*', Leer-/Sonderzeichen."""
+    s = str(text or "").strip().lower().replace("*", "")
+    s = re.sub(r"\([^)]*\)", "", s)  # Klammerzusätze wie "(optional)" / "(zur_Orientierung)" ignorieren
+    s = s.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+    return "".join(ch for ch in s if ch.isalnum())
+
+
+def rows_by_header(ws, columns) -> list[dict]:
+    """Liest ein Tabellenblatt als Liste von Dicts {key: str}, Spalten **über die Kopfzeile** zugeordnet.
+
+    Robust gegen eingefügte, entfernte oder umsortierte Spalten (z. B. eine nachträglich ergänzte Spalte
+    »Kategorie«): Jeder bekannte Spaltenkopf aus `columns` wird in Zeile 1 gesucht (normalisiert, '*'-
+    Pflichtmarker ignoriert). Unbekannte Spalten werden ignoriert; fehlt ein bekannter Kopf, bleibt der
+    Wert leer. Nur wenn Zeile 1 gar keinen bekannten Kopf enthält, wird positional zugeordnet.
+    """
+    keys = [c[0] for c in columns]
+    header_cells = next(ws.iter_rows(min_row=1, max_row=1, values_only=True), ())
+    wanted = {_norm_header(c[1]): c[0] for c in columns}
+    index: dict[str, int] = {}
+    for i, h in enumerate(header_cells):
+        k = wanted.get(_norm_header(h))
+        if k and k not in index:
+            index[k] = i
+    if not index:  # kein bekannter Kopf -> positional (altes Verhalten)
+        index = {k: i for i, k in enumerate(keys)}
+    out = []
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if not any(v not in (None, "") for v in row):
+            continue
+        rec = {}
+        for k in keys:
+            i = index.get(k)
+            v = row[i] if i is not None and i < len(row) else None
+            rec[k] = str(v).strip() if v is not None else ""
+        out.append(rec)
+    return out
+
+
 def dropdown_lists(enums: dict[str, list[str]]) -> dict[str, list[str]]:
     """Anzeigewerte je Dropdown-Liste (für das 'Codelisten'-Blatt + Data-Validation)."""
     return {
         "phase": list(PHASE_LAYMEN.keys()),
+        "category_laymen": list(CATEGORY_LAYMEN.keys()),
         "tumor_entity_multi": list(enums["tumor_entity"]) + ["NSCLC,SCLC"],
         "datatype_laymen": list(DATATYPE_LAYMEN.keys()),
         "cardinality_laymen": list(CARDINALITY_LAYMEN.keys()),
@@ -279,6 +346,7 @@ EXAMPLE_ELEMENT: dict[str, str] = {
     "local_id": EXAMPLE_LOCAL_ID,
     "label_de": "Rauchstatus",
     "definition_de": "Aktueller Tabakkonsumstatus inkl. E-Zigarette und Passivrauchexposition.",
+    "category": "Sozialanamnese",
     "phase": "Onkologische Nachsorge (kurativ behandelt)",
     "phase_other": "",
     "tumor_entity": "NSCLC,SCLC",
