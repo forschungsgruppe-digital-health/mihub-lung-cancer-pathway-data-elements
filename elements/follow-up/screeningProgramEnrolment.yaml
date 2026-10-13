@@ -1,0 +1,57 @@
+id: mihub.lung.followup.screeningProgramEnrolment.v0.1
+uuid: 1067ccb1-cd9e-5b96-99db-81750cb85002
+name: screeningProgramEnrolment
+label_de: Übergang in ein Lungenkrebs-Früherkennungsprogramm
+definition_de: Dokumentation (Datum/Status), dass die Patient:in nach Abschluss des 5. Nachsorgejahres
+  in ein (LDCT-)Lungenkrebs-Früherkennungsprogramm eingeschlossen wurde. Das Intervall des Programms ist
+  nicht Teil der S3-Nachsorgeempfehlung.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: versorgungsplanung
+datatype: dateTime
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: n/a
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan / Encounter
+  path: CarePlan.period.start
+care_process:
+  trigger: Ende des 5. Nachsorgejahres
+  frequency_pattern: once
+  responsible_role: Onkolog:in / Pneumolog:in / Hausärzt:in
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026: „nach 5 Jahren in ein Screeningprogramm eingeschlossen werden“);
+      Kap. 16.3.2/16.3.3 (LDCT-Evidenz)'
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: followUpInterval

@@ -1,0 +1,77 @@
+id: mihub.lung.primarycare.patientContactMasterData.v0.1
+uuid: 0edb074e-adf7-57ef-9f0f-46f39950b588
+name: patientContactMasterData
+label_de: Kontakt-, Adress- und Sprachangaben der Patient:in
+definition_de: 'Weitere Stammdaten: Kontakt- und Adressdaten, bevorzugte Sprache, Beruf/Arbeitgeber (sozialmedizinisch
+  relevant).'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: stammdaten
+datatype: string
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '184097001'
+    display: Patient address
+  - system: snomed-ct
+    code: '184103008'
+    display: Patient telephone number
+  - system: snomed-ct
+    code: '370157003'
+    display: Main spoken language
+  - system: snomed-ct
+    code: '184104002'
+    display: Patient occupation
+  - system: loinc
+    code: 54505-3
+    display: Language
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
+  resource: Patient
+  path: Patient.address / Patient.telecom / Patient.communication.language
+care_process:
+  trigger: Aufnahme / Erstkontakt; Aktualisierung bei Änderung
+  frequency_pattern: once (Update ad-hoc)
+  responsible_role: Hausärzt:in / MFA
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-035 Stammdaten (Kontakt- und Adressdaten, Beruf, Arbeitgeber, Sprache)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''

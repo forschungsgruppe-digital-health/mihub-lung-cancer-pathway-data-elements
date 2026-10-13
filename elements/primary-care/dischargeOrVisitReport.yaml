@@ -1,0 +1,99 @@
+id: mihub.lung.primarycare.dischargeOrVisitReport.v0.1
+uuid: d230cfc6-8bfd-592d-9628-7b2bbfb6c22e
+name: dischargeOrVisitReport
+label_de: Entlassbrief / Arztbrief
+definition_de: Entlassungsbericht bzw. Arztbrief nach stationärer oder ambulanter Vorstellung (inkl. Epikrise,
+  Prozedere) als Übergabedokument an die Hausarztpraxis.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: ED110112
+    display: KH-Entlassbrief
+  - system: kdl
+    code: AD010115
+    display: Entlassungsbericht
+  - system: kdl
+    code: AD010109
+    display: Ärztlicher Befundbericht
+  - system: kdl
+    code: AD010110
+    display: Ärztlicher Verlaufsbericht
+  - system: loinc
+    code: 18842-5
+    display: Discharge Summary
+  - system: loinc
+    code: 11488-4
+    display: Consult Note
+  - system: snomed-ct
+    code: '373942005'
+    display: Discharge summary
+standard_mappings:
+- standard: gematik-epa-fhir
+  profile_or_url: https://gemspec.gematik.de/ig/fhir/
+  resource: DocumentReference (MHD) — eArztbrief
+- standard: hl7-cda
+  resource: eArztbrief (CDA)
+- standard: ihe-xds
+  resource: DocumentReference
+care_process:
+  trigger: nach jeder stationären oder ambulanten Vorstellung
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Krankenhaus
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-002 Entlassbrief, Bericht
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
+    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: survivorshipCarePlan

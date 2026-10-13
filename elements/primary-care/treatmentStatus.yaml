@@ -1,0 +1,83 @@
+id: mihub.lung.primarycare.treatmentStatus.v0.1
+uuid: 59610e3c-a2d4-547d-af48-97b03321bed9
+name: treatmentStatus
+label_de: Therapiestatus
+definition_de: 'Status der tumorspezifischen Therapie aus Sicht der Hausarztpraxis: laufend, Erhaltungstherapie,
+  abgeschlossen, therapiefrei (Beobachtung).'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungskontext
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Kein deckungsgleiches ValueSet gefunden; Teilentsprechungen: LOINC 59557-9 Treatment status
+    Cancer (Observation.code), SNOMED CT 182992009 Treatment completed, 1345242003 Maintenance antineoplastic
+    therapy; für „laufend“/„therapiefrei“ kein SNOMED-Konzept auf dem MII TermServ.'
+  codings:
+  - system: local-no-standard-binding
+    code: ongoing
+    display: Therapie laufend
+  - system: local-no-standard-binding
+    code: maintenance
+    display: Erhaltungstherapie laufend
+  - system: local-no-standard-binding
+    code: completed
+    display: Therapie abgeschlossen
+  - system: local-no-standard-binding
+    code: treatment-free
+    display: therapiefrei / Beobachtung
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation
+  path: Observation.code = LOINC 59557-9; Observation.valueCodeableConcept
+care_process:
+  trigger: bei jeder Übergabe / Visite
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Hausärzt:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-037 Therapiestatus
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: therapyLineNumber

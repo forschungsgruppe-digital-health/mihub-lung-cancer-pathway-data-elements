@@ -1,0 +1,106 @@
+id: mihub.lung.primarycare.diagnosticReportDocument.v0.1
+uuid: 9b1bd81c-3174-5d5c-b0fb-d31dec7cd833
+name: diagnosticReportDocument
+label_de: Befundbericht Diagnostik (Bildgebung, Endoskopie, Biopsie)
+definition_de: Befunddokumente der Diagnostik — Röntgen Thorax, CT Thorax, PET-CT, MRT, EBUS/Bronchoskopie,
+  Biopsie/Histologie — als Dokument mit Zusammenfassung; für die Hausarztpraxis sind alle Bildgebungsbefunde
+  („Zusammenfassung lesen“) relevant.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+  - system: kdl
+    code: DG020107
+    display: MRT-Befund
+  - system: kdl
+    code: DG020110
+    display: Röntgenbefund
+  - system: kdl
+    code: DG020109
+    display: PET-Befund
+  - system: kdl
+    code: DG020105
+    display: Endoskopiebefund
+  - system: kdl
+    code: PT080102
+    display: Histologiebefund
+standard_mappings:
+- standard: ihe-xds
+  resource: DocumentReference (classCode/typeCode nach KDL)
+- standard: gematik-epa-fhir
+  profile_or_url: https://gemspec.gematik.de/ig/fhir/
+  resource: DocumentReference (MHD)
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  resource: DiagnosticReport / ImagingStudy
+care_process:
+  trigger: nach jeder diagnostischen Untersuchung; Übergabe
+  frequency_pattern: per-imaging-event
+  responsible_role: Radiolog:in / Patholog:in / Pneumolog:in
+  data_flows:
+  - system: ris-pacs
+    actor_role: Radiolog:in
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: lis-patho
+    actor_role: Patholog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-001 Befund / DE-010 Bildgebung / DE-011 Diagnostik
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
+    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: ctThoraxFinding
+- relation: generalizes
+  target: brainMriFinding
+- relation: hasPart
+  target: tumorHistology

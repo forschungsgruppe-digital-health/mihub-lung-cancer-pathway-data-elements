@@ -1,0 +1,94 @@
+id: mihub.lung.followup.bronchoscopyFollowUp.v0.1
+uuid: c6fbe35a-6861-5fa1-bdf8-279786068bbe
+name: bronchoscopyFollowUp
+label_de: Bronchoskopie in der Nachsorge
+definition_de: Datum einer (diagnostischen) Bronchoskopie in der Nachsorge; indiziert nur bei hohem Lokalrezidivrisiko
+  (z. B. nach Manschettenresektion) oder zur histologischen Sicherung bei Rezidivverdacht — keine Routine
+  (intensive Nachsorge mit jährlicher Bronchoskopie ohne Überlebensvorteil).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: prozedur
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '10847001'
+    display: Bronchoscopy
+  - system: ops
+    code: 1-620
+    display: Diagnostische Tracheobronchoskopie
+  - system: kdl
+    code: DG020105
+    display: Endoskopiebefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.performedDateTime
+care_process:
+  trigger: hohes Lokalrezidivrisiko (z. B. Manschettenresektion) oder V. a. lokalisiertes/lokal behandelbares
+    Rezidiv (histologische Sicherung)
+  frequency_pattern: ad-hoc
+  responsible_role: Pneumolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (Bronchoskopie: hohes Lokalrezidivrisiko, z. B. Manschettenresektion); Kap. 16.3.4'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Tab. 9 Fußnote („Methoden zur histologischen Sicherung“ bei V. a. lokalisiertes Rezidiv)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: 'DE-023 Bronchoskopie (Onkologische Nachsorge; Trigger lt. Erhebung: hohes Lokalrezidivrisiko,
+      Tab. 44)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: recurrenceOrSecondPrimary

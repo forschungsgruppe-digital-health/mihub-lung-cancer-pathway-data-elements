@@ -1,0 +1,98 @@
+id: mihub.lung.primarycare.currentMedicationPlan.v0.1
+uuid: d84c9b8c-a909-5518-8f51-f62084eb075e
+name: currentMedicationPlan
+label_de: Aktuelle Medikation / Medikationsplan (BMP/eMP)
+definition_de: Aktuelle Gesamtmedikation inkl. Änderungen — als bundeseinheitlicher Medikationsplan (BMP,
+  § 31a SGB V) bzw. elektronischer Medikationsplan (eMP) — zur Abstimmung zwischen Onkologie und Hausarztpraxis.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: medikation
+datatype: Reference
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '713114000'
+    display: Provision of medication list
+  - system: snomed-ct
+    code: '430193006'
+    display: Medication reconciliation
+  - system: loinc
+    code: 56445-0
+    display: Medication summary Document
+  - system: loinc
+    code: 10160-0
+    display: History of Medication use Narrative
+  - system: kdl
+    code: TH130107
+    display: Medikationsplan
+  - system: kdl
+    code: ED110103
+    display: Medikationsplan elektronisch (eMP)
+standard_mappings:
+- standard: gematik-epa-fhir
+  profile_or_url: https://gemspec.gematik.de/ig/fhir/
+  resource: Medication Service (eMP / Medikationsliste)
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
+  resource: MedicationStatement
+care_process:
+  trigger: bei jeder Medikationsänderung; Übergabe
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Hausärzt:in / Apotheke
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: update
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: update
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+    notes: eMP in der ePA für alle
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-077 Aktuelle Medikation / Medikationsplan (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-029 Medikation inkl. Änderungen der Medikation (z. B. standardisierter BMP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: medication
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: systemicTherapyRegimen
+- relation: dependsOn
+  target: opioidDailyOmme

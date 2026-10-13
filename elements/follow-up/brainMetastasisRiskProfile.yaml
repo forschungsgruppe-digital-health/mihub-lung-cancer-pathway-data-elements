@@ -1,0 +1,78 @@
+id: mihub.lung.followup.brainMetastasisRiskProfile.v0.1
+uuid: 63a13a5d-0c6e-531e-a1fb-21a6d7388f9b
+name: brainMetastasisRiskProfile
+label_de: Individuelles Risiko für zerebrale Metastasierung
+definition_de: 'Einstufung des individuellen Risikos einer ZNS-Metastasierung zur Steuerung der Schädel-MRT
+  in der Nachsorge: molekulare Hochrisikokriterien (S3 Empf. 16.8: EGFR+, ALK+, ROS1+, Adenokarzinom Stadium
+  III) oder histologische Kriterien (Onkopedia NSCLC Kap. 8.1: großzellige Karzinome, undifferenzierte
+  Adenokarzinome, kleinzellige Anteile/Mischtumoren, seltene Histologien) oder Standardrisiko.'
+phase: followup
+tumor_entity:
+- NSCLC
+category: assessment
+datatype: CodeableConcept
+cardinality: 0..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Keine standardisierte Repräsentation einer Risikostratifizierung für ZNS-Metastasierung gefunden
+    (SNOMED CT 20260701 / LOINC 2.83 auf dem MII TermServ); projekt-lokale Platzhalter. Perspektive: FHIR
+    RiskAssessment mit Prognose-Coding.'
+  codings:
+  - system: local-no-standard-binding
+    code: high-risk-molecular
+    display: Hochrisiko molekular (EGFR+/ALK+/ROS1+, Adenokarzinom Stadium III — S3 Empf. 16.8)
+  - system: local-no-standard-binding
+    code: high-risk-histology
+    display: Hochrisiko histologisch (großzellig, undifferenziertes Adeno, kleinzellige Anteile, seltene
+      Histologien — Onkopedia NSCLC Kap. 8.1)
+  - system: local-no-standard-binding
+    code: standard-risk
+    display: Standardrisiko — kein routinemäßiges Schädel-MRT (S3 Kap. 16.3.4)
+standard_mappings:
+- standard: fhir-r4-base
+  resource: RiskAssessment
+  path: RiskAssessment.prediction.qualitativeRisk
+care_process:
+  trigger: Erstellung des Nachsorgeplans (nach Lokaltherapie)
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Onkolog:in / MDT (Tumorboard)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.8 (EK, geprüft 2026); Kap. 16.3.4 (Hirnmetastasen-Screening ohne Risikoindikation
+      nicht empfohlen)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1 (MRT-Schädel 6–9-monatlich in den ersten drei Jahren bei individuell hohem Risiko);
+      Kap. 6.1.6.2.1.1 (ALK+)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: brainMriHighRisk

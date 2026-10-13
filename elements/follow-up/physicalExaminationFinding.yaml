@@ -1,0 +1,101 @@
+id: mihub.lung.followup.physicalExaminationFinding.v0.1
+uuid: 6d6f9cb7-00ae-59fd-ba17-d6331d323ab5
+name: physicalExaminationFinding
+label_de: Körperliche Untersuchung — Befund
+definition_de: Befund der körperlichen Untersuchung am Nachsorgetermin (z. B. Auskultation, Lymphknotenstatus,
+  Narbenverhältnisse, Ödeme, neurologischer Status) bzw. „unauffällig“. Pathologische Befunde triggern
+  weiterführende Diagnostik.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '5880005'
+    display: Physical examination
+  - system: snomed-ct
+    code: '37931006'
+    display: Auscultation
+  - system: loinc
+    code: 29545-1
+    display: Physical findings note
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation
+  path: Observation.code = 5880005 Physical examination; Befund in Observation.value/component
+care_process:
+  trigger: bei jedem Nachsorgetermin (followUpVisitDate); in der Surveillance bei jeder Verlaufskontroll-Visite
+    (surveillanceVisit)
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Pneumolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026): körperliche Untersuchung an jedem Nachsorgetermin; Empf.
+      16.9 (EK: unter Systemtherapie)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1, Tab. 12 (körperliche Untersuchung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 10.2, Tab. 9 (körperliche Untersuchung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-020 / DE-043 körperliche Untersuchung (Nachsorge + Surveillance)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: followUpVisitDate
+- relation: isPartOf
+  target: surveillanceVisit

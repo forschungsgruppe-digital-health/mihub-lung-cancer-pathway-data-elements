@@ -1,0 +1,71 @@
+id: mihub.lung.primarycare.bodyMassIndex.v0.1
+uuid: 0f95196a-c9e1-5ea1-abe2-3bac2e8fa602
+name: bodyMassIndex
+label_de: Body-Mass-Index (BMI)
+definition_de: Body-Mass-Index aus Körpergewicht und -größe (kg/m²) als Verlaufsparameter (Ernährungsstatus,
+  Gewichtsverlust).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: messwert
+datatype: decimal
+cardinality: 0..*
+unit: kg/m2
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 39156-5
+    display: Body mass index (BMI) [Ratio]
+  - system: snomed-ct
+    code: '60621009'
+    display: Body mass index
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation (vital-signs BMI)
+  path: Observation.valueQuantity
+care_process:
+  trigger: bei jeder Vorstellung
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in / MFA
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-039 BMI
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: weightChangePercent

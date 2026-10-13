@@ -1,0 +1,81 @@
+id: mihub.lung.primarycare.coTreatingProviderContact.v0.1
+uuid: 494369d5-6dab-5fe3-bb8e-11799326c0b9
+name: coTreatingProviderContact
+label_de: Kontaktdaten der Mitbehandler:innen
+definition_de: Kontaktdaten (Name, Einrichtung, Rolle, Telefon/E-Mail) aller mitbehandelnden Ärzt:innen
+  und Einrichtungen für Rückfragen — Onkologie, Hausarztpraxis, Fachärzt:innen, Krankenhaus, Palliativ-Team.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: administrativ
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 86744-0
+    display: Care team
+  - system: loinc
+    code: 85847-2
+    display: Patient Care team information
+  - system: snomed-ct
+    code: '223366009'
+    display: Healthcare professional
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CareTeam / PractitionerRole
+  path: CareTeam.participant.member; PractitionerRole.telecom
+care_process:
+  trigger: Aufnahme in die Mitbehandlung; Änderung
+  frequency_pattern: ad-hoc
+  responsible_role: MFA / Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-078 Kontaktdaten für Rückfragen an Mitbehandler (Übergreifende Datenelemente, Projekt
+      LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-034 Kontaktdaten Mitbehandler
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''

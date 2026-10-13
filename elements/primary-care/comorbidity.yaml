@@ -1,0 +1,80 @@
+id: mihub.lung.primarycare.comorbidity.v0.1
+uuid: 86a66291-9bfe-5d29-9715-6810fe7546da
+name: comorbidity
+label_de: Komorbiditäten / weitere Diagnosen
+definition_de: Weitere (chronische) Erkrankungen und Risiken der Patient:in inkl. Einschreibung in Disease-Management-Programme;
+  codiert nach ICD-10-GM.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '398192003'
+    display: Co-morbid conditions
+  - system: loinc
+    code: 75618-9
+    display: Comorbid condition
+  - system: loinc
+    code: 11450-4
+    display: Problem list - Reported
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code (ICD-10-GM)
+- standard: kbv-mio
+  profile_or_url: https://mio.kbv.de/
+  resource: Patientenkurzakte
+care_process:
+  trigger: Anamnese; fortlaufend
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-074 Weitere Diagnosen (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-021 Komorbiditäten
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''

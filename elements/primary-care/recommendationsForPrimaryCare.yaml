@@ -1,0 +1,89 @@
+id: mihub.lung.primarycare.recommendationsForPrimaryCare.v0.1
+uuid: 908bb32f-5a34-5af0-9a00-bcfbb8432890
+name: recommendationsForPrimaryCare
+label_de: Empfehlungen / weiteres Prozedere für die Hausarztpraxis
+definition_de: Vorschläge, was als Nächstes gemacht werden soll (weiteres Prozedere, hausärztliche Aufgaben,
+  Kontrollen, Warnzeichen) — strukturierter Bestandteil von Arztbrief und Abschlussbericht.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungsplanung
+datatype: text
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '424900004'
+    display: Recommendation - action
+  - system: loinc
+    code: 18776-5
+    display: Plan of Care Note
+  - system: loinc
+    code: 74156-1
+    display: Oncology Plan of Care and Summary Note
+  - system: kdl
+    code: VL040309
+    display: Behandlungsplan
+standard_mappings:
+- standard: hl7-cda
+  resource: eArztbrief — Abschnitt Prozedere
+- standard: fhir-r4-base
+  resource: CarePlan.activity
+care_process:
+  trigger: bei jeder Übergabe (Arztbrief, Abschlussbericht, Tumorboard)
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-032 Empfehlungen / DE-027 Therapieplanung
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
+    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: survivorshipCarePlan
+- relation: dependsOn
+  target: tumorBoardDecision

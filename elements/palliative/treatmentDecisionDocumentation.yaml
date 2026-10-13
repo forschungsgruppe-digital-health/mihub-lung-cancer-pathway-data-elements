@@ -1,0 +1,85 @@
+id: mihub.lung.palliative.treatmentDecisionDocumentation.v0.1
+uuid: 111800b7-bd62-5e00-a7dc-8247b4c77908
+name: treatmentDecisionDocumentation
+label_de: Dokumentation der Entscheidungen und Maßnahmen zur Behandlung
+definition_de: Dokumentiertes Ergebnis der Entscheidungsfindung zur (palliativen) Behandlung — Therapieziel,
+  Therapiezieländerung, Begrenzung oder Beendigung tumorspezifischer Maßnahmen, vereinbarte Maßnahmen
+  — nachvollziehbar für alle Mitbehandelnden.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+category: dokument
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: VL040309
+    display: Behandlungsplan
+  - system: loinc
+    code: 18776-5
+    display: Plan of Care Note
+  - system: snomed-ct
+    code: '247583006'
+    display: Decision making
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan / DocumentReference
+  path: CarePlan.activity / DocumentReference.type
+- standard: gematik-epa-fhir
+  profile_or_url: https://gemspec.gematik.de/ig/fhir/
+  resource: DocumentReference (MHD)
+care_process:
+  trigger: bei jeder Therapieentscheidung / Therapiezieländerung in der Palliativversorgung
+  frequency_pattern: ad-hoc
+  responsible_role: Lead-Clinician / Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 14.7 — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-066 „Doku der Entscheidungen
+      und Maßnahmen zur Behandlung“), Wortlaut-Verifikation ausstehend
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-066 Doku der Entscheidungen und Maßnahmen zur Behandlung (Palliativversorgung, Kategorie
+      Dokument)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: advanceCarePlanning
+- relation: dependsOn
+  target: tumorBoardDecision

@@ -1,0 +1,97 @@
+id: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1
+uuid: a39d89a0-6c3c-5e31-897d-bea6b942c0fe
+name: rehabilitationAndSocialCounselling
+label_de: Information/Beratung zu Rehabilitation und sozialrechtlichen Ansprüchen
+definition_de: Dokumentation, dass die Patient:in frühzeitig über ambulante und stationäre Rehabilitationsmaßnahmen
+  sowie weitere sozialrechtliche Ansprüche informiert bzw. an Sozialdienst/Krebsberatungsstelle vermittelt
+  wurde (inkl. Empfehlung einer Klinik mit onkologischem Schwerpunkt unter Berücksichtigung des Patientenwunsches,
+  § 9 SGB IX).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: mitbetreuung
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '171001002'
+    display: Benefits counseling
+  - system: snomed-ct
+    code: '410606002'
+    display: Social service procedure
+  - system: kdl
+    code: AM190203
+    display: Einschätzung Sozialdienst
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Procedure / ServiceRequest
+  path: Procedure.code
+care_process:
+  trigger: Therapieabschluss; spätestens bei der Erstvorstellung in der Nachsorge (firstFollowUpVisitDate);
+    bei erkanntem Bedarf im Nachsorge-/Verlaufsplan
+  frequency_pattern: once-per-treatment-completion (Aktualisierung ad-hoc)
+  responsible_role: Onkolog:in / Sozialdienst
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 7 Rehabilitation („sollen … frühzeitig informiert werden“; „Empfehlung für eine Klinik
+      mit onkologischem Schwerpunkt“)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 9 Rehabilitation
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1/16.2 (EK: Bedarf an Sozialberatung erkennen); Empf. 8.77 (EK, geprüft 2026: Reha,
+      Sozialberatung, Selbsthilfe ansprechen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: structuredFollowUpPlan
+- relation: hasPart
+  target: rehabilitationMeasure

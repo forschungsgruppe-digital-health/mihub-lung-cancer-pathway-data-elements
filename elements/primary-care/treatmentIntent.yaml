@@ -1,0 +1,82 @@
+id: mihub.lung.primarycare.treatmentIntent.v0.1
+uuid: 9e2fb3ec-c481-5551-82ab-2172659dc04b
+name: treatmentIntent
+label_de: Therapieintention
+definition_de: Intention der tumorspezifischen Therapie (kurativ / palliativ) als Entscheidungsgrundlage
+  für Nachsorge, Verlaufsplanung und hausärztliche Begleitung.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungsplanung
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '373808002'
+    display: Curative - procedure intent
+  - system: snomed-ct
+    code: '363676003'
+    display: Palliative intent
+  - system: snomed-ct
+    code: '395077000'
+    display: Treatment intent
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Intention (Module OP / ST / SYST)
+- standard: mcode
+  profile_or_url: https://hl7.org/fhir/us/mcode/
+  resource: procedure-intent (Extension)
+care_process:
+  trigger: Therapieentscheidung (Tumorboard); Änderung bei Therapiezieländerung
+  frequency_pattern: per-line
+  responsible_role: Tumorboard / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-004 Therapiebarkeit
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: tumorBoardDecision
+- relation: dependsOn
+  target: advanceCarePlanning

@@ -1,0 +1,72 @@
+id: mihub.lung.surveillance.postInductionEvaluationDate.v0.1
+uuid: 6bf9c8ee-f77b-5052-b7dd-5484bec67f48
+name: postInductionEvaluationDate
+label_de: Basisevaluation nach Abschluss der Induktionsbehandlung
+definition_de: Datum der Evaluation von Ansprechen, Nebenwirkungen und Beschwerdebild einen Monat nach
+  Abschluss der (Induktions-)Behandlung im Stadium IVA/B — mit Anamnese, körperlicher Untersuchung und
+  CT Thorax/Abdomen/Becken (MRT Schädel bei Verdacht).
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+category: kontakt-visite
+datatype: dateTime
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '390906007'
+    display: Follow-up encounter
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period.start
+care_process:
+  trigger: '1 Monat nach Abschluss der Induktionstherapie (SCLC: Ansprechen nach frühestens 2, i. d. R.
+    nach 3–4 Zyklen)'
+  frequency_pattern: once-per-line
+  responsible_role: Onkolog:in
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.9 (EK, geprüft 2026)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.7 (Ansprechensbeurteilung nach 2–4 Zyklen Chemo-Immuntherapie)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: systemicTherapyRegimen
+- relation: hasPart
+  target: restagingImagingDate
+- relation: hasPart
+  target: recistResponse

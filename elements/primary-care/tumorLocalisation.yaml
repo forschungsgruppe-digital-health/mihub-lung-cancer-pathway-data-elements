@@ -1,0 +1,95 @@
+id: mihub.lung.primarycare.tumorLocalisation.v0.1
+uuid: f13a89ec-d5f2-5de8-b7cb-8af67c18beda
+name: tumorLocalisation
+label_de: Tumorlokalisation
+definition_de: Sitz des Primärtumors in der Lunge (Lappen/Bronchus; ICD-O-3-Topographie C34.0–C34.9).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '260716003'
+    display: Site of primary tumor
+  - system: icd-o-3
+    code: C34.1
+    display: Lungenoberlappen
+  - system: icd-o-3
+    code: C34.2
+    display: Lungenmittellappen
+  - system: icd-o-3
+    code: C34.3
+    display: Lungenunterlappen
+  - system: icd-o-3
+    code: C34.0
+    display: Hauptbronchus
+  - system: icd-o-3
+    code: C34.8
+    display: Lunge, mehrere Teilbereiche überlappend
+  - system: icd-o-3
+    code: C34.9
+    display: Lunge o.n.A.
+  - system: loinc
+    code: 21855-2
+    display: Primary site Cancer
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Diagnose (Primärtumor Topographie ICD-O)
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.bodySite
+care_process:
+  trigger: Diagnosestellung (Radiologie/Pathologie); Übernahme in die Hausarztakte
+  frequency_pattern: once
+  responsible_role: Radiolog:in / Patholog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-003 Lokalisation
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: cancerDiagnosis

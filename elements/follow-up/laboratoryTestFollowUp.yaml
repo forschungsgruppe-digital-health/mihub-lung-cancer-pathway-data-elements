@@ -1,0 +1,89 @@
+id: mihub.lung.followup.laboratoryTestFollowUp.v0.1
+uuid: dda008b3-f0ae-5547-a249-6abce2d269cf
+name: laboratoryTestFollowUp
+label_de: Laborparameter in der Nachsorge
+definition_de: Laboruntersuchung am Nachsorgetermin „nach Maßgabe des Behandlers“ (z. B. bei Pneumonitis-
+  oder Toxizitätsverdacht; Panel/Parameter als Coding). Tumormarker sind in der Nachsorge ausdrücklich
+  nicht empfohlen und dürfen nicht als Routinewert erfasst werden.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: laborbefund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '15220000'
+    display: Laboratory test
+  - system: loinc
+    code: 11502-2
+    display: Laboratory report
+  - system: kdl
+    code: LB120107
+    display: Laborbefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab
+  resource: Observation (ObservationLab)
+  path: Observation.code
+constraints_de: Keine Tumormarker als Routine-Nachsorgeparameter (S3 Kap. 16.3.4, LoE 1a); Onkopedia NSCLC/SCLC
+  sehen in der Nachsorge kein Labor vor.
+care_process:
+  trigger: nach Maßgabe des Behandlers (symptom-/toxizitätsorientiert)
+  frequency_pattern: ad-hoc
+  responsible_role: Onkolog:in / Pneumolog:in
+  data_flows:
+  - system: lis-patho
+    actor_role: Labor
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (Laborparameter: nach Maßgabe des Behandlers); Kap. 16.3.4 (Tumormarker in der Nachsorge
+      nicht empfohlen, LoE 1a)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: 'DE-026 Laborparameter (Onkologische Nachsorge; Trigger lt. Erhebung: nach Maßgabe des Behandlers)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: laboratoryResultsReport

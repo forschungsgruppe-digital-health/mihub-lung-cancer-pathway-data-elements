@@ -1,0 +1,62 @@
+id: mihub.lung.surveillance.structuredSurveillancePlan.v0.1
+uuid: f1279f34-9bc5-5960-8fa8-97beb1ea7a2d
+name: structuredSurveillancePlan
+label_de: Strukturierter Verlaufsplan vorhanden (Stadium IV)
+definition_de: Vorhandensein eines strukturierten Verlaufs-/Follow-up-Plans unter Systemtherapie im Stadium
+  IVA/IVB, der Progression/Rezidive, Zweitkarzinome, Komplikationen und Toxizitäten der Therapie sowie
+  den Bedarf an Psychoonkologie, Palliativmedizin und Sozialberatung adressiert.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+category: versorgungsplanung
+datatype: boolean
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: SD150101
+    display: Follow up-Bogen
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan
+  path: CarePlan.category
+care_process:
+  trigger: Beginn der Systemtherapie im Stadium IVA/B; Aktualisierung bei Linienwechsel
+  frequency_pattern: per-line
+  responsible_role: Onkolog:in
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.2 (EK, geprüft 2026)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: structuredFollowUpPlan
+- relation: dependsOn
+  target: therapyLineNumber

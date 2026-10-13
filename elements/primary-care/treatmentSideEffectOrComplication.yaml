@@ -1,0 +1,75 @@
+id: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
+uuid: 6d7496bd-764d-5750-af0b-b3174340c7b9
+name: treatmentSideEffectOrComplication
+label_de: Nebenwirkung / Komplikation der Tumortherapie (als Diagnose)
+definition_de: Unerwünschte Beschwerden, Reaktionen oder Komplikationen nach einer Tumorbehandlung, als
+  Diagnose in der Hausarztakte notiert (z. B. Übelkeit nach Chemotherapie, Pneumonitis).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '62014003'
+    display: Adverse reaction to drug
+  - system: snomed-ct
+    code: '281647001'
+    display: Adverse reaction
+  - system: icd-10-gm
+    code: T66
+    display: Nicht näher bezeichnete Schäden durch Strahlung
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+care_process:
+  trigger: bei Auftreten / Mitteilung
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-018 Komplikationen / DE-028 Nebenwirkungen
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: postTherapyComplication
+- relation: generalizes
+  target: adverseEventCtcae

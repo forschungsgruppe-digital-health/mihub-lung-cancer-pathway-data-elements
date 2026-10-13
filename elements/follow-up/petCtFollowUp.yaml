@@ -1,0 +1,97 @@
+id: mihub.lung.followup.petCtFollowUp.v0.1
+uuid: f754adb0-ab88-5b64-a404-0669c0e6b938
+name: petCtFollowUp
+label_de: PET-CT in der Nachsorge
+definition_de: Datum eines FDG-PET-CT in der Nachsorge; indiziert ausschließlich zum Ausschluss von Metastasen
+  vor erneutem thoraxchirurgischem Eingriff bzw. bei V. a. lokalisiertes, lokal behandelbares Rezidiv
+  (kein Vorteil als Routine-Nachsorge).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: bildgebung
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '450436003'
+    display: Positron emission tomography with computed tomography
+  - system: ops
+    code: 3-752
+    display: Positronenemissionstomographie mit Computertomographie [PET/CT] des gesamten Körperstammes
+  - system: kdl
+    code: DG020109
+    display: PET-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  resource: ImagingStudy
+  path: ImagingStudy.started
+care_process:
+  trigger: geplanter erneuter thoraxchirurgischer Eingriff bei Rezidiv/Zweittumor; V. a. lokalisiertes
+    Rezidiv (SCLC Tab. 9 Fußnote)
+  frequency_pattern: ad-hoc
+  responsible_role: Nuklearmedizin / Radiolog:in / Thoraxchirurg:in
+  data_flows:
+  - system: ris-pacs
+    actor_role: Radiolog:in
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: read
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (PET-CT: Ausschluss von Metastasen vor erneutem thoraxchirurgischem Eingriff); Kap.
+      6.3.1'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Tab. 9 Fußnote („ggf. einschließlich PET-CT“); Kap. 6.1.2.1 (PET-CT + MRT Schädel vor Re-Resektion/CRT)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: 'DE-024 PET CT (Onkologische Nachsorge; Trigger lt. Erhebung: Ausschluss von Metastasen vor
+      erneutem thoraxchirurgischem Eingriff)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: recurrenceOrSecondPrimary
+- relation: dependsOn
+  target: curativeRecurrencePotential

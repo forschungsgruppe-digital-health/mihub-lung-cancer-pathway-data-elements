@@ -1,0 +1,114 @@
+id: mihub.lung.followup.followUpVisitDate.v0.1
+uuid: 49c79717-1ab6-5eea-9bf2-323a6999954c
+name: followUpVisitDate
+label_de: Nachsorgetermin — Datum (Anamnese und körperliche Untersuchung)
+definition_de: Datum jedes strukturierten Nachsorgetermins nach kurativ intendierter Therapie, an dem
+  eine dezidierte Anamnese und eine körperliche Untersuchung erfolgen. Ergänzt firstFollowUpVisitDate
+  (nur Erstvorstellung) um die Folgetermine und ist der Anker für alle per-encounter-Elemente der Phase;
+  bildet das Zeitraster der strukturierten Nachsorge als Ereignis ab.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: kontakt-visite
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '185389009'
+    display: Follow-up visit
+  - system: snomed-ct
+    code: '390906007'
+    display: Follow-up encounter
+  - system: icd-10-gm
+    code: Z08
+    display: Nachuntersuchung nach Behandlung wegen bösartiger Neubildung
+  - system: kdl
+    code: SD150101
+    display: Follow up-Bogen
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period.start
+- standard: fhir-r4-base
+  resource: Encounter
+  path: Encounter.period.start
+care_process:
+  trigger: jeder Nachsorgetermin gemäß Nachsorgeplan, beginnend mit der Erstvorstellung innerhalb von
+    8 Wochen nach Therapieabschluss
+  frequency_pattern: 'S3: Q3M-Y1-Y2;Q6M-Y3-Y5 · Onkopedia NSCLC: M3;M6;M12;M18;M24;M36;M48;M60 · Onkopedia
+    SCLC: Q3M-Y1;Q6M-Y2;Q12M-Y3-Y5'
+  responsible_role: Onkolog:in / Pneumolog:in / Thoraxchirurg:in (Pflege supportiv)
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026): an jedem Nachsorgetermin dezidierte Anamnese, körperliche
+      Untersuchung und geeignete Bildgebung; Kap. 16.5 (pflegegeleitetes Follow-up supportiv)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1, Tab. 12 (Zeile „Anamnese, körperliche Untersuchung“: X an allen 8 Zeitpunkten)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2, Tab. 9 (Zeile „Anamnese, körperliche Untersuchung“: X an allen 9 Zeitpunkten)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-019 Anamnese / DE-020 körperliche Untersuchung (Onkologische Nachsorge)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: firstFollowUpVisitDate
+- relation: dependsOn
+  target: followUpInterval
+- relation: hasPart
+  target: followUpHistoryFinding
+- relation: hasPart
+  target: physicalExaminationFinding

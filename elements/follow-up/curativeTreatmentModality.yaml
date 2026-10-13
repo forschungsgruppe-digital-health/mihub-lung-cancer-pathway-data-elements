@@ -1,0 +1,106 @@
+id: mihub.lung.followup.curativeTreatmentModality.v0.1
+uuid: 4cc40010-ff86-505f-bc6d-604b70406e27
+name: curativeTreatmentModality
+label_de: Kurative Therapiemodalität (Eingangsgröße des Nachsorgeplans)
+definition_de: 'Modalität der abgeschlossenen kurativ intendierten Therapie (Operation, alleinige Strahlentherapie,
+  Radiochemotherapie, multimodal inkl. systemischer Therapie/Immuntherapie). Steuert die modalitätsabhängigen
+  Zeitpunkte von CT Thorax (Onkopedia: Mo 3/6/18 nur nach Strahlentherapie) und Lungenfunktion (nach RT/RCT
+  bis Ende des Pneumonitis-Risikos).'
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: prozedur
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '173171007'
+    display: Lobectomy of lung
+  - system: snomed-ct
+    code: '1287742003'
+    display: Radiotherapy
+  - system: snomed-ct
+    code: '703423002'
+    display: Combined chemotherapy and radiation therapy
+  - system: snomed-ct
+    code: '367336001'
+    display: Chemotherapy
+  - system: snomed-ct
+    code: '870387009'
+    display: Immune checkpoint inhibitor therapy
+  - system: ops
+    code: 5-324
+    display: Einfache Lobektomie und Bilobektomie der Lunge
+  - system: icd-10-gm
+    code: Z92.4
+    display: Größerer operativer Eingriff in der Eigenanamnese, anderenorts nicht klassifiziert
+  - system: icd-10-gm
+    code: Z92.3
+    display: Bestrahlung in der Eigenanamnese
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Module Operation / Strahlentherapie / Systemische Therapie
+  notes: Pflichtmeldung §65c SGB V
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+care_process:
+  trigger: Therapieabschluss / Erstellung des Nachsorgeplans
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Lead-Clinician (Onkolog:in / Pneumolog:in / Thoraxchirurg:in / Strahlentherapeut:in)
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1, Tab. 12 Fußnote „* nach Strahlentherapie“; Kap. 8.1 Text (Lungenfunktion nach RT/RCT)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.4/16.5 (Population nach OP bzw. RT/RCT); Empf. 16.7 (nach multimodaler Therapie
+      inkl. OP oder CTx/RTx)
+    recommendation_grade: EK
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: structuredFollowUpPlan

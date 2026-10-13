@@ -1,0 +1,104 @@
+id: mihub.lung.primarycare.cancerDiagnosis.v0.1
+uuid: 00fe7f61-d908-5fd1-8723-186011fe6457
+name: cancerDiagnosis
+label_de: Krebsdiagnose(n)
+definition_de: Tumordiagnose(n) der Patient:in mit Diagnosedatum (ICD-10-GM C34.-), ggf. mehrere Primärtumoren;
+  Grundlage der hausärztlichen Mitbetreuung.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: icd-10-gm
+    code: C34.9
+    display: 'Bösartige Neubildung: Bronchus oder Lunge, nicht näher bezeichnet'
+  - system: icd-10-gm
+    code: C34
+    display: Bösartige Neubildung der Bronchien und der Lunge
+  - system: snomed-ct
+    code: '363358000'
+    display: Malignant neoplasm of lung
+  - system: icd-10-gm
+    code: Z85.1
+    display: Bösartige Neubildung der Trachea, der Bronchien oder der Lunge in der Eigenanamnese
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Diagnose
+  notes: Pflichtmeldung §65c SGB V
+- standard: kbv-mio
+  profile_or_url: https://mio.kbv.de/
+  resource: Patientenkurzakte
+care_process:
+  trigger: Diagnosestellung; Übernahme in die Hausarztakte
+  frequency_pattern: once (Update bei Zweittumor)
+  responsible_role: Onkolog:in / Hausärzt:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-073 Krebsdiagnose(n) (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-008 Diagnose(n)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
+    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: hasPart
+  target: tumorLocalisation
+- relation: hasPart
+  target: tumorHistology
+- relation: hasPart
+  target: tnmStage

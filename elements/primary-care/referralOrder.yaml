@@ -1,0 +1,73 @@
+id: mihub.lung.primarycare.referralOrder.v0.1
+uuid: d0fb9f63-cb41-5c32-91ec-c69c3720ad05
+name: referralOrder
+label_de: Überweisung
+definition_de: Überweisung bzw. Verordnung an Radiologie, Physio-/Ergotherapie, andere Fachärzt:innen
+  oder Krankenhaus (Überweisungsschein / Reason for referral).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: administrativ
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '3457005'
+    display: Patient referral
+  - system: loinc
+    code: 57133-1
+    display: Referral Note
+  - system: loinc
+    code: 42349-1
+    display: Reason for referral (narrative)
+  - system: kdl
+    code: AU050102
+    display: Überweisungsschein
+standard_mappings:
+- standard: fhir-r4-base
+  resource: ServiceRequest
+  path: ServiceRequest.reasonCode
+care_process:
+  trigger: bei jeder Überweisung
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-009 Überweisungsschein
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''

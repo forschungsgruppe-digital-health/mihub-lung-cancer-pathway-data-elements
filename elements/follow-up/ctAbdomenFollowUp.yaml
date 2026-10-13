@@ -1,0 +1,91 @@
+id: mihub.lung.followup.ctAbdomenFollowUp.v0.1
+uuid: 1be17afc-cbfa-5c0b-8ec6-08a14f11f2b3
+name: ctAbdomenFollowUp
+label_de: CT Abdomen in der Nachsorge
+definition_de: Datum eines Abdomen-CT bei Verdacht auf oder zum Ausschluss abdomineller Metastasen bzw.
+  als CT-Option des Nachsorgetermins (alternativ zur Sonografie).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: bildgebung
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '169070004'
+    display: CT of abdomen
+  - system: ops
+    code: 3-225
+    display: Computertomographie des Abdomens mit Kontrastmittel
+  - system: ops
+    code: 3-207
+    display: Native Computertomographie des Abdomens
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  resource: ImagingStudy
+  path: ImagingStudy.started
+care_process:
+  trigger: V. a. abdominelle Metastasen; indikationsbezogen bzw. als CT-Option des Nachsorgetermins
+  frequency_pattern: per-imaging-event
+  responsible_role: Radiolog:in
+  data_flows:
+  - system: ris-pacs
+    actor_role: Radiolog:in
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: read
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (Abdomen CT: Abdominelle Metastasen); Empf. 16.7 (EK: „CT-Untersuchungen“ als Option)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: 'DE-025 Abdomen CT (Onkologische Nachsorge; Trigger lt. Erhebung: abdominelle Metastasen)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+issues:
+- Onkopedia NSCLC Tab. 12 / SCLC Tab. 9 nennen in der Nachsorge ausschließlich „CT Thorax“ (Oberbauch
+  nicht spezifiziert).
+related_elements:
+- relation: dependsOn
+  target: recurrenceOrSecondPrimary

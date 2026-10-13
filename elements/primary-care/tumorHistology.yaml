@@ -1,0 +1,97 @@
+id: mihub.lung.primarycare.tumorHistology.v0.1
+uuid: c13a775c-29c6-5c92-891c-b59b0d358f77
+name: tumorHistology
+label_de: Histologie
+definition_de: Histologischer Tumortyp (ICD-O-3-Morphologie) aus der mikroskopischen Untersuchung des
+  entnommenen Gewebes.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: icd-o-3
+    code: 8140/3
+    display: Adenokarzinom o.n.A.
+  - system: icd-o-3
+    code: 8070/3
+    display: Plattenepithelkarzinom o.n.A.
+  - system: icd-o-3
+    code: 8046/3
+    display: Nichtkleinzelliges Karzinom
+  - system: icd-o-3
+    code: 8041/3
+    display: Kleinzelliges Karzinom o.n.A.
+  - system: icd-o-3
+    code: 8012/3
+    display: Großzelliges Karzinom o.n.A.
+  - system: snomed-ct
+    code: '250537006'
+    display: Histopathology finding
+  - system: loinc
+    code: 22036-8
+    display: Histology Cancer Narrative
+  - system: kdl
+    code: PT080102
+    display: Histologiebefund
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Histologie
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  resource: Observation (Pathologie-Befund)
+care_process:
+  trigger: Histologiebefund; Übernahme in die Hausarztakte
+  frequency_pattern: once (Update bei Re-Biopsie)
+  responsible_role: Patholog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-026 Histologie
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: cancerDiagnosis
+- relation: dependsOn
+  target: molecularResistanceFinding

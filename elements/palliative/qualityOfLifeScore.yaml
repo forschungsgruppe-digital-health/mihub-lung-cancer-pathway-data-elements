@@ -1,0 +1,90 @@
+id: mihub.lung.palliative.qualityOfLifeScore.v0.1
+uuid: 5187a52f-e2ad-5123-9ce2-04c518ecfe57
+name: qualityOfLifeScore
+label_de: Lebensqualität (Selbsteinschätzung) in der Palliativversorgung
+definition_de: Patientenberichtete gesundheitsbezogene Lebensqualität in der Palliativversorgung, erhoben
+  mit einem validierten Instrument (z. B. EORTC QLQ-C15-PAL als palliative Kurzform des QLQ-C30); Gesamtwert
+  bzw. globale Skala.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+category: prom
+datatype: integer
+cardinality: 0..*
+unit: score
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: EORTC QLQ-C15-PAL / QLQ-C30 sind in LOINC 2.83 nicht enthalten (MII TermServ, Stand 2026-10-13);
+    SNOMED CT 273446001 bildet das EORTC-Instrument generisch ab.
+  codings:
+  - system: snomed-ct
+    code: '709503007'
+    display: Assessment of quality of life
+  - system: snomed-ct
+    code: '273446001'
+    display: European Organisation for Research and Treatment of Cancer - Quality of Life questionnaire
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation / QuestionnaireResponse
+  path: Observation.valueInteger
+care_process:
+  trigger: Aufnahme in die Palliativversorgung und im Verlauf (bei Phasenwechsel)
+  frequency_pattern: per-encounter / Q1M in SPV
+  responsible_role: Palliativ-Team / Patient:in (Selbsteinschätzung)
+  data_flows:
+  - system: patientenportal
+    actor_role: Patient:in
+    usage_type: patient-entered
+    sector: haeuslich
+  - system: kis
+    actor_role: Palliativ-Team
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 14.8 — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-065 „Lebensqualität“),
+      Wortlaut-Verifikation ausstehend
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.01 (Konsultationsfassung 03/2026)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Tab. 9 (EORTC QLQ-C15-PAL als Erfassungsinstrument)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-065 Lebensqualität (Palliativversorgung, Kategorie PROM)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: specializes
+  target: qolEortcQlqC30
+- relation: dependsOn
+  target: symptomAssessmentInstrument

@@ -1,0 +1,97 @@
+id: mihub.lung.followup.prophylacticCranialIrradiationStatus.v0.1
+uuid: fc877f9f-2c14-51b2-ab7d-4bf9c47e34f2
+name: prophylacticCranialIrradiationStatus
+label_de: Prophylaktische Schädelbestrahlung (PCI) — Status
+definition_de: Dokumentiert, ob nach Abschluss der Erstlinientherapie beim SCLC eine prophylaktische Schädelbestrahlung
+  durchgeführt wurde, nicht durchgeführt wurde (zugunsten einer MRT-Überwachung bzw. ohne Überwachung)
+  oder abgelehnt wurde. Steuerbedingung für „MRT Schädel bei LD ohne PCI“ (Onkopedia SCLC Tab. 9) und
+  die MRT-Überwachung bei ED (Watch-and-Wait).
+phase: followup
+tumor_entity:
+- SCLC
+category: prozedur
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Kein SNOMED-CT-Prozedurkonzept für die prophylaktische Schädelbestrahlung auf dem MII TermServ
+    (SNOMED CT 20260701) gefunden; OPS 8-52x codiert nur die Bestrahlungstechnik. Projekt-lokale Statuscodes;
+    perspektivisch FHIR Procedure (PCI) + Procedure.status.
+  codings:
+  - system: local-no-standard-binding
+    code: performed
+    display: PCI durchgeführt
+  - system: local-no-standard-binding
+    code: not-performed-mri-surveillance
+    display: PCI nicht durchgeführt — MRT-Überwachung (Watch-and-Wait)
+  - system: local-no-standard-binding
+    code: not-performed-no-surveillance
+    display: PCI nicht durchgeführt — keine strukturierte MRT-Überwachung
+  - system: local-no-standard-binding
+    code: declined
+    display: PCI von der Patient:in abgelehnt
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Strahlentherapie (Zielgebiet Schädel, Intention prophylaktisch)
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+care_process:
+  trigger: Abschluss der simultanen Radiochemotherapie (LD) bzw. Response-Beurteilung nach Erstlinien-Chemo-Immuntherapie
+    (ED)
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Strahlentherapeut:in / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 6.1.1.3 (PCI bei LD: etablierter Therapiebestandteil nach simultaner CT-RT); Kap. 6.1.1.5
+      + 8.2.2 (ED: PCI als Alternative zur Überwachung mit MR-Verlaufskontrollen, individuell zu erörtern);
+      Tab. 9 (Bedingung „LD ohne PCI“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.3.4 (ED-SCLC bei Watch-and-Wait statt PCI: MRT Schädel alle drei Monate)'
+    recommendation_grade: Statement
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: curativeTreatmentModality

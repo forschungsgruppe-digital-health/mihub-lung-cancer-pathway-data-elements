@@ -1,0 +1,101 @@
+id: mihub.lung.primarycare.socialSituation.v0.1
+uuid: 2ac96f01-41e6-50a7-8612-494937568053
+name: socialSituation
+label_de: Soziale Situation
+definition_de: Wohnsituation, aktueller Aufenthalt (zu Hause, Kurzzeitpflege, Heim, Krankenhaus), Familie
+  und soziales Umfeld, berufliche Situation, Pflege-/Unterstützungsbedarf bzw. vorhandene Unterstützung
+  („wer kümmert sich“), Vorliegen einer Patientenverfügung.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: sozialanamnese
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '48176007'
+    display: Social context
+  - system: snomed-ct
+    code: '224130005'
+    display: Household composition
+  - system: snomed-ct
+    code: '160734000'
+    display: Lives in nursing home
+  - system: snomed-ct
+    code: '224362002'
+    display: Employment status
+  - system: snomed-ct
+    code: '301887005'
+    display: Needs assistance at home
+  - system: snomed-ct
+    code: '133932002'
+    display: Caregiver
+  - system: loinc
+    code: 29762-2
+    display: Social history note
+  - system: icd-10-gm
+    code: Z74
+    display: Probleme mit Bezug auf Pflegebedürftigkeit
+  - system: icd-10-gm
+    code: Z60
+    display: Kontaktanlässe mit Bezug auf die soziale Umgebung
+  - system: icd-10-gm
+    code: Z63
+    display: Andere Kontaktanlässe mit Bezug auf den engeren Familienkreis
+  - system: icd-10-gm
+    code: Z56
+    display: Kontaktanlässe mit Bezug auf das Berufsleben
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation (social-history)
+care_process:
+  trigger: Anamnese; bei Änderung der Lebenssituation
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in / Sozialdienst
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-022 soziale Situation
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: caregiverBurden
+- relation: dependsOn
+  target: advanceDirectiveDocument
+- relation: dependsOn
+  target: rehabilitationAndSocialCounselling

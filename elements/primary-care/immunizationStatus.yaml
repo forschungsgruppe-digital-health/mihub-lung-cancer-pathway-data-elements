@@ -1,0 +1,80 @@
+id: mihub.lung.primarycare.immunizationStatus.v0.1
+uuid: 24fe6203-fd48-526c-80ca-822d37016d78
+name: immunizationStatus
+label_de: Impfstatus
+definition_de: Impfstatus der Patient:in (Impfausweis/Impfhistorie), insbesondere Influenza-, Pneumokokken-,
+  COVID-19- und Herpes-zoster-Impfung bei onkologischen Patient:innen.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: medikation
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '304250009'
+    display: Immunization status
+  - system: snomed-ct
+    code: '425457005'
+    display: History of vaccination
+  - system: loinc
+    code: 87273-9
+    display: Immunization Note
+  - system: loinc
+    code: 105580-5
+    display: Immunization Certificate
+  - system: kdl
+    code: AM160102
+    display: Impfausweis
+standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://mio.kbv.de/
+  resource: Impfpass (MIO)
+- standard: fhir-r4-base
+  resource: Immunization
+care_process:
+  trigger: Anamnese; bei jeder Impfung
+  frequency_pattern: per-event
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-076 Impfstatus (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+issues:
+- S3-LL Lungenkarzinom 5.1 enthält keine Impfempfehlung (Kap. 12 verweist auf S3-LL Supportive Therapie);
+  Quelle STIKO/Onkopedia „Impfungen“ noch zu prüfen.

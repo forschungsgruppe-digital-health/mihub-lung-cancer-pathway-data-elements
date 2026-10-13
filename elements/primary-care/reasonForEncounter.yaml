@@ -1,0 +1,76 @@
+id: mihub.lung.primarycare.reasonForEncounter.v0.1
+uuid: bf587030-2a6e-5fdb-a4d1-aebdd5e30e87
+name: reasonForEncounter
+label_de: Beratungsanlass / Symptome
+definition_de: Anlass der hausärztlichen Konsultation und aktuelle Symptome — mit Prüfung, ob ein Zusammenhang
+  mit der zurückliegenden Tumorerkrankung oder Behandlung besteht.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '1269489004'
+    display: Chief complaint
+  - system: loinc
+    code: 29298-7
+    display: Reason for visit
+  - system: loinc
+    code: 46239-0
+    display: Chief complaint+Reason for visit Narrative
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.reasonCode
+instruction_de: Bei jedem Symptom prüfen und dokumentieren, ob es mit der Tumorerkrankung bzw. deren Therapie
+  (Spätfolgen, Nebenwirkungen) zusammenhängen kann.
+care_process:
+  trigger: bei jeder Konsultation
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-019 Symptome, Beratungsanlass
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: treatmentSideEffectOrComplication

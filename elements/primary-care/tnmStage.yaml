@@ -1,0 +1,92 @@
+id: mihub.lung.primarycare.tnmStage.v0.1
+uuid: 4d044a25-2ac3-5647-b2fd-3bcc5f3d8132
+name: tnmStage
+label_de: TNM-Stadium / UICC-Stadiengruppe
+definition_de: 'Ausmaß und Ausbreitung des Tumors (Staging): klinische bzw. pathologische TNM-Klassifikation
+  inkl. UICC-Stadiengruppe und TNM-Version.'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '399537006'
+    display: Clinical TNM stage grouping
+  - system: snomed-ct
+    code: '405979002'
+    display: Pathologic TNM stage
+  - system: snomed-ct
+    code: '399390009'
+    display: TNM stage grouping
+  - system: loinc
+    code: 21908-9
+    display: Stage group.clinical Cancer
+  - system: loinc
+    code: 21902-2
+    display: Stage group.pathology Cancer
+  - system: loinc
+    code: 21917-0
+    display: Version used [Identifier] TNM classification
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul TNM
+- standard: mcode
+  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-tnm-stage-group.html
+  resource: TNMStageGroup
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  resource: Observation
+care_process:
+  trigger: Staging bei Diagnose; Re-Staging bei Rezidiv
+  frequency_pattern: once (Update ad-hoc)
+  responsible_role: Radiolog:in / Onkolog:in / Tumorboard
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-012 Staging
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: cancerDiagnosis

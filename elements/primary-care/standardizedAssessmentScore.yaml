@@ -1,0 +1,78 @@
+id: mihub.lung.primarycare.standardizedAssessmentScore.v0.1
+uuid: 3e8f9264-1739-589d-8098-926d82b128e1
+name: standardizedAssessmentScore
+label_de: Standardisiertes Assessment (Score)
+definition_de: Ergebnis eines standardisierten Assessment-Instruments in der Hausarztpraxis (z. B. Beck-Depressions-Inventar)
+  mit Angabe des Instruments.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: assessment
+datatype: integer
+cardinality: 0..*
+unit: score
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '446053003'
+    display: Beck depression inventory score
+  - system: snomed-ct
+    code: '273306008'
+    display: Beck depression inventory
+  - system: loinc
+    code: 89209-1
+    display: Beck Depression Inventory II total score [BDI]
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation
+  path: Observation.code (Instrument) / Observation.valueInteger
+care_process:
+  trigger: bei Verdacht / Screening
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-023 Assessments (z. B. BDI)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: phq9DepressionScore
+- relation: generalizes
+  target: anxietyHadsScore
+- relation: generalizes
+  target: distressThermometerScore

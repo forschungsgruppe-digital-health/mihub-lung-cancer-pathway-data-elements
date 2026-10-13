@@ -1,0 +1,115 @@
+id: mihub.lung.primarycare.cancerTreatmentHistory.v0.1
+uuid: 6538983e-79df-57d1-8cdf-1763c68714b4
+name: cancerTreatmentHistory
+label_de: Erfolgte Tumortherapie
+definition_de: Durchgeführte tumorspezifische Behandlungen (Operation, Strahlentherapie, Chemotherapie,
+  Immuntherapie, zielgerichtete Therapie, Erhaltungstherapie) inkl. Schema, Zeitraum, Port.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: prozedur
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '173171007'
+    display: Lobectomy of lung
+  - system: snomed-ct
+    code: '1287742003'
+    display: Radiotherapy
+  - system: snomed-ct
+    code: '367336001'
+    display: Chemotherapy
+  - system: snomed-ct
+    code: '870387009'
+    display: Immune checkpoint inhibitor therapy
+  - system: snomed-ct
+    code: '1345242003'
+    display: Maintenance antineoplastic therapy
+  - system: snomed-ct
+    code: '703423002'
+    display: Combined chemotherapy and radiation therapy
+  - system: loinc
+    code: 21946-9
+    display: Chemotherapy treatment Cancer
+  - system: loinc
+    code: 21943-6
+    display: Radiation treatment Cancer
+  - system: icd-10-gm
+    code: Z92.3
+    display: Bestrahlung in der Eigenanamnese
+  - system: icd-10-gm
+    code: Z92.4
+    display: Größerer operativer Eingriff in der Eigenanamnese, anderenorts nicht klassifiziert
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Module Operation / Strahlentherapie / Systemische Therapie
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure / MedicationStatement
+care_process:
+  trigger: Therapieabschluss je Modalität; Übergabe an die Hausarztpraxis
+  frequency_pattern: per-line
+  responsible_role: Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-075 Erfolgte Behandlung (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-017 Tumortherapie
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
+    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
+      weiteres Prozedere, Diagnostik)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: generalizes
+  target: curativeTreatmentModality
+- relation: generalizes
+  target: systemicTherapyRegimen

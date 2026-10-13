@@ -1,0 +1,72 @@
+id: mihub.lung.primarycare.psychoOncologyContact.v0.1
+uuid: 2d063b29-3cfa-5ead-a648-7c85cb1a839d
+name: psychoOncologyContact
+label_de: Psychoonkologische Gespräche / Unterstützung
+definition_de: Durchgeführte psychoonkologische Gespräche bzw. psychische und emotionale Unterstützung
+  von Patient:in und Angehörigen (Ängste, Informationen) — auch außerhalb des onkologischen Zentrums.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: mitbetreuung
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '428997004'
+    display: Psychosocial counseling about cancer
+  - system: snomed-ct
+    code: '171022008'
+    display: Psychological counseling
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Procedure
+  path: Procedure.code
+care_process:
+  trigger: bei Bedarf / nach positivem Distress-Screening
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in / Psychoonkolog:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-007 Psychoonkologische Gespräche
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: psychoOncologyReferral
+- relation: dependsOn
+  target: distressThermometerScore

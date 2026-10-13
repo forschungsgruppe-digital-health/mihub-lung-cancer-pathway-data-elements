@@ -1,0 +1,79 @@
+id: mihub.lung.primarycare.mentalHealthStatus.v0.1
+uuid: d9c0636e-ba8a-52d2-b8d9-4d506030fcc4
+name: mentalHealthStatus
+label_de: Mentale und psychische Situation
+definition_de: Einschätzung der mentalen/psychischen Situation der Patient:in (Stimmung, Belastung, Ängste)
+  mit geführten Gesprächen und Empfehlungen.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: assessment
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '391281002'
+    display: Mental health assessment
+  - system: snomed-ct
+    code: '363871006'
+    display: Mental state
+  - system: snomed-ct
+    code: '704488001'
+    display: Impairment of psychological status
+  - system: icd-10-gm
+    code: F32.9
+    display: Depressive Episode, nicht näher bezeichnet
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation / ClinicalImpression
+care_process:
+  trigger: bei jeder Vorstellung (orientierend); vertieft bei Belastung
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-033 mentale und psychische Situation
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: phq9DepressionScore
+- relation: dependsOn
+  target: anxietyHadsScore
+- relation: dependsOn
+  target: standardizedAssessmentScore

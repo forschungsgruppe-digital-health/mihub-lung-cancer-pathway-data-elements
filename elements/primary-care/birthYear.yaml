@@ -1,0 +1,69 @@
+id: mihub.lung.primarycare.birthYear.v0.1
+uuid: a378d68e-845b-5e81-890b-441e0cd58488
+name: birthYear
+label_de: Geburtsjahr
+definition_de: Geburtsjahr der Patient:in (datensparsame Variante des Geburtsdatums für Übergabe- und
+  Auswertungszwecke).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: stammdaten
+datatype: date
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '184099003'
+    display: Date of birth
+  - system: loinc
+    code: 21112-8
+    display: Birth date
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
+  resource: Patient
+  path: Patient.birthDate (Präzision Jahr)
+instruction_de: Nur das Jahr (YYYY) erfassen, sofern das vollständige Geburtsdatum nicht erforderlich
+  ist.
+care_process:
+  trigger: Aufnahme / Erstkontakt
+  frequency_pattern: once
+  responsible_role: Hausärzt:in / MFA
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-070 Geburtsjahr (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''

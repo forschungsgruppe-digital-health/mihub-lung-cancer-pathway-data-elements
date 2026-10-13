@@ -1,0 +1,72 @@
+id: mihub.lung.primarycare.responsiblePrimaryCarePhysician.v0.1
+uuid: b46dcf5f-376b-5062-a512-324a3f019bb4
+name: responsiblePrimaryCarePhysician
+label_de: Zuständige Hausarztpraxis
+definition_de: Zuständige Hausärzt:in / Hausarztpraxis als koordinierende Stelle (Gatekeeper-Funktion,
+  bei der die Fäden zusammenlaufen; zuständig für Sorgen, Nöte und Probleme).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: administrativ
+datatype: Reference
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '446050000'
+    display: Primary care physician
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
+  resource: Patient
+  path: Patient.generalPractitioner
+care_process:
+  trigger: Aufnahme; Wechsel der Hausarztpraxis
+  frequency_pattern: once (Update ad-hoc)
+  responsible_role: Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-025 hausärztliche Versorgung (Gatekeeper-Funktion)
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: coTreatingProviderContact

@@ -1,0 +1,69 @@
+id: mihub.lung.followup.curativeRecurrencePotential.v0.1
+uuid: f12ad8dd-8e22-5545-b94c-2855e39c9ac8
+name: curativeRecurrencePotential
+label_de: Kuratives Potenzial bei Rezidiv / Zweitkarzinom
+definition_de: Tumorboard-Einschätzung, ob bei einem in der Nachsorge detektierten Rezidiv oder Zweitkarzinom
+  ein kurativer Therapieanspruch besteht. Bei „ja“ kann das Nachsorgeintervall auf 6–8 Wochen verkürzt
+  werden (Onkopedia) und die Rezidivdiagnostik (PET-CT, histologische Sicherung) ergänzt werden.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: versorgungsplanung
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: n/a
+standard_mappings:
+- standard: fhir-r4-base
+  resource: ClinicalImpression
+  path: ClinicalImpression.finding
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
+  resource: Modul Tumorkonferenz
+care_process:
+  trigger: Detektion Rezidiv/Zweittumor (recurrenceOrSecondPrimary) → Tumorboard-Entscheid
+  frequency_pattern: ad-hoc
+  responsible_role: MDT (Tumorboard)
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1 („Bei einigen Pat. mit Rezidiv oder einem Zweitkarzinom besteht ein kuratives Potenzial
+      … kann das Nachsorgeintervall auf 6-8 Wochen verkürzt werden“)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Tab. 9 Fußnote (lokalisiertes / lokal behandelbares Rezidiv: weitere Bildgebung ggf. PET-CT
+      und/oder histologische Sicherung); Kap. 6.1.2.1'
+    recommendation_grade: n/a
+    evidence_level: n/a
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: recurrenceOrSecondPrimary
+- relation: dependsOn
+  target: tumorBoardDecision
