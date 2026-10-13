@@ -101,7 +101,7 @@ Sowie ggf. einer Liste der Codings-Korrekturen mit Vorher/Nachher.
 - KDL-Version `<x>` aktuell — keine Änderung erforderlich
 
 ### Regeneration
-- `catalog/data-dictionary.csv` (51 Elemente) — OK
+- `catalog/data-dictionary.csv` (<n> Elemente) — OK
 - `derived/fhir-logical-model/` — auf Wunsch generiert
 
 ### Doku-Konsistenz

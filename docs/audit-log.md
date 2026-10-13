@@ -7,7 +7,7 @@ Dieses Dokument bündelt zwei Audit-Funktionen:
 
 Beide Funktionen erfüllen gemeinsam die Audit-Pflicht aus `AGENTS.md` §3 und dienen als operative Evidenz menschlicher Aufsicht im Sinne der EU-AI-Act-Transparenzpflichten (siehe `AI_USAGE.md` §4).
 
-Stand: 2026-05-04 · Befüllungs-Iteration v0.1 · **51 Datenelemente** (44 Erhebungs- + 7 Ergebnis-Artefakte)
+Stand: 2026-10-13 · Iteration v0.2.0 · **112 Datenelemente** (51 aus v0.1 + 61 aus Klinik-Erhebungen und Leitlinien-Abgleich 2026-10; siehe §13). Historischer Stand v0.1 (2026-05-04): 51 Datenelemente (44 Erhebungs- + 7 Ergebnis-Artefakte).
 
 ## 1 Vorgehen
 
@@ -392,9 +392,148 @@ Datum: 2026-05-06 · Auslöser: Nutzer-Anweisung zur finalen Übernahme der `AI_
 
 **Doku-Konsistenz:** README, CONTRIBUTING, `docs/howto-add-element.md`, `docs/github-workflow.md`, `docs/methodology.md`, `GLOSSARY.md`, `AI_USAGE.md` aktualisiert (3 Beitrags-Wege, 24 Spalten, `dev`/`main`, Skills, Disclaimer/Lizenz/Zitat).
 
-## 13 Limitationen
+## 13 v0.2.0 — Leitlinien-Resync (S3 5.1, Onkopedia 04/2025 + 08/2026), Terminologie-Verifikation (MII TermServ), Klinik-Erhebungen (Nachsorge-WG + Allgemeinmedizin), neue Phase `primarycare`
+
+**Datum:** 2026-10-13 · **Auslöser:** Maintainer-Auftrag (Acht-Punkte-Prüfung: Repo-Stand, Excel-Erhebungen, MII-Repos/TermServ/MCP, Excel-Abdeckung, Leitlinien-Abdeckung, Zertifikat-Nutzbarkeit, Terminologie-Abgleich, Umsetzung + PR) · **KI-Unterstützung:** Claude Code (Fable 5.1) mit drei Read-only-Recherche-Agenten (je Leitlinie) · **Werkzeuge:** MII TermServ (Ontoserver, FHIR-API, mTLS mit TU-Dresden-Funktionszertifikat) und AskMIIAnything MCP-Server v0.9.0 (Live-Test der Werkzeuge `lookup_code`, `validate_code`, `expand_valueset` über stdio).
+
+Der zusammengeführte Updateplan (A Excel-Erhebung → Repo · B Leitlinien-Abdeckung · C Terminologie) wurde in einem Pull Request gegen `dev` umgesetzt; die vollständigen Recherche-Berichte liegen als Momentaufnahmen unter [`docs/reviews/2026-10-13-leitlinien-abgleich/`](reviews/2026-10-13-leitlinien-abgleich/) und [`docs/reviews/2026-10-13-terminologie-verifikation.md`](reviews/2026-10-13-terminologie-verifikation.md).
+
+### 13.1 Erratum zu §8 — Empfehlungsgrade und Versionsablösung der S3-LL Lungenkarzinom
+
+- **Aktuell publiziert ist die Langversion 5.1 (Juli 2026, AWMF 020-007OL)**; sie löst die Konsultationsfassung 5.01 (04/2026, Konsultation 03.04.–02.05.2026, laut Leitlinienreport 5.0 nur redaktionelle Korrekturen) und die Erstfassung 5.0 (Juni 2026) ab. 5.0 → 5.1 änderte ausschließlich Arzneimittelzulassungen (Lurbinectedin, Tarlatamab) und URLs; **Kap. 15 und 16 sind in 5.0 und 5.1 zeichenidentisch** und seit v4.0 inhaltlich unverändert (Tab. 48 enthält keine 16.x-Zeile). Neuer Versions-Pin in allen 25 S3-referenzierenden YAMLs: `5.1 (Juli 2026, AWMF 020-007OL)`.
+- **Die in §8 angenommene „Aufwertung EK → B“ der Empf. 16.1/16.4/16.7/16.8/16.9 ist nicht belegt:** in v4.0, 5.0 und 5.1 sind 16.1, 16.2, 16.4, 16.7, 16.8 und 16.9 Konsensbasierte Empfehlungen (EK); 16.3 B/LoE 3, 16.5 A/B/LoE 2, 16.6 A/LoE 2 (Evidenzlevel-Notation in 5.x von Oxford-2009-Buchstaben auf Oxford-2011-Ziffern umgestellt). Die Fehlzuordnung erklärt sich vermutlich aus der „sollte“-Formulierung (≙ B-Stärke) der EK-Empfehlungen. **Korrigiert:** Grad B → EK in `structuredFollowUpPlan`, `followUpInterval`, `brainMriHighRisk`, `recurrenceOrSecondPrimary`, `ctThoraxFinding`, `recistResponse`, `restagingImagingDate`; LoE 1a → 2 bzw. 2b → 3 in `firstFollowUpVisitDate` (jetzt 16.4 EK + 16.5 A/2 getrennt), `postTherapyComplication`, `ctThoraxScan` (16.6 nur noch für das einmalige CT NSCLC Stadium III vor Durvalumab; Nachsorge-Rhythmus über 16.7/Tab. 44), `smokingStatus`, `tobaccoCessationCounselling`.
+- **Tabellen-Umnummerierung:** die Nachsorge-Indikationstabelle ist in 5.x **Tab. 44** (v4.0/5.01: Tab. 42; „Tab. 42“ bezeichnet in 5.x die Atemnot-Instrumente in Kap. 14) → korrigiert in `ctThoraxFinding`, `ctThoraxScan`, `pulmonaryFunctionTest`, `fev1PercentPredicted`, `dlcoPercentPredicted` (Lungenfunktions-Trio zusätzlich Grad EK → n/a, da Indikationstabelle ohne Grad).
+- **Kap. 15 Rehabilitation** ist in 5.1 „wegen laufender Überarbeitung ausgesetzt“ (Empf. 15.1–15.5 „ausgesetzt 2026“) — Reha-Referenzen als vorläufig gekennzeichnet; **Kap. 4.2 Tabakrauchen** vollständig überarbeitet (Empf. 4.1–4.4 modifiziert, 4.5 neu; alle A/LoE 1) → Empf. 4.2 (Erfassung), 4.3 (ABC-Schema/DiGA) und 4.4 (Pharmakotherapie) als Primärbelege an `smokingStatus` bzw. `tobaccoCessationCounselling`; G-BA-Erstattung NET/Vareniclin seit 20.08.2025 in `instruction_de`.
+- **Onkopedia-Pins:** NSCLC `Stand 03/2026` existiert online nicht (weder gültig noch archiviert) → `Stand April 2025` (7 YAMLs + Doku); SCLC `Stand 09/2025` → `Stand August 2026` (Kap. 0 nennt nur Therapieänderungen; Kap. 9/10, Tab. 9 unverändert; Archiv nicht gedifft → UNSICHER). Die Behauptung in §13-alt/Limitationen, NSCLC Tab. 12 habe eine Monatsspalte 9, war falsch (nur SCLC Tab. 9).
+
+### 13.2 Leitlinien-Abdeckung (Nachsorge/Surveillance) — Bilanz und umgesetzte Änderungen
+
+| Leitlinie (Stand) | Items geprüft | COVERED | PARTIAL | MISSING | Bericht |
+| --- | --- | --- | --- | --- | --- |
+| S3-LL Lungenkarzinom 5.1 (Juli 2026) | Empf. 16.1–16.9, Tab. 44, Kap. 4.2, 15, 11, Stmt. 8.6, Empf. 8.77 | 15 | 12 | 12 | [`s3-lungenkarzinom-5.1.md`](reviews/2026-10-13-leitlinien-abgleich/s3-lungenkarzinom-5.1.md) |
+| Onkopedia NSCLC (April 2025) | 19 (Kap. 7, 8.1, 8.2, Tab. 12, 6.1.6.2.1.1, 6.2.2.1) | 4 | 12 | 3 | [`onkopedia-nsclc-2025-04.md`](reviews/2026-10-13-leitlinien-abgleich/onkopedia-nsclc-2025-04.md) |
+| Onkopedia SCLC (August 2026) | 19 (Kap. 9, 10.2, Tab. 9, 6.1.1.3/6.1.1.5/8.2.2) | 6 | 8 | 4 (+2 kein LL-Item) | [`onkopedia-sclc-2026-08.md`](reviews/2026-10-13-leitlinien-abgleich/onkopedia-sclc-2026-08.md) |
+
+Umgesetzt (Bestandselemente): quellenspezifische Intervalle statt eines gemischten Rasters (`ctThoraxScan`, `pulmonaryFunctionTest`, `brainMriHighRisk`, `followUpInterval` — S3 Q3M/Q6M vs. Onkopedia NSCLC Tab. 12 vs. Onkopedia SCLC Tab. 9 mit 9 Zeitpunkten), Onkopedia-Kapitel als Zusatzreferenzen (NSCLC 8.1/8.2/6.1.6.2.1.1/6.2.2.1/7; SCLC 10.2/6.1.2.1/6.1.1.5/8.2.2/6.1.1.4.1.7/9), Pneumonitis-Risikofenster 6–24 Monate (`constraints_de`), ALK+-MRT-Raster 3–6 Monate, zyklusbasierte SCLC-Ansprechensbeurteilung, Population der PRO-Web-Nachsorge (Denis 2017), Psychoonkologie-/Palliativ-Referenzen (Empf. 16.2, 8.77, Stmt. 8.6, Kap. 11), Defekt `Q6-9M` → `Q6-9W` behoben. **Lücken → neue Elemente** (§13.5): Nachsorgetermin/Anamnese/körperliche Untersuchung, PCI-Status (Steuerbedingung „LD ohne PCI“), kurative Therapiemodalität (Steuerbedingung „nach RT“), ZNS-Risikoprofil, kuratives Rezidivpotenzial (6–8-Wochen-Intervall), Reha-/Sozialberatung + Reha-Maßnahme, Screening-Übergang nach Jahr 5, strukturierter Verlaufsplan Stadium IV (16.2), Basisevaluation nach Induktion (16.9), Verlaufskontroll-Visite 3–6 Wochen, Kontaktform (Video), Basislabor unter Systemtherapie, konditionale Nachsorge-Untersuchungen aus Tab. 44 (Röntgen Thorax, Sonografie Abdomen, Bronchoskopie, PET-CT, Abdomen-CT, Labor).
+
+### 13.3 Terminologie-Verifikation gegen den MII TermServ
+
+**Zugang:** Das Funktionszertifikat (GÉANT S/MIME, EKU TLS Web Client Authentication, gültig bis 2028-07-16) ist für die mTLS-Authentifizierung am MII TermServ (`https://ontoserver.mii-termserv.de/fhir`) nutzbar — `metadata`, `CodeSystem/$lookup`, `ValueSet/$expand` (POST mit Inline-ValueSet + Textfilter) funktionieren; die implizite Expansion `?fhir_vs` nur für SNOMED CT. Verfügbare Systeme: SNOMED CT 20260701, LOINC 2.83, ICD-10-GM 2026, OPS 2026, ATC 2026, KDL, ICD-O-3 (deutsche Displays); **nicht verfügbar:** ICF, MedDRA, HL7-Core-ValueSets (z. B. `smoking-status`). Der MCP-Server **AskMIIAnything v0.9.0** (`medizininformatik-initiative/AskMIIAnything`) wurde mit demselben Zertifikat (`TERMINOLOGY_CLIENT_CERT`/`_KEY`) erfolgreich gegen den TermServ getestet; er pinnt `mcp[cli]>=1.0.0`, importiert aber `mcp.server.fastmcp` (in mcp 2.x umbenannt) — lauffähig nur mit `mcp<2` (Upstream-Befund). In der MII-GitLab-Gruppe `mii-termserv` (96 Projekte: Terminologie-NPM-Pakete, `txq`-Browser, Packager) existiert **kein** MCP-Server/-Client.
+
+**Ergebnis (vor dem Update, 51 Elemente, 141 Codings):** 94 gefunden · 2 inaktiv (KDL AD060106 → Nachfolger SD150103) · 38 nicht auffindbar · 7 nicht verifizierbar (ICF, MedDRA). Davon **13 semantisch falsche Codes** (existierender Code mit anderer Bedeutung), u. a. 385763009 = „Hospice care“ (`psychoOncologyReferral`), 410429000 = „Cardiac arrest“ (`painType`), 89283-6 = CT-Untersuchung (`dyspneaIntensityNrs`), 233604007 = „Pneumonia“ (Pneumonitis), 85756007 = „Body tissue structure“ (Fernmetastase), 736378000 = „Medication management plan“ (Survivorship Care Plan), 419099009 = „Dead“ (Sterbephase), 190787008 = „Abetalipoproteinemia“ (Autoimmunhepatitis), 182840001 = „Drug treatment stopped“ (Complete Response), 73831-0 = Depressionsscreening Jugendliche (EORTC QLQ-C30), 8341-0 = Trockengewicht (Gewichtsverlust). **ATC 2024-Restrukturierung** (L01XC → L01FF, L01XE → L01E) betraf 6 Codes; OPS-Fehler: 1-712 = Spiroergometrie (→ 1-710 Ganzkörperplethysmographie), 3-225 = CT Abdomen mit KM (Region ergänzt), 3-820 = MRT Schädel mit KM (+ 3-800 nativ).
+
+**Umgesetzt (85 Coding-Änderungen: 48 ersetzt, 24 ergänzt, 13 entfernt; 34 Anzeigetexte synchronisiert — vollständige Tabelle im Review-Dokument):** alle nicht auffindbaren/falschen Codes durch verifizierte Konzepte ersetzt; `recistResponse` auf das mCODE-ValueSet ConditionStatusTrend (SNOMED CT) umgestellt; Display-Texte auf die TermServ-Anzeigetexte gesetzt (Regel: `display` = Anzeigetext des Servers, Stand 2026-10-13). **Ohne Standard-Code** (Status `pending-mapping` + `notes`): NCCN Distress-Thermometer, Zarit-Score, Atemnot-NRS (LOINC kennt nur PROMIS-T-Score/MRC-Grad), MIDOS2/ESAS-r; ohne Konzept: AKPS, oMME, Mischschmerz, PCI-Prozedur, Vorsorgevollmacht-Dokumentklasse (SNOMED 425393008 als Ersatz). ICF- und MedDRA-Codes bleiben unverändert mit Vermerk „nicht verifizierbar“.
+
+**Ergebnis nach dem Update (112 Elemente, 408 Codings):** 369 OK · 32 lokal · 7 nicht verifizierbar · **0 nicht auffindbar · 0 inaktiv** (`scripts/verify-terminology.py`, neu).
+
+### 13.4 Excel-Erhebungen — Abgleich und Entscheidungen
+
+| Mappe | Zeilen | Bestand bestätigt | zusammengeführt (Dublette) | neu |
+| --- | --- | --- | --- | --- |
+| Nachsorge-WG (`datenelement-erhebung_Nachsorge_WG_ak.xlsx`, 2026-07-30; Vorlage um Spalte »Kategorie (optional)« erweitert, Definitionsspalte entfernt) | 78 | 51 (DE-001…018, 027…041, 047…064 — Labels identisch mit dem Katalog; Zusatzreferenzen waren bereits vorhanden; Kategorie je Element übernommen) | DE-044/045/046 → `restagingImagingDate` (CT Thorax/Abdomen/Becken), DE-067 → `painIntensityNrs`, DE-068 → `dyspneaIntensityNrs` (je S3-LL-Lungenkarzinom-Referenz Kap. 14 ergänzt, Wortlaut-Verifikation ausstehend), DE-011 → Label-Ergänzung „Schmerz“ bereits in `definition_de` enthalten | 22 Zeilen → 22 Elemente (DE-019/020 + DE-042/043 → Visite/Anamnese/Untersuchung je Phase; DE-021…026 → 6 konditionale Untersuchungen; DE-065/066 → 2 Palliativ-Elemente; DE-069…078 „Übergreifende Datenelemente — LoTeCaS-GP“ → Phase `primarycare`) |
+| Allgemeinmedizin (`datenelement-erhebung (1)-Amed.xlsx`, 2026-10-13, Kontakt AK) | 38 (DE-001…039 ohne DE-024) | — (hausärztliche Perspektive, bislang nicht im Katalog) | Befund/Bildgebung/Diagnostik → `diagnosticReportDocument`; Therapiebarkeit/Tumorboard/Therapieplanung → `tumorBoardDecision` + `treatmentIntent`; Komplikationen/Nebenwirkungen → `treatmentSideEffectOrComplication`; Laborwerte/Auffälligkeiten → `laboratoryResultsReport`; Stammdaten/Kontakt → 4 Stammdaten-Elemente (gemeinsam mit LoTeCaS-GP) | 38 Elemente in `elements/primary-care/` |
+
+Tooling-Befund: beide Mappen wichen von der Vorlage ab (eingefügte Spalte, fehlende Definitionsspalte, leere Definitionen) → Importer und Dubletten-Check ordnen Spalten jetzt **über die Kopfzeile** zu (robust gegen eingefügte/umsortierte Spalten; Klammerzusätze wie „(optional)“ ignoriert) und erzeugen bei fehlender Definition einen Entwurf mit Platzhalter + `issues`-Hinweis statt die Zeile zu verwerfen. Round-trip verifiziert: WG-Mappe → 78 Entwürfe (Kategorien erkannt), Allgemeinmedizin → 38 Entwürfe, Vorlage → 0 (nur Beispielzeile).
+
+### 13.5 Neue Elemente (61) — Übersicht
+
+| Phase | name | Bezeichnung | Kategorie | Quellen |
+| --- | --- | --- | --- | --- |
+| followup | `followUpVisitDate` | Nachsorgetermin — Datum (Anamnese und körperliche Untersuchung) | kontakt-visite | S3-LL Lungenkarzinom; Onkopedia NSCLC; Onkopedia SCLC; Expert:innen-Erhebung MiHUB |
+| followup | `followUpHistoryFinding` | Nachsorge-Anamnese — Befund | befund | S3-LL Lungenkarzinom; Onkopedia NSCLC; Onkopedia SCLC; Expert:innen-Erhebung MiHUB |
+| followup | `physicalExaminationFinding` | Körperliche Untersuchung — Befund | befund | S3-LL Lungenkarzinom; Onkopedia NSCLC; Onkopedia SCLC; Expert:innen-Erhebung MiHUB |
+| followup | `curativeTreatmentModality` | Kurative Therapiemodalität (Eingangsgröße des Nachsorgeplans) | prozedur | Onkopedia NSCLC; S3-LL Lungenkarzinom |
+| followup | `brainMetastasisRiskProfile` | Individuelles Risiko für zerebrale Metastasierung | assessment | S3-LL Lungenkarzinom; Onkopedia NSCLC |
+| followup | `curativeRecurrencePotential` | Kuratives Potenzial bei Rezidiv / Zweitkarzinom | versorgungsplanung | Onkopedia NSCLC; Onkopedia SCLC |
+| followup | `rehabilitationAndSocialCounselling` | Information/Beratung zu Rehabilitation und sozialrechtlichen Ansprüchen | mitbetreuung | Onkopedia NSCLC; Onkopedia SCLC; S3-LL Lungenkarzinom |
+| followup | `rehabilitationMeasure` | Rehabilitationsmaßnahme (Setting, onkologischer Schwerpunkt) | prozedur | Onkopedia NSCLC; S3-LL Lungenkarzinom |
+| followup | `prophylacticCranialIrradiationStatus` | Prophylaktische Schädelbestrahlung (PCI) — Status | prozedur | Onkopedia SCLC; S3-LL Lungenkarzinom |
+| followup | `screeningProgramEnrolment` | Übergang in ein Lungenkrebs-Früherkennungsprogramm | versorgungsplanung | S3-LL Lungenkarzinom |
+| followup | `chestXRayFollowUp` | Röntgen Thorax in der Nachsorge | bildgebung | S3-LL Lungenkarzinom; Expert:innen-Erhebung MiHUB |
+| followup | `abdominalUltrasoundFollowUp` | Sonografie Abdomen in der Nachsorge | bildgebung | S3-LL Lungenkarzinom; Expert:innen-Erhebung MiHUB |
+| followup | `bronchoscopyFollowUp` | Bronchoskopie in der Nachsorge | prozedur | S3-LL Lungenkarzinom; Onkopedia SCLC; Expert:innen-Erhebung MiHUB |
+| followup | `petCtFollowUp` | PET-CT in der Nachsorge | bildgebung | S3-LL Lungenkarzinom; Onkopedia SCLC; Expert:innen-Erhebung MiHUB |
+| followup | `ctAbdomenFollowUp` | CT Abdomen in der Nachsorge | bildgebung | S3-LL Lungenkarzinom; Expert:innen-Erhebung MiHUB |
+| followup | `laboratoryTestFollowUp` | Laborparameter in der Nachsorge | laborbefund | S3-LL Lungenkarzinom; Expert:innen-Erhebung MiHUB |
+| surveillance | `surveillanceVisit` | Verlaufskontroll-Visite unter Systemtherapie (Anamnese und körperliche Untersuchung) | kontakt-visite | S3-LL Lungenkarzinom; Onkopedia NSCLC; Expert:innen-Erhebung MiHUB |
+| surveillance | `postInductionEvaluationDate` | Basisevaluation nach Abschluss der Induktionsbehandlung | kontakt-visite | S3-LL Lungenkarzinom; Onkopedia SCLC |
+| surveillance | `consultationModality` | Kontaktform der Verlaufskontrolle (Präsenz / Video / Telefon) | kontakt-visite | Onkopedia NSCLC |
+| surveillance | `laboratoryPanelSurveillance` | Basislabor unter Systemtherapie | laborbefund | Onkopedia NSCLC; S3-LL Lungenkarzinom |
+| surveillance | `structuredSurveillancePlan` | Strukturierter Verlaufsplan vorhanden (Stadium IV) | versorgungsplanung | S3-LL Lungenkarzinom |
+| palliative | `qualityOfLifeScore` | Lebensqualität (Selbsteinschätzung) in der Palliativversorgung | prom | S3-LL Lungenkarzinom; S3-LL Palliativmedizin; Expert:innen-Erhebung MiHUB |
+| palliative | `treatmentDecisionDocumentation` | Dokumentation der Entscheidungen und Maßnahmen zur Behandlung | dokument | S3-LL Lungenkarzinom; S3-LL Palliativmedizin; Expert:innen-Erhebung MiHUB |
+| primarycare | `patientName` | Name der Patient:in | stammdaten | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB |
+| primarycare | `birthYear` | Geburtsjahr | stammdaten | Expert:innen-Erhebung MiHUB |
+| primarycare | `administrativeGender` | Geschlecht | stammdaten | Expert:innen-Erhebung MiHUB |
+| primarycare | `patientContactMasterData` | Kontakt-, Adress- und Sprachangaben der Patient:in | stammdaten | Expert:innen-Erhebung MiHUB |
+| primarycare | `lastPracticeContactDate` | Letzter Kontakt in der Hausarztpraxis | kontakt-visite | Expert:innen-Erhebung MiHUB |
+| primarycare | `plannedFollowUpAppointment` | Geplante Wiedervorstellung / Verlaufskontrolle | kontakt-visite | Expert:innen-Erhebung MiHUB |
+| primarycare | `cancerDiagnosis` | Krebsdiagnose(n) | diagnose | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `tumorLocalisation` | Tumorlokalisation | diagnose | Expert:innen-Erhebung MiHUB |
+| primarycare | `tumorHistology` | Histologie | befund | Expert:innen-Erhebung MiHUB |
+| primarycare | `tnmStage` | TNM-Stadium / UICC-Stadiengruppe | befund | Expert:innen-Erhebung MiHUB |
+| primarycare | `currentTumorStatus` | Aktueller Tumorstatus | befund | Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `comorbidity` | Komorbiditäten / weitere Diagnosen | diagnose | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB |
+| primarycare | `acuteIntercurrentIllness` | Akute (interkurrente) Erkrankung | diagnose | Expert:innen-Erhebung MiHUB |
+| primarycare | `cancerTreatmentHistory` | Erfolgte Tumortherapie | prozedur | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `treatmentStatus` | Therapiestatus | versorgungskontext | Expert:innen-Erhebung MiHUB |
+| primarycare | `immunizationStatus` | Impfstatus | medikation | Expert:innen-Erhebung MiHUB |
+| primarycare | `currentMedicationPlan` | Aktuelle Medikation / Medikationsplan (BMP/eMP) | medikation | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB |
+| primarycare | `coTreatingProviderContact` | Kontaktdaten der Mitbehandler:innen | administrativ | Expert:innen-Erhebung MiHUB; Expert:innen-Erhebung MiHUB |
+| primarycare | `ongoingSupportiveServices` | Laufende Therapien und Anbindungen (Physio, Ergo, Pflegedienst, SAPV …) | mitbetreuung | Expert:innen-Erhebung MiHUB |
+| primarycare | `diagnosticReportDocument` | Befundbericht Diagnostik (Bildgebung, Endoskopie, Biopsie) | dokument | Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `dischargeOrVisitReport` | Entlassbrief / Arztbrief | dokument | Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `tumorBoardDecision` | Tumorboardbeschluss (inkl. Therapiebarkeit und Therapieplanung) | versorgungsplanung | Expert:innen-Erhebung MiHUB |
+| primarycare | `treatmentIntent` | Therapieintention | versorgungsplanung | Expert:innen-Erhebung MiHUB |
+| primarycare | `recommendationsForPrimaryCare` | Empfehlungen / weiteres Prozedere für die Hausarztpraxis | versorgungsplanung | Expert:innen-Erhebung MiHUB; andere Empfehlungen |
+| primarycare | `patientGoalsAndPreferences` | Zielsetzungen und Wünsche der Patient:in | versorgungsplanung | Expert:innen-Erhebung MiHUB |
+| primarycare | `psychoOncologyContact` | Psychoonkologische Gespräche / Unterstützung | mitbetreuung | Expert:innen-Erhebung MiHUB |
+| primarycare | `mentalHealthStatus` | Mentale und psychische Situation | assessment | Expert:innen-Erhebung MiHUB |
+| primarycare | `referralOrder` | Überweisung | administrativ | Expert:innen-Erhebung MiHUB |
+| primarycare | `reasonForEncounter` | Beratungsanlass / Symptome | befund | Expert:innen-Erhebung MiHUB |
+| primarycare | `historyTakingPrimaryCare` | Hausärztliche Anamnese | prozedur | Expert:innen-Erhebung MiHUB |
+| primarycare | `laboratoryResultsReport` | Laborbefund (inkl. Auffälligkeiten) | laborbefund | Expert:innen-Erhebung MiHUB |
+| primarycare | `treatmentSideEffectOrComplication` | Nebenwirkung / Komplikation der Tumortherapie (als Diagnose) | diagnose | Expert:innen-Erhebung MiHUB |
+| primarycare | `socialSituation` | Soziale Situation | sozialanamnese | Expert:innen-Erhebung MiHUB |
+| primarycare | `standardizedAssessmentScore` | Standardisiertes Assessment (Score) | assessment | Expert:innen-Erhebung MiHUB |
+| primarycare | `responsiblePrimaryCarePhysician` | Zuständige Hausarztpraxis | administrativ | Expert:innen-Erhebung MiHUB |
+| primarycare | `workIncapacityCertificate` | Arbeitsunfähigkeit (AU) | administrativ | Expert:innen-Erhebung MiHUB |
+| primarycare | `riskFactorAndAlert` | Risikofaktoren / Warnhinweise | diagnose | Expert:innen-Erhebung MiHUB |
+| primarycare | `bodyMassIndex` | Body-Mass-Index (BMI) | messwert | Expert:innen-Erhebung MiHUB |
+
+Alle neuen Elemente: `publication_status: AuthorDraft`, `version_number: 0.1.0`, `creation_date: 2026-10-13`, Codings gegen den MII TermServ verifiziert (lokale Platzhalter nur bei `no-standard-found`), `related_elements` zu den Bestandselementen gesetzt. Klinik-elizitierte Elemente tragen die Quelle `Expert:innen-Erhebung MiHUB` mit Mappe + Zeilen-ID (`DE-0xx`) in `section`; Elemente mit Kliniker-Fundstellen, deren Wortlaut nicht gegengeprüft wurde (S3 Kap. 14.x, Empf. 14.7/14.8), sind entsprechend gekennzeichnet.
+
+### 13.6 Schema und Tooling
+
+| Änderung | Detail |
+| --- | --- |
+| `phase` Enum + ID-Pattern | + `primarycare` (Hausärztliche Versorgung / sektorenübergreifende Basisdaten); Ordner `elements/primary-care/`; `build-catalog.py`, FSH-Generator (PhasesCS), CODEOWNERS (`@mihub-ap8/lead-primarycare`), Issue-Formular, Excel-Vorlage nachgezogen |
+| `category` (optional) | 17 klinische Kategorien der Nachsorge-WG (befund, bildgebung, assessment, messwert, kontakt-visite, versorgungsplanung, mitbetreuung, prozedur, diagnose, sozialanamnese, dokument, laborbefund, prom, medikation, versorgungskontext, stammdaten, administrativ); in allen 112 Elementen gesetzt; CSV-Spalte `category` (jetzt **25 Spalten**), Phasen-Übersicht 9 Spalten, FSH `category` + CategoryCS/VS, Excel-Spalte »Kategorie«, Issue-Dropdown; `GLOSSARY.md` §20 |
+| `evidence.guideline_references[].source` | + `Expert:innen-Erhebung MiHUB` (Klinik-/Hausarzt-Erhebungen ohne Leitlinienbeleg) |
+| `scripts/verify-terminology.py` | neu: `$lookup` je Coding gegen einen FHIR-Terminologieserver (Default MII TermServ, mTLS per `--cert/--key`), Statusbericht + JSON; Exit-Code ≠ 0 bei NOT-FOUND/INACTIVE |
+| `scripts/_elicitation.py`, `import-elicitation-workbook.py`, `check-duplicates.py` | kopfzeilenbasierte Spaltenzuordnung (`rows_by_header`), Platzhalter bei fehlender Definition, Kategorie-Mapping |
+
+### 13.7 Verifikation
+
+`validate.py` 112/112 OK · `build-catalog.py` drift-frei (CSV 25 Spalten, 112 Zeilen; Phasen-Übersicht 4 Phasen) · `verify-terminology.py`: 369 OK / 32 lokal / 7 nicht verifizierbar / 0 nicht auffindbar · Excel-Round-trip (beide Kliniker-Mappen + Vorlage) · `check-duplicates.py` Self-Mode (Treffer ausschließlich über gemeinsame KDL-Dokumentklassen bzw. beabsichtigte Phasen-Pendants, z. B. `ecogPerformanceStatus` ↔ `ecogPerformanceStatusSurveillance`) · `skill-lint` 4 Skills + 4 Agenten OK · FSH-Generator 112 Instanzen (lokal, gitignored).
+
+### 13.8 Offene Punkte (für das klinische Review)
+
+1. Wortlaut-Verifikation der Kliniker-Fundstellen S3-LL Lungenkarzinom Kap. 14.1 / 14.3.2 / Empf. 14.7 / 14.8 (Palliativ-Elemente).
+2. Bedeutung von „(X)“ in Onkopedia Tab. 12/Tab. 9 ist in den Leitlinien nicht legendiert (Lesart: fakultativ).
+3. S3-LL Palliativmedizin: Pin `3.01 (Konsultationsfassung 03/2026)` — Finalisierung noch zu prüfen (außerhalb dieses Laufs).
+4. Nachsorge **nach** PCI (MRT? Neurokognition?) — Onkopedia SCLC macht keine Vorgabe; `postTherapyComplication` enthält den Spätfolgen-Code.
+5. Röntgen Thorax / Sonografie Abdomen in der Nachsorge: S3-Option (Empf. 16.7), von Onkopedia nicht vorgesehen — Aufnahme auf Wunsch der Nachsorge-WG, klinisch zu bestätigen.
+6. Kodierungslücken (Distress-Thermometer, Zarit, Atemnot-NRS, AKPS, oMME, Mischschmerz, PCI, „verwandte Tabakprodukte“) → SNOMED-CT-/LOINC-Anträge oder lokales ValueSet im `mihub`-Namensraum.
+7. Dubletten-Heuristik gewichtet gemeinsame KDL-Dokumentklassen-Codes hoch (viele NAH-DUBLETTE-Treffer im Self-Mode) — Gewichtung prüfen.
+8. Die 38 `primarycare`-Elemente stammen aus einer Einzelerhebung (Allgemeinmedizin, Kontakt AK) — Konsentierung mit weiteren Hausärzt:innen / LoTeCaS-GP ausstehend; Datenschutz-Hinweis für Stammdaten (personenbezogen) ist als `constraints_de` vermerkt.
+
+## 14 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
-- **Onkopedia** ändert online schrittweise — die Versionen-Pins (`Stand 03/2026`, `Stand 09/2025`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden.
-- Die **Onkopedia-Tabellen** (Tab. 12 NSCLC, Tab. 9 SCLC) wurden auf die genaue Spalten-Belegung (Monatsspalten 3/6/9/12/18/24/36/48/60) verifiziert.
+- **Onkopedia** ändert online schrittweise — die Versionen-Pins (seit 2026-10-13: NSCLC `Stand April 2025`, SCLC `Stand August 2026`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden; die SCLC-Archivfassung 09/2025 wurde nicht gegen 08/2026 gedifft (Kap. 0 nennt keine Nachsorge-Änderung).
+- Die **Onkopedia-Tabellen** wurden 2026-10-13 aus dem HTML-Markup verifiziert: NSCLC Tab. 12 hat die Monatsspalten 3/6/12/18/24/36/48/60 (**keine** Spalte 9 — frühere Angabe korrigiert), SCLC Tab. 9 die Spalten 3/6/9/12/18/24/36/48/60; „(X)“ ist in beiden Leitlinien nicht legendiert.
 - Die hier gewählten **Empfehlungsgrade/Evidenzlevel** spiegeln die formal in der Leitlinie ausgewiesenen Werte; bei Konsensbasierten Empfehlungen (EK) ist kein Evidenzlevel zugeordnet — als `n/a` codiert.
+- **Konsultationsfassungen** (z. B. S3-LL 5.01) sind nach Finalisierung nicht mehr abrufbar; Annahmen über ihren Inhalt bleiben UNSICHER — daher werden nur finale Fassungen gepinnt (§13.1).
+- **Terminologie-Verifikation** belegt die Existenz und den Anzeigetext eines Codes, nicht die klinische Eignung der Zuordnung; ICF und MedDRA sind auf dem MII TermServ nicht verfügbar und bleiben unverifiziert.
+- Die **Kliniker-Fundstellen** der Excel-Erhebung (S3-LL Kap. 14.x, Empf. 14.7/14.8) wurden ohne Wortlautprüfung übernommen und sind in den YAMLs entsprechend gekennzeichnet.

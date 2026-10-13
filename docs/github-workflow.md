@@ -10,6 +10,7 @@
   /elements/follow-up/      @<lead-onko>
   /elements/surveillance/   @<lead-onko>
   /elements/palliative/     @<lead-pall>
+  /elements/primary-care/   @<lead-primarycare>
   /schemas/                 @<lead-mi>
   ```
 - **Issue-Templates** mit Pflichtfeldern: betroffene Element-ID(s), Quellen-LL-Referenz, Begründung.

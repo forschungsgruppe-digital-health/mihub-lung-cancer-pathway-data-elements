@@ -12,7 +12,8 @@ Versionierbares Repository der klinischen **Datenelemente** entlang des Lungenkr
 pfads (NSCLC/SCLC) im Projekt **MiHUB** (TU Dresden / Forschungsgruppe Digital Health), erhoben
 in den Use-Case-Arbeitspaketen AP6/AP7/AP8 mit Bezug zum BPMN-Pfad aus AP3
 ([`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)).
-Initial befüllt: Nachsorge (`followup`), Surveillance, Palliativ — **51 Datenelemente**.
+Befüllt: Nachsorge (`followup`), Surveillance, Palliativ, Hausärztliche Versorgung (`primarycare`) —
+**112 Datenelemente** (Stand 2026-10-13; aktuelle Zahl in `docs/phases-overview.md`).
 
 ## Repository-Konventionen
 
@@ -21,7 +22,8 @@ Initial befüllt: Nachsorge (`followup`), Surveillance, Palliativ — **51 Daten
   `docs/phases-overview.md`, alles unter `derived/`.
 - **Schema:** `schemas/data-element.schema.json` (ISO 13972:2022 / ISO 13606-2 / HL7 HSRA).
 - **Validierung:** `python scripts/validate.py` · **Aggregation:** `python scripts/build-catalog.py`
-  · **FHIR (optional):** `python scripts/build-fhir-logical-models.py`.
+  · **FHIR (optional):** `python scripts/build-fhir-logical-models.py` · **Terminologie (optional, mTLS):**
+  `python scripts/verify-terminology.py --cert <crt> --key <key>` (MII TermServ).
 - **Branching:** Beiträge per Pull Request gegen **`dev`** (Integrations-/Review-Branch);
   **`main`** ist die Release-Branch. Nicht direkt auf `main` pushen, nicht selbst mergen.
 - **Drei Beitrags-Spuren** (siehe [`CONTRIBUTING.md`](CONTRIBUTING.md)): GitHub-Issue-Formular ·

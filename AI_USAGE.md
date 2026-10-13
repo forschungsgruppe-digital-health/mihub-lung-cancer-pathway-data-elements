@@ -28,7 +28,7 @@
 > Die Datei ist bei wesentlichen Änderungen im KI-Einsatz zu aktualisieren.
 
 **Verantwortliche Person (Human Oversight):** Marcel Susky, Forschungsgruppe Digital Health (FGDH), Technische Universität Dresden — `marcel.susky@tu-dresden.de`
-**Letzte Aktualisierung:** 2026-06-30
+**Letzte Aktualisierung:** 2026-10-13
 **Geltungsbereich:** Repository `data-elements/` — Erhebung, Strukturierung und Pflege der klinischen Datenelemente entlang der Lungenkrebs-Patient Journey im Rahmen von MiHUB (AP6/AP7/AP8 in Bezug auf AP3); umfasst auch die Erhebungs-/Import-Werkzeuge (Excel), die Dubletten-Prüfung und die werkzeug-unabhängigen Agent Skills. Alle Branches.
 
 ---
@@ -42,11 +42,11 @@
 
 | Artefakttyp | KI-Einsatz | Werkzeug / Modell | Scope | Menschliche Überprüfung |
 |---|---|---|---|---|
-| **YAML-Datenelemente** (`elements/<phase>/*.yaml`) | Generated | Anthropic Claude (Sonnet 4.5 / Sonnet 4.6 / Opus 4.7) | Vollständige initiale Erstellung auf Basis bereitgestellter klinischer Leitlinien, Onkopedia-Stände und Fachpublikationen | Stichprobenartige Quellen-Verifikation gegen Primärbelege (siehe `docs/audit-log.md`); **klinisches Review durch Domänenexpert:innen ausstehend** (publication_status: AuthorDraft) |
+| **YAML-Datenelemente** (`elements/<phase>/*.yaml`) | Generated | Anthropic Claude (Sonnet 4.5 / Sonnet 4.6 / Opus 4.7 / Fable 5.1) | Vollständige initiale Erstellung (51 Elemente, 2026-05) auf Basis bereitgestellter klinischer Leitlinien, Onkopedia-Stände und Fachpublikationen; 2026-10: Resync auf S3-LL 5.1 / Onkopedia, Terminologie-Korrekturen nach Verifikation gegen den MII TermServ, 61 neue Elemente aus zwei Excel-Erhebungen klinischer Expert:innen und dem Leitlinien-Abgleich (Fable 5.1) | Stichprobenartige Quellen-Verifikation gegen Primärbelege (siehe `docs/audit-log.md`); **klinisches Review durch Domänenexpert:innen ausstehend** (publication_status: AuthorDraft) |
 | **JSON-Schema** (`schemas/data-element.schema.json`) | Assisted | Anthropic Claude (Sonnet 4.5) | Schema-Design auf Basis ISO 13972/13606-Mustern; iterative Verfeinerung | Vollständig durch Repository-Maintainer geprüft; CI-validiert |
-| **Markdown-Dokumentation** (README, AGENTS, CONTRIBUTING, methodology, howto, GLOSSARY u. a.) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.7) | Strukturierung, Formulierung, Synthese aus Antrag/Leitlinien/Standards | Inhaltlich durch Repository-Maintainer geprüft und freigegeben |
+| **Markdown-Dokumentation** (README, AGENTS, CONTRIBUTING, methodology, howto, GLOSSARY, `docs/reviews/` u. a.) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.7 / Opus 4.8 / Fable 5.1) | Strukturierung, Formulierung, Synthese aus Antrag/Leitlinien/Standards | Inhaltlich durch Repository-Maintainer geprüft und freigegeben |
 | **Agent Skills / Sub-Agenten** (`skills/*/SKILL.md` als einzige Quelle; `.claude/agents` + `.claude/skills` + `.codex/skills` Symlinks; `AGENTS.md`, `.github/copilot-instructions.md`) | Assisted | Anthropic Claude (Sonnet 4.5 / Opus 4.7 / Opus 4.8) | Entwurf der System-Prompts; Workflow-Regeln; Separation-of-Concerns; vendor-neutrale Refaktorierung + neues Skill `check-duplicate-data-element` | Durch Repository-Maintainer entworfen und auf Konsultations-Pflicht zugeschnitten; `skill-lint` CI-validiert |
-| **Python-Skripte** (`scripts/*.py`) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.8) | Validierung, Aggregation, FHIR-Logical-Model-Generierung | Manuell ausgeführt und ergebnis-geprüft |
+| **Python-Skripte** (`scripts/*.py`) | Assisted | Anthropic Claude (Sonnet 4.5 / 4.6 / Opus 4.8 / Fable 5.1) | Validierung, Aggregation, FHIR-Logical-Model-Generierung, Terminologie-Verifikation (`verify-terminology.py`), kopfzeilenbasierter Excel-Import | Manuell ausgeführt und ergebnis-geprüft |
 | **Erhebungs-Werkzeuge** (`scripts/_elicitation.py`, `build-/import-elicitation-workbook.py`, `templates/`) | Assisted | Anthropic Claude (Opus 4.8) | Schema-getriebene Excel-Vorlage + Importer für die Klinik-Spur (Weg 2) | Manuell ausgeführt, Round-trip getestet |
 | **Dubletten-Prüfung** (`scripts/check-duplicates.py`, Skill `check-duplicate-data-element`) | Assisted | Anthropic Claude (Opus 4.8) | Heuristik + Skill für Dubletten/Ähnlichkeit neuer Kandidaten | Getestet (bekannte Dublette + Negativfall); Letztentscheidung Mensch |
 | **Glossar** (`GLOSSARY.md`) | Assisted | Anthropic Claude (Opus 4.7) | Sammlung, Strukturierung, Quellen-Verifikation | Web-stichprobenartige Quellen-Validierung (Primärpublikationen, Score-Cut-offs); §18 markiert Verifikations-Status explizit |
@@ -76,6 +76,8 @@
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-sonnet-4-6` | 2026-05 (Patches, README-Neufassung) | Doku-Anpassung, Antrags-Auswertung |
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-opus-4-7` | 2026-05 (Glossar-Verifikation, AI_USAGE-Befüllung, Curator-Sub-Agent) | Quellen-Verifikation, Compliance-Dokumentation, Sub-Agent-Architektur |
 | **Claude Code (Opus 4.8, 1M-Kontext)** | Anthropic | `claude-opus-4-8` | 2026-06 (Schema-`data_flows`, Excel-Erhebungs-Tooling, Dubletten-Checker, vendor-neutrale Skills-Refaktor, Go-public-Artefakte) | Schema-Erweiterung, Skript-/Skill-Entwicklung, Doku-Überarbeitung |
+| **Claude Code (Fable 5.1)** | Anthropic | `claude-fable-5-1` | 2026-10 (Leitlinien-Resync S3-LL 5.1 / Onkopedia NSCLC 04-2025 + SCLC 08-2026 mit drei Read-only-Recherche-Agenten; Terminologie-Verifikation aller Codings gegen den MII TermServ; Abgleich zweier Excel-Erhebungen; Phase `primarycare`; 61 neue Elemente; Doku/Audit-Log) | Recherche, Code-Verifikation, YAML-Generierung, Skript-/Doku-Entwicklung |
+| **MII TermServ (Ontoserver) + AskMIIAnything MCP-Server v0.9.0** | Medizininformatik-Initiative (kein KI-Modell) | FHIR-Terminologie-API (`$lookup`, `$expand`, mTLS); MCP-Werkzeuge `lookup_code` / `validate_code` / `expand_valueset` | 2026-10 | deterministische Verifikation von SNOMED-CT-/LOINC-/ICD-10-GM-/OPS-/ATC-/KDL-/ICD-O-3-Codes (Ergebnisse in `docs/reviews/2026-10-13-terminologie-verifikation.md`) |
 | **Repo-eigene Sub-Agenten** (`.claude/agents/`) | basierend auf Claude | `data-element-analyzer`, `data-element-validator`, `ai-usage-curator` — siehe [`AGENTS.md`](AGENTS.md) | 2026-05 – laufend | Datenelementweise Analyse + Validation + KI-Nutzungs-Pflege |
 
 > **Hinweis zur Modellversionierung:** Die hier aufgeführten Modellkennungen entsprechen
@@ -245,6 +247,7 @@ Folgende Bereiche unterliegen **bewusst nicht** dem KI-Workflow (entspricht Scop
 |---|---|---|
 | 2026-05-06 | Erstmalige inhaltliche Befüllung der Vorlage; vollständige Subsumierung des bisherigen `DISCLAIMER.md` (Datei entfernt); README-Badge auf `AI_USAGE.md` umgelinkt; `ai-usage-curator`-Sub-Agent etabliert | Marcel Susky (Repository-Maintainer) |
 | 2026-06-30 | Modell `claude-opus-4-8` ergänzt (§3); Schema-Erweiterung `care_process.data_flows[]`; Excel-Erhebungs-Werkzeuge + Importer; Dubletten-Prüfung + neues Skill `check-duplicate-data-element`; vendor-neutrale Skills-Refaktorierung (`skills/` als SSoT, `.claude`/`.codex`-Symlinks, Copilot-Brücke, `skill-lint`); Go-public-Artefakte (LICENSE/Apache, DISCLAIMER, CITATION, CoC); `dev`/`main`-Branching. Hinweis: eigenständige `DISCLAIMER.md` (Zweckbestimmung/MDR/Haftung) neu angelegt — ergänzt, ersetzt **nicht** diese KI-Disklosure. | Marcel Susky (Repository-Maintainer), KI-assistiert (Opus 4.8) |
+| 2026-10-13 | Modell `claude-fable-5-1` ergänzt (§3); MII TermServ + AskMIIAnything-MCP als deterministische Verifikationswerkzeuge aufgenommen (§3); Scope-Erweiterung: Leitlinien-Resync (S3-LL 5.1, Onkopedia), Terminologie-Korrekturen, Excel-Erhebungen (Nachsorge-WG, Allgemeinmedizin), Phase `primarycare`, 61 neue Elemente, `scripts/verify-terminology.py`, `docs/reviews/` (§2). Erratum zum Analyzer-Lauf 2026-05-05 dokumentiert in `docs/audit-log.md` §13.1. | Marcel Susky (Repository-Maintainer), KI-assistiert (Fable 5.1) |
 
 ---
 

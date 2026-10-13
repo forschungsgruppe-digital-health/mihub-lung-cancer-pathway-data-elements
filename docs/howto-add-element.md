@@ -20,7 +20,7 @@ Skill [`check-duplicate-data-element`](../skills/check-duplicate-data-element/SK
 
 Im Repository **„Issues" → „New Issue" → Vorlage „📋 Neues Datenelement vorschlagen"** wählen. Es öffnet sich ein Web-Formular mit Pflichtfeldern:
 
-- **Phase** (Auswahlliste: Nachsorge / Surveillance / Palliativ / *neue Phase*)
+- **Phase** (Auswahlliste: Nachsorge / Surveillance / Palliativ / Hausärztliche Versorgung / *neue Phase*) und optional eine **Kategorie** (Befund, Bildgebung, Assessment, …)
 - **Bezeichnung (Deutsch)** — z. B. „Schluckbeschwerden (NRS)"
 - **Klinische Definition** — Freitext, 1–3 Sätze
 - **Tumorentität(en)** — NSCLC / SCLC / unspezifisch
@@ -117,7 +117,7 @@ git checkout -b feat/<phase>/<elementName>
 cp schemas/TEMPLATE.element.yaml elements/<phase>/<elementName>.yaml
 ```
 
-`<phase>` ist `follow-up`, `surveillance`, `palliative` (oder eine neue Phase, siehe §D).
+`<phase>` ist `follow-up`, `surveillance`, `palliative`, `primary-care` (oder eine neue Phase, siehe §D).
 `<elementName>` ist der camelCase-Name aus dem Schema-Pattern, z. B. `dysphagiaIntensity`.
 
 ### Schritt B4 — Felder befüllen
@@ -131,7 +131,8 @@ Pflichtfelder (Schema `required`, im CSV mit `*` markiert):
 | `name` | technischer camelCase-Name (identisch mit Dateiname ohne `.yaml`) |
 | `label_de` | klinisch verständliche deutsche Bezeichnung |
 | `definition_de` | semantische Definition (1–3 Sätze) |
-| `phase` | `followup`, `surveillance` oder `palliative` |
+| `phase` | `followup`, `surveillance`, `palliative` oder `primarycare` |
+| `category` (optional) | klinische Kategorie aus dem Schema-Enum (z. B. `befund`, `bildgebung`, `assessment`; siehe `GLOSSARY.md` §20) |
 | `datatype` | aus dem Schema-Enum (z. B. `integer`, `CodeableConcept`, `Quantity`) |
 | `cardinality` | `0..1`, `1..1`, `0..*`, `1..*` |
 | `iso13972_metadata.version_number` | `0.1.0` für Erstanlage |
@@ -165,13 +166,21 @@ Ergebnis muss `OK` sein. Bei `FAIL` zeigt das Skript den Pfad und die Schema-Ver
 python scripts/build-catalog.py
 ```
 
-Aktualisiert `catalog/data-dictionary.csv` (24 Spalten). **Diese CSV gehört in den Commit** — die CI bricht sonst ab.
+Aktualisiert `catalog/data-dictionary.csv` (25 Spalten). **Diese CSV gehört in den Commit** — die CI bricht sonst ab.
 
 ### Schritt B6.5 — Dubletten prüfen
 
 ```bash
 python scripts/check-duplicates.py --candidates elements/<phase>/<elementName>.yaml
 ```
+
+### Schritt B6.6 — Codings gegen den Terminologieserver prüfen (optional, empfohlen)
+
+```bash
+python scripts/verify-terminology.py --cert client.crt --key client.key elements/<phase>/<elementName>.yaml
+```
+
+Prüft jedes Coding per `$lookup` gegen den MII TermServ (mTLS; Zertifikat **nicht** ins Repo) und zeigt nicht auffindbare/inaktive Codes sowie abweichende Anzeigetexte. Konvention: `display` = Anzeigetext des Servers.
 
 Bei Einstufung `DUBLETTE`/`NAH-DUBLETTE`: bestehendes Element verfeinern statt neu anlegen; bei
 `VERWANDT`: per `related_elements[]` verlinken. (Heuristik — Letztentscheidung beim Menschen.)
@@ -205,13 +214,16 @@ Major-Änderungen erzeugen **immer ein neues Element** mit neuer ID (`...v1.0`),
 
 ## D · Neue Versorgungsphase aufnehmen
 
-Wenn z. B. eine Phase „Rehabilitation" oder „Diagnostik" ergänzt werden soll, sind **fünf Stellen** zu ändern:
+Wenn z. B. eine Phase „Rehabilitation" oder „Diagnostik" ergänzt werden soll, sind **acht Stellen** zu ändern (Beispiel: PR „Phase `primarycare`", 2026-10):
 
-1. `schemas/data-element.schema.json` — Enum `phase` und `tumor_entity` ergänzen, ID-Pattern erweitern.
-2. `elements/<neue-phase>/` Ordner anlegen.
-3. `scripts/build-catalog.py` & `docs/phases-overview.md` — Generator kennt automatisch alle Unterordner; nur ggf. Beschreibungstext der neuen Phase im Phasen-Overview-Generator pflegen.
-4. `.github/CODEOWNERS` — Reviewer:in für die neue Phase eintragen.
-5. `README.md` — Repository-Struktur-Tabelle aktualisieren.
+1. `schemas/data-element.schema.json` — Enum `phase` ergänzen, ID-Pattern erweitern (ggf. `tumor_entity`).
+2. `elements/<neue-phase>/` Ordner anlegen (Ordnername mit Bindestrich, Enum-Wert ohne: `primary-care` ↔ `primarycare`).
+3. `scripts/build-catalog.py` — Phasenliste `phases` in `write_phases_overview()` (Ordner, Titel, Beschreibung) ergänzen; `docs/phases-overview.md` wird daraus generiert.
+4. `scripts/_elicitation.py` — `PHASE_LAYMEN` (Excel-Dropdown) ergänzen und `templates/datenelement-erhebung.xlsx` neu erzeugen.
+5. `.github/ISSUE_TEMPLATE/new-data-element.yml` — Phase-Dropdown ergänzen.
+6. `scripts/build-fhir-logical-models.py` — `PhasesCS` ergänzen (nur für die FSH-Ableitung).
+7. `.github/CODEOWNERS` — Reviewer:in für die neue Phase eintragen.
+8. `README.md`, `AGENTS.md`, `docs/methodology.md` §5 — Phasenlisten/Zähler aktualisieren.
 
 Schritt 1 ist die einzige Stelle, an der das Schema selbst betroffen ist — daher ist eine Phasen-Erweiterung eine **Minor-Schema-Version** (alle alten YAMLs bleiben gültig).
 

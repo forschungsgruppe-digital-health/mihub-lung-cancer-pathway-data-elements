@@ -7,15 +7,16 @@
 
 Das Repository erhebt die Datenelemente, die im Verlauf des onkologischen Patientenpfads (Lungenkarzinom: NSCLC, SCLC) intersektoral dokumentiert und ausgetauscht werden müssen — über *alle* Versorgungsphasen hinweg (Prävention, Diagnostik, Staging, Therapie, Nachsorge, Surveillance, Palliativversorgung, Rehabilitation, Übergänge). Die Erhebung folgt einer expliziten Systematik der Medizininformatik, ist nachvollziehbar versionierbar und legt den Grundstein für das nachgelagerte vollständige Profile-Authoring (FHIR-IG, oBDS-Mapping, ePA-MIO etc.).
 
-Initial befüllt sind die drei Versorgungsphasen **Onkologische Nachsorge, Verlaufsbeobachtung/Surveillance, Palliativversorgung**. Weitere Phasen werden additiv ergänzt; das Schema bleibt dabei stabil.
+Befüllt sind die Versorgungsphasen **Onkologische Nachsorge, Verlaufsbeobachtung/Surveillance, Palliativversorgung** (initial, 2026-05) und **Hausärztliche Versorgung / sektorenübergreifende Basisdaten** (`primarycare`, seit 2026-10 aus der Erhebung Allgemeinmedizin/LoTeCaS-GP). Weitere Phasen werden additiv ergänzt; das Schema bleibt dabei stabil.
 
 ## 2 Methodik der Datenerhebung
 
-Die Erhebung folgt einem **dreistufigen, iterativen Vorgehen je Versorgungsphase**:
+Die Erhebung folgt einem **vierstufigen, iterativen Vorgehen je Versorgungsphase**:
 
 1. **Standards-/Referenzarchitektur-Sichtung.** Sichten der einschlägigen Normen und Referenzarchitekturen mit dem Ziel, die Struktur (Header/Metadaten) für jedes Datenelement von etablierten internationalen Mustern abzuleiten — *nicht* eine eigene Vorlage zu erfinden.
 2. **Leitlinien-Auswertung.** Pro Phase werden die einschlägigen nationalen Leitlinien (S3-Leitlinien des Leitlinienprogramms Onkologie, AWMF-Leitlinien, Onkopedia-Leitlinien der DGHO) sowie ergänzend internationale Leitlinien (ESMO, ASCO, NCCN, OCP) und versorgungsforscherische Primärquellen ausgewertet.
 3. **Konsolidierung.** Ableitung der Datenelemente in YAML pro Element (Single Source of Truth), Aggregation als CSV-Data-Dictionary, lesbare Phasenübersicht in Markdown — alles aus dem YAML autogeneriert.
+4. **Terminologie-Verifikation.** Alle `value_set.codings[]` werden gegen den MII TermServ geprüft (`scripts/verify-terminology.py`: `$lookup` je Coding; Ersatzcodes per `$expand` recherchiert), Anzeigetexte auf die Server-Displays synchronisiert, nicht auffindbare Codes ersetzt oder als `pending-mapping` begründet. Codesysteme ohne Server-Abdeckung (ICF, MedDRA) werden als nicht verifizierbar vermerkt.
 
 Validierung gegen JSON-Schema; Konsistenzprüfung CSV ↔ YAML automatisiert (CI).
 
@@ -137,14 +138,15 @@ Risiko und Mitigation:
 - **Mehrsprachigkeit:** Inhalte deutsch (`label_de`, `definition_de`); Feldnamen englisch — internationale Anschlussfähigkeit ohne Bruch in der Klinik-Sprache.
 - **Sensible Inhalte (z. B. Todeswunsch):** als Element-`issues` markiert; Zugriffsschutz wird in der Architektur (Consent / DSF / Broad Consent) gelöst, nicht im Schema.
 
-## 5 Umfang der initialen Befüllung (v0.1)
+## 5 Umfang der Befüllung
 
-| Phase | YAMLs |
-| --- | --- |
-| Onkologische Nachsorge (`elements/follow-up/`) | 18 |
-| Verlaufsbeobachtung / Surveillance (`elements/surveillance/`) | 15 |
-| Palliativversorgung (`elements/palliative/`) | 18 |
-| **GESAMT (initial)** | **51** |
+| Phase | YAMLs v0.1 (2026-05) | YAMLs v0.2 (2026-10) |
+| --- | --- | --- |
+| Onkologische Nachsorge (`elements/follow-up/`) | 18 | 34 |
+| Verlaufsbeobachtung / Surveillance (`elements/surveillance/`) | 15 | 20 |
+| Palliativversorgung (`elements/palliative/`) | 18 | 20 |
+| Hausärztliche Versorgung / sektorenübergreifende Basisdaten (`elements/primary-care/`) | — | 38 |
+| **GESAMT** | **51** | **112** |
 
 Davon **44 Erhebungs-Datenelemente** (Prozeduren, Werte, Status, Pläne) plus **7 Ergebnis-Datenelemente** (Bildbefunde, Lungenfunktionswerte, Mutationsergebnis, CTCAE-Grad, Caregiver-Burden-Score) — siehe `audit-log.md` §4.
 
@@ -215,6 +217,7 @@ Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) 
 | v0.1 LL-v5.01-Sync (Analyzer + Validator) | unverändert | Quellen-Pin S3-LL Lungenkarzinom v4.0→v5.01 in 25 Elementen; recommendation_grade EK→B in 7 Nachsorge-/Surveillance-Elementen (Empf. 16.1, 16.4, 16.7, 16.8, 16.9 in v5.01 aufgewertet); smokingStatus erweitert (E-Zigarette + Passivrauch); tobaccoCessationCounselling erweitert (ABC-Schema + DiGA); earlyPalliativeReferral erweitert (standardisiertes Symptomassessment + dependsOn → symptomAssessmentInstrument). Audit-Trail in `audit-log.md` §8. |
 | v0.1 FSH-Generator agnostisch | unverändert | `scripts/build-fhir-logical-models.py` projekt-agnostisch refaktoriert: CodeSystem/ValueSet-Namen ohne `MiHUB`-Präfix (PhasesCS/VS, StandardsCS/VS, …); CLI-Parameter `--namespace-base` für FHIR-URL-Basis (Default `https://mihub.de/fhir`) und `--title` für Logical-Model-Titel. Strukturen damit in anderen Projekten direkt wiederverwendbar; nur `--title` und ggf. die Codes in den CodeSystems sind projekt-spezifisch zu konfigurieren. |
 | v0.1 Datennutzung + Erhebungs-Tooling | `care_process.data_flows[]` ergänzt (System·Rolle·Nutzung je Element; additive Minor-Erweiterung, alle 51 YAMLs bleiben gültig); CSV nun 24 Spalten (`care_process_data_flows`) | Excel-Erhebungs-Vorlage + Importer (`build-/import-elicitation-workbook.py`) für eine niederschwellige dritte Beitrags-Spur; Dubletten-Prüfung (`check-duplicates.py` + Skill `check-duplicate-data-element`); Skills vendor-neutral (`skills/` als SSoT + `.claude`/`.codex`-Symlinks + Copilot-Brücke + `skill-lint`); Go-public-Artefakte (LICENSE/Apache, DISCLAIMER, CITATION, CoC); `dev`/`main`-Branching. |
+| v0.2 Leitlinien-Resync + Terminologie-Verifikation + Klinik-Erhebungen + Phase `primarycare` (2026-10-13) | Phase-Enum + ID-Pattern `primarycare`; optionales `category` (17 klinische Kategorien); Quelle `Expert:innen-Erhebung MiHUB`; CSV nun 25 Spalten (`category`), Phasen-Übersicht 9 Spalten; Excel-Import kopfzeilenbasiert | S3-LL Lungenkarzinom auf **5.1 (Juli 2026)** gepinnt — Erratum: die „Aufwertung EK→B“ aus der v5.01-Iteration war nicht belegt (Grade B→EK in 7 Elementen, LoE-Umstellung, Tab. 42→44); Onkopedia NSCLC auf April 2025, SCLC auf August 2026; **alle Codings gegen den MII TermServ verifiziert** (141 Codings: 38 nicht auffindbar + 2 inaktiv + ≥13 semantisch falsch → 85 Coding-Änderungen, 34 Display-Synchronisationen; neues Skript `verify-terminology.py`); Excel-Erhebungen Nachsorge-WG (78 Zeilen) + Allgemeinmedizin (38 Zeilen) abgeglichen → **+61 Elemente** (16 followup, 5 surveillance, 2 palliative, 38 primarycare) → 112. Audit-Trail in `audit-log.md` §13, Berichte in `docs/reviews/`. |
 
 Detaillierter Audit-Trail je Element: `audit-log.md`.
 
@@ -230,10 +233,12 @@ Die Datenelemente füttern die drei Säulen des MiHUB-Zielbilds:
 
 ### Klinische Leitlinien (initiale Befüllung)
 
-- S3-Leitlinie **Lungenkarzinom** (Langversion **5.01, Konsultationsfassung 04/2026**, AWMF 020-007OL; Kommentarfrist bis 2026-05-02) — insbesondere Kap. 4 *Tabakentwöhnung* (Empf. 4.1–4.5 modifiziert/neu 2026, inkl. E-Zigarette, Passivrauch, ABC-Schema, DiGA, Screening-Opt-out), Kap. 16 *Nachsorge / Verlauf / Follow-up* (Empfehlungen 16.1–16.9 mit Aufwertung EK→B in 2025, Tabelle 42), Kap. 15 Rehabilitation, Tabelle 48 (Übersicht der Änderungen v4 → v5).
+- S3-Leitlinie **Lungenkarzinom** (Langversion **5.1, Juli 2026**, final; AWMF 020-007OL; löst Konsultationsfassung 5.01 vom 04/2026 und Erstfassung 5.0 vom 06/2026 ab — 5.0 → 5.1 nur Arzneimittelzulassungen und URLs, Kap. 15/16 unverändert; Gültigkeit maximal bis Mai 2031) — insbesondere Kap. 4.2 *Tabakrauchen* (Empf. 4.1–4.4 modifiziert, 4.5 neu 2026; alle A/LoE 1; E-Zigarette, Passivrauch, ABC-Schema, DiGA, Screening-Opt-out), Kap. 16 *Nachsorge / Verlauf / Follow-up* (Empf. 16.1–16.9 geprüft 2026: 16.1/16.2/16.4/16.7/16.8/16.9 EK, 16.3 B/LoE 3, 16.5 A/B/LoE 2, 16.6 A/LoE 2; Tabelle 44 Nachsorge-Indikationen), Kap. 15 Rehabilitation (2026 ausgesetzt), Statement 8.6 / Empf. 8.77, Kap. 11 (Psychoonkologie), Tabelle 48 (Übersicht der Änderungen v4 → v5). Zitierweise nach Kap. 1.5.
 - S3-Leitlinie **Palliativmedizin** (Langversion 3.01, Konsultationsfassung 03/2026) — Kap. 5, 6, 9, 10, 17, 18, 19, 20, 21; Tabellen 6 und 9.
 - S3-Leitlinie **Tabakentwöhnung** AWMF 076-006l, 03/2021.
-- **Onkopedia** Lungenkarzinom NSCLC, Stand 03/2026, Kap. 8 Nachsorge, Tab. 12. Onkopedia SCLC, Stand 09/2025, Kap. 10 Nachsorge, Tab. 9.
+- **Onkopedia** Lungenkarzinom NSCLC, Stand April 2025 (Kap. 7 Rehabilitation, Kap. 8 Nachsorge und Kontrolluntersuchungen, Tab. 12; Kap. 6.1.6.2.1.1, 6.2.2.1). Onkopedia SCLC, Stand August 2026 (Kap. 9 Rehabilitation, Kap. 10 Verlaufskontrolle und Nachsorge, Tab. 9; Kap. 6.1.1.3/6.1.1.5/8.2.2). Online-Fassungen; Abruf 2026-10-13 (`docs/reviews/2026-10-13-leitlinien-abgleich/`).
+- **Expert:innen-Erhebungen MiHUB** (Klinik-Spur, Excel-Vorlage): Nachsorge-WG eines Lungenkrebszentrums, Stand 2026-07-30 (78 Zeilen: 51 Bestandselemente bestätigt und kategorisiert, 27 neue Zeilen) und Allgemeinmedizin / LoTeCaS-GP, Stand 2026-10-13 (38 Zeilen aus hausärztlicher Perspektive). Quelle `Expert:innen-Erhebung MiHUB` mit Mappe und Zeilen-ID in `evidence.guideline_references[].section`.
+- **MII TermServ** (Ontoserver der Medizininformatik-Initiative, mTLS): Verifikationsquelle aller Codings — SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3; ICF und MedDRA dort nicht verfügbar. Optional per MCP-Server AskMIIAnything (`lookup_code`, `validate_code`, `expand_valueset`) abfragbar.
 - Cancer Council Victoria: **Optimal Care Pathway for People with Lung Cancer**, 2nd ed. 2021 (Update 07/2025) — Steps 5–7.
 - Klein A-A et al. (2026). *Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden — Empfehlungen zum Verfassen von onkologischen Abschlussberichten.* Die Onkologie 32:91–99. doi:10.1007/s00761-025-01867-1.
 - AG LONKO im Nationalen Krebsplan: Empfehlungspapiere *Datenerhebung und Datenanalyse* sowie *Bedarfsgerechte Versorgungsmodelle* (2021).

@@ -104,11 +104,11 @@ Continuous Remote Patient Monitoring; sicherer, interoperabler Vital-Daten-Gatew
 
 ## Artefakte in diesem Repository
 
-Die Datenelemente werden als **YAML-Single-Source-of-Truth** geführt; abgeleitete Sichten (CSV, Markdown, FHIR) werden aus den YAML-Quellen generiert. Die Erhebung erfolgt **iterativ und phasenweise**: Pro Versorgungsphase existiert ein eigenes Verzeichnis unter `elements/`; weitere Phasen können additiv ergänzt werden, ohne Schema-Bruch — siehe [`docs/howto-add-element.md`](./docs/howto-add-element.md) §D.
+Die Datenelemente werden als **YAML-Single-Source-of-Truth** geführt; abgeleitete Sichten (CSV, Markdown, FHIR) werden aus den YAML-Quellen generiert. Die Erhebung erfolgt **iterativ und phasenweise**: Pro Versorgungsphase existiert ein eigenes Verzeichnis unter `elements/`; weitere Phasen können additiv ergänzt werden, ohne Schema-Bruch — siehe [`docs/howto-add-element.md`](./docs/howto-add-element.md) §D. Befüllt sind vier Phasen: **Onkologische Nachsorge** (`follow-up/`), **Verlaufsbeobachtung/Surveillance** (`surveillance/`), **Palliativversorgung** (`palliative/`) und — seit 2026-10 aus der Erhebung Allgemeinmedizin/LoTeCaS-GP — **Hausärztliche Versorgung / sektorenübergreifende Basisdaten** (`primary-care/`); jedes Element trägt optional eine klinische **Kategorie** (`category`, 17 Werte) als Sortier-/Review-Hilfe.
 
 Eine aktuelle, autogenerierte Übersicht über alle befüllten Phasen und Datenelemente liefert [`docs/phases-overview.md`](./docs/phases-overview.md). Die maschinenlesbare Vollsicht steht unter [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv) bzw. als Markdown-Spiegel [`catalog/data-dictionary.md`](./catalog/data-dictionary.md) zur Verfügung.
 
-Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen (siehe Abschnitt *Vorarbeiten und Grundlagen*).
+Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL — gegen den **MII TermServ** verifiziert, siehe `scripts/verify-terminology.py` und [`docs/reviews/`](./docs/reviews/)), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen (siehe Abschnitt *Vorarbeiten und Grundlagen*).
 
 ### Schema und Vorlagen
 
@@ -122,12 +122,13 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 
 | Datei                                                                              | Beschreibung                                              |
 | ---------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv)                     | Vollsicht (24 Spalten, inkl. `care_process_data_flows`); Excel-/REDCap-kompatibel |
+| [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv)                     | Vollsicht (25 Spalten, inkl. `category` und `care_process_data_flows`); Excel-/REDCap-kompatibel |
 | [`catalog/data-dictionary.md`](./catalog/data-dictionary.md)                       | 1:1-Markdown-Spiegel der CSV (für PR-Diffs, Web-Browsing) |
-| [`docs/phases-overview.md`](./docs/phases-overview.md)                             | Lesefreundliche Phasen-Übersicht (8 Spalten, gruppiert)   |
+| [`docs/phases-overview.md`](./docs/phases-overview.md)                             | Lesefreundliche Phasen-Übersicht (9 Spalten, gruppiert)   |
 | [`docs/methodology.md`](./docs/methodology.md)                                     | Methodik, Gap-Analyse, Designentscheidungen               |
 | [`docs/audit-log.md`](./docs/audit-log.md)                           | Audit-Trail (Quellen, Codings, Iterationen)               |
 | [`GLOSSARY.md`](./GLOSSARY.md)                                                     | Akronyme, Skalen, Frequenz-Codes, Standard-Identifier     |
+| [`docs/reviews/`](./docs/reviews/)                                                 | Momentaufnahmen der Leitlinien-Abgleiche und der Terminologie-Verifikation (datiert, unveränderlich) |
 
 ### Skripte
 
@@ -137,7 +138,8 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 | [`scripts/build-catalog.py`](./scripts/build-catalog.py)                                           | YAML → CSV + Markdown + Phasen-Übersicht aggregieren            |
 | [`scripts/build-fhir-logical-models.py`](./scripts/build-fhir-logical-models.py)                   | YAML → FHIR Logical Model (FSH, on-demand, projekt-agnostisch)  |
 | [`scripts/build-elicitation-workbook.py`](./scripts/build-elicitation-workbook.py)                 | Excel-Erhebungs-Vorlage erzeugen (schema-getrieben; benötigt `openpyxl`) |
-| [`scripts/import-elicitation-workbook.py`](./scripts/import-elicitation-workbook.py)               | Ausgefüllte Excel-Mappe → YAML-Entwürfe (`elements/_incoming/`) |
+| [`scripts/import-elicitation-workbook.py`](./scripts/import-elicitation-workbook.py)               | Ausgefüllte Excel-Mappe → YAML-Entwürfe (`elements/_incoming/`); Spalten werden über die Kopfzeile zugeordnet |
+| [`scripts/verify-terminology.py`](./scripts/verify-terminology.py)                                 | Alle Codings per `$lookup` gegen einen FHIR-Terminologieserver prüfen (Default: MII TermServ, mTLS mit Client-Zertifikat) |
 | [`scripts/check-duplicates.py`](./scripts/check-duplicates.py)                                      | Dubletten-/Ähnlichkeitsprüfung neuer Kandidaten gegen den Bestand |
 
 ### Agent Skills (werkzeug-unabhängig)
@@ -228,15 +230,17 @@ Das Repository folgt etablierten Mustern der klinischen Modellierung:
 | **ISO 23903**                  | Plattformneutralität — Trennung Domänen-Modell ↔ Implementierung                                       |
 | **HL7 HSRA Edition 1 (2023)**  | Datenelemente als Inhalte der HSRA-Capabilities (Common Terminology Service, Care Coordination …)     |
 
-### Klinische Quellen (initiale Befüllung)
+### Klinische Quellen
 
-- **S3-Leitlinie Lungenkarzinom**, Langversion **5.01** (Konsultationsfassung 04/2026, AWMF 020-007OL); Kapitel 4 (Tabakentwöhnung), Kapitel 15 (Rehabilitation), Kapitel 16 (Nachsorge / Verlauf / Follow-up; Empfehlungen 16.1–16.9 Aufwertung EK→B); Tab. 42, Tab. 48.
+- **S3-Leitlinie Lungenkarzinom**, Langversion **5.1** (Juli 2026, final; AWMF 020-007OL) — löst die Konsultationsfassung 5.01 (04/2026) und die Erstfassung 5.0 (06/2026) ab; Kapitel 4.2 (Tabakrauchen, Empf. 4.1–4.5 modifiziert/neu 2026, A/LoE 1), Kapitel 15 (Rehabilitation, 2026 ausgesetzt), Kapitel 16 (Nachsorge / Verlauf / Follow-up; Empf. 16.1–16.9 geprüft 2026 — 16.1/16.2/16.4/16.7/16.8/16.9 EK, 16.3 B, 16.5 A/B, 16.6 A); Tab. 44 (Nachsorge-Indikationen), Tab. 48 (Änderungsübersicht).
 - **S3-Leitlinie Palliativmedizin**, Langversion **3.01** (Konsultationsfassung 03/2026).
 - **AWMF S3-LL Rauchen / Tabakabhängigkeit** (076-006l, 03/2021).
-- **Onkopedia** Lungenkarzinom NSCLC (03/2026, Kap. 8 Nachsorge, Tab. 12) und SCLC (09/2025, Kap. 10 Nachsorge, Tab. 9).
+- **Onkopedia** Lungenkarzinom NSCLC (Stand April 2025; Kap. 7 Rehabilitation, Kap. 8 Nachsorge, Tab. 12) und SCLC (Stand August 2026; Kap. 9 Rehabilitation, Kap. 10 Nachsorge, Tab. 9).
 - **Optimal Care Pathway for People with Lung Cancer**, Cancer Council Victoria, 2nd ed. (2021, Update 07/2025).
 - **Klein A-A et al. (2026).** _Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden — Empfehlungen zum Verfassen von onkologischen Abschlussberichten._ Die Onkologie 32:91–99.
 - **AG LONKO** (Nationaler Krebsplan): Empfehlungspapiere zur Datenerhebung und zu bedarfsgerechten Versorgungsmodellen.
+- **Expert:innen-Erhebungen MiHUB** (Klinik-Spur, Excel-Vorlage): Nachsorge-WG eines Lungenkrebszentrums (Stand 2026-07-30; Kategorien + 27 neue Zeilen) und Allgemeinmedizin / LoTeCaS-GP (Stand 2026-10-13; 38 hausärztliche Elemente) — Quelle `Expert:innen-Erhebung MiHUB` in den YAMLs, Abgleich in [`docs/audit-log.md`](./docs/audit-log.md) §13.
+- **MII TermServ** (Ontoserver der Medizininformatik-Initiative; SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3) — Verifikationsquelle aller Codings (mTLS-Zugang über ein Funktionszertifikat; Stand 2026-10-13).
 
 ### Verwandte MiHUB-Artefakte
 

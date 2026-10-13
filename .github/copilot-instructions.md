@@ -18,7 +18,7 @@ Quelle*; CSV/Markdown/FHIR-Sichten werden daraus generiert. Schema:
 - **Klinische Freigabe (`publication_status`) nicht autonom heben** (AuthorDraft → … →
   ApprovedForProductionUse ist menschliche/klinische Entscheidung).
 - **Schema-Enums (Phase, Standards, Datentypen …) nicht stillschweigend ändern** — additiv +
-  begründet; bestehende 51 YAMLs müssen gültig bleiben.
+  begründet; alle bestehenden YAMLs müssen gültig bleiben.
 
 ## Qualitäts-Gate (eine Änderung ist erst fertig, wenn das grün ist)
 - `python scripts/validate.py` — alle YAMLs gegen das JSON-Schema (CI-erzwungen).
