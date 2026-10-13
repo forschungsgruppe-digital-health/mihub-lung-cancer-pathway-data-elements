@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: bildgebung
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -15,14 +16,17 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: loinc
-    code: 30688-4
-    display: CT Thorax
+    code: 24627-2
+    display: CT Chest
   - system: snomed-ct
     code: '169069000'
-    display: CT of thorax (procedure)
+    display: CT of chest
   - system: ops
     code: 3-202
-    display: Native CT, Thorax
+    display: Native Computertomographie des Thorax
+  - system: ops
+    code: 3-222
+    display: Computertomographie des Thorax mit Kontrastmittel
   - system: kdl
     code: DG020103
     display: CT-Befund
@@ -32,27 +36,38 @@ standard_mappings:
   resource: ImagingStudy
   path: ImagingStudy.started
 care_process:
-  trigger: gemäß Nachsorgeintervall (Tab. 12 Onkopedia / Tab. 9 SCLC); zusätzlich nach Strahlentherapie
-  frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
+  trigger: 'gemäß Nachsorgeplan: S3 Empf. 16.7 (CT als eine der bildgebenden Optionen an jedem Nachsorgetermin);
+    Onkopedia NSCLC Tab. 12 (jährlich Mo 12–60 für alle, zusätzlich Mo 3/6/18 nur nach Strahlentherapie
+    — siehe curativeTreatmentModality); Onkopedia SCLC Tab. 9 (alle 9 Zeitpunkte); einmalig nach Radiochemotherapie
+    NSCLC Stadium III vor Durvalumab-Konsolidierung (S3 Empf. 16.6)'
+  frequency_pattern: 'S3: Q3M-Y1-Y2;Q6M-Y3-Y5 · Onkopedia NSCLC: M12;M24;M36;M48;M60 (+M3;M6;M18 nach
+    RT/RCT) · Onkopedia SCLC: Q3M-Y1;Q6M-Y2;Q12M-Y3-Y5'
   responsible_role: Radiologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Tab. 42 / Empf. 16.6 (A, 1a)
+    section: 'Tab. 44 (Thorax CT: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.6 (A, LoE 2, geprüft 2026) — einmaliges CT Thorax nach lokal ablativer Therapie
+      NSCLC Stadium III zum Ausschluss einer Progression vor Durvalumab
     recommendation_grade: A
-    evidence_level: 1a
+    evidence_level: '2'
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Tab. 12
+    section: 'Kap. 8.1, Tab. 12 (CT Thorax: X Mo 12/24/36/48/60; X* Mo 3/6/18 nur nach Strahlentherapie)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia SCLC
-    version: Stand 09/2025
+    version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: Tab. 9
+    section: Kap. 10.2, Tab. 9 (CT Thorax an allen 9 Zeitpunkten Mo 3–60)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -75,3 +90,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: curativeTreatmentModality

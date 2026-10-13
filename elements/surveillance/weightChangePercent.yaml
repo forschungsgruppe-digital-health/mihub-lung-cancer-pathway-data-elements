@@ -8,15 +8,19 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: messwert
 datatype: decimal
 cardinality: 0..*
 unit: '%'
 value_set:
   binding_strength: preferred
   codings:
+  - system: snomed-ct
+    code: '248349002'
+    display: Percentage weight loss
   - system: loinc
-    code: 8341-0
-    display: Body weight change
+    code: 107109-1
+    display: Weight loss 3 months
 care_process:
   trigger: bei jeder Visite
   frequency_pattern: per-encounter

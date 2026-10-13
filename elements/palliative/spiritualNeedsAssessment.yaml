@@ -8,14 +8,15 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: boolean
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '248058001'
-    display: Spiritual concern
+    code: '424823000'
+    display: Expresses spiritual concerns
 care_process:
   trigger: Aufnahme + bei Phasenwechsel
   frequency_pattern: per-encounter

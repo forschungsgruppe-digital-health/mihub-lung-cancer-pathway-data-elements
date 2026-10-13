@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungskontext
 datatype: code
 cardinality: 1..1
 value_set:

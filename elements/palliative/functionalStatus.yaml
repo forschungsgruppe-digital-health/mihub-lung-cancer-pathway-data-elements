@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -16,22 +17,28 @@ value_set:
   codings:
   - system: loinc
     code: 89262-0
-    display: ECOG Performance Status
+    display: ECOG Performance Status [Interpretation]
   - system: snomed-ct
-    code: '373802001'
+    code: '423740007'
+    display: ECOG performance status
+  - system: snomed-ct
+    code: '761869008'
+    display: KPS (Karnofsky Performance Status) score
+  - system: loinc
+    code: 89243-0
     display: Karnofsky Performance Status score
-  - system: loinc
-    code: 70924-1
-    display: Australian-modified Karnofsky Performance Status (AKPS)
-  - system: loinc
-    code: 65488-5
-    display: Barthel Index
+  - system: snomed-ct
+    code: '273302005'
+    display: Barthel index
   - system: icf
     code: d4
     display: Mobilität (Aktivität & Partizipation)
   - system: icf
     code: d5
     display: Selbstversorgung (Aktivität & Partizipation)
+  notes: 'AKPS (Australia-modified Karnofsky): kein LOINC-/SNOMED-CT-Code auf dem MII TermServ gefunden
+    (Stand 2026-10-13). ICF-Codes sind nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht
+    verfügbar (Stand 2026-10-13); Codes gemäß ICF-Browser belassen.'
 care_process:
   trigger: bei jeder Visite
   frequency_pattern: per-encounter

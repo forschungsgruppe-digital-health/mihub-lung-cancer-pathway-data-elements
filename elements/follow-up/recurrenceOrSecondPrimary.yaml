@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: diagnose
 datatype: CodeableConcept
 cardinality: 0..1
 value_set:
@@ -15,38 +16,38 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '417798001'
-    display: Recurrent neoplasm
+    code: '1259237005'
+    display: Recurrent malignant neoplasm
   - system: snomed-ct
-    code: '20003000'
-    display: Locoregional recurrence
+    code: '314954002'
+    display: Local recurrence of malignant neoplasm of lung
   - system: snomed-ct
-    code: '85756007'
-    display: Distant metastasis
+    code: '399409002'
+    display: Distant metastasis present
   - system: snomed-ct
-    code: '128462008'
-    display: Second primary malignant neoplasm
+    code: '878806005'
+    display: Second primary cancer
   - system: icd-10-gm
     code: C34.9
-    display: Bösartige Neubildung der Bronchien und der Lunge, n.n.b.
+    display: 'Bösartige Neubildung: Bronchus oder Lunge, nicht näher bezeichnet'
   - system: kdl
-    code: AD060106
+    code: SD150103
     display: Tumorkonferenzprotokoll
   - system: icd-o-3
     code: 8140/3
-    display: Adenokarzinom (M-Code)
+    display: Adenokarzinom o.n.A.
   - system: icd-o-3
     code: 8070/3
-    display: Plattenepithelkarzinom (M-Code)
+    display: Plattenepithelkarzinom o.n.A.
   - system: icd-o-3
     code: 8041/3
-    display: Kleinzelliges Karzinom (M-Code)
+    display: Kleinzelliges Karzinom o.n.A.
   - system: icd-o-3
     code: 8012/3
-    display: Großzelliges Karzinom (M-Code)
+    display: Großzelliges Karzinom o.n.A.
   - system: icd-o-3
     code: C34.9
-    display: Lunge, n.n.b. (T-Code, Topographie)
+    display: Lunge o.n.A.
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-diagnose-primaertumor
@@ -67,10 +68,23 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.1 (B, geprüft 2025); Kap. 16.3.4
-    recommendation_grade: B
+    section: Empf. 16.1 (EK, geprüft 2026); Empf. 16.2 (EK); Kap. 16.3.4
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1 (Nachsorgeziele: frühzeitige Diagnose eines Rezidivs und eines Zweittumors)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2 (Nachsorgeziele: Rezidiv, Zweitneoplasie); Kap. 6.1.2.1 (Zweittumor auch anderer
+      Histologie; PET-CT + MRT Schädel vor Re-Resektion)'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: condition
@@ -92,3 +106,12 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: curativeRecurrencePotential
+- relation: dependsOn
+  target: bronchoscopyFollowUp
+- relation: dependsOn
+  target: petCtFollowUp
+- relation: dependsOn
+  target: ctAbdomenFollowUp

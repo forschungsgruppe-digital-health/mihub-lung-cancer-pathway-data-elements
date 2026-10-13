@@ -7,8 +7,11 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: medikation
 datatype: integer
 cardinality: 0..1
+value_set:
+  codings: []
 constraints_de: Wertebereich 1..n; Linienwechsel (PD oder Toxizität) erhöht den Zähler.
 care_process:
   trigger: bei Therapiestart
@@ -17,9 +20,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 16.1 'real-world vs. Studie'
+    section: 'Kap. 16.1 (Hintergrundtext: real-world vs. Studienergebnisse, Evidenzgrad IIa) — kein formales
+      Statement'
     recommendation_grade: Statement
     evidence_level: 2a
 iso13972_metadata:

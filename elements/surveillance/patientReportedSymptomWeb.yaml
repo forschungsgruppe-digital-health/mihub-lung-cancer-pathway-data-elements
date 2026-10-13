@@ -8,21 +8,27 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: prom
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: snomed-ct
-    code: '364712001'
+    code: '162465004'
     display: Symptom severity
   - system: loinc
-    code: 89204-2
-    display: Patient reported outcome
+    code: 89194-5
+    display: Patient reported outcome measure score
+  - system: snomed-ct
+    code: '840297006'
+    display: Assessment of patient reported outcome measures
 standard_mappings:
 - standard: fhir-r4-base
   resource: QuestionnaireResponse
   path: QuestionnaireResponse.item
+constraints_de: 'Population lt. Onkopedia: Patient:innen in fortgeschrittenen Stadien ohne Krankheitsprogress
+  (Denis et al., JNCI 2017, HR 0,32).'
 care_process:
   trigger: wöchentliche Selbsterfassung
   frequency_pattern: weekly
@@ -30,9 +36,10 @@ care_process:
 evidence:
   guideline_references:
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.2 (web-basierte Nachsorge, Denis 2017)
+    section: Kap. 8.2 (web-basierte wöchentliche Symptom-Selbsteinschätzung; Denis P et al., JNCI 109:djx029,
+      2017)
     recommendation_grade: Statement
     evidence_level: 1b
 iso13972_metadata:

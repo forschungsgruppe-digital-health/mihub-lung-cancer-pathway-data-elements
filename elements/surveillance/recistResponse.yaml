@@ -7,6 +7,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: code
 cardinality: 0..*
 value_set:
@@ -14,20 +15,27 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '182840001'
-    display: Complete response (CR)
+    code: '260415000'
+    display: Not detected
   - system: snomed-ct
     code: '268910001'
-    display: Partial response (PR)
+    display: Patient's condition improved
   - system: snomed-ct
     code: '359746009'
-    display: Stable disease (SD)
+    display: Patient's condition stable
   - system: snomed-ct
-    code: '271879005'
-    display: Progressive disease (PD)
+    code: '271299001'
+    display: Patient's condition worsened
+  - system: snomed-ct
+    code: '709137006'
+    display: Patient condition undetermined
   - system: kdl
-    code: AD060106
+    code: SD150103
     display: Tumorkonferenzprotokoll
+  notes: 'RECIST-1.1-Kategorien auf das mCODE-ValueSet ConditionStatusTrendVS (SNOMED CT) abgebildet:
+    CR = 260415000 Not detected, PR = 268910001 Patient''s condition improved, SD = 359746009 Patient''s
+    condition stable, PD = 271299001 Patient''s condition worsened, NE = 709137006 Patient condition undetermined;
+    oBDS ''Gesamtbeurteilung Tumorstatus'' analog.'
 standard_mappings:
 - standard: obds
   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
@@ -49,16 +57,32 @@ standard_mappings:
   resource: MEASUREMENT / OBSERVATION (Onkologie-Extension)
   notes: OHDSI Onkologie-Extension; FHIR-OMOP-Brücke via mCODE↔OMOP
 care_process:
-  trigger: Restaging-CT alle 6–9 Wo unter Systemtherapie
-  frequency_pattern: Q6-9W
+  trigger: 'Restaging-CT alle 6–9 Wochen unter Systemtherapie (S3 Empf. 16.9) bzw. 6–8 Wochen (Onkopedia
+    NSCLC) — auch in der therapiefreien Beobachtung nach Erstlinientherapie; SCLC: Ansprechen nach frühestens
+    2, i. d. R. nach 3–4 Zyklen Chemo-Immuntherapie'
+  frequency_pattern: Q6-9W (S3) · Q6-8W (Onkopedia NSCLC) · per-cycle (SCLC, nach 2–4 Zyklen)
   responsible_role: Onkologe / Radiologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.9 (B, modifiziert 2025)
-    recommendation_grade: B
+    section: Empf. 16.9 (EK, geprüft 2026)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.2 (Kontrollintervall 6–8 Wochen nach Erstlinientherapie — S3-Expertenkonsens); Kap.
+      6.1.6.2.2.1.2.1 (engmaschige Kontrolle alle 6–8 Wochen als Alternative zur Erhaltungstherapie)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.7 (Ansprechen auf Chemo-Immuntherapie nach frühestens 2, in der Regel nach
+      3–4 Zyklen beurteilbar)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: evaluation

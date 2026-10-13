@@ -7,6 +7,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: medikation
 datatype: Quantity
 cardinality: 0..*
 unit: mg/d
@@ -15,10 +16,9 @@ value_set:
   codings:
   - system: atc
     code: N02A
-    display: Opioide
-  - system: snomed-ct
-    code: '412130007'
-    display: Oral morphine equivalent (substance)
+    display: OPIOIDE
+  notes: Für das orale Morphinäquivalent (oMME) existiert auf dem MII TermServ kein SNOMED-CT-/LOINC-Konzept
+    (Stand 2026-10-13); Einheit UCUM mg/d, Umrechnung projektseitig.
 standard_mappings:
 - standard: fhir-r4-base
   resource: MedicationStatement

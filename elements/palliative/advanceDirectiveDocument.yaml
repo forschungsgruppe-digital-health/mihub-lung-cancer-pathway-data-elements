@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: dokument
 datatype: Reference
 cardinality: 0..*
 value_set:
@@ -16,10 +17,13 @@ value_set:
   codings:
   - system: snomed-ct
     code: '371538006'
-    display: Advance directive
+    display: Advance directive report
   - system: snomed-ct
-    code: '470611000124106'
-    display: Healthcare proxy
+    code: '425393008'
+    display: Active Durable Power of Attorney for Healthcare
+  - system: loinc
+    code: 42348-3
+    display: Advance Healthcare Directives
   - system: kdl
     code: AM160104
     display: Patientenverfügung

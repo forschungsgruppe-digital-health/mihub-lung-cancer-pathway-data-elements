@@ -9,15 +9,16 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: dokument
 datatype: Reference
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   standard_binding_status: mapped
   codings:
-  - system: snomed-ct
-    code: '736378000'
-    display: Cancer survivorship care plan
+  - system: loinc
+    code: 74156-1
+    display: Oncology Plan of Care and Summary Note
   - system: kdl
     code: SD150101
     display: Follow up-Bogen
@@ -64,3 +65,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- S3-LL Lungenkarzinom 5.1 enthält keine Empfehlung zu Survivorship Care Plan / Abschlussbericht (Survivorship
+  nur als Forschungsbedarf Kap. 16.3) — Fremdquellen (AG LONKO, Klein 2026, OCP) beibehalten.

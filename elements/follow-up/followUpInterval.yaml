@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungsplanung
 datatype: code
 cardinality: 1..1
 value_set:
@@ -15,8 +16,9 @@ value_set:
   standard_binding_status: no-standard-found
   notes: Keine etablierte Standardisierung für Nachsorge-Intervall-Pattern dieser Granularität (SNOMED
     CT, LOINC, oBDS kennen keine deckungsgleichen Codes). Die Codes sind projekt-lokale Platzhalter, abgeleitet
-    aus S3-LL Lungenkarzinom Empf. 16.7 sowie Onkopedia NSCLC Tab. 12 / SCLC Tab. 9. Perspektivisch entweder
-    als FHIR Timing/Period datatypisiert oder als kontrolliertes ValueSet im 'mihub'-Namensraum publiziert.
+    aus S3-LL Lungenkarzinom Empf. 16.7 (EK), Onkopedia NSCLC Tab. 12 (Stand April 2025) und Onkopedia
+    SCLC Tab. 9 (Stand August 2026). Perspektivisch entweder als FHIR Timing/Period datentypisiert oder
+    als kontrolliertes ValueSet im 'mihub'-Namensraum publiziert.
   codings:
   - system: local-no-standard-binding
     code: Q3M-Y1-Y2
@@ -26,10 +28,20 @@ value_set:
     display: alle 6 Monate, Jahr 3–5
   - system: local-no-standard-binding
     code: Q12M-PostY5
-    display: jährlich (Screening) ab Jahr 6
+    display: jährlich ab Jahr 6 (Screeningprogramm; Intervall nicht aus der S3-LL ableitbar)
   - system: local-no-standard-binding
-    code: Q6-9M
-    display: alle 6–9 Wochen (palliativ unter Systemtherapie)
+    code: Q6-9W
+    display: alle 6–9 Wochen (palliativ unter Systemtherapie; S3 Empf. 16.9)
+  - system: local-no-standard-binding
+    code: Q3M-Y1;Q6M-Y2;Q12M-Y3-Y5
+    display: alle 3 Monate Jahr 1, alle 6 Monate Jahr 2, jährlich Jahr 3–5 (SCLC; Onkopedia SCLC Tab.
+      9)
+  - system: local-no-standard-binding
+    code: M3;M6;M12;M18;M24;M36;M48;M60
+    display: Onkopedia-NSCLC-Raster Tab. 12 (Monate 3/6/12/18/24/36/48/60)
+  - system: local-no-standard-binding
+    code: Q6-8W-curative-recurrence
+    display: alle 6–8 Wochen bei Rezidiv/Zweitkarzinom mit kurativem Potenzial (Onkopedia NSCLC Kap. 8.1)
 care_process:
   trigger: Festlegung im Nachsorgeplan
   frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5;Q12M-PostY5
@@ -37,19 +49,20 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.7 (B, geprüft 2025)
-    recommendation_grade: B
+    section: Empf. 16.7 (EK, geprüft 2026)
+    recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: 'Kap. 8.1, Tabelle 12 (NSCLC: 3,6,12,18,24,36,48,60 Mo)'
+    section: 'Kap. 8.1, Tabelle 12 (NSCLC: Mo 3,6,12,18,24,36,48,60); Kap. 8.1 Text (6–8 Wochen bei kurativem
+      Rezidiv-/Zweittumorpotenzial)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia SCLC
-    version: Stand 09/2025
+    version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
     section: 'Kap. 10.2, Tabelle 9 (SCLC: 3,6,9,12,18,24,36,48,60 Mo)'
     recommendation_grade: n/a
@@ -74,3 +87,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: curativeRecurrencePotential

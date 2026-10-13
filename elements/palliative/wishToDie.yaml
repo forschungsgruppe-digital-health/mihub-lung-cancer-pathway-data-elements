@@ -8,14 +8,15 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: boolean
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '224943005'
-    display: Wish to die
+    code: '225876004'
+    display: Wanting to die
 care_process:
   trigger: Sensitiv erfragen bei psychosozialer Belastung; bei Verschlechterung
   frequency_pattern: ad-hoc

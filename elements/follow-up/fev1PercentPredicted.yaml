@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: messwert
 datatype: decimal
 cardinality: 0..*
 unit: '%'
@@ -19,11 +20,11 @@ value_set:
     code: 20150-9
     display: FEV1
   - system: loinc
-    code: 75889-0
-    display: FEV1/Predicted FEV1
+    code: 20152-5
+    display: FEV1 measured/predicted
   - system: snomed-ct
     code: '59328004'
-    display: Forced expired volume in 1 second (observable entity)
+    display: Forced expired volume in 1 second
   - system: kdl
     code: DG060108
     display: Dokumentationsbogen Lungenfunktionsprüfung
@@ -40,10 +41,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Tab. 42 (Lungenfunktionsprüfung)
-    recommendation_grade: EK
+    section: Tab. 44 (Lungenfunktionsprüfung)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation

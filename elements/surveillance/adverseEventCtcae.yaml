@@ -7,6 +7,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -22,6 +23,9 @@ value_set:
   - system: meddra
     code: '10010726'
     display: Confusion
+  standard_binding_status: mapped
+  notes: MedDRA ist auf dem MII TermServ nicht verfügbar (Lizenz); Codes nicht verifiziert (Stand 2026-10-13).
+    CTCAE-Begriffe sind MedDRA-LLT-basiert.
 care_process:
   trigger: bei jedem Kontakt unter Therapie
   frequency_pattern: per-encounter
@@ -29,7 +33,7 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.9 (Toxizitäten)
     recommendation_grade: EK

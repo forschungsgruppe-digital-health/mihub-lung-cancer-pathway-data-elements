@@ -8,22 +8,24 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
 value_set:
   binding_strength: required
-  standard_binding_status: mapped
+  standard_binding_status: pending-mapping
   codings:
-  - system: loinc
-    code: 89283-6
-    display: Dyspnea severity
   - system: snomed-ct
     code: '267036007'
-    display: Dyspnea (finding)
+    display: Dyspnea
   - system: icf
     code: b440
     display: Funktionen der Atmung
+  notes: 'Kein LOINC-Code für die Atemnot-NRS 0–10 auf dem MII TermServ (LOINC 2.83) gefunden; PROMIS
+    dyspnea severity 92149-4 ist ein T-Score, MRC-Skala 98070-6 ein Grad — Mapping offen. ICF-Codes sind
+    nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht verfügbar (Stand 2026-10-13); Codes
+    gemäß ICF-Browser belassen.'
 constraints_de: 'Wertebereich 0..10. In Sterbephase: RDOS-Fremdeinschätzung.'
 care_process:
   trigger: bei jeder Visite + nach Therapie-Anpassung
@@ -36,6 +38,14 @@ evidence:
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
     section: Empf. 9.1 (A); Tab. 9 Dimensionen Atemnot
     recommendation_grade: A
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.1 (Atemnot; Tab. 42 Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente)
+      — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-068 „Erfassung Atemnot“), Wortlaut-Verifikation
+      ausstehend
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation

@@ -7,15 +7,20 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: prom
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
 value_set:
   binding_strength: preferred
   codings:
-  - system: loinc
-    code: 73831-0
-    display: EORTC QLQ-C30 questionnaire
+  - system: snomed-ct
+    code: '273446001'
+    display: European Organisation for Research and Treatment of Cancer - Quality of Life questionnaire
+  - system: snomed-ct
+    code: '709503007'
+    display: Assessment of quality of life
+  standard_binding_status: mapped
 care_process:
   trigger: in jeder Linie, bei Restaging
   frequency_pattern: Q6-9W oder Q3M
@@ -29,7 +34,7 @@ evidence:
     recommendation_grade: Statement
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Kap. 16.6 Forschungsbedarf — Lebensqualität bei verschiedenen Nachsorgestrategien
     recommendation_grade: Statement

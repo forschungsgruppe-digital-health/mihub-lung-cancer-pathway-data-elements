@@ -8,15 +8,17 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..1
 unit: '{score}'
 value_set:
   binding_strength: required
-  codings:
-  - system: loinc
-    code: 63994-4
-    display: Distress thermometer NCCN
+  codings: []
+  standard_binding_status: pending-mapping
+  notes: LOINC 63994-4 ist auf dem MII TermServ (LOINC 2.83) nicht auffindbar; weder LOINC noch SNOMED
+    CT (20260701) führen ein Konzept für das NCCN Distress-Thermometer. Mapping offen (Antrag SNOMED CT
+    / LOINC oder lokales ValueSet).
 care_process:
   trigger: regelmäßig in Nachsorge
   frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
@@ -34,6 +36,13 @@ evidence:
     url: https://www.cancer.org.au/OCP
     section: Principle 4 Supportive care
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 11 (Verweis auf S3-LL Psychoonkologie — Screening; kein Instrument benannt); Empf.
+      16.1 (EK: Bedarf an Psychoonkologie erkennen)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation

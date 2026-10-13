@@ -8,20 +8,25 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: snomed-ct
-    code: '1217138004'
-    display: Immune-related adverse event
+    code: '62014003'
+    display: Adverse reaction to drug
   - system: snomed-ct
-    code: '233604007'
+    code: '205237003'
     display: Pneumonitis
   - system: snomed-ct
-    code: '190787008'
+    code: '408335007'
     display: Autoimmune hepatitis
+  - system: snomed-ct
+    code: '1345085000'
+    display: Immune checkpoint inhibitor therapy induced enterocolitis
+  standard_binding_status: mapped
 care_process:
   trigger: Verdachtsfall unter Checkpoint-Inhibitor
   frequency_pattern: per-encounter
@@ -29,11 +34,11 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 16.3.1 (immun-bezogene Komplikationen)
+    section: 'Kap. 16.3 (Einleitung: immun-bezogene Komplikationen); Kap. 16.3.1'
     recommendation_grade: EK
-    evidence_level: 1b
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:

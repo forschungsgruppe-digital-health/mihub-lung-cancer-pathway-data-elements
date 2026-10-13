@@ -8,6 +8,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: laborbefund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -15,11 +16,11 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: loinc
-    code: 84141-0
-    display: Circulating tumor DNA panel
+    code: 107453-3
+    display: Circulating tumor DNA [Interpretation] Narrative
   - system: snomed-ct
-    code: '765168009'
-    display: Liquid biopsy
+    code: '1285455002'
+    display: Detection of neoplasm in blood
   - system: kdl
     code: PT130102
     display: Molekularpathologiebefund

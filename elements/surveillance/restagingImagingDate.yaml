@@ -2,11 +2,14 @@ id: mihub.lung.surveillance.restagingImagingDate.v0.1
 uuid: 5f2a77d9-6070-5f17-b5bf-968329ee7319
 name: restagingImagingDate
 label_de: Restaging-Bildgebung Datum
-definition_de: Datum des CT Thorax/Abdomen/Becken zur Verlaufskontrolle unter laufender Systemtherapie.
+definition_de: Datum des CT Thorax/Abdomen/Becken zur Verlaufskontrolle unter laufender Systemtherapie
+  und in der therapiefreien Beobachtung nach Erstlinientherapie; Körperregionen über die OPS-/SNOMED-Codings
+  differenzierbar.
 phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: bildgebung
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -15,24 +18,53 @@ value_set:
   codings:
   - system: snomed-ct
     code: '169069000'
-    display: CT of thorax
+    display: CT of chest
+  - system: snomed-ct
+    code: '169070004'
+    display: CT of abdomen
+  - system: snomed-ct
+    code: '169071000'
+    display: CT of pelvis
+  - system: ops
+    code: 3-222
+    display: Computertomographie des Thorax mit Kontrastmittel
   - system: ops
     code: 3-225
-    display: Native CT, Thorax/Abdomen/Becken
+    display: Computertomographie des Abdomens mit Kontrastmittel
+  - system: ops
+    code: 3-226
+    display: Computertomographie des Beckens mit Kontrastmittel
   - system: kdl
     code: DG020103
     display: CT-Befund
 care_process:
-  trigger: alle 6–9 Wochen unter Systemtherapie
-  frequency_pattern: Q6-9W
+  trigger: Basisevaluation 1 Monat nach Abschluss der Induktionsbehandlung (S3 Empf. 16.9), danach alle
+    6–9 Wochen unter Systemtherapie (S3) bzw. 6–8 Wochen (Onkopedia NSCLC); SCLC zyklusbasiert nach 2–4
+    Zyklen
+  frequency_pattern: Q6-9W (S3) · Q6-8W (Onkopedia NSCLC) · per-cycle (SCLC)
   responsible_role: Radiologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.9 (B, modifiziert 2025)
-    recommendation_grade: B
+    section: Empf. 16.9 (EK, geprüft 2026); Kap. 16.4 (CT Thorax und CT Abdomen/Becken alle 6–9 Wochen
+      in Studien)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.2 (6–8-wöchige Intervalle nach Erstlinientherapie); Kap. 6.1.6.2 / Tab. 2 (symptom-
+      und therapieorientierte Diagnostik: CT Thorax/Oberbauch mit KM oder FDG-PET-CT)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.7 (Ansprechensbeurteilung nach 2–4 Zyklen); Modalität/Intervall unter Erhaltung
+      nicht spezifiziert
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -54,3 +86,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- Excel-Erhebung Nachsorge-WG 2026-07 (DE-044 CT-Thorax, DE-045 CT-Abdomen, DE-046 CT Becken, Surveillance)
+  hier zusammengeführt (Dubletten; Frequenz „alle 3–6 Wochen bei Erhaltungstherapie“ → surveillanceVisit).

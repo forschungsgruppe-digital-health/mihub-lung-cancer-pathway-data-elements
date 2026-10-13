@@ -7,6 +7,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 value_set:
@@ -14,7 +15,7 @@ value_set:
   codings:
   - system: loinc
     code: 89262-0
-    display: ECOG Performance Status
+    display: ECOG Performance Status [Interpretation]
 care_process:
   trigger: vor jedem Therapiezyklus
   frequency_pattern: per-cycle
@@ -22,9 +23,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.9
+    section: Empf. 16.9 (EK, geprüft 2026; Beschwerdebild/körperliche Untersuchung — ECOG nicht explizit
+      genannt)
     recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:

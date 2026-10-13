@@ -8,16 +8,16 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
 value_set:
   binding_strength: preferred
-  standard_binding_status: mapped
-  codings:
-  - system: loinc
-    code: 62133-0
-    display: Total score [Zarit Burden Interview]
+  standard_binding_status: pending-mapping
+  codings: []
+  notes: 'Zarit-Burden-Interview-Gesamtscore: kein LOINC-/SNOMED-CT-Code auf dem MII TermServ gefunden
+    (Stand 2026-10-13); Mapping offen.'
 constraints_de: 'Wertebereich abhängig vom Instrument: Zarit ZBI 0–88 (höher = höhere Belastung); ZBI
   Cut-offs 21 (mild)/40 (mittel)/61 (schwer). CAREPAL ist multi-dimensional; bitte das verwendete Instrument
   explizit in den begleitenden Notizen vermerken.'

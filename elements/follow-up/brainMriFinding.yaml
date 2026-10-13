@@ -9,6 +9,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -16,17 +17,17 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '94225009'
-    display: Secondary malignant neoplasm of brain
+    code: '94225005'
+    display: Metastatic malignant neoplasm to brain
   - system: snomed-ct
     code: '359746009'
-    display: Stable disease (finding)
+    display: Patient's condition stable
   - system: snomed-ct
     code: '260413007'
-    display: None (qualifier value)
+    display: None
   - system: snomed-ct
     code: '419984006'
-    display: Inconclusive (qualifier value)
+    display: Inconclusive
   - system: kdl
     code: DG020107
     display: MRT-Befund
@@ -44,7 +45,7 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.8 (EK); Kap. 16.3.4 (Watch-and-Wait, MRT alle 3 Mo bei SCLC ED)
     recommendation_grade: EK

@@ -8,28 +8,29 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: medikation
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: atc
-    code: L01XC18
+    code: L01FF02
     display: Pembrolizumab
   - system: atc
-    code: L01XC32
+    code: L01FF05
     display: Atezolizumab
   - system: atc
-    code: L01XC44
+    code: L01FF03
     display: Durvalumab
   - system: atc
-    code: L01XE13
+    code: L01EB03
     display: Afatinib
   - system: atc
-    code: L01XE35
+    code: L01EB04
     display: Osimertinib
   - system: atc
-    code: L01XE36
+    code: L01ED03
     display: Alectinib
   - system: atc
     code: L01CD01
@@ -37,6 +38,7 @@ value_set:
   - system: atc
     code: L01XA02
     display: Carboplatin
+  standard_binding_status: mapped
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
@@ -48,15 +50,22 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Kap. 16.4 / Empf. 16.9
     recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
     section: Kap. 6 Therapie
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.6 (Immun-Erhaltung ≥ 2 Jahre oder bis Progress); Kap. 6.1.1.2.1 (Durvalumab-Konsolidierung
+      LD, 2 Jahre)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

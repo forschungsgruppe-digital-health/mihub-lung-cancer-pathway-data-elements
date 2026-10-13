@@ -9,6 +9,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: bildgebung
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -20,35 +21,46 @@ value_set:
     display: MR Brain
   - system: snomed-ct
     code: '241601008'
-    display: MRI of brain (procedure)
+    display: MRI of head
+  - system: ops
+    code: 3-800
+    display: Native Magnetresonanztomographie des Schädels
   - system: ops
     code: 3-820
-    display: MRT Schädel
+    display: Magnetresonanztomographie des Schädels mit Kontrastmittel
   - system: kdl
     code: DG020107
     display: MRT-Befund
 care_process:
-  trigger: Bei Hochrisiko-Subgruppen; SCLC LD ohne PCI standardmäßig in Nachsorge.
-  frequency_pattern: Q3M-Y1 (SCLC LD ohne PCI); Q6-9M-Y1-Y3 (NSCLC Hochrisiko)
+  trigger: 'NSCLC: individuell hohes Risiko einer ZNS-Metastasierung — molekular (S3 Empf. 16.8: EGFR+,
+    ALK+, ROS1+, Adenokarzinom Stadium III; nach Maßgabe des interdisziplinären Behandlungsteams) oder
+    histologisch (Onkopedia NSCLC Kap. 8.1: großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige
+    Anteile/Mischtumoren, seltene Histologien), nur in den ersten 3 Jahren nach Lokaltherapie (Kann-Empfehlung).
+    SCLC LD ohne PCI: standardmäßig gemäß Onkopedia SCLC Tab. 9 (Steuerbedingung: prophylacticCranialIrradiationStatus).'
+  frequency_pattern: 'NSCLC: Q6-9M-Y1-Y3 (Onkopedia; S3 nennt kein Intervall) · SCLC LD ohne PCI: Q3M-Y1;Q6M-Y2;Q12M-Y3
+    (Mo 3–36 obligat, Mo 48/60 fakultativ; Onkopedia SCLC Tab. 9)'
   responsible_role: Radiologie / Onkologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (B, geprüft 2025)
-    recommendation_grade: B
+    section: Empf. 16.8 (EK, geprüft 2026) — regelmäßiges Schädel-MRT bei Hochrisiko, Intervall nicht
+      festgelegt
+    recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia SCLC
-    version: Stand 09/2025
+    version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: Tab. 9 (MRT Schädel bei LD ohne PCI)
+    section: 'Kap. 10.2, Tab. 9 (MRT Schädel bei LD ohne PCI: X Mo 3/6/9/12/18/24/36, (X) Mo 48/60)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.1 (Hochrisiko EGFR/ALK/ROS1)
+    section: 'Kap. 8.1 (Text nach Tab. 12: MRT-Schädel alle 6–9 Monate, nur in den ersten drei Jahren
+      nach Lokaltherapie, bei individuell hohem Risiko — histologische Kriterien; „sollte man durchaus
+      erwägen“)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -71,3 +83,8 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: prophylacticCranialIrradiationStatus
+- relation: dependsOn
+  target: brainMetastasisRiskProfile

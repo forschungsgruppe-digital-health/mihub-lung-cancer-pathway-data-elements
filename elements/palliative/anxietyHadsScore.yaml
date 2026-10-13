@@ -7,15 +7,20 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
 value_set:
   binding_strength: required
   codings:
-  - system: loinc
-    code: 62106-6
-    display: HADS Anxiety score
+  - system: snomed-ct
+    code: '401319005'
+    display: 'HAD scale: anxiety score'
+  - system: snomed-ct
+    code: '273524006'
+    display: Hospital anxiety and depression scale
+  standard_binding_status: mapped
 care_process:
   trigger: Aufnahme + Verlauf
   frequency_pattern: per-encounter

@@ -8,15 +8,18 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: example
-  standard_binding_status: no-standard-found
+  standard_binding_status: pending-mapping
   notes: Codes für deutsche Palliativ-Assessmentinstrumente (MIDOS2 — Klinik für Palliativmedizin TU Dresden;
     ESAS-r). LOINC kennt einzelne Items von ESAS und IPOS sowie den Distress-Thermometer-Score, jedoch
     nicht MIDOS2 oder ESAS-r als Instrumente. Die LOINC-/projekt-lokalen Codes sind hier gemischt; explizit
-    gekennzeichnet sind nur die nicht-standardisierten.
+    gekennzeichnet sind nur die nicht-standardisierten. IPOS über SNOMED CT 718975008 abgebildet; MIDOS2
+    und ESAS-r ohne Standardcode auf dem MII TermServ (Stand 2026-10-13) — lokale Platzhalter, Mapping
+    offen; NCCN Distress-Thermometer siehe distressThermometerScore.
   codings:
   - system: local-no-standard-binding
     code: MIDOS2
@@ -24,12 +27,9 @@ value_set:
   - system: local-no-standard-binding
     code: ESAS-r
     display: Edmonton Symptom Assessment System - Revised
-  - system: loinc
-    code: 89200-0
-    display: IPOS Integrated Palliative Care Outcome Scale
-  - system: loinc
-    code: 63994-4
-    display: NCCN Distress Thermometer
+  - system: snomed-ct
+    code: '718975008'
+    display: Integrated Palliative care Outcome Scale Patient Version (1 week recall period)
 care_process:
   trigger: Aufnahme + regelmäßig
   frequency_pattern: Q1W in SPV; per-encounter in APV

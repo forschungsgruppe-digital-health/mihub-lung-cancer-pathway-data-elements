@@ -9,35 +9,68 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: snomed-ct
-    code: '233604007'
-    display: Pneumonitis (disorder)
+    code: '84004001'
+    display: Radiation pneumonitis
   - system: snomed-ct
-    code: '16348002'
-    display: Radiation oesophagitis
+    code: '205237003'
+    display: Pneumonitis
+  - system: snomed-ct
+    code: '235605005'
+    display: Radiation esophagitis
+  - system: snomed-ct
+    code: '51615001'
+    display: Fibrosis of lung
+  - system: snomed-ct
+    code: '709073001'
+    display: Neurocognitive disorder
   - system: icd-10-gm
     code: T66
-    display: Strahlenschäden, nicht näher bezeichnet
+    display: Nicht näher bezeichnete Schäden durch Strahlung
   - system: icd-10-gm
     code: J70.1
-    display: Chronische pulmonale Manifestation Strahlentherapie
+    display: Chronische und sonstige Lungenbeteiligung bei Strahleneinwirkung
+  standard_binding_status: mapped
 care_process:
-  trigger: Bei Erstvorstellung 8 Wo nach Therapieende und bei jeder Folgevisite
+  trigger: Bei Erstvorstellung innerhalb von 8 Wochen nach Therapieende (nach OP Stadium I–III; nach RT/RCT
+    Stadium I–II; NSCLC Stadium III nach RT/RCT) und bei jeder Folgevisite
   frequency_pattern: per-encounter
   responsible_role: Onkologe / Pneumologe
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.4 (EK), 16.5 (A/B, 1a); Kap. 16.3.1
+    section: Empf. 16.4 (EK, geprüft 2026); Kap. 16.3.1 (Komplikationen nach OP und RT)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.5 (A/B, LoE 2, geprüft 2026) — NSCLC Stadium III nach RT/RCT
     recommendation_grade: A
-    evidence_level: 1a
+    evidence_level: '2'
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 7 (Therapiefolgestörungen); Kap. 8.1 (Nachsorgeziel: Erkennung von Nebenwirkungen der
+      Therapie); Kap. 6.2.2.1 (Strahlenpneumonitis → Fibrose, 6–24 Monate nach RT); Kap. 6.1.6.1 (kognitive
+      und neurologische Langzeitnebenwirkungen nach Ganzhirnbestrahlung)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 6.1.1.3 (kognitive Einschränkung nach PCI); Kap. 10.2 (Nachsorgeziel: Nebenwirkungen
+      der Therapie)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:

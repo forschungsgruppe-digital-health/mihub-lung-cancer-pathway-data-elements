@@ -7,14 +7,15 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: mitbetreuung
 datatype: boolean
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '385763009'
-    display: Psycho-oncology counselling
+    code: '428997004'
+    display: Psychosocial counseling about cancer
 care_process:
   trigger: Distress-Screening positiv
   frequency_pattern: ad-hoc
@@ -22,9 +23,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.1 (EK)
+    section: 'Empf. 16.1 (EK, geprüft 2026); Empf. 16.2 (EK: Verlaufsplan Stadium IV); Empf. 8.77 (EK,
+      geprüft 2026); Kap. 11 (Verweis auf S3-LL Psychoonkologie)'
     recommendation_grade: EK
     evidence_level: n/a
   - source: OCP Lung (AU)

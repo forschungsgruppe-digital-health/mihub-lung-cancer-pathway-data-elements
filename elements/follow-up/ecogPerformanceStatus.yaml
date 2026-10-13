@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..1
 value_set:
@@ -15,10 +16,10 @@ value_set:
   codings:
   - system: loinc
     code: 89262-0
-    display: ECOG Performance Status
+    display: ECOG Performance Status [Interpretation]
   - system: snomed-ct
     code: '423740007'
-    display: Eastern Cooperative Oncology Group performance status finding
+    display: ECOG performance status
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-allgemeiner-leistungszustand-ecog
@@ -32,10 +33,10 @@ care_process:
 evidence:
   guideline_references:
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 5.6 Allgemeinzustand und Komorbidität — ECOG PS als Standard-Erfassung
-      im onkologischen Kontext
+    section: Kap. 5.6 Allgemeinzustand und Komorbidität — ECOG PS als Standard-Erfassung im onkologischen
+      Kontext
     recommendation_grade: Statement
     evidence_level: n/a
   - source: S3-LL Palliativmedizin

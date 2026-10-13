@@ -7,20 +7,18 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: code
 cardinality: 0..*
 value_set:
   binding_strength: required
   codings:
   - system: snomed-ct
-    code: '410429000'
-    display: Nociceptive pain
+    code: '735644008'
+    display: Chronic nociceptive pain
   - system: snomed-ct
     code: '247398009'
     display: Neuropathic pain
-  - system: snomed-ct
-    code: '278860009'
-    display: Chronic mixed pain
 care_process:
   trigger: Erstanamnese + bei Therapie-Anpassung
   frequency_pattern: ad-hoc
@@ -53,3 +51,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Mischschmerz (mixed pain): kein SNOMED-CT-Konzept auf dem MII TermServ gefunden (Stand 2026-10-13)
+  — ggf. lokaler Code oder Antrag.'

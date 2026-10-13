@@ -10,6 +10,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: mitbetreuung
 datatype: boolean
 cardinality: 1..1
 value_set:
@@ -35,6 +36,13 @@ evidence:
     url: https://www.cancer.org.au/OCP
     section: Step 6 (palliative care from diagnosis)
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 8.6 (EK, modifiziert 2026: regelmäßiges standardisiertes Symptomassessment + frühzeitige
+      Palliativberatung); Empf. 16.2 (EK: Bedarf an Palliativmedizin im Verlaufsplan erkennen)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: procedure

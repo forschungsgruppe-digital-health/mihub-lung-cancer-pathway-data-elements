@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
@@ -17,13 +18,15 @@ value_set:
   codings:
   - system: loinc
     code: 72514-3
-    display: Pain severity NRS
+    display: Pain severity - 0-10 verbal numeric rating [Score] - Reported
   - system: kdl
     code: VL010103
     display: Schmerzerhebungsbogen
   - system: icf
     code: b280
     display: Schmerz
+  notes: 'ICF-Codes sind nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht verfügbar (Stand
+    2026-10-13); Codes gemäß ICF-Browser belassen.'
 care_process:
   trigger: bei jeder Visite + bei jeder schmerztherapeutischen Maßnahme
   frequency_pattern: per-encounter
@@ -41,6 +44,13 @@ evidence:
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
     section: Empf. 10.1 (A) — Fremdeinschätzung bei kognitiver/körperlicher Einschränkung
     recommendation_grade: A
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.3.2 (Schmerz) — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-067 „Schmerzerfassung“),
+      Wortlaut-Verifikation ausstehend
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation

@@ -8,18 +8,18 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: Codes für deutschsprachige Angehörigenbelastungs-Instrumente CAREPAL und HPS-DEGAM. LOINC kennt
+  notes: 'Codes für deutschsprachige Angehörigenbelastungs-Instrumente CAREPAL und HPS-DEGAM. LOINC kennt
     Zarit Burden Interview (62133-0, oben verwendet), nicht aber CAREPAL oder die Häusliche Pflegeskala
-    der DEGAM. Nur diese beiden Codes sind projekt-lokal.
+    der DEGAM. Nur diese beiden Codes sind projekt-lokal. Zarit Burden Interview: weder LOINC 2.83 noch
+    SNOMED CT 20260701 führen auf dem MII TermServ ein Konzept (Stand 2026-10-13); CAREPAL/HPS-DEGAM bleiben
+    projekt-lokal.'
   codings:
-  - system: loinc
-    code: 62133-0
-    display: Zarit Burden Interview
   - system: local-no-standard-binding
     code: CAREPAL
     display: Multidimensionaler CAREPAL-Fragebogen

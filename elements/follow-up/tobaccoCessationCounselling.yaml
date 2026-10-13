@@ -10,6 +10,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: prozedur
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -20,20 +21,27 @@ value_set:
     code: '710081004'
     display: Smoking cessation therapy
   - system: snomed-ct
-    code: '171055004'
-    display: Anti-smoking education
+    code: '225323000'
+    display: Smoking cessation education
   - system: atc
     code: N07BA03
     display: Vareniclin
   - system: atc
     code: N07BA01
-    display: Nikotinersatz
+    display: Nicotin
   - system: icd-10-gm
-    code: Z71.6
-    display: Beratung bei Tabakkonsum
+    code: Z72.0
+    display: 'Probleme mit Bezug auf: Konsum von Alkohol, Tabak, Arzneimitteln oder Drogen'
   - system: snomed-ct
-    code: '386516008'
-    display: Tobacco use cessation education (procedure)
+    code: '702388001'
+    display: Tobacco use cessation education
+instruction_de: 'Beratung nach ABC-Schema empfohlen (S3-LL Lungenkarzinom v5.01 Empf. 4.3). DiGA-Optionen
+  (Digitale Gesundheitsanwendungen, BfArM-DiGA-Verzeichnis) können als Vermittlungsweg in instruction_de
+  oder im Versorgungs-Setup konkretisiert werden.
+
+  G-BA-Erstattung von Nikotinersatztherapie/Vareniclin seit 20.08.2025 (Fagerström ≥ 6 bzw. tabakassoziierte
+  chronische Lungen-/Herzerkrankung; 3 Monate, Wiederholung frühestens nach 3 Jahren) — S3-LL 5.1 Kap.
+  4.2.1.'
 care_process:
   trigger: bei Status 'Smoker' / 'Occasional smoker'
   frequency_pattern: per-encounter-if-indicated
@@ -41,11 +49,25 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.3 (B)
+    section: 'Empf. 4.3 (A, LoE 1, modifiziert 2026): strukturierte Beratung (z. B. ABC-Schema) und Vermittlung
+      an professionelle Tabakentwöhnung (Kurse, Telefonberatung, DiGA)'
+    recommendation_grade: A
+    evidence_level: '1'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 4.4 (A, LoE 1, modifiziert 2026): pharmakologische Therapie (Nikotinersatz, Vareniclin)
+      allen rauchenden Patienten anbieten'
+    recommendation_grade: A
+    evidence_level: '1'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.3 (B, LoE 3, geprüft 2026)
     recommendation_grade: B
-    evidence_level: 2b
+    evidence_level: '3'
   - source: S3-LL Tabakentwöhnung
     version: 1.0 (03/2021, AWMF 076-006l)
     url: https://register.awmf.org/de/leitlinien/detail/076-006
@@ -72,6 +94,3 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
-instruction_de: Beratung nach ABC-Schema empfohlen (S3-LL Lungenkarzinom v5.01 Empf. 4.3). DiGA-Optionen
-  (Digitale Gesundheitsanwendungen, BfArM-DiGA-Verzeichnis) können als Vermittlungsweg in instruction_de
-  oder im Versorgungs-Setup konkretisiert werden.

@@ -9,13 +9,14 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungsplanung
 datatype: boolean
 cardinality: 1..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '713600000'
+    code: '713603004'
     display: Advance care planning
 standard_mappings:
 - standard: fhir-r4-base

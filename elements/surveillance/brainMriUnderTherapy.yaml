@@ -8,6 +8,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: bildgebung
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -17,20 +18,47 @@ value_set:
   - system: loinc
     code: 24590-2
     display: MR Brain
+  - system: snomed-ct
+    code: '241601008'
+    display: MRI of head
+  - system: ops
+    code: 3-800
+    display: Native Magnetresonanztomographie des Schädels
+  - system: ops
+    code: 3-820
+    display: Magnetresonanztomographie des Schädels mit Kontrastmittel
   - system: kdl
     code: DG020107
     display: MRT-Befund
 care_process:
-  trigger: klinischer Verdacht ODER Hochrisiko-Genotyp ODER SCLC ED Watch-and-Wait
-  frequency_pattern: Q3M (SCLC ED W&W); ad-hoc bei Symptomen
+  trigger: 'klinischer Verdacht auf Hirnmetastasen (S3 Empf. 16.9) ODER Hochrisiko-Genotyp (NSCLC EGFR/ALK/ROS1;
+    ALK+: MRT bei Diagnosestellung und strukturiert alle 3–6 Monate auch asymptomatisch — Onkopedia NSCLC
+    Kap. 6.1.6.2.1.1) ODER SCLC ED Watch-and-Wait nach Verzicht auf PCI (siehe prophylacticCranialIrradiationStatus)'
+  frequency_pattern: Q3-6M (NSCLC ALK+) · Q3M (SCLC ED Watch-and-Wait; S3 Kap. 16.3.4 — Onkopedia SCLC
+    legt kein Intervall fest, 3-monatlich entspricht dem Kontrollarm Takahashi 2017) · ad-hoc bei Symptomen
   responsible_role: Radiologie / Onkologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 16.3.4 (NSCLC EGFR/ALK/ROS1; SCLC ED Watch-and-Wait)
+    section: 'Kap. 16.3.4 (NSCLC EGFR/ALK/ROS1; SCLC ED Watch-and-Wait: MRT Schädel alle 3 Monate); Empf.
+      16.9 (EK: MRT Schädel bei Verdacht auf Hirnmetastasen)'
     recommendation_grade: Statement
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.1.6.2.1.1 (ALK+: MRT bei Diagnosestellung; strukturierte Bildgebung z. B. alle 3–6
+      Monate auch asymptomatisch)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 6.1.1.5; Kap. 8.2.2 (ED: PCI als Alternative zur Überwachung mit MR-Verlaufskontrollen,
+      individuell zu erörtern; Intervall nicht festgelegt)'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -52,3 +80,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: prophylacticCranialIrradiationStatus

@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungskontext
 datatype: boolean
 cardinality: 0..1
 value_set:
@@ -15,8 +16,8 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '419099009'
-    display: Dying
+    code: '399069006'
+    display: Dying process
   - system: icd-10-gm
     code: Z51.5
     display: Palliativbehandlung

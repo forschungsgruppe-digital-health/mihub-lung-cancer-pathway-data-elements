@@ -9,6 +9,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -17,16 +18,19 @@ value_set:
   codings:
   - system: snomed-ct
     code: '359746009'
-    display: Stable disease (finding)
+    display: Patient's condition stable
   - system: snomed-ct
-    code: '417798001'
-    display: Recurrent neoplasm (finding)
+    code: '1259237005'
+    display: Recurrent malignant neoplasm
   - system: snomed-ct
     code: '128462008'
-    display: Secondary malignant neoplastic disease
+    display: Metastatic malignant neoplasm
+  - system: snomed-ct
+    code: '878806005'
+    display: Second primary cancer
   - system: snomed-ct
     code: '419984006'
-    display: Inconclusive (qualifier value)
+    display: Inconclusive
   - system: loinc
     code: 59776-5
     display: Procedure findings Narrative
@@ -53,10 +57,10 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 42 (CT Thorax: Tumorkinetik); Empf. 16.7 (geprüft 2025)'
-    recommendation_grade: B
+    section: 'Tab. 44 (CT Thorax: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: evaluation
