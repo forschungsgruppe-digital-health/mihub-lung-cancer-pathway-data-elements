@@ -100,4 +100,4 @@ issues:
   wäre z. B. als status not-done mit statusReason abzubilden.'
 related_elements:
 - relation: hasPart
-  target: advanceDirectiveDocument
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1

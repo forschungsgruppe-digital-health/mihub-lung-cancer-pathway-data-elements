@@ -130,6 +130,6 @@ issues:
   type.coding:KDL) als nationales FHIR-Ziel ergänzt werden soll.'
 related_elements:
 - relation: generalizes
-  target: survivorshipCarePlan
+  target: mihub.lung.followup.survivorshipCarePlan.v0.1
 - relation: hasPart
-  target: recommendationsForPrimaryCare
+  target: mihub.lung.primarycare.recommendationsForPrimaryCare.v0.1

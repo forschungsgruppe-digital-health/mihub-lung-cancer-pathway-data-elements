@@ -109,4 +109,4 @@ issues:
   nur als Hinweis (Condition bzw. Flag) führen.'
 related_elements:
 - relation: dependsOn
-  target: advanceDirectiveDocument
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1

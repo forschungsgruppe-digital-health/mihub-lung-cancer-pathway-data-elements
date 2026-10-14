@@ -145,6 +145,6 @@ issues:
   anpassen (z. B. ‚Progress/Rezidiv inkl. neu aufgetretener Metastasen‘).
 related_elements:
 - relation: generalizes
-  target: recistResponse
+  target: mihub.lung.surveillance.recistResponse.v0.1
 - relation: generalizes
-  target: recurrenceOrSecondPrimary
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1

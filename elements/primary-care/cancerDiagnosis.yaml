@@ -135,8 +135,8 @@ issues:
   Diagnosedatum.'
 related_elements:
 - relation: hasPart
-  target: tumorLocalisation
+  target: mihub.lung.primarycare.tumorLocalisation.v0.1
 - relation: hasPart
-  target: tumorHistology
+  target: mihub.lung.primarycare.tumorHistology.v0.1
 - relation: hasPart
-  target: tnmStage
+  target: mihub.lung.primarycare.tnmStage.v0.1

@@ -176,6 +176,6 @@ issues:
   festlegen, insbesondere für Checkpoint-Inhibitor-, Erhaltungs- und Radiochemotherapie.'
 related_elements:
 - relation: generalizes
-  target: curativeTreatmentModality
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1
 - relation: generalizes
-  target: systemicTherapyRegimen
+  target: mihub.lung.surveillance.systemicTherapyRegimen.v0.1

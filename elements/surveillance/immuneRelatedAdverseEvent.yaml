@@ -97,4 +97,4 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: specializes
-  target: adverseEventCtcae
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1

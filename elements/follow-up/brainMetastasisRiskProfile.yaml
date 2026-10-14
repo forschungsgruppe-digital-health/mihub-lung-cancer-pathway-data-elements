@@ -122,6 +122,6 @@ issues:
   oder als Referenzen in RiskAssessment.basis; (c) ob das Element in Stufe und Kriterium aufgeteilt wird.'
 related_elements:
 - relation: dependsOn
-  target: tumorHistology
+  target: mihub.lung.primarycare.tumorHistology.v0.1
 - relation: dependsOn
-  target: tnmStage
+  target: mihub.lung.primarycare.tnmStage.v0.1

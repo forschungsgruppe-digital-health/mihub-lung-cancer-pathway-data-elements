@@ -98,8 +98,8 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: isPartOf
-  target: survivorshipCarePlan
+  target: mihub.lung.followup.survivorshipCarePlan.v0.1
 - relation: dependsOn
-  target: tumorBoardDecision
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1
 - relation: isPartOf
-  target: dischargeOrVisitReport
+  target: mihub.lung.primarycare.dischargeOrVisitReport.v0.1

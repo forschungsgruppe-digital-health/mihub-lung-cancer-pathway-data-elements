@@ -131,6 +131,6 @@ issues:
   passend).'
 related_elements:
 - relation: dependsOn
-  target: advanceCarePlanning
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1
 - relation: dependsOn
-  target: tumorBoardDecision
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1

@@ -77,4 +77,4 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: coTreatingProviderContact
+  target: mihub.lung.primarycare.coTreatingProviderContact.v0.1

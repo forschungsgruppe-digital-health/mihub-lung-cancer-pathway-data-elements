@@ -116,6 +116,6 @@ issues:
   16.3 nennt „immun-bezogene Komplikationen“.'
 related_elements:
 - relation: specializes
-  target: treatmentSideEffectOrComplication
+  target: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
 - relation: dependsOn
-  target: curativeTreatmentModality
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1

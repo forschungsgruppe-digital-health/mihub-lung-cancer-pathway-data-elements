@@ -81,4 +81,4 @@ issues:
   (ebenfalls SD150101) entscheiden.'
 related_elements:
 - relation: dependsOn
-  target: curativeTreatmentModality
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1

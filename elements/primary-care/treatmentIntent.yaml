@@ -112,8 +112,8 @@ issues:
   -strahlentherapie-intention, -systemische-therapie-intention) als nationales FHIR-Ziel ergänzt werden.'
 related_elements:
 - relation: isPartOf
-  target: tumorBoardDecision
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1
 - relation: dependsOn
-  target: advanceCarePlanning
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1
 - relation: dependsOn
-  target: tnmStage
+  target: mihub.lung.primarycare.tnmStage.v0.1

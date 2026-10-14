@@ -87,4 +87,4 @@ issues:
   zu prüfen; das wurde lokal nicht verifiziert (UNSICHER).
 related_elements:
 - relation: dependsOn
-  target: rehabilitationMeasure
+  target: mihub.lung.followup.rehabilitationMeasure.v0.1

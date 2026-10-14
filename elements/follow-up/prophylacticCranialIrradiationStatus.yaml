@@ -167,6 +167,6 @@ issues:
   als Procedure not-done oder als eigene Observation führen und die Intention der PCI (K oder P) festlegen.'
 related_elements:
 - relation: dependsOn
-  target: curativeTreatmentModality
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1
 - relation: dependsOn
-  target: recistResponse
+  target: mihub.lung.surveillance.recistResponse.v0.1

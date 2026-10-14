@@ -91,6 +91,6 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: treatmentSideEffectOrComplication
+  target: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
 - relation: dependsOn
-  target: cancerTreatmentHistory
+  target: mihub.lung.primarycare.cancerTreatmentHistory.v0.1

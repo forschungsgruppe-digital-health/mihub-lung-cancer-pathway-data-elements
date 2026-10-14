@@ -96,4 +96,4 @@ issues:
   nicht spezifiziert).
 related_elements:
 - relation: dependsOn
-  target: followUpVisitDate
+  target: mihub.lung.followup.followUpVisitDate.v0.1

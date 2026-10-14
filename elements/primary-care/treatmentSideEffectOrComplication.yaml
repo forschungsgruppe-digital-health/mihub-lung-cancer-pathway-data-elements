@@ -107,8 +107,8 @@ issues:
   per Arztbrief) und Übernahme als ICD-kodierte Diagnose im PVS durch die Hausärzt:in.'
 related_elements:
 - relation: generalizes
-  target: postTherapyComplication
+  target: mihub.lung.followup.postTherapyComplication.v0.1
 - relation: generalizes
-  target: adverseEventCtcae
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1
 - relation: dependsOn
-  target: cancerTreatmentHistory
+  target: mihub.lung.primarycare.cancerTreatmentHistory.v0.1

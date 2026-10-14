@@ -149,6 +149,6 @@ issues:
   integer.'
 related_elements:
 - relation: specializes
-  target: qolEortcQlqC30
+  target: mihub.lung.surveillance.qolEortcQlqC30.v0.1
 - relation: dependsOn
-  target: symptomAssessmentInstrument
+  target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1

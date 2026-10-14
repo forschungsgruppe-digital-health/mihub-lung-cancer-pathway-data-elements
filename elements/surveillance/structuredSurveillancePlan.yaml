@@ -68,6 +68,6 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: specializes
-  target: structuredFollowUpPlan
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.1
 - relation: dependsOn
-  target: therapyLineNumber
+  target: mihub.lung.surveillance.therapyLineNumber.v0.1

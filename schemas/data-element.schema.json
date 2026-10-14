@@ -394,7 +394,7 @@
             "type": "string",
             "enum": ["isPartOf", "hasPart", "specializes", "generalizes", "dependsOn", "supersedes", "supersededBy"]
           },
-          "target": { "type": "string" }
+          "target": { "type": "string", "pattern": "^mihub\\.lung\\.[a-z]+\\.[a-zA-Z][a-zA-Z0-9]*\\.v[0-9]+\\.[0-9]+$", "description": "Vollständige id des Ziel-Datenelements (mihub.lung.<phase>.<name>.v<major>.<minor>); scripts/validate.py prüft zusätzlich, dass das Ziel existiert." }
         }
       }
     }

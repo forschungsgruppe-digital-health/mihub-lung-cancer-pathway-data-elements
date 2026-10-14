@@ -102,8 +102,8 @@ issues:
   Empfehlungen“) vorher mit der Erhebungsquelle (Excel-Erhebung Allgemeinmedizin) abstimmen.'
 related_elements:
 - relation: dependsOn
-  target: phq9DepressionScore
+  target: mihub.lung.palliative.phq9DepressionScore.v0.1
 - relation: dependsOn
-  target: anxietyHadsScore
+  target: mihub.lung.palliative.anxietyHadsScore.v0.1
 - relation: dependsOn
-  target: standardizedAssessmentScore
+  target: mihub.lung.primarycare.standardizedAssessmentScore.v0.1

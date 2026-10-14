@@ -116,10 +116,10 @@ issues:
   die Rollen nur in diesem Element zu trennen.'
 related_elements:
 - relation: dependsOn
-  target: firstFollowUpVisitDate
+  target: mihub.lung.followup.firstFollowUpVisitDate.v0.1
 - relation: dependsOn
-  target: followUpInterval
+  target: mihub.lung.followup.followUpInterval.v0.1
 - relation: hasPart
-  target: followUpHistoryFinding
+  target: mihub.lung.followup.followUpHistoryFinding.v0.1
 - relation: hasPart
-  target: physicalExaminationFinding
+  target: mihub.lung.followup.physicalExaminationFinding.v0.1

@@ -115,6 +115,6 @@ issues:
   ergänzen oder das Element als Freitext bzw. Dokument (CarePlan.description, MII Dokument) belassen.'
 related_elements:
 - relation: hasPart
-  target: treatmentIntent
+  target: mihub.lung.primarycare.treatmentIntent.v0.1
 - relation: hasPart
-  target: curativeRecurrencePotential
+  target: mihub.lung.followup.curativeRecurrencePotential.v0.1

@@ -129,6 +129,6 @@ issues:
   (oBDS 13.1, 14.1, 16.1). Für den Registerexport ist das Element in jedem Fall nur teilweise abbildbar.'
 related_elements:
 - relation: dependsOn
-  target: recurrenceOrSecondPrimary
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1
 - relation: dependsOn
-  target: tumorBoardDecision
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1

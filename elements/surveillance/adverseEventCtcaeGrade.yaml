@@ -121,6 +121,6 @@ issues:
   Die Grad-2-Abweichung (6736007 statt ConceptMap-Ziel 1255665007) ist in value_set.notes bereits begründet.'
 related_elements:
 - relation: isPartOf
-  target: adverseEventCtcae
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1
 - relation: isPartOf
-  target: immuneRelatedAdverseEvent
+  target: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1

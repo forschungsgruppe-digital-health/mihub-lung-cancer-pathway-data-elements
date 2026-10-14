@@ -126,8 +126,8 @@ issues:
   Status.'
 related_elements:
 - relation: isPartOf
-  target: followUpVisitDate
+  target: mihub.lung.followup.followUpVisitDate.v0.1
 - relation: isPartOf
-  target: surveillanceVisit
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1
 - relation: isPartOf
-  target: postInductionEvaluationDate
+  target: mihub.lung.surveillance.postInductionEvaluationDate.v0.1

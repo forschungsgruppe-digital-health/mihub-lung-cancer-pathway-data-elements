@@ -116,4 +116,4 @@ issues:
   zu 171001002 ''Benefits counseling''.'
 related_elements:
 - relation: dependsOn
-  target: structuredFollowUpPlan
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.1

@@ -93,4 +93,4 @@ issues:
   zur Rolle der KDL-Codings bei code-Elementen nötig (siehe complexityLevel).'
 related_elements:
 - relation: dependsOn
-  target: complexityLevel
+  target: mihub.lung.palliative.complexityLevel.v0.1

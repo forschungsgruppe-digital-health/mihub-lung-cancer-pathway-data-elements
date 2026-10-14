@@ -104,12 +104,12 @@ issues:
   examination'' im Visiten-Wertebereich bleiben.'
 related_elements:
 - relation: hasPart
-  target: physicalExaminationFinding
+  target: mihub.lung.followup.physicalExaminationFinding.v0.1
 - relation: dependsOn
-  target: postInductionEvaluationDate
+  target: mihub.lung.surveillance.postInductionEvaluationDate.v0.1
 - relation: hasPart
-  target: consultationModality
+  target: mihub.lung.surveillance.consultationModality.v0.1
 - relation: dependsOn
-  target: structuredSurveillancePlan
+  target: mihub.lung.surveillance.structuredSurveillancePlan.v0.1
 - relation: hasPart
-  target: adverseEventCtcae
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1

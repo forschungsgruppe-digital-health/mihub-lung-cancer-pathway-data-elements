@@ -76,6 +76,6 @@ issues:
   S3 Kap. 16.3.4: „Ob eine weitere Nachsorge nach 5 Jahren sinnvoll ist, ist strittig.“'
 related_elements:
 - relation: dependsOn
-  target: followUpInterval
+  target: mihub.lung.followup.followUpInterval.v0.1
 - relation: dependsOn
-  target: smokingStatus
+  target: mihub.lung.followup.smokingStatus.v0.1

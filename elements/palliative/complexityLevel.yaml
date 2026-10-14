@@ -91,6 +91,6 @@ related_elements:
 - relation: dependsOn
   target: mihub.lung.palliative.functionalStatus.v0.1
 - relation: dependsOn
-  target: symptomAssessmentInstrument
+  target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1
 - relation: dependsOn
-  target: caregiverBurden
+  target: mihub.lung.palliative.caregiverBurden.v0.1

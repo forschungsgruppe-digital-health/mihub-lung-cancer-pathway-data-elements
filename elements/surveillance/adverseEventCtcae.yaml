@@ -81,4 +81,4 @@ issues:
   UNSICHER).'
 related_elements:
 - relation: hasPart
-  target: adverseEventCtcaeGrade
+  target: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.1

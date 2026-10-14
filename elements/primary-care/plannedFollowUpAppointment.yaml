@@ -95,6 +95,6 @@ issues:
   die data_flows sehen für das PVS aber nur read vor und keinen capture für hausärztliche Wiedervorstellungen.'
 related_elements:
 - relation: dependsOn
-  target: followUpInterval
+  target: mihub.lung.followup.followUpInterval.v0.1
 - relation: dependsOn
-  target: referralOrder
+  target: mihub.lung.primarycare.referralOrder.v0.1

@@ -109,8 +109,8 @@ issues:
   oder die Transformation integer → Quantity als Mapping-Regel festhalten.'
 related_elements:
 - relation: generalizes
-  target: phq9DepressionScore
+  target: mihub.lung.palliative.phq9DepressionScore.v0.1
 - relation: generalizes
-  target: anxietyHadsScore
+  target: mihub.lung.palliative.anxietyHadsScore.v0.1
 - relation: generalizes
-  target: distressThermometerScore
+  target: mihub.lung.followup.distressThermometerScore.v0.1

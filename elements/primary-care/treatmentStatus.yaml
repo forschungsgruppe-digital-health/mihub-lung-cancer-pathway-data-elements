@@ -115,4 +115,4 @@ issues:
   zu completed festlegen.'
 related_elements:
 - relation: dependsOn
-  target: cancerTreatmentHistory
+  target: mihub.lung.primarycare.cancerTreatmentHistory.v0.1

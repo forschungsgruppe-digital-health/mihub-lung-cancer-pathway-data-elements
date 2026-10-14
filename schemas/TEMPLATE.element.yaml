@@ -108,4 +108,6 @@ provenance:
   git_commit: ""                               # füllt CI
 
 issues: []                                     # offene Punkte
-related_elements: []                           # Beziehungen
+related_elements: []                           # Beziehungen; target = vollständige id des Ziel-Elements, z. B.
+#   - relation: dependsOn                      # isPartOf|hasPart|specializes|generalizes|dependsOn|supersedes|supersededBy
+#     target: mihub.lung.followup.ctThoraxScan.v0.1   # validate.py prüft, dass die id existiert

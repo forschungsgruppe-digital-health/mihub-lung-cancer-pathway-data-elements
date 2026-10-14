@@ -113,8 +113,8 @@ issues:
   Leistung bzw. Anbindung).'
 related_elements:
 - relation: dependsOn
-  target: earlyPalliativeReferral
+  target: mihub.lung.surveillance.earlyPalliativeReferral.v0.1
 - relation: dependsOn
-  target: palliativeCareTier
+  target: mihub.lung.palliative.palliativeCareTier.v0.1
 - relation: dependsOn
-  target: rehabilitationMeasure
+  target: mihub.lung.followup.rehabilitationMeasure.v0.1

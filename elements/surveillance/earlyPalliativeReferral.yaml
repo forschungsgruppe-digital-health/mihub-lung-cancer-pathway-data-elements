@@ -105,4 +105,4 @@ related_elements:
 - relation: dependsOn
   target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1
 - relation: dependsOn
-  target: complexityLevel
+  target: mihub.lung.palliative.complexityLevel.v0.1

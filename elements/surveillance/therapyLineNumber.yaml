@@ -71,4 +71,4 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: systemicTherapyRegimen
+  target: mihub.lung.surveillance.systemicTherapyRegimen.v0.1

@@ -119,4 +119,4 @@ issues:
   Änderung in nur einem Element ließe die beiden Schädel-MRT-Elemente auseinanderlaufen.'
 related_elements:
 - relation: dependsOn
-  target: prophylacticCranialIrradiationStatus
+  target: mihub.lung.followup.prophylacticCranialIrradiationStatus.v0.1

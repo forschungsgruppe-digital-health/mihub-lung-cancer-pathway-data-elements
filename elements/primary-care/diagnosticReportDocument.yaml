@@ -163,8 +163,8 @@ issues:
   in den value_set aufnehmen oder nur als Mapping-Regel KDL → IHE-D dokumentieren.'
 related_elements:
 - relation: hasPart
-  target: tumorHistology
+  target: mihub.lung.primarycare.tumorHistology.v0.1
 - relation: hasPart
-  target: ctThoraxFinding
+  target: mihub.lung.followup.ctThoraxFinding.v0.1
 - relation: hasPart
-  target: brainMriFinding
+  target: mihub.lung.followup.brainMriFinding.v0.1

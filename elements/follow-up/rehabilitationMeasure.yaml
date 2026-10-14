@@ -97,4 +97,4 @@ issues:
   des Antragsdokuments (eigenes Mapping) geführt werden.
 related_elements:
 - relation: dependsOn
-  target: rehabilitationAndSocialCounselling
+  target: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1

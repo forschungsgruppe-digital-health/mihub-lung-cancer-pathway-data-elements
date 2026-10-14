@@ -92,4 +92,4 @@ issues:
   auf Wunsch der Nachsorge-WG mit S3-Beleg (Option).
 related_elements:
 - relation: dependsOn
-  target: followUpVisitDate
+  target: mihub.lung.followup.followUpVisitDate.v0.1

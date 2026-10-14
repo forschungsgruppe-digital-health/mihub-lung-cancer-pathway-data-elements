@@ -106,6 +106,6 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: recurrenceOrSecondPrimary
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1
 - relation: dependsOn
-  target: curativeRecurrencePotential
+  target: mihub.lung.followup.curativeRecurrencePotential.v0.1

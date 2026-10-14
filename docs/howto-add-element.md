@@ -183,7 +183,9 @@ python scripts/verify-terminology.py --cert client.crt --key client.key elements
 Prüft jedes Coding per `$lookup` gegen den MII TermServ (mTLS; Zertifikat **nicht** ins Repo) und zeigt nicht auffindbare/inaktive Codes sowie abweichende Anzeigetexte. Konvention: `display` = Anzeigetext des Servers.
 
 Bei Einstufung `DUBLETTE`/`NAH-DUBLETTE`: bestehendes Element verfeinern statt neu anlegen; bei
-`VERWANDT`: per `related_elements[]` verlinken. (Heuristik — Letztentscheidung beim Menschen.)
+`VERWANDT`: per `related_elements[]` verlinken — `target` ist die vollständige Element-ID
+(z. B. `mihub.lung.followup.ctThoraxScan.v0.1`); `scripts/validate.py` prüft, dass das Ziel existiert.
+(Heuristik — Letztentscheidung beim Menschen.)
 
 ### Schritt B7 — Commit & Push & PR (gegen `dev`)
 
@@ -206,7 +208,7 @@ Drei Fälle:
 | --- | --- | --- |
 | Tippfehler / Doku-Klarstellung | `0.1.0 → 0.1.1` (Patch) | gleich |
 | Neues Coding / neues Standard-Mapping / `binding_strength` lockern | `0.1.0 → 0.2.0` (Minor, additive) | ggf. weiter |
-| Datentyp/Bezeichnung/Definition geändert (semantischer Bruch) | `0.1.0 → 1.0.0` (Major) | neue ID, alte als `Superseded` markieren, mit `related_elements: [{relation: supersededBy, target: ...}]` verlinken |
+| Datentyp/Bezeichnung/Definition geändert (semantischer Bruch) | `0.1.0 → 1.0.0` (Major) | neue ID, alte als `Superseded` markieren, mit `related_elements: [{relation: supersededBy, target: <neue Element-ID>}]` verlinken |
 
 Major-Änderungen erzeugen **immer ein neues Element** mit neuer ID (`...v1.0`), weil bestehende Daten gegen `v0.x` weiter auflösbar bleiben müssen.
 

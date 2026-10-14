@@ -168,4 +168,4 @@ issues:
   ist damit entbehrlich. Bindungsstärke (bisher required) und Datentyp (bisher code) mit entscheiden.'
 related_elements:
 - relation: dependsOn
-  target: restagingImagingDate
+  target: mihub.lung.surveillance.restagingImagingDate.v0.1

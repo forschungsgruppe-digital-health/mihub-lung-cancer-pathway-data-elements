@@ -72,4 +72,4 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: generalizes
-  target: followUpHistoryFinding
+  target: mihub.lung.followup.followUpHistoryFinding.v0.1

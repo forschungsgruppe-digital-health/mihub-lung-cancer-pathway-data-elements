@@ -120,6 +120,6 @@ issues:
   oder nur als übernommener Befund (Dokument, KDL PT080102 Histologiebefund) geführt wird.'
 related_elements:
 - relation: isPartOf
-  target: cancerDiagnosis
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1
 - relation: dependsOn
-  target: molecularResistanceFinding
+  target: mihub.lung.surveillance.molecularResistanceFinding.v0.1

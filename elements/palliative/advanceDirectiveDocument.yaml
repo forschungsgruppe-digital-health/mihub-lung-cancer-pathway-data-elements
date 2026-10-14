@@ -121,4 +121,4 @@ issues:
   MII Dokument geführt?'
 related_elements:
 - relation: isPartOf
-  target: advanceCarePlanning
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1

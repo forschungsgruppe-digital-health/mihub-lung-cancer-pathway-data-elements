@@ -96,6 +96,6 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: prophylacticCranialIrradiationStatus
+  target: mihub.lung.followup.prophylacticCranialIrradiationStatus.v0.1
 - relation: dependsOn
-  target: brainMetastasisRiskProfile
+  target: mihub.lung.followup.brainMetastasisRiskProfile.v0.1

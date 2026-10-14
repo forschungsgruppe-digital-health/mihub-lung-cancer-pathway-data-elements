@@ -106,6 +106,6 @@ issues:
   bzw. FHIR Timing.'
 related_elements:
 - relation: dependsOn
-  target: curativeRecurrencePotential
+  target: mihub.lung.followup.curativeRecurrencePotential.v0.1
 - relation: isPartOf
-  target: structuredFollowUpPlan
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.1

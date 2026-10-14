@@ -89,4 +89,4 @@ issues:
   lokal nicht geprüft, UNSICHER).'
 related_elements:
 - relation: isPartOf
-  target: surveillanceVisit
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1

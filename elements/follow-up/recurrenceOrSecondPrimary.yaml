@@ -145,14 +145,14 @@ issues:
   beibehalten wird.'
 related_elements:
 - relation: dependsOn
-  target: bronchoscopyFollowUp
+  target: mihub.lung.followup.bronchoscopyFollowUp.v0.1
 - relation: dependsOn
-  target: petCtFollowUp
+  target: mihub.lung.followup.petCtFollowUp.v0.1
 - relation: dependsOn
-  target: ctAbdomenFollowUp
+  target: mihub.lung.followup.ctAbdomenFollowUp.v0.1
 - relation: dependsOn
-  target: ctThoraxFinding
+  target: mihub.lung.followup.ctThoraxFinding.v0.1
 - relation: dependsOn
-  target: brainMriFinding
+  target: mihub.lung.followup.brainMriFinding.v0.1
 - relation: dependsOn
-  target: tumorHistology
+  target: mihub.lung.primarycare.tumorHistology.v0.1

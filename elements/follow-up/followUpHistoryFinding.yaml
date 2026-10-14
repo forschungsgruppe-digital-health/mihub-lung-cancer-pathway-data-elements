@@ -162,4 +162,4 @@ issues:
   gewählten Muster dargestellt wird.
 related_elements:
 - relation: isPartOf
-  target: followUpVisitDate
+  target: mihub.lung.followup.followUpVisitDate.v0.1

@@ -67,12 +67,12 @@ provenance:
   git_commit: ''
 related_elements:
 - relation: dependsOn
-  target: systemicTherapyRegimen
+  target: mihub.lung.surveillance.systemicTherapyRegimen.v0.1
 - relation: hasPart
-  target: restagingImagingDate
+  target: mihub.lung.surveillance.restagingImagingDate.v0.1
 - relation: hasPart
-  target: recistResponse
+  target: mihub.lung.surveillance.recistResponse.v0.1
 - relation: hasPart
-  target: physicalExaminationFinding
+  target: mihub.lung.followup.physicalExaminationFinding.v0.1
 - relation: hasPart
-  target: brainMriUnderTherapy
+  target: mihub.lung.surveillance.brainMriUnderTherapy.v0.1

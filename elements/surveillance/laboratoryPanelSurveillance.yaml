@@ -98,4 +98,4 @@ issues:
   US-Panels ''… 2000 panel'' (Renal/Hepatic) decken sich nicht 1:1 mit ''Nieren-/Leberparameter''.'
 related_elements:
 - relation: dependsOn
-  target: surveillanceVisit
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1

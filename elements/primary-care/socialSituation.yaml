@@ -154,8 +154,8 @@ issues:
   oder bei der generischen social-history-Observation bleiben.'
 related_elements:
 - relation: dependsOn
-  target: caregiverBurden
+  target: mihub.lung.palliative.caregiverBurden.v0.1
 - relation: dependsOn
-  target: advanceDirectiveDocument
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1
 - relation: dependsOn
-  target: rehabilitationAndSocialCounselling
+  target: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1

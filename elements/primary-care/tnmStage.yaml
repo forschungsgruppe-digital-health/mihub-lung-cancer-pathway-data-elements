@@ -129,4 +129,4 @@ issues:
   Befunde vor 01/2025 nach TNM 8 klassifiziert sind.'
 related_elements:
 - relation: isPartOf
-  target: cancerDiagnosis
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1
