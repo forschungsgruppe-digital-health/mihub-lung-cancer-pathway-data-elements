@@ -521,14 +521,58 @@ Alle neuen Elemente: `publication_status: AuthorDraft`, `version_number: 0.1.0`,
 
 1. Wortlaut-Verifikation der Kliniker-Fundstellen S3-LL Lungenkarzinom Kap. 14.1 / 14.3.2 / Empf. 14.7 / 14.8 (Palliativ-Elemente).
 2. Bedeutung von „(X)“ in Onkopedia Tab. 12/Tab. 9 ist in den Leitlinien nicht legendiert (Lesart: fakultativ).
-3. S3-LL Palliativmedizin: Pin `3.01 (Konsultationsfassung 03/2026)` — Finalisierung noch zu prüfen (außerhalb dieses Laufs).
+3. S3-LL Palliativmedizin: Pin `3.01 (Konsultationsfassung 03/2026)` — Finalisierung noch zu prüfen (außerhalb dieses Laufs). → **erledigt 2026-10-14:** finale Fassung 3.0 (Juli 2026), siehe §14.1.
 4. Nachsorge **nach** PCI (MRT? Neurokognition?) — Onkopedia SCLC macht keine Vorgabe; `postTherapyComplication` enthält den Spätfolgen-Code.
 5. Röntgen Thorax / Sonografie Abdomen in der Nachsorge: S3-Option (Empf. 16.7), von Onkopedia nicht vorgesehen — Aufnahme auf Wunsch der Nachsorge-WG, klinisch zu bestätigen.
 6. Kodierungslücken (Distress-Thermometer, Zarit, Atemnot-NRS, AKPS, oMME, Mischschmerz, PCI, „verwandte Tabakprodukte“) → SNOMED-CT-/LOINC-Anträge oder lokales ValueSet im `mihub`-Namensraum.
 7. Dubletten-Heuristik gewichtet gemeinsame KDL-Dokumentklassen-Codes hoch (viele NAH-DUBLETTE-Treffer im Self-Mode) — Gewichtung prüfen.
 8. Die 38 `primarycare`-Elemente stammen aus einer Einzelerhebung (Allgemeinmedizin, Kontakt AK) — Konsentierung mit weiteren Hausärzt:innen / LoTeCaS-GP ausstehend; Datenschutz-Hinweis für Stammdaten (personenbezogen) ist als `constraints_de` vermerkt.
 
-## 14 Limitationen
+## 14 v0.2.0 (Fortsetzung) — Zweitprüfung gegen die Primärquellen, Mapping-Audit, Konsistenzprüfungen
+
+**Datum:** 2026-10-14/15 · **Auslöser:** Maintainer-Auftrag „Datenelemente zur Nachsorge (aftercare, palliativ, long term survivors) nochmals anhand der Primärquellen verifizieren und ggf. korrigieren; auf semantische Korrektheit achten“ sowie Vorbereitung des Nachsorge-Releases · **KI-Unterstützung:** Claude Code (Opus 5.5) mit Multi-Agenten-Workflows (Verifizierer, je zwei Skeptiker mit unterschiedlicher Linse, Zusammenführung) · **Werkzeuge:** MII TermServ (mTLS, `$lookup`/`$expand`), lokal entpackte FHIR-Pakete (MII KDS 2025–2027-Ballot, ISiK 6.0.0, KBV MIO/eAU, gematik ePA, mCODE STU4, Genomics Reporting STU3), oBDS-XSD 3.0.5. Bericht mit Kennzahlen, Befunden und Änderungstabelle je Element: [`docs/reviews/2026-10-14-zweitpruefung.md`](reviews/2026-10-14-zweitpruefung.md).
+
+### 14.1 Quellen und Pins
+
+| Quelle | Ergebnis |
+| --- | --- |
+| S3-LL Palliativmedizin | Pin `3.01 (Konsultationsfassung 03/2026)` → **`3.0 (Juli 2026, AWMF 128-001OL)`** (final, gültig bis 20.07.2031). Kap.-10-Empfehlungsnummern ab 10.2 um +1 verschoben; Konsensempfehlungen in 3.0 als EK. Erledigt damit §13.8 Nr. 3. |
+| S3-LL Rauchen und Tabakabhängigkeit | Version „1.0“ nicht belegt → **3.1** (Stand 01/2021, Langversion 03/2021; Gültigkeit bis 31.12.2025 abgelaufen, Aktualisierung angemeldet 12/2024). |
+| AG LONKO / Klein 2026 | In `survivorshipCarePlan` vermengt → getrennte Referenzen; „2022“ nicht belegt (AG-LONKO-Papiere Stand 17./18.06.2021). Klein-Titel in README/Methodik vervollständigt. |
+| S3-LL Lungenkarzinom 5.1, Onkopedia NSCLC 04/2025 und SCLC 08/2026, OCP 2nd ed. (Update 07/2025) | Pins bestätigt (aktuell). OCP-Referenzen zeigen auf das Dokument statt auf die Übersichtsseite. |
+| Nicht graduierende Quellen | AWMF-Grade („Statement“, LoE) bei Onkopedia, OCP und AG LONKO entfernt (`n/a`). |
+| Neu (je ein Element, Quelle `andere`) | S3-LL Psychoonkologie 2.1 (`distressThermometerScore`), Onkopedia „Impfungen bei malignen Erkrankungen“ (`immunizationStatus`), EORTC QLQ-C30 Scoring Manual (`qolEortcQlqC30`). |
+
+### 14.2 Inhaltliche Zweitprüfung (alle 112 Elemente)
+
+687 Änderungsvorschläge aus 22 Verifizierer-Gruppen; 88 von mindestens einer Linse widerlegt und verworfen; 599 von beiden Linsen bestätigt, davon 216 mit Teilkorrektur zusammengeführt (206 korrigiert übernommen, 7 unverändert, 3 verworfen). **597 Änderungen angewendet** (Referenzen 129 ergänzt/74 präzisiert, 140 Felder, Codings 42 ersetzt/48 ergänzt/26 entfernt, 80 offene Punkte, Beziehungen 46/12); jede Code-Änderung beim Schreiben live am MII TermServ geprüft (0 abgelehnt). Modelländerungen: `curativeTreatmentModality` 1..*, `adverseEventCtcaeGrade` CodeableConcept, `qolEortcQlqC30` decimal, `responsiblePrimaryCarePhysician` 0..1. Manuell: Zeilenverweise lokaler Textfassungen aus zwei Issue-Texten entfernt, überholter Kurz-Issue in `painType` durch den zusammengeführten Issue ersetzt, Folgeänderung `value_set.notes` in `anxietyHadsScore`.
+
+### 14.3 Standard-Mappings
+
+Zentrale Prüfung aller 115 Mapping-Einträge (26 distinkte Ziele) gegen die publizierten Pakete: 7 Ziele existierten nicht (MII Onkologie/Bildgebung unter `core/` statt `ext/`, Profil „imagingstudy“, MII-Profil „Raucher“, oBDS-Seite `/feldbeschreibung`), weitere zeigten auf HTML-/IG-Startseiten oder semantisch unpassende Profile. 151 Operationen formuliert und gegen die lokalen Pakete gegengeprüft (2 widerlegt, 4 beim Zusammenführen verworfen) → **145 angewendet** in 57 Elementen (74 ersetzt, 38 ergänzt, 33 offene Punkte zu Repräsentationsunterschieden). Jede geschriebene FHIR-Canonical existiert als StructureDefinition-`url` in den Paketen (maschinell geprüft). Mapping-Einträge 115 → 153, distinkte Ziele 26 → 57. Nur-Ballot-Profile gekennzeichnet. 9 offene Punkte, die eine Mapping-Korrektur verlangten, aufgelöst bzw. reduziert.
+
+### 14.4 Schema, Validator und Verweise
+
+| Änderung | Detail |
+| --- | --- |
+| `related_elements[].target` | Konvention vereinheitlicht: vollständige Element-ID (`mihub.lung.<phase>.<name>.v<maj>.<min>`); Schema-Pattern; bisher 98 Ziele als bloßer Name, 13 als ID → alle normalisiert (134 Namen umgestellt, 0 unaufgelöst). |
+| `scripts/validate.py` | Katalogweite Konsistenz: `id` beginnt mit `mihub.lung.<phase>.<name>.v`, Dateiname = `name`, Ordner passt zur Phase, Verweisziele existieren (keine Selbstverweise), `id`/`name`/`uuid` katalogweit eindeutig. |
+| `CITATION.cff`, README | Zenodo-Concept-DOI 10.5281/zenodo.21083229 und Versions-DOIs der Release Candidates eingetragen. |
+
+### 14.5 Verifikation
+
+`validate.py` (inkl. neuer Konsistenzprüfungen) 112/112 OK · `build-catalog.py` neu erzeugt (CSV 25 Spalten, 112 Zeilen) · `verify-terminology.py` gegen den MII TermServ: 430 Codings — 392 OK, 31 lokal, 7 nicht verifizierbar (ICF, MedDRA), 0 nicht auffindbar, 0 inaktiv, keine Anzeigetext-Abweichung · MedDRA-Codes gegen das MII-ValueSet `mii-vs-onko-nebenwirkung-art` (CTCAE v4.03) geprüft · `check-duplicates.py` Self-Mode: 57 eigenständig, 54 Nah-Dublette, 1 verwandt (vorher 52/57/3; Treffer weiterhin über gemeinsame KDL-Klassen und Phasen-Pendants, keine neue Dublette) · `skill-lint` 4 Skills + 4 Agenten OK · FSH-Generator 112 Instanzen · `dependsOn`-Zyklen 7 → 4.
+
+### 14.6 Offene Punkte (für das klinische Review)
+
+1. 80 neue `issues[]` aus der Zweitprüfung und 33 aus dem Mapping-Audit (Repräsentation in den nationalen Profilen); Schwerpunkte im Bericht, Abschnitt 5.
+2. 88 verworfene Vorschläge sind nicht angewendet; sie können im Review erneut aufgegriffen werden (Liste in den Arbeitsdaten der Prüfung).
+3. Modelländerung `responsiblePrimaryCarePhysician` 0..1 klinisch rückbestätigen (Erhebung Allgemeinmedizin hatte Pflichtangabe gesetzt).
+4. Nur-Ballot-Profile (MII Lungenfunktion, Soziodemographie, Kardiologie 2027-Ballot) sind als solche gekennzeichnet; bei Release der Module erneut prüfen.
+5. **Element-Versionierung:** Nach `docs/howto-add-element.md` §C wären die Datentyp-Änderungen (`adverseEventCtcaeGrade`, `qolEortcQlqC30`) Major- und die Kardinalitätsänderungen mindestens Minor-Änderungen; im AuthorDraft-Stadium wurde die Regel bisher nicht angewendet (alle Elemente `0.1.0`). Vor dem Release 0.2.0-rc.1 entscheiden.
+6. **`dependsOn`-Zyklen:** vier Zyklen um `recurrenceOrSecondPrimary` und die Bildgebung; Semantik von `dependsOn` (Auslöser vs. Datengrundlage) festlegen.
+
+## 15 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (seit 2026-10-13: NSCLC `Stand April 2025`, SCLC `Stand August 2026`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden; die SCLC-Archivfassung 09/2025 wurde nicht gegen 08/2026 gedifft (Kap. 0 nennt keine Nachsorge-Änderung).
@@ -537,3 +581,5 @@ Alle neuen Elemente: `publication_status: AuthorDraft`, `version_number: 0.1.0`,
 - **Konsultationsfassungen** (z. B. S3-LL 5.01) sind nach Finalisierung nicht mehr abrufbar; Annahmen über ihren Inhalt bleiben UNSICHER — daher werden nur finale Fassungen gepinnt (§13.1).
 - **Terminologie-Verifikation** belegt die Existenz und den Anzeigetext eines Codes, nicht die klinische Eignung der Zuordnung; ICF und MedDRA sind auf dem MII TermServ nicht verfügbar und bleiben unverifiziert.
 - Die **Kliniker-Fundstellen** der Excel-Erhebung (S3-LL Kap. 14.x, Empf. 14.7/14.8) wurden ohne Wortlautprüfung übernommen und sind in den YAMLs entsprechend gekennzeichnet.
+- Die **Zweitprüfung vom 2026-10-14** ist KI-gestützt (Verifizierer und je zwei Skeptiker); die konservative Regel „verwerfen, sobald eine Linse widerlegt“ kann berechtigte Korrekturen verworfen haben (88 Vorschläge, nicht angewendet). Die Primärquellen lagen als Textfassungen der PDFs vor; Tabellen- und Spaltenzuordnungen bleiben eine mögliche Fehlerquelle.
+- **Mapping-Ziele** wurden gegen lokal geladene Paketstände geprüft (MII KDS bis 2027-Ballot, ISiK 6.0.0 u. a.); neuere Paketversionen können Canonicals oder Bindungen ändern.
