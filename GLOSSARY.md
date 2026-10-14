@@ -374,6 +374,29 @@ Optionale Sortier-/Review-Hilfe je Datenelement (Taxonomie der Nachsorge-WG, Exc
 | `stammdaten` | Stammdaten | Identität, Geburtsjahr, Geschlecht, Kontakt |
 | `administrativ` | Administrativ | administrative Angabe (Überweisung, AU, Kontakte) |
 
+## 21 Lungenkrebs-Früherkennung (Phase `screening`)
+
+Begriffe der Screening-Episode (Erhebung 2026-10; Quellen-Dossier unter [`docs/screening/`](docs/screening/)). Wortlaut der Normen: LuKrFrühErkV vom 15.05.2024 (BGBl. 2024 I Nr. 162, in Kraft 01.07.2024); KFE-RL Abschnitt D.III (§§ 37–46, Fassung 18.12.2025, in Kraft 12.03.2026).
+
+| Akronym / Begriff | Bedeutung | Beschreibung | Quelle |
+| --- | --- | --- | --- |
+| **LuKrFrühErkV** | Lungenkrebs-Früherkennungs-Verordnung | Verordnung des Bundesumweltministeriums (Ermächtigung § 84 Abs. 2 StrlSchG) über die Zulässigkeit der Niedrigdosis-CT zur Lungenkrebsfrüherkennung | BGBl. 2024 I Nr. 162 |
+| **KFE-RL** | Krebsfrüherkennungs-Richtlinie des G-BA | Abschnitt D.III regelt die Lungenkrebs-Früherkennung als GKV-Leistung; Versicherteninformation als Anlage I | G-BA, Fassung 18.12.2025 |
+| **NDCT** / LDCT | Niedrigdosis-Computertomographie des Thorax | Volumen-CT-Dosisindex (CTDIvol) ≤ 1,3 mGy, höher nur im Einzelfall wegen der Körperstatur; die Übersichtsaufnahme wird nicht angerechnet | LuKrFrühErkV § 1 Abs. 1 |
+| **PJ** | Packungsjahr | Je Jahr des Zigarettenkonsums die im Jahresdurchschnitt pro Tag gerauchten Zigaretten ÷ 20; die Jahreswerte werden addiert. Konsum vor einer vollständigen Unterbrechung zählt nur, wenn die Unterbrechung weniger als zehn Jahre beträgt | LuKrFrühErkV § 1 Abs. 2 |
+| Zulässigkeitsvoraussetzungen | — | 50. Lebensjahr vollendet, 76. noch nicht; letzte befundungsgeeignete Thorax-CT ≥ 12 Monate zurück; Bericht über Zigarettenkonsum ≥ 25 Jahre (Unterbrechungsregel) und ≥ 15 PJ sowie medizinisches Eignungsprofil; mündliche und schriftliche Information (Nutzen, falsch-positive/-negative Ergebnisse, Abklärung, Überdiagnose, Strahlenrisiko) | LuKrFrühErkV § 2 Abs. 1 |
+| Bericht nach § 2 Abs. 1 Nr. 3 | „Prüfbericht“ der berichterstellenden Ärzt:in | Formfrei; bestätigt Zigarettenkonsum, Eignungsprofil und erfolgte Information; wird der versicherten Person zur Verfügung gestellt | LuKrFrühErkV § 2 Abs. 1 Nr. 3; KFE-RL §§ 39, 40 |
+| Medizinisches Eignungsprofil | — | Eignung für eine kurativ intendierte Lungenkrebs-Behandlung; konsentierte Ausschlusskriterien fehlen | LuKrFrühErkV § 2 Abs. 1 Nr. 3 Buchst. b; S3-LL Lungenkarzinom 5.1 Empf. 5.5 (EK) |
+| Rechtfertigende Indikation | — | Stellt die fachkundige Ärzt:in der Radiologie unter Berücksichtigung des Berichts | § 83 Abs. 3 StrlSchG; LuKrFrühErkV § 3 Nr. 2 |
+| Erst- / Zweitbefunder | — | Erstbefundung ohne, dann mit CAD; bei kontroll- oder abklärungsbedürftigem Befund unabhängige Zweitbefundung und gemeinsame abschließende Beurteilung | LuKrFrühErkV § 5 |
+| **CAD** | Software zur computerassistierten Detektion | Unterstützt die Befundung durch Auswertung der digitalen Bilddaten | LuKrFrühErkV § 1 Abs. 3 |
+| Kontrollbedürftiger Befund | — | Befund, aufgrund dessen vor Ablauf von zwölf Monaten eine erneute Untersuchung zur Früherkennung indiziert ist, ohne konkreten Krankheitsverdacht; gemeinsame Empfehlung zum Zeitpunkt der nächsten Untersuchung | LuKrFrühErkV § 1 Abs. 4, § 5 Abs. 3 |
+| Abklärungsbedürftiger Befund | — | Befund mit so hoher Wahrscheinlichkeit für ein Lungenkarzinom, dass ein konkreter Krankheitsverdacht besteht und eine zeitnahe klinische Abklärung angezeigt ist | LuKrFrühErkV § 1 Abs. 5 |
+| **Lung-RADS** | Lung CT Screening Reporting and Data System (ACR) | Befundklassifikation; in Deutschland einheitlich die modifizierte Fassung 2022 mit integrierter Volumetrie | ACR Lung-RADS v2022; S3-LL Lungenkarzinom 5.1 Empf. 5.9 (EK) |
+| **VDT** | Volumenverdopplungszeit | Wachstumsmaß eines Rundherds aus volumetrischen Messungen; geht in die Kategorisierung ein (S3 Tab. 17, Kategorie 4A: VDT < 600 Tage) | S3-LL Lungenkarzinom 5.1 Tab. 17; ESTI (Prokop et al., Eur Radiol 2026) |
+| **CTDIvol** | Volumen-CT-Dosisindex | Dosisgröße in mGy; Grenzwert der NDCT 1,3 mGy | LuKrFrühErkV § 1 Abs. 1 |
+| NELSON-Kriterien | — | ≥ 15 Zigaretten/Tag über ≥ 25 Jahre oder ≥ 10 Zigaretten/Tag über ≥ 30 Jahre (Statement zur Risikopopulation; die Verordnung verlangt ≥ 25 Jahre und ≥ 15 PJ) | S3-LL Lungenkarzinom 5.1 Statement 5.2 |
+
 ## Pflege
 
 Dieses Glossar wird durch den `data-element-analyzer`-Sub-Agenten gepflegt: Bei jedem Lauf werden neue Begriffe in YAML-Inhalten / Codings / Kommentaren auf Aufnahme geprüft. Manuelle Ergänzungen jederzeit möglich; Änderungen sollten im `docs/audit-log.md` als Audit-Eintrag dokumentiert werden.

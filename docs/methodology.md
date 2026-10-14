@@ -7,7 +7,7 @@
 
 Das Repository erhebt die Datenelemente, die im Verlauf des onkologischen Patientenpfads (Lungenkarzinom: NSCLC, SCLC) intersektoral dokumentiert und ausgetauscht werden müssen — über *alle* Versorgungsphasen hinweg (Prävention, Diagnostik, Staging, Therapie, Nachsorge, Surveillance, Palliativversorgung, Rehabilitation, Übergänge). Die Erhebung folgt einer expliziten Systematik der Medizininformatik, ist nachvollziehbar versionierbar und legt den Grundstein für das nachgelagerte vollständige Profile-Authoring (FHIR-IG, oBDS-Mapping, ePA-MIO etc.).
 
-Befüllt sind die Versorgungsphasen **Onkologische Nachsorge, Verlaufsbeobachtung/Surveillance, Palliativversorgung** (initial, 2026-05) und **Hausärztliche Versorgung / sektorenübergreifende Basisdaten** (`primarycare`, seit 2026-10 aus der Erhebung Allgemeinmedizin/LoTeCaS-GP). Weitere Phasen werden additiv ergänzt; das Schema bleibt dabei stabil.
+Befüllt sind die Versorgungsphasen **Onkologische Nachsorge, Verlaufsbeobachtung/Surveillance, Palliativversorgung** (initial, 2026-05) und **Hausärztliche Versorgung / sektorenübergreifende Basisdaten** (`primarycare`, seit 2026-10 aus der Erhebung Allgemeinmedizin/LoTeCaS-GP). Die Phase **Krebsfrüherkennung / LDCT-Screening** (`screening`) ist angelegt; ihre Erhebung ist vorbereitet (Quellen-Dossier, vorbefüllte Mappe: [`docs/screening/`](screening/)). Weitere Phasen werden additiv ergänzt; das Schema bleibt dabei stabil.
 
 ## 2 Methodik der Datenerhebung
 
@@ -146,6 +146,7 @@ Risiko und Mitigation:
 | Verlaufsbeobachtung / Surveillance (`elements/surveillance/`) | 15 | 20 |
 | Palliativversorgung (`elements/palliative/`) | 18 | 20 |
 | Hausärztliche Versorgung / sektorenübergreifende Basisdaten (`elements/primary-care/`) | — | 38 |
+| Krebsfrüherkennung / LDCT-Screening (`elements/screening/`) | — | — (Erhebung vorbereitet: 53 Kandidaten, siehe `docs/screening/`) |
 | **GESAMT** | **51** | **112** |
 
 Davon **44 Erhebungs-Datenelemente** (Prozeduren, Werte, Status, Pläne) plus **7 Ergebnis-Datenelemente** (Bildbefunde, Lungenfunktionswerte, Mutationsergebnis, CTCAE-Grad, Caregiver-Burden-Score) — siehe `audit-log.md` §4.

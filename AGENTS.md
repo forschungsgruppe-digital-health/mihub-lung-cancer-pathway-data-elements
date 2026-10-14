@@ -13,7 +13,8 @@ pfads (NSCLC/SCLC) im Projekt **MiHUB** (TU Dresden / Forschungsgruppe Digital H
 in den Use-Case-Arbeitspaketen AP6/AP7/AP8 mit Bezug zum BPMN-Pfad aus AP3
 ([`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)).
 Befüllt: Nachsorge (`followup`), Surveillance, Palliativ, Hausärztliche Versorgung (`primarycare`) —
-**112 Datenelemente** (Stand 2026-10-13; aktuelle Zahl in `docs/phases-overview.md`).
+**112 Datenelemente** (Stand 2026-10-13; aktuelle Zahl in `docs/phases-overview.md`). Angelegt, Erhebung
+läuft: Krebsfrüherkennung / LDCT-Screening (`screening`; Quellen-Dossier und vorbefüllte Mappe in `docs/screening/`).
 
 ## Repository-Konventionen
 
