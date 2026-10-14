@@ -4,6 +4,13 @@ Lesefreundliche, kuratierte 9-Spalten-Sicht je Versorgungsphase. Quelle: `elemen
 
 Stand: **112 Datenelemente** · für die volle 25-Spalten-Sicht siehe `catalog/data-dictionary.csv` bzw. `catalog/data-dictionary.md` (1:1-Mirror).
 
+## Krebsfrüherkennung (Lungenkrebs-Früherkennung mittels Niedrigdosis-CT)
+
+Datenelemente der Screening-Episode nach LuKrFrühErkV / G-BA Krebsfrüherkennungs-Richtlinie: Eignungsprüfung, Raucheranamnese, Bericht, Aufklärung, Niedrigdosis-CT, Befundung und Befundkategorie, Empfehlung, Qualitätsdaten. Episode in Vorbereitung — Elemente entstehen aus der Erhebung 2026-10 (siehe docs/screening/).
+
+| Bezeichnung (DE) | name | Kategorie | Datentyp · Card | Beispiel-Codings | Trigger | Frequenz | Rolle | Quelle |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ## Onkologische Nachsorge (kurativ behandelt)
 
 Datenelemente nach kurativ-intendierter multimodaler Therapie. Mit Ergebnis-Artefakten zu Bildgebung und Lungenfunktion.

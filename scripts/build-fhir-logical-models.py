@@ -191,7 +191,7 @@ Title: "Care Pathway Phases"
 * #surveillance "Verlaufsbeobachtung unter Systemtherapie"
 * #palliative "Palliativversorgung"
 * #primarycare "Hausärztliche Versorgung / sektorenübergreifende Basisdaten"
-* #screening "Prävention / Früherkennung (geplant)"
+* #screening "Krebsfrüherkennung (Lungenkrebs-Früherkennung mittels Niedrigdosis-CT)"
 * #diagnostics "Diagnostik & Staging (geplant)"
 * #treatment "Therapie kurativ + palliativ (geplant)"
 * #rehabilitation "Rehabilitation (geplant)"
@@ -370,6 +370,8 @@ Id: guideline-source
 * #ag-lonko "AG LONKO / Survivorship"
 * #esmo "ESMO Clinical Practice Guidelines"
 * #asco "ASCO Guidelines"
+* #lukrfruherkv "Lungenkrebs-Früherkennungs-Verordnung (LuKrFrühErkV)"
+* #gba-kfe-rl "G-BA Krebsfrüherkennungs-Richtlinie (KFE-RL)"
 * #other "Sonstige Quelle"
 
 ValueSet: GuidelineSourceVS
@@ -442,6 +444,8 @@ GUIDELINE_SOURCE_CODES = {
     "AG LONKO / Survivorship": "ag-lonko",
     "ESMO": "esmo",
     "ASCO": "asco",
+    "LuKrFrühErkV": "lukrfruherkv",
+    "G-BA KFE-RL": "gba-kfe-rl",
 }
 
 
@@ -483,7 +487,7 @@ def render_instance(doc: dict) -> str:
     definition = doc.get("definition_de", "")
 
     out.append(f"// Auto-generated from {yaml_id}")
-    phase_dir = {"followup": "follow-up", "primarycare": "primary-care"}.get(doc["phase"], doc["phase"])
+    phase_dir = {"followup": "follow-up", "primarycare": "primary-care", "screening": "screening"}.get(doc["phase"], doc["phase"])
     out.append(f"// Source: elements/{phase_dir}/{name}.yaml")
     out.append("// FHIR-Form: Instance of Logical Model 'BaseDataElement' (EHDS-Pattern, ohne Extensions)")
     out.append("")

@@ -19,6 +19,7 @@ body:
       label: Versorgungsphase
       description: In welcher Phase wird dieses Datenelement erfasst?
       options:
+        - Krebsfrüherkennung / LDCT-Screening
         - Onkologische Nachsorge (kurativ behandelt)
         - Verlaufsbeobachtung / Surveillance (unter Systemtherapie)
         - Palliativversorgung

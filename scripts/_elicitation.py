@@ -59,6 +59,7 @@ def load_schema_enums(schema_path: Path = SCHEMA_PATH) -> dict[str, list[str]]:
 # Reihenfolge = Reihenfolge im Dropdown. Schlüssel = Anzeigetext, Wert = Schema-Code.
 
 PHASE_LAYMEN: dict[str, str] = {
+    "Krebsfrüherkennung / LDCT-Screening": "screening",
     "Onkologische Nachsorge (kurativ behandelt)": "followup",
     "Verlaufsbeobachtung / Surveillance (unter Systemtherapie)": "surveillance",
     "Palliativversorgung": "palliative",
