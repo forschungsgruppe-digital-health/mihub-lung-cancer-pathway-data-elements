@@ -36,7 +36,8 @@ standard_mappings:
 - standard: fhir-r4-base
   resource: Immunization
 care_process:
-  trigger: Anamnese; bei jeder Impfung
+  trigger: Anamnese; vor Beginn der Tumortherapie (sofern der Therapiebeginn nicht dringlich ist); bei
+    jeder Impfung; Übergabe (onkologischer Abschlussbericht)
   frequency_pattern: per-event
   responsible_role: Hausärzt:in
   data_flows:
@@ -55,6 +56,24 @@ evidence:
     section: DE-076 Impfstatus (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. (LoTeCaS-GP): Empfehlungsliste Anhang 2 = Abb. 2, Dos › Relevante Informationen
+      › Weiteres: ''bei Einfluss auf zukünftige Impfungen: Hinweise zum Impfen + Impfstatus''; Ergebnisse
+      S. 96'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen und Immunsuppression“ (DGHO/AGIHO),
+      Stand Mai 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/impfungen-bei-malignen-erkrankungen-und-immunsuppression
+    section: 'Kap. 6.1 Solide Tumore, Tab. 5 (SoR/QoE nach AGIHO/ESCMID, Tab. 1–3: COVID-19 A/IIu; Influenza
+      A/IIu,r,h; Pneumokokken-Konjugatimpfstoff A/I; RSV A/IIu; adjuvantierte rekombinante gE-VZV-Vakzine
+      A/I); ergänzend ohne Graduierung: Kap. 2.1.1 Lebendimpfung, Kap. 2.1.3 Zeitpunkt der Impfung mit
+      Tab. 4'
+    recommendation_grade: A
+    evidence_level: I–IIu (AGIHO/ESCMID-Skala, nicht AWMF)
 iso13972_metadata:
   type: procedure
   keywords:
@@ -78,3 +97,13 @@ provenance:
 issues:
 - S3-LL Lungenkarzinom 5.1 enthält keine Impfempfehlung (Kap. 12 verweist auf S3-LL Supportive Therapie);
   Quelle STIKO/Onkopedia „Impfungen“ noch zu prüfen.
+- 'Stand 2026-10-14 zu den Impfempfehlungen: Die Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen
+  und Immunsuppression“ (DGHO/AGIHO, Stand Mai 2026; Webabruf 2026-10-14, außerhalb des kuratierten Quellkorpus,
+  UNSICHER) ist geprüft. Ihre Tab. 5 empfiehlt für Patient:innen mit soliden Tumoren u. a. Influenza-,
+  Pneumokokken-Konjugat-, COVID-19-, RSV- und rekombinante Zoster-Impfung (je SoR A, AGIHO/ESCMID-Skala).
+  Zur Entscheidung: (a) RSV in die Aufzählung in definition_de aufnehmen? (b) Therapiebedingte Besonderheiten
+  (z. B. Lebendimpfungen im Kontext der Tumortherapie nicht empfohlen, Onkopedia Kap. 2.1.1; Abweichungen
+  von den allgemeinen Impfempfehlungen zusammen mit dem Impfstatus darstellen, Klein et al. 2026, S. 96)
+  im Impfstatus oder als Hinweis in recommendationsForPrimaryCare bzw. riskFactorAndAlert führen? Offen
+  bleibt der Abgleich mit den aktuellen STIKO-Empfehlungen (Indikationsimpfungen bei Immundefizienz);
+  aus dem Issue zur fehlenden S3-Impfempfehlung ist damit nur noch dieser STIKO-Teil offen.'

@@ -2,8 +2,11 @@ id: mihub.lung.palliative.spiritualNeedsAssessment.v0.1
 uuid: 3f0afa4e-1e47-557e-b464-a408b0ec665a
 name: spiritualNeedsAssessment
 label_de: Spiritueller Bedarf erfasst
-definition_de: Wahrnehmung und Erfassung spiritueller Bedürfnisse (spiritual needs) der Patient:in / Angehörigen.
-  Dokumentation inkl. Spiritual-Care-Interventionen.
+definition_de: Angabe (ja/nein), ob die spirituellen Bedürfnisse (spiritual needs) der Patient:in – ggf.
+  auch der Angehörigen – initial und im Verlauf wahrgenommen bzw. erfasst wurden, z. B. per offenem Screening
+  im (Aufnahme-)Gespräch (2Q-SAM) oder mit einem validierten Instrument (z. B. SpNQ-10). Inhalte der Bedürfnisse
+  und erfolgte Spiritual-Care-Interventionen werden mit Einverständnis der Patient:in gesondert dokumentiert
+  und sind nicht Teil dieses Elements.
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -15,8 +18,12 @@ value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '424823000'
-    display: Expresses spiritual concerns
+    code: '105408001'
+    display: Spiritual assessment
+constraints_de: Dokumentation dieses Ja/Nein-Merkmals sowie spiritueller/existentieller Bedürfnisse und
+  erfolgter Interventionen nur mit Einverständnis der Patient:in. Umfang und Personenkreis der Weitergabe
+  bzw. Einsichtnahme außerhalb des Betreuungsteams (z. B. in elektronischen Systemen) vorab mit der Patient:in
+  abstimmen (S3-LL Palliativmedizin 3.0, Kap. 19.5, Empf. 19.8).
 care_process:
   trigger: Aufnahme + bei Phasenwechsel
   frequency_pattern: per-encounter
@@ -24,13 +31,29 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 19.3 Wahrnehmung/Erfassung; 19.5 Dokumentation
+    section: Kap. 19.3 Wahrnehmung, Erfassung und Erkennung spiritueller Bedürfnisse (spiritual needs),
+      Empf. 19.3 (spirituelle Bedürfnisse initial und im Verlauf wahrnehmen)
     recommendation_grade: B
+    evidence_level: '3'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 19.5 Dokumentation spiritueller Bedürfnisse und Interventionen, Empf. 19.8 (mit Einverständnis
+      dokumentieren und ins Team kommunizieren)
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 8.2 Konzept der frühzeitigen Integration palliativmedizinischer Versorgung, Empf. 8.4
+      (Versorgung und Dokumentation in allen Dimensionen inkl. spiritueller Bedürfnisse) und Empf. 8.5
+      (regelmäßiges Einschätzen u. a. spiritueller Belastungen)
+    recommendation_grade: B
+    evidence_level: '3'
 iso13972_metadata:
-  type: observation
+  type: procedure
   keywords:
   - Lungenkarzinom
   - palliative

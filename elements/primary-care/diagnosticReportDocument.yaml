@@ -33,6 +33,12 @@ value_set:
   - system: kdl
     code: PT080102
     display: Histologiebefund
+  - system: kdl
+    code: DG020111
+    display: Sonographiebefund
+  - system: kdl
+    code: PT260102
+    display: Zytologiebefund
 standard_mappings:
 - standard: ihe-xds
   resource: DocumentReference (classCode/typeCode nach KDL)
@@ -44,7 +50,7 @@ standard_mappings:
   resource: DiagnosticReport / ImagingStudy
 care_process:
   trigger: nach jeder diagnostischen Untersuchung; Übergabe
-  frequency_pattern: per-imaging-event
+  frequency_pattern: per-procedure
   responsible_role: Radiolog:in / Patholog:in / Pneumolog:in
   data_flows:
   - system: ris-pacs
@@ -72,9 +78,25 @@ evidence:
     recommendation_grade: n/a
     evidence_level: n/a
   - source: andere
-    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
-    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik)
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Empfehlungsliste (Abb. 2 / Anhang 2): Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise (aktuelle Diagnostik im Anhang); Dos › Format › Diagnostik (letzte, aktuelle Befunde
+      im Anhang)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.2.1, Tab. 2 (CT Thorax/Oberbauch oder FDG-PET-CT als Methode der ersten Wahl; MRT;
+      Bronchoskopie mit Biopsie) und Tab. 3 (EUS/EBUS mit Biopsie; MRT Schädel)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 5.2.1, Tab. 2 (Stufe 1 Röntgen Thorax, CT/FDG-PET-CT; Stufe 2 histologische oder zytologische
+      Sicherung per Bronchoskopie mit Biopsie; Stufe 3/4 MRT Schädel, EUS/EBUS mit Biopsie)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -98,9 +120,9 @@ provenance:
   reviewers: []
   git_commit: ''
 related_elements:
-- relation: generalizes
-  target: ctThoraxFinding
-- relation: generalizes
-  target: brainMriFinding
 - relation: hasPart
   target: tumorHistology
+- relation: hasPart
+  target: ctThoraxFinding
+- relation: hasPart
+  target: brainMriFinding

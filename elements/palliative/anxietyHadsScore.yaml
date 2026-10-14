@@ -17,10 +17,13 @@ value_set:
   - system: snomed-ct
     code: '401319005'
     display: 'HAD scale: anxiety score'
-  - system: snomed-ct
-    code: '273524006'
-    display: Hospital anxiety and depression scale
   standard_binding_status: mapped
+  notes: SNOMED CT 273524006 „Hospital anxiety and depression scale (assessment scale)“ bezeichnet das
+    Gesamtinstrument (beide Subskalen) und ist kein Element-Code; bei Bedarf als Observation.method bzw.
+    Questionnaire.code führen (vgl. MII-KDS-Modul PRO 2026.7.0, Questionnaire mii-qst-pro-hads). Element-Code
+    bleibt 401319005 (HADS-A-Score).
+constraints_de: Wertebereich 0..21 (HADS-A). In der Sterbephase sind differenzierte Erfassungsinstrumente
+  wie die HADS i. d. R. nicht mehr einsetzbar (S3-LL Palliativmedizin 3.0, Kap. 21.4.5).
 care_process:
   trigger: Aufnahme + Verlauf
   frequency_pattern: per-encounter
@@ -28,10 +31,18 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 17.2 Erfassung Angst
-    recommendation_grade: B
+    section: Kap. 17.2 Erfassung (Angst), Empf. 17.2 (validiertes und standardisiertes Screeninginstrument
+      zur Erkennung einer Angst; HADS nur im Hintergrundtext genannt)
+    recommendation_grade: '0'
+    evidence_level: '3'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 17.2 Erfassung (Angst), Empf. 17.1 (Angst aktiv und regelmäßig prüfen; Anamnese psychischer
+      Vorerkrankungen bei Aufnahme)
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -53,3 +64,14 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Instrumentenwahl prüfen: Zum Erfassungsinstrument für Angst gibt die S3-LL Palliativmedizin 3.0 nur
+  eine Kann-Empfehlung für ein validiertes und standardisiertes Screeninginstrument ohne Instrumentnennung
+  (Kap. 17.2, Empf. 17.2, Grad 0, LoE 3); formal erfüllt die HADS das. Im Hintergrundtext (keine graduierte
+  Empfehlung) gilt die HADS als im Vergleich aufwändiger und im palliativmedizinisch-klinischen Kontext
+  wenig eingesetzt; für die klinische Praxis in Deutschland nennt er GAD-2 und MIDOS, den GAD-2 aufgrund
+  seiner Kürze als besonders geeignet (Verlauf stationär mindestens wöchentlich, ambulant alle 6–8 Wochen
+  und/oder nach Verhaltensveränderung), zudem IPOS. MIDOS2 und IPOS sind über symptomAssessmentInstrument
+  abgedeckt. Ergänzung eines GAD-2-Elements erwägen (SNOMED CT 1365837005 „Generalized Anxiety Disorder
+  2 item score“, observable entity, aktiv – MII TermServ 2026-10-14) bzw. anxietyHadsScore als eines von
+  mehreren zulässigen Angst-Screenings führen.'

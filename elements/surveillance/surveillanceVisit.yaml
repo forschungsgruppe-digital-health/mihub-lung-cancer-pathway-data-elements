@@ -32,9 +32,13 @@ standard_mappings:
   resource: Encounter
   path: Encounter.period.start
 care_process:
-  trigger: festgelegte Wiedervorstellung unter laufender Erhaltungstherapie (NSCLC, SCLC) bzw. laufender
-    Systemtherapie
-  frequency_pattern: Q3-6W (Erhaltungstherapie) · Q6-9W (Systemtherapie, parallel zum Restaging)
+  trigger: festgelegte Wiedervorstellung gemäß strukturiertem Verlaufsplan (S3 Empf. 16.2) unter laufender
+    Erhaltungstherapie (NSCLC, SCLC; S3 Empf. 16.9) bzw. laufender Systemtherapie sowie in der therapiefreien
+    Beobachtung nach Erstlinientherapie (Onkopedia NSCLC Kap. 8.2)
+  frequency_pattern: 'Q3-6W unter laufender Erhaltungstherapie (S3 Empf. 16.9: „mindestens alle 3-6 Wochen“)
+    · Q6-9W unter laufender Systemtherapie, gekoppelt an das CT-Restaging (Intervall lt. Expert:innen-Erhebung
+    DE-042/043; S3 Empf. 16.9 nennt 6–9 Wochen für CT-Kontrollen) · Q6-8W in der therapiefreien Beobachtung
+    nach Erstlinientherapie, NSCLC (Onkopedia NSCLC Kap. 8.2)'
   responsible_role: Onkolog:in (Pflege supportiv)
   data_flows:
   - system: kis
@@ -87,6 +91,17 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'Anamnese-Komponente der Verlaufskontroll-Visite fehlt: S3-LL Lungenkarzinom 5.1, Empf. 16.9 nennt Anamnese
+  und körperliche Untersuchung als Basis der Evaluation, die Expert:innen-Erhebung führt die Anamnese
+  als Surveillance-Datenelement (DE-042); surveillanceVisit (dateTime) trägt selbst keinen Befund. Die
+  körperliche Untersuchung ist über physicalExaminationFinding angebunden (Trigger und isPartOf surveillanceVisit),
+  die Anamnese nicht: followUpHistoryFinding ist nur an followUpVisitDate gekoppelt (siehe dort den offenen
+  Punkt „Surveillance-Asymmetrie“). Zu entscheiden: followUpHistoryFinding um Trigger und isPartOf surveillanceVisit
+  erweitern (analog physicalExaminationFinding) oder ein eigenes Surveillance-Anamnese-Element anlegen;
+  in beiden Fällen hier per hasPart verknüpfen und gegen patientReportedSymptomWeb (PROM) und adverseEventCtcae
+  abgrenzen. Erst danach entscheiden, ob die Codings 84100007 ''History taking'' und 5880005 ''Physical
+  examination'' im Visiten-Wertebereich bleiben.'
 related_elements:
 - relation: hasPart
   target: physicalExaminationFinding
@@ -94,3 +109,7 @@ related_elements:
   target: postInductionEvaluationDate
 - relation: hasPart
   target: consultationModality
+- relation: dependsOn
+  target: structuredSurveillancePlan
+- relation: hasPart
+  target: adverseEventCtcae

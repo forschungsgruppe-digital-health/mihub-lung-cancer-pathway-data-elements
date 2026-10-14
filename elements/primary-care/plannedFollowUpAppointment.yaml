@@ -46,6 +46,25 @@ evidence:
     section: DE-016 Wiedervorstellungen, Verlaufskontrollen
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026: nach abgeschlossener multimodaler Therapie Nachsorgetermine
+      in den ersten 2 Jahren alle 3 Monate, ab dem 3. Jahr halbjährlich, beginnend mit der Erstvorstellung
+      innerhalb von 8 Wochen nach Therapieabschluss); Empf. 16.9 (EK, geprüft 2026: unter Systemtherapie
+      im Stadium IVA/B festgelegte Wiedervorstellungen bei laufender Erhaltungstherapie mindestens alle
+      3–6 Wochen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 2.3 Initial referral (Kontext Erstüberweisung: Fachärzt:in benachrichtigt die Hausärzt:in
+      bei nicht wahrgenommenen Terminen); Step 5.1 Transitioning from active treatment (shared care plan
+      bzw. treatment summary inkl. follow-up schedule); Step 5.4.4 Communication with the general practitioner
+      (follow-up care plan)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: plan
   keywords:
@@ -66,6 +85,14 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Der Datentyp dateTime deckt die Definition nur teilweise ab. „Vorgemerkte Überweisungen“ sind kein
+  Datum; sie sind inhaltlich über dependsOn referralOrder verknüpft. Auch ein ggf. für „Lücken erkennen“
+  benötigter Terminstatus (booked / fulfilled / noshow) lässt sich nicht abbilden. Prüfen: Reference(Appointment)
+  mit Appointment.start, Appointment.basedOn (ServiceRequest) und optional Appointment.status (z. B. noshow;
+  alternativ Lückenerkennung durch Abgleich mit dokumentierten Kontakten) oder definition_de auf das Termindatum
+  einschränken. Außerdem beziehen trigger und responsible_role die Hausarztpraxis bzw. Hausärzt:in ein,
+  die data_flows sehen für das PVS aber nur read vor und keinen capture für hausärztliche Wiedervorstellungen.'
 related_elements:
 - relation: dependsOn
   target: followUpInterval

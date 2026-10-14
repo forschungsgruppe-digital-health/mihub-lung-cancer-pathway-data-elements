@@ -4,7 +4,8 @@ name: chestXRayFollowUp
 label_de: Röntgen Thorax in der Nachsorge
 definition_de: 'Datum einer Röntgen-Thorax-Aufnahme (2 Ebenen) als bildgebende Option des Nachsorgetermins
   (Tumorkinetik), wenn kein CT erfolgt. S3-Hintergrund 16.3.3: Röntgen-Thorax ist „nicht die relevante
-  Untersuchung“ (LDCT effektiver); Onkopedia sieht in der Nachsorge nur CT vor.'
+  Untersuchung“ (LDCT effektiver); Onkopedia sieht als Thorax-Bildgebung in der Nachsorge nur CT vor (NSCLC
+  Tab. 12, SCLC Tab. 9).'
 phase: followup
 tumor_entity:
 - NSCLC

@@ -23,6 +23,11 @@ value_set:
   - system: loinc
     code: 11450-4
     display: Problem list - Reported
+  notes: 'Antwortwerte: ICD-10-GM-Diagnosen (CodeSystem http://fhir.de/CodeSystem/bfarm/icd-10-gm) gemäß
+    MII-KDS Diagnose (Modul Diagnose 2025.0.1; KDS-Basismodule 2026.0.1): Condition.code.coding:icd10-gm,
+    Binding required an https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/ValueSet/mii-vs-diagnose-icd10gm.
+    SNOMED CT 398192003 und LOINC 75618-9 sind Elementcodes, LOINC 11450-4 ist ein Abschnittscode (Problemliste).
+    DMP-Einschreibung ist nicht ICD-codierbar.'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
@@ -57,6 +62,39 @@ evidence:
     section: DE-021 Komorbiditäten
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. (LoTeCaS-GP): Empfehlungsliste Anhang 2 = Abb. 2, Dos › Relevante Informationen
+      › Anamnese, Abschlussstatus und Epikrise: ''weitere Diagnosen ohne Details''; Ergebnisse S. 94'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 5.2 Follow-up care (S. 45: General practitioners „manage comorbidities“); Step 5.2.1
+      Preventing recurrence (S. 45: „Ongoing coordination of care between providers should also deal with
+      any comorbidities“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 8 Therapie des nicht-kleinzelligen Lungenkarzinoms, 8.1 Bedeutung von Alter, Komorbidität,
+      prognostischer Einschätzung und Symptomlast als Selektionskriterium für Therapiemaßnahmen – Empf.
+      8.1 (konsensbasiert, Starker Konsens, geprüft 2026; S. 200; Geltungsbereich NSCLC)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: AG LONKO / Survivorship
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Daten_AG_LONKO_bf.pdf
+    section: 'UAG Daten, Kap. 4 Grundsätzlicher Datenbedarf (S. 9): Nachsorgepässe sollten neben den Nachsorgeempfehlungen
+      Tumordiagnose und -therapie inkl. Komplikationen sowie bestehende Komorbiditäten zusammenfassen
+      (Kontext: Transition nach Krebserkrankung im Kindes- oder Jugendalter in die Allgemeinmedizin oder
+      Innere Medizin; Nutzen ausdrücklich nicht auf jüngere Krebspatient:innen beschränkt)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:
@@ -78,3 +116,7 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'DMP-Einschreibung (DE-021: ''Anbindung in Disease-Management-Programm(en)'') ist keine Diagnose und
+  nicht nach ICD-10-GM codierbar. Entweder als eigenes Attribut bzw. Element (Programmteilnahme) modellieren
+  oder ongoingSupportiveServices zuordnen. ''Risiken'' gegen riskFactorAndAlert (DE-036) abgrenzen.'

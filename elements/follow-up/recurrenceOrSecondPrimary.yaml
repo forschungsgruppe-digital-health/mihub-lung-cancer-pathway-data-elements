@@ -33,21 +33,6 @@ value_set:
   - system: kdl
     code: SD150103
     display: Tumorkonferenzprotokoll
-  - system: icd-o-3
-    code: 8140/3
-    display: Adenokarzinom o.n.A.
-  - system: icd-o-3
-    code: 8070/3
-    display: Plattenepithelkarzinom o.n.A.
-  - system: icd-o-3
-    code: 8041/3
-    display: Kleinzelliges Karzinom o.n.A.
-  - system: icd-o-3
-    code: 8012/3
-    display: Großzelliges Karzinom o.n.A.
-  - system: icd-o-3
-    code: C34.9
-    display: Lunge o.n.A.
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-diagnose-primaertumor
@@ -70,7 +55,10 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.1 (EK, geprüft 2026); Empf. 16.2 (EK); Kap. 16.3.4
+    section: 'Kap. 16.1 (Hintergrund: Nachsorgeziel frühzeitige Diagnose von Rezidiv- oder Zweittumoren;
+      Rezidivrisiko in den ersten 2 Jahren am höchsten, Anteil Zweitkarzinome steigt mit Abstand zur OP);
+      Empf. 16.1 (EK, geprüft 2026); Empf. 16.2 (EK, geprüft 2026); Kap. 16.3.4 (IFCT: vermehrte Detektion
+      von Zweittumoren nach 4–5 Jahren)'
     recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia NSCLC
@@ -82,8 +70,12 @@ evidence:
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: 'Kap. 10.2 (Nachsorgeziele: Rezidiv, Zweitneoplasie); Kap. 6.1.2.1 (Zweittumor auch anderer
-      Histologie; PET-CT + MRT Schädel vor Re-Resektion)'
+    section: 'Kap. 10.2 (Nachsorgeziele: Rezidiv, Zweitneoplasie; Text nach Tab. 9: bei V. a. lokalisiertes
+      oder lokal behandelbares Rezidiv weitere Bildgebung ggf. inkl. PET-CT und/oder histologische Sicherung);
+      Kap. 6.1.2.1 (intrapulmonaler Zweittumor nach Resektion: auch andere Histologie bedenken, PET-CT
+      und ggf. mediastinales Staging vor erneuter Resektion; Persistenz oder erneute lokale Progression
+      des Primärtumors nach Chemo-Strahlentherapie: PET-CT, ggf. mediastinales Staging und MRT Schädel
+      vor Resektion)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -106,12 +98,27 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'oBDS-Mapping korrigieren: Der path „Allgemeiner Leistungszustand / Tumorstatus_Lokoregionaeres_Tumorstatus“
+  ist fehlerhaft. „Allgemeiner_Leistungszustand“ ist im oBDS der Leistungszustand (ECOG oder Karnofsky)
+  und für Rezidiv/Zweittumor nicht einschlägig; ein Feld „Tumorstatus_Lokoregionaeres_Tumorstatus“ existiert
+  nicht (oBDS-XSD 3.0.4 vom 15.04.2025, Verlauf_Typ). Rezidiv und Metastasierung werden in der Verlaufsmeldung
+  über Gesamtbeurteilung_Tumorstatus (Y = Rezidiv), Verlauf_Lokaler_Tumorstatus (R = Lokalrezidiv), Verlauf_Tumorstatus_Lymphknoten
+  (R = neu aufgetretenes Lymphknotenrezidiv) und Verlauf_Tumorstatus_Fernmetastasen (R = neu aufgetretene
+  Fernmetastase(n) bzw. Metastasenrezidiv; neue Metastasen zusätzlich unter Menge_FM mit Lokalisation
+  und Datum) gemeldet, ein Zweitkarzinom als eigene Diagnosemeldung. Pfad entsprechend ändern, gegen die
+  bei Umsetzung gültige oBDS-Fassung prüfen und ctThoraxFinding (gleicher Fehler „Tumorstatus_Lokoregionaeres“)
+  einheitlich korrigieren.'
 related_elements:
-- relation: dependsOn
-  target: curativeRecurrencePotential
 - relation: dependsOn
   target: bronchoscopyFollowUp
 - relation: dependsOn
   target: petCtFollowUp
 - relation: dependsOn
   target: ctAbdomenFollowUp
+- relation: dependsOn
+  target: ctThoraxFinding
+- relation: dependsOn
+  target: brainMriFinding
+- relation: dependsOn
+  target: tumorHistology

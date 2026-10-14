@@ -16,8 +16,8 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '48176007'
-    display: Social context
+    code: '160476009'
+    display: Social / personal history observable
   - system: snomed-ct
     code: '224130005'
     display: Household composition
@@ -31,14 +31,14 @@ value_set:
     code: '301887005'
     display: Needs assistance at home
   - system: snomed-ct
-    code: '133932002'
-    display: Caregiver
+    code: '184156005'
+    display: Has a caregiver
   - system: loinc
     code: 29762-2
     display: Social history note
   - system: icd-10-gm
-    code: Z74
-    display: Probleme mit Bezug auf Pflegebedürftigkeit
+    code: Z74.9
+    display: Problem mit Bezug auf Pflegebedürftigkeit, nicht näher bezeichnet
   - system: icd-10-gm
     code: Z60
     display: Kontaktanlässe mit Bezug auf die soziale Umgebung
@@ -72,6 +72,35 @@ evidence:
     section: DE-022 soziale Situation
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.2 Empf. 5.1 (geprüft 2026, Starker Konsens: physische, psychische, soziale und spirituelle
+      Bedürfnisse wiederholt und bei Änderung der klinischen Situation erfassen) – Geltungsbereich: nicht
+      heilbare Krebserkrankung'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1 und 16.2 (EK, geprüft 2026, Starker Konsens: strukturierter Nachsorge- bzw. Verlaufsplan
+      sollte geeignet sein, den Bedarf an Sozialberatung zu erkennen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Appendix A Supportive care domains (social domain); Principle 4 Supportive care (Bedarfserhebung
+      bei Patient:innen und Familien)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: AG LONKO / Survivorship
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Versorgungsmodelle_AG_LONKO_bf.pdf
+    section: UAG Versorgungsmodelle Kap. 2.2 Soziale und berufliche Situation der Langzeitüberlebenden
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: social
   keywords:
@@ -92,6 +121,14 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Value Set nach Rolle gliedern: Element-Codes (SNOMED CT 160476009, 224130005, 224362002; LOINC 29762-2)
+  vs. Antwortwerte (SNOMED-CT-Befunde 160734000, 301887005, 184156005; ICD-10-GM-Problemkodes Z56, Z60,
+  Z63, Z74.x). Umgang mit „Vorliegen einer Patientenverfügung“ (ausdrücklich Teil von DE-022 der Expert:innen-Erhebung)
+  mit der Erhebungsquelle (Kontakt AK) klären: Ja/Nein-Hinweis in diesem Element vs. Dokumentverweis über
+  advanceDirectiveDocument (Beziehung dependsOn besteht bereits; dort Phase palliative, Entitäten NSCLC/SCLC).
+  Abgrenzung von „vorhandene Unterstützung“ (informell, „wer kümmert sich“) zu ongoingSupportiveServices
+  (professionelle Dienste, z. B. Pflegedienst) festlegen.'
 related_elements:
 - relation: dependsOn
   target: caregiverBurden

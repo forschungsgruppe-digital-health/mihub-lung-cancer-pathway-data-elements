@@ -12,7 +12,18 @@ datatype: integer
 cardinality: 0..1
 value_set:
   codings: []
-constraints_de: Wertebereich 1..n; Linienwechsel (PD oder Toxizität) erhöht den Zähler.
+  standard_binding_status: n/a
+  notes: 'Kein Standard-Elementcode für die Liniennummer. Optionale codierte Darstellung: SNOMED CT 708255002
+    |First line treatment|, 708256001 |Second line treatment|, 708257005 |Third line treatment| (procedure);
+    ab der 4. Linie gibt es kein SNOMED-Konzept, daher ist der Integerwert führend.'
+constraints_de: 'Wertebereich 1..n (1 = Erstlinie). NSCLC: Zählung ab der ersten Systemtherapie im metastasierten
+  bzw. palliativen Setting (Stadium IV inkl. metastasiertem Rezidiv sowie Stadium III ohne Indikation
+  zur definitiven Lokaltherapie). SCLC: Die Systemtherapie der Primärbehandlung aller Stadien (bei LD
+  auch im Rahmen der Radiochemotherapie) ist die Erstlinie, die erste systemische Rezidivtherapie die
+  Zweitlinie. Der Zähler erhöht sich beim Wechsel auf eine neue Systemtherapie wegen Progression oder
+  Unverträglichkeit. Keine neue Linie: Erhaltungs- bzw. Konsolidierungstherapie im Anschluss an Induktion
+  oder Radiochemotherapie (Teil derselben Linie) sowie Fortführung der laufenden Systemtherapie bei Oligoprogression
+  bzw. lokaler Progression mit lokaler Therapie.'
 care_process:
   trigger: bei Therapiestart
   frequency_pattern: per-line
@@ -24,8 +35,20 @@ evidence:
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: 'Kap. 16.1 (Hintergrundtext: real-world vs. Studienergebnisse, Evidenzgrad IIa) — kein formales
       Statement'
-    recommendation_grade: Statement
+    recommendation_grade: n/a
     evidence_level: 2a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 16.4 (Therapiewechsel in die Zweitlinientherapie unter Verlaufskontrolle) / Empf. 16.9
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 6.1.6.2.2.1 Erstlinientherapie / 6.1.6.2.2.2 Zweitlinientherapie
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: observation
   keywords:
@@ -46,3 +69,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: systemicTherapyRegimen

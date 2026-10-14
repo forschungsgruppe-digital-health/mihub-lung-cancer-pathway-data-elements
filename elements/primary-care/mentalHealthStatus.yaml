@@ -50,6 +50,29 @@ evidence:
     section: DE-033 mentale und psychische Situation
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 18.3.1 Empf. 18.2 (geprüft 2026, Starker Konsens: Depression aktiv und regelmäßig prüfen)
+      – Geltungsbereich: nicht heilbare Krebserkrankung'
+    recommendation_grade: A
+    evidence_level: '4'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 17.2 Empf. 17.1 (modifiziert 2026, Starker Konsens: Angst aktiv und regelmäßig prüfen;
+      Anamnese psychischer Vorerkrankungen) und Empf. 17.3 (geprüft 2026, Konsens: vertiefte Exploration
+      bei Angstsymptomen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1 und 16.2 (EK, geprüft 2026, Starker Konsens: strukturierter Nachsorge- bzw. Verlaufsplan
+      sollte geeignet sein, den Bedarf an Psychoonkologie zu erkennen); Kap. 11 (Verweis auf S3-LL Psychoonkologie,
+      keine eigenen Empfehlungen)'
+    recommendation_grade: EK
+    evidence_level: n/a
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -70,6 +93,13 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Abgrenzung zu psychoOncologyContact klären: mentalHealthStatus = Einschätzung/Befund (Observation.code
+  363871006 mit Observation.valueCodeableConcept bzw. ClinicalImpression.code 391281002 mit ClinicalImpression.finding.itemCodeableConcept;
+  Freitext in ClinicalImpression.summary); durchgeführte Gespräche und Interventionen = psychoOncologyContact
+  (Procedure). Da DE-033 der Expert:innen-Erhebung das Element wörtlich als „Gespräche, Empfehlungen“
+  beschreibt, eine Präzisierung von definition_de (z. B. „Ergebnis der Einschätzung inkl. daraus abgeleiteter
+  Empfehlungen“) vorher mit der Erhebungsquelle (Excel-Erhebung Allgemeinmedizin) abstimmen.'
 related_elements:
 - relation: dependsOn
   target: phq9DepressionScore

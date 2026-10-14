@@ -18,9 +18,6 @@ value_set:
   - system: snomed-ct
     code: '248349002'
     display: Percentage weight loss
-  - system: loinc
-    code: 107109-1
-    display: Weight loss 3 months
 care_process:
   trigger: bei jeder Visite
   frequency_pattern: per-encounter
@@ -29,8 +26,17 @@ evidence:
   guideline_references:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Section 5.4 (malnutrition)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.1 Supportive care (Mangelernährung nach Therapie, z. B. Gewichtsverlust → Monitoring
+      und Ernährungsintervention); ergänzend Step 3.6.1 (Screening auf Mangelernährung mit validiertem
+      Tool, z. B. MST)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.6.3 Ernährungszustand (wiederholtes Screening auf Mangelernährung im Verlauf mit validiertem
+      Tool)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -53,3 +59,9 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Vorzeichen- und Bezugskonvention festlegen: Der Name ''weightChangePercent'' (Änderung) passt nicht
+  zu Label, Definition und Code ''Gewichtsverlust'' (SNOMED 248349002 ''Percentage weight loss''). Werden
+  Zu- und Abnahme vorzeichenbehaftet erfasst, passt das verifizierte Elternkonzept SNOMED 248347000 ''Percentage
+  change in weight (observable entity)''; andernfalls den Constraint ''Verlust ≥ 0 %, Zunahme nicht erfasst''
+  ergänzen.'

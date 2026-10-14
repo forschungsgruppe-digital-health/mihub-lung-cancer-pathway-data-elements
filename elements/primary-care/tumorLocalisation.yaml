@@ -14,8 +14,8 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '260716003'
-    display: Site of primary tumor
+    code: '399687005'
+    display: Anatomic location of primary malignant neoplasm
   - system: icd-o-3
     code: C34.1
     display: Lungenoberlappen
@@ -70,6 +70,15 @@ evidence:
     section: DE-003 Lokalisation
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 19.2 Template Pathologiebefund-Resektionspräparat, Tab. 47 (Stand 03/2025), Makroskopie:
+      Tumorlokalisation – anatomische Lokalisation im Resektat (z. B. zentral oder subpleural, Lungensegment);
+      ergänzend Kap. 19.1 Template Pathologiebefund-Biopsie, Tab. 46 (Stand 03/2025), Makroskopie: Lokalisation
+      der Bioptate (Angabe der einsendenden Stelle)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:
@@ -90,6 +99,16 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Seitenlokalisation des Primärtumors (rechts/links; ggf. beidseitig/unbekannt) als eigene Teilangabe
+  bzw. Qualifier ergänzen: Die ICD-O-3-Topographie C34.x kodiert keine Seite, ‚Lungenoberlappen‘ allein
+  ist daher mehrdeutig. National wird die Seite getrennt geführt (oBDS-Seitenlokalisation; MII KDS Onkologie:
+  Condition.bodySite.coding:primaertumorSeitenlokalisation, CodeSystem mii-cs-onko-seitenlokalisation
+  L/R/B/M/U/T; SNOMED CT laut MII-ConceptMap L = 7771000 Left, R = 24028007 Right, B = 51440002 Right
+  and left). Nicht in die Topographie-Werteliste mischen. Klinische Zusatzrelevanz: Die Seite ist Bezugsgröße
+  für die Zuordnung weiterer Herde (getrennter Herd in einem anderen Lappen derselben Seite = T4, in einem
+  kontralateralen Lungenlappen = M1a; S3-LL Lungenkarzinom 5.1, Kap. 6.5.1.1.1 Tab. 21 und Kap. 6.5.1.1.4
+  Tab. 25).'
 related_elements:
 - relation: isPartOf
   target: cancerDiagnosis

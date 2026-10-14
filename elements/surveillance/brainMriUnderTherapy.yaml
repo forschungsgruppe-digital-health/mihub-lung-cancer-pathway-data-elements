@@ -1,9 +1,11 @@
 id: mihub.lung.surveillance.brainMriUnderTherapy.v0.1
 uuid: 3accdd74-433b-5f83-ae6a-c7f266f3a50b
 name: brainMriUnderTherapy
-label_de: Schädel-MRT bei Verdacht auf Hirnmetastasen
-definition_de: MRT Schädel bei klinischem Verdacht oder protokollarisch bei oncogene-addicted NSCLC (EGFR/ALK/ROS1)
-  sowie SCLC ED bei Watch-and-Wait nach Verzicht auf PCI.
+label_de: Schädel-MRT unter Systemtherapie (Verdacht oder Überwachung)
+definition_de: MRT Schädel unter bzw. nach Systemtherapie im Stadium IV – bei klinischem Verdacht auf
+  Hirnmetastasen oder als regelmäßige Überwachung auch asymptomatischer Patient:innen bei onkogen-getriebenem
+  NSCLC (EGFR, ALK, ROS1, NTRK, RET, MET Exon 14) sowie bei SCLC ED mit active surveillance anstelle einer
+  prophylaktischen Schädelbestrahlung (PCI).
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -31,20 +33,26 @@ value_set:
     code: DG020107
     display: MRT-Befund
 care_process:
-  trigger: 'klinischer Verdacht auf Hirnmetastasen (S3 Empf. 16.9) ODER Hochrisiko-Genotyp (NSCLC EGFR/ALK/ROS1;
-    ALK+: MRT bei Diagnosestellung und strukturiert alle 3–6 Monate auch asymptomatisch — Onkopedia NSCLC
-    Kap. 6.1.6.2.1.1) ODER SCLC ED Watch-and-Wait nach Verzicht auf PCI (siehe prophylacticCranialIrradiationStatus)'
-  frequency_pattern: Q3-6M (NSCLC ALK+) · Q3M (SCLC ED Watch-and-Wait; S3 Kap. 16.3.4 — Onkopedia SCLC
-    legt kein Intervall fest, 3-monatlich entspricht dem Kontrollarm Takahashi 2017) · ad-hoc bei Symptomen
+  trigger: 'klinischer Verdacht auf Hirnmetastasen (S3 Empf. 16.9) ODER onkogen-getriebenes NSCLC im Stadium
+    IV unter Therapie – regelmäßige ZNS-Bildgebung auch bei asymptomatischen Patient:innen (EGFR: S3 Empf.
+    8.120; ALK: Empf. 8.132 und Onkopedia NSCLC Kap. 6.1.6.2.1.1; ROS1: Empf. 8.139; NTRK: Empf. 8.143;
+    RET: Empf. 8.145; MET Exon 14: Empf. 8.147) ODER SCLC ED mit Ansprechen auf die Erstlinientherapie
+    und active surveillance anstelle einer PCI (S3 Empf. 9.26; Onkopedia SCLC Kap. 6.1.1.5/8.2.2; siehe
+    prophylacticCranialIrradiationStatus)'
+  frequency_pattern: 'NSCLC ALK+/ROS1+/NTRK+/RET+/MET-Exon-14+: Q3-9M, auch asymptomatisch (S3 Empf. 8.132/8.139/8.143/8.145/8.147;
+    Onkopedia NSCLC ALK+: z. B. Q3-6M) · NSCLC EGFR+: Q6M oder Q12M (S3 Empf. 8.120: „z.B. alle 6 oder
+    12 Monate“) · SCLC ED mit active surveillance statt PCI: Q3M-Y1;Q6M-PostY1 (S3 Empf. 9.26) · ad-hoc
+    bei klinischem Verdacht auf Hirnmetastasen (S3 Empf. 16.9)'
   responsible_role: Radiologie / Onkologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Kap. 16.3.4 (NSCLC EGFR/ALK/ROS1; SCLC ED Watch-and-Wait: MRT Schädel alle 3 Monate); Empf.
-      16.9 (EK: MRT Schädel bei Verdacht auf Hirnmetastasen)'
-    recommendation_grade: Statement
+    section: 'Empf. 16.9 (EK, geprüft 2026: MRT Schädel bei Verdacht auf Hirnmetastasen im Rahmen der
+      Evaluation unter Systemtherapie); Kap. 16.3.4 (Hintergrundtext ohne Empfehlungsgrad: Risikokollektive
+      EGFR/ALK/ROS1 im Stadium IVA/IVB; ED-SCLC-Observation mit MRT Schädel alle drei Monate)'
+    recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia NSCLC
     version: Stand April 2025
@@ -59,6 +67,24 @@ evidence:
     section: 'Kap. 6.1.1.5; Kap. 8.2.2 (ED: PCI als Alternative zur Überwachung mit MR-Verlaufskontrollen,
       individuell zu erörtern; Intervall nicht festgelegt)'
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 9.6.3.1, Empf. 9.26 (evidenzbasiert, Konsens, geprüft 2026): SCLC mit Ansprechen auf
+      die Erstlinienchemotherapie – PCI oder active surveillance mit 3-monatiger MRT-Kontrolle des Gehirns
+      im 1. Jahr, anschließend alle 6 Monate'
+    recommendation_grade: A
+    evidence_level: '2'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6.4.2 Empf. 8.120 (EGFR: ZNS-Bildgebung in regelmäßigen Abständen, z. B. alle 6 oder
+      12 Monate, auch bei asymptomatischen Patienten); Kap. 8.6.5.5 Empf. 8.132 (ALK+), Kap. 8.6.6.2 Empf.
+      8.139 (ROS1+), Kap. 8.6.8 Empf. 8.143 (NTRK), Kap. 8.6.9 Empf. 8.145 (RET), Kap. 8.6.10 Empf. 8.147
+      (MET Exon 14): regelmäßige ZNS-Bildgebung auch bei asymptomatischen Patienten alle 3–9 Monate (alle
+      EK, Starker Konsens, geprüft 2026)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -80,6 +106,17 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'SNOMED-Kodierung der Schädel-MRT gemeinsam mit brainMriHighRisk entscheiden: Beide Elemente führen
+  denselben Coding-Satz mit 241601008 ''MRI of head'', einem Gruppierungskonzept, das weitere Kopf-MRT-Untersuchungen
+  umfasst. Untersucht wird das Gehirn (S3-LL Lungenkarzinom 5.1, Empf. 9.26: „MRT-Kontrolle des Gehirns“;
+  Empf. 8.132 ff.: „Bildgebung des ZNS“); dazu passt das engere, aktive Kindkonzept 816077007 ''MRI of
+  brain'' (Parents 241601008 und 441986001 ''Imaging of brain''), deckungsgleich mit LOINC 24590-2 ''MR
+  Brain''. In brainMriHighRisk war 241601008 ursprünglich mit dem Anzeigetext ''MRI of brain (procedure)''
+  erfasst; bei der Terminologie-Verifikation vom 2026-10-13 wurde nur der Anzeigetext angeglichen und
+  derselbe Code hier ergänzt. Für 241601008 spricht der Wortlaut der OPS-Codes 3-800/3-820 („des Schädels“).
+  Zu entscheiden: 241601008 in beiden Elementen durch 816077007 ersetzen oder in beiden beibehalten; eine
+  Änderung in nur einem Element ließe die beiden Schädel-MRT-Elemente auseinanderlaufen.'
 related_elements:
 - relation: dependsOn
   target: prophylacticCranialIrradiationStatus

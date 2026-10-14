@@ -15,17 +15,14 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '1397166002'
-    display: Participates in shared decision making
-  - system: snomed-ct
     code: '1186606009'
     display: Patient request observable
   - system: loinc
     code: 61146-7
     display: Goals Narrative
   - system: loinc
-    code: 52685-5
-    display: Care goals documented
+    code: 75773-2
+    display: Goals, preferences, and priorities for medical treatment Narrative - Reported
 standard_mappings:
 - standard: fhir-r4-base
   resource: Goal
@@ -51,8 +48,28 @@ evidence:
     section: DE-006 Zielsetzungen/Wunsch des Pat.
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.2 Empf. 7.1 (patientenzentrierte Kommunikation, die eine partizipative Entscheidungsfindung
+      ermöglicht) und Kap. 7.3.1 Empf. 7.4 (Vorstellungen, Hoffnungen und Befürchtungen erfragen); jeweils
+      EK, geprüft 2026
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.1 Empf. 5.5 (EK, neu 2026, Starker Konsens: Aufgabenfeld der palliativmedizinischen
+      Basisversorgung durch Primärbehandelnde bei niedriger Komplexität „Konsentierung der patient:innenindividuellen
+      Therapiezielfindung“); Kap. 6.2 Empf. 6.1 (EK, modifiziert 2026, Starker Konsens: Informationen
+      „orientiert an deren aktuellen Wünschen und Präferenzen“ vermitteln); Kap. 6.5 Empf. 6.13 (EK, geprüft
+      2026, Starker Konsens: Gesprächsbegleitung zur vorausschauenden Versorgungsplanung frühzeitig und
+      wiederholt bei wesentlichen Veränderungen von Befinden und Prognose anbieten – ACP-spezifisch, nur
+      analog für den Trigger „bei Verschlechterung erneut“) – Geltungsbereich: nicht heilbare Krebserkrankung'
+    recommendation_grade: EK
+    evidence_level: n/a
 iso13972_metadata:
-  type: social
+  type: plan
   keywords:
   - Lungenkarzinom
   - primarycare

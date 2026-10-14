@@ -21,19 +21,22 @@ value_set:
     code: '184103008'
     display: Patient telephone number
   - system: snomed-ct
-    code: '370157003'
-    display: Main spoken language
+    code: '428996008'
+    display: Language preference
   - system: snomed-ct
     code: '184104002'
     display: Patient occupation
   - system: loinc
-    code: 54505-3
-    display: Language
+    code: 54899-0
+    display: Preferred language
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
   resource: Patient
   path: Patient.address / Patient.telecom / Patient.communication.language
+constraints_de: Personenbezogen — Anschrift und Telefon/E-Mail direkt identifizierend, Beruf/Arbeitgeber
+  indirekt identifizierend; Nutzung nur im Behandlungskontext; für Sekundärnutzung nur pseudonymisiert
+  und datensparsam (MII KDS PatientPseudonymisiert).
 care_process:
   trigger: Aufnahme / Erstkontakt; Aktualisierung bei Änderung
   frequency_pattern: once (Update ad-hoc)
@@ -53,6 +56,14 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-035 Stammdaten (Kontakt- und Adressdaten, Beruf, Arbeitgeber, Sprache)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Principle 5 Care coordination (translation/interpreter services, S. 15); Principle 6 Communication
+      (professionally trained interpreters, S. 16); Step 2.3 Initial referral (notification if an interpreter
+      service is required, S. 24)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -75,3 +86,20 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Strukturierung prüfen: Das Sammelelement (Anschrift, Telefon/E-Mail, bevorzugte Sprache, Beruf/Arbeitgeber)
+  ist als string 0..1 modelliert, die Mapping-Ziele im Patient-Profil sind aber strukturierte FHIR-Typen
+  (Patient.address: Address, Patient.telecom: ContactPoint, Patient.communication.language: CodeableConcept).
+  Aufteilung in Teil-Elemente oder eine Gruppe prüfen. Mapping der bevorzugten Sprache präzisieren: Patient.communication.language
+  mit Patient.communication.preferred = true. Für den Arbeitgeber kommt neben einer social-history-Observation
+  auch Patient.contact (relationship v2-0131 „E“ Employer, organization) in Betracht. Abgrenzung zu socialSituation
+  („berufliche Situation“, SNOMED CT 224362002 Employment status) festlegen, um Doppelerfassung zu vermeiden.'
+- 'Fachliche Lücke: „Beruf/Arbeitgeber“ als Stammdatum ersetzt nicht die nach S3-LL Lungenkarzinom 5.1
+  (Juli 2026, AWMF 020-007OL), Kap. 3.7, Empf. 3.1 (EK, modifiziert 2026, Starker Konsens) geforderte
+  Erhebung: Bei allen Patient:innen mit Lungenkarzinom sollen Rauchen, berufliche Noxen und die Familienanamnese
+  bezüglich maligner Erkrankungen anamnestisch erfragt werden; „Die Erhebung einer umfassenden Arbeitsanamnese
+  ist erforderlich.“ Laut Hintergrundtext sollte die Arbeitsanamnese chronologisch-tabellarisch erfolgen
+  (Muster Tab. 9); berufliche Kanzerogene werden für ca. 9–15 % aller Lungenkrebsfälle verantwortlich
+  gemacht. Bei begründetem Verdacht auf eine Berufskrankheit besteht die Pflicht zur Verdachtsanzeige
+  (Kap. 4.3, Hintergrundtext). Eigenes Element (Arbeitsanamnese/berufliche Exposition) im Umfeld von historyTakingPrimaryCare
+  bzw. riskFactorAndAlert prüfen und die Phasenzuordnung klären (Empf. 3.1 nennt keinen Erhebungszeitpunkt).'

@@ -23,6 +23,21 @@ value_set:
   - system: icd-10-gm
     code: T66
     display: Nicht näher bezeichnete Schäden durch Strahlung
+  - system: snomed-ct
+    code: '373865001'
+    display: Cancer treatment related morbidity
+  - system: snomed-ct
+    code: '18846006'
+    display: Chemotherapy-induced nausea and vomiting
+  - system: icd-10-gm
+    code: T88.7
+    display: Nicht näher bezeichnete unerwünschte Nebenwirkung eines Arzneimittels oder einer Droge
+  - system: icd-10-gm
+    code: J70.0
+    display: Akute Lungenbeteiligung bei Strahleneinwirkung
+  - system: icd-10-gm
+    code: J70.4
+    display: Arzneimittelinduzierte interstitielle Lungenkrankheit, nicht näher bezeichnet
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
@@ -48,6 +63,24 @@ evidence:
     section: DE-018 Komplikationen / DE-028 Nebenwirkungen
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie, keine Empfehlungsgrade) –
+      Empfehlungsliste Abb. 2 (S. 95) bzw. Anhang 2: Dos – Relevante Informationen – Anamnese, Abschlussstatus
+      und Epikrise: „Komplikationen und bestehende Langzeitfolgen“; Ergebnisse (Synthese – Empfehlungsliste,
+      S. 95): Komplikationen während der Therapie bzw. (Langzeit-)Folgen sind zu listen, um eine gezielte
+      Therapieeinleitung zu ermöglichen und Doppeluntersuchungen zu vermeiden'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 4.5.4 Communication with the general practitioner (GP hilft beim Management von Nebenwirkungen;
+      Kommunikation über potential side effects); Step 5.1 treatment summary (current toxicities; potential
+      long-term and late effects)
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:
@@ -68,8 +101,14 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Laut Erhebung (DE-018, DE-028) ist die Onkolog:in verantwortlich, in den data_flows ist sie aber nur
+  lesend (kis/read) eingetragen. Klären und ggf. ergänzen: Erfassung durch die Onkolog:in (KIS, Übermittlung
+  per Arztbrief) und Übernahme als ICD-kodierte Diagnose im PVS durch die Hausärzt:in.'
 related_elements:
 - relation: generalizes
   target: postTherapyComplication
 - relation: generalizes
   target: adverseEventCtcae
+- relation: dependsOn
+  target: cancerTreatmentHistory

@@ -26,6 +26,12 @@ value_set:
   - system: kdl
     code: AU050102
     display: Überweisungsschein
+  - system: kdl
+    code: AU050101
+    display: Verordnung von Krankenhausbehandlung
+  - system: kdl
+    code: AM160301
+    display: Heil- / Hilfsmittelverordnung
 standard_mappings:
 - standard: fhir-r4-base
   resource: ServiceRequest
@@ -51,6 +57,13 @@ evidence:
     section: DE-009 Überweisungsschein
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 2.3 Initial referral (Überweisung durch die Hausärzt:in inkl. Mindestinhalte); Step
+      2.4.2 (Information zu Überweisungsziel, -grund und erwarteten Terminfristen)
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: procedure
   keywords:
@@ -71,3 +84,13 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Mapping-Pfad und Datentyp passen nicht zusammen. Das Element ist als Reference auf die Überweisung
+  bzw. Verordnung typisiert, gemappt wird aber auf ServiceRequest.reasonCode. Dieses Feld trägt nur den
+  codierten Überweisungsgrund (z. B. ICD-10-GM), und keiner der gelisteten Codes ist ein solcher Grund.
+  Prüfen: (1) Mapping auf die Ressource ServiceRequest, mit der Überweisungsart z. B. in ServiceRequest.category
+  oder .code (etwa SNOMED 3457005). Für den Überweisungs- bzw. Verordnungsschein DocumentReference.type
+  (LOINC 57133-1; KDL AU050102, AU050101, AM160301). (2) Den in definition_de genannten Überweisungsgrund
+  nicht streichen, sondern als eigenes Teil-Element modellieren (ServiceRequest.reasonCode/reasonReference).
+  LOINC 42349-1 bezeichnet nur den narrativen Abschnitt „Reason for referral“ und gehört zu diesem Teil-Element,
+  nicht als Code der Überweisung selbst.'

@@ -16,25 +16,36 @@ value_set:
   binding_strength: required
   codings: []
   standard_binding_status: pending-mapping
-  notes: LOINC 63994-4 ist auf dem MII TermServ (LOINC 2.83) nicht auffindbar; weder LOINC noch SNOMED
-    CT (20260701) führen ein Konzept für das NCCN Distress-Thermometer. Mapping offen (Antrag SNOMED CT
-    / LOINC oder lokales ValueSet).
+  notes: 'Kein LOINC- und kein SNOMED-CT-Konzept für das NCCN Distress-Thermometer auf dem MII TermServ
+    (LOINC 2.83, SNOMED CT 20260701; Stand 2026-10-14): $expand ‚distress thermometer‘ ergibt in beiden
+    Systemen 0 Treffer; ‚distress‘, ‚NCCN‘ und ‚thermometer‘ liefern nur andere Konzepte (z. B. FACIT-NCCN-Symptomindizes,
+    Kessler K6/K10, PROMIS, CORE-OM, Thermometer-Geräte), kein DT-Konzept. Der früher notierte Code LOINC
+    63994-4 ist kein gültiger LOINC-Code (Prüfziffer zu 63994 wäre 8; 63994-8 = PhenX-Item ‚fixed braces‘).
+    Mapping offen (Antrag SNOMED CT / LOINC oder lokales ValueSet).'
+constraints_de: 'Wertebereich 0..10 (ganzzahlig; Selbsteinschätzung durch die Patient:in). Cut-off ≥5
+  = auffällig (S3-LL Psychoonkologie 2.1 Tab. 8: 0–4 unauffällig, 5–10 auffällig) → vertiefende Diagnostik,
+  Information, Beratung (Kap. 7.4).'
 care_process:
-  trigger: regelmäßig in Nachsorge
+  trigger: bei jeder Nachsorgevisite (Raster Empf. 16.7); zusätzlich bei Therapieende, Rezidiv/Progress
+    oder Änderung des Erkrankungsstatus
   frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
   responsible_role: Onkologe / Psychoonkologie
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 (Distress-Thermometer mit Problemliste)
+    section: 'Tab. 6 (Kap. 5.3, Faktor 1 ‚Probleme und Bedürfnisse d. Patient:in'': Distress-Thermometer
+      mit Problemliste [39 = Mehnert 2006, deutsche Version des NCCN-DT]); Kontext Empf. 5.2 (EK: validierte
+      multidimensionale Erfassungsinstrumente)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Principle 4 Supportive care
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 4 Supportive care (Box ‚Validated screening tools'': NCCN Distress Thermometer
+      and Problem Checklist; Key review points: end of treatment, throughout survivorship, diagnosis of
+      recurrence); Step 5.4.1 (Survivorship: Verweis auf die Principle-4-Instrumente)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
@@ -44,6 +55,14 @@ evidence:
       16.1 (EK: Bedarf an Psychoonkologie erkennen)'
     recommendation_grade: EK
     evidence_level: n/a
+  - source: andere
+    version: S3-LL Psychoonkologie 2.1 (August 2023, AWMF 032-051OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/psychoonkologie
+    section: 'Empf. 7.4 (A, LoE 1b, Konsens, modifiziert 2023: Distress-Thermometer als validiertes Screeninginstrument
+      für psychosoziale Belastung); Tab. 8 (DT 0–4 unauffällig / 5–10 auffällig, Evidenzlevel 1b); Kap.
+      7.4 (auffälliger Screeningwert → vertiefende Diagnostik, Information, Beratung und Begleitung)'
+    recommendation_grade: A
+    evidence_level: 1b
 iso13972_metadata:
   type: observation
   keywords:

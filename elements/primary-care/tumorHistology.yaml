@@ -2,8 +2,9 @@ id: mihub.lung.primarycare.tumorHistology.v0.1
 uuid: c13a775c-29c6-5c92-891c-b59b0d358f77
 name: tumorHistology
 label_de: Histologie
-definition_de: Histologischer Tumortyp (ICD-O-3-Morphologie) aus der mikroskopischen Untersuchung des
-  entnommenen Gewebes.
+definition_de: 'Histologischer Tumortyp nach der jeweils gültigen WHO-Klassifikation (laut S3-LL Lungenkarzinom
+  5.1: 5. Auflage 2021), kodiert als ICD-O-3-Morphologie mit Dignität (z. B. 8140/3), bestimmt am Resektat,
+  an einer Biopsie oder an einem zytologischen Präparat.'
 phase: primarycare
 tumor_entity:
 - lung_cancer_any
@@ -30,11 +31,11 @@ value_set:
     code: 8012/3
     display: Großzelliges Karzinom o.n.A.
   - system: snomed-ct
-    code: '250537006'
-    display: Histopathology finding
+    code: '911750741000004104'
+    display: Histologic type of primary malignant neoplasm of lung
   - system: loinc
-    code: 22036-8
-    display: Histology Cancer Narrative
+    code: 59847-4
+    display: Histology and Behavior ICD-O-3 Cancer
   - system: kdl
     code: PT080102
     display: Histologiebefund
@@ -45,6 +46,11 @@ standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
   resource: Observation (Pathologie-Befund)
+instruction_de: Typisierung nach der jeweils gültigen WHO-Klassifikation (S3-LL Lungenkarzinom 5.1, Empf.
+  6.50); Übernahme als ICD-O-3-Morphologie mit Dignität wie im Pathologiebefund angegeben. 8046/3 (NSCLC-NOS)
+  nur verwenden, wenn der Befund keine genauere Typisierung enthält (laut WHO-Klassifikation so selten
+  wie möglich; Hintergrund zu Empf. 6.51). Bei Rebiopsie (z. B. bei TKI-Resistenz, Kap. 8.6.4.2, Tab.
+  36) den neuen Befund ergänzen, da eine histologische Transformation (z. B. zu SCLC) möglich ist.
 care_process:
   trigger: Histologiebefund; Übernahme in die Hausarztakte
   frequency_pattern: once (Update bei Re-Biopsie)
@@ -69,6 +75,14 @@ evidence:
       (1)-Amed.xlsx)
     section: DE-026 Histologie
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 6.6.4 Histopathologische Typisierung, Empf. 6.50 (Tab. 27 WHO-Klassifikation der Thorakalen
+      Tumoren, 5. Aufl. 2021); Kap. 19.1/19.2 Tab. 46/47 (Histologische Typisierung: WHO-Klassifikation;
+      ICD-O-3)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: condition

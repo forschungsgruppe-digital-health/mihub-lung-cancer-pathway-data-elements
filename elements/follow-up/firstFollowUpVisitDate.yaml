@@ -2,8 +2,10 @@ id: mihub.lung.followup.firstFollowUpVisitDate.v0.1
 uuid: 3948c905-5fd2-5899-85b7-d2de5114bc4c
 name: firstFollowUpVisitDate
 label_de: Datum Erstvorstellung in der Nachsorge
-definition_de: Datum der ersten klinischen Vorstellung nach Abschluss der lokal-ablativen Therapie. Soll
-  innerhalb von 8 Wochen nach Therapieende erfolgen.
+definition_de: Datum der ersten klinischen Vorstellung in der Nachsorge nach Abschluss der lokal-ablativen
+  Therapie (OP, RT/RCT). Die Erstvorstellung erfolgt in der Regel innerhalb von 8 Wochen nach Therapieende;
+  mit ihr beginnen die Nachsorgeintervalle (S3 Empf. 16.4, 16.7). Bei NSCLC Stadium III nach RT/RCT soll
+  sie innerhalb von 8 Wochen erfolgen (S3 Empf. 16.5).
 phase: followup
 tumor_entity:
 - NSCLC
@@ -12,7 +14,10 @@ category: kontakt-visite
 datatype: dateTime
 cardinality: 1..1
 value_set:
-  codings: []
+  codings:
+  - system: snomed-ct
+    code: '390906007'
+    display: Follow-up encounter
 standard_mappings:
 - standard: fhir-r4-base
   resource: Encounter
@@ -65,3 +70,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: hasPart
+  target: postTherapyComplication

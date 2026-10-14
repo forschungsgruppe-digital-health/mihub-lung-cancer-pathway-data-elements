@@ -71,9 +71,23 @@ evidence:
     recommendation_grade: n/a
     evidence_level: n/a
   - source: andere
-    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
-    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik)
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Anhang 2 / Abb. 2 (LoTeCaS-GP-Empfehlungen), Dos – Relevante Informationen: Anamnese, Abschlussstatus
+      und Epikrise (Status zum Abschluss der onkologischen Nachsorge)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.1 Empf. 16.1/16.2 (strukturierter Nachsorge- bzw. Verlaufsplan: Rezidive, Progression,
+      Zweitkarzinome); Kap. 16.4 Empf. 16.9 (Evaluation von Ansprechen und Progress unter Systemtherapie)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.4 Communication with the general practitioner (the patient’s progress)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -96,6 +110,22 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Die Werteliste belegt Kategorien doppelt und mischt Achsen: ‚kein Nachweis/rezidivfrei‘ = 260415000
+  (Not detected, qualifier value) und 445150007 (Surviving free of recurrence of neoplastic disease, finding);
+  ‚Progress‘ = 271299001 (Patient''s condition worsened) und 1371415000 (Malignant neoplastic disease
+  progression). Das mCODE-STU4-ConditionStatusTrendVS (4.0.0) enthält nur 268910001, 359746009, 271299001
+  und 709137006; 260415000, 445150007 und 1371415000 gehören nicht dazu. Je Kategorie genau einen Code
+  festlegen und das Mapping in value_set.notes dokumentieren (wie bei recistResponse). Als Referenz für
+  die Kategorien bietet sich die im Mapping genannte oBDS-Gesamtbeurteilung des Tumorstatus an (V/T/K/P/D/B/R/Y/U/X;
+  MII KDS Onkologie: CodeSystem mii-cs-onko-verlauf-gesamtbeurteilung, SNOMED-Zuordnung in der ConceptMap
+  mii-cm-onko-verlauf-gesamtbeurteilung-sct). Die Kategorie ‚nicht beurteilbar‘ fehlt (oBDS U ‚Beurteilung
+  unmöglich‘; Kandidat 709137006 Patient condition undetermined wie in recistResponse – die MII-ConceptMap
+  bildet U allerdings auf 385432009 Not applicable ab).'
+- definition_de nennt ‚Metastasen‘ als Statuswert, die Erhebung DE-030 zusätzlich ‚Tumorgröße‘ und ‚aktuelle
+  Ausbreitung‘. Das sind keine Kategorien einer Gesamtbeurteilung, Codes dafür sind nicht hinterlegt.
+  Ausbreitung und Metastasen über recurrenceOrSecondPrimary bzw. tnmStage (rTNM) abbilden und die Definition
+  anpassen (z. B. ‚Progress/Rezidiv inkl. neu aufgetretener Metastasen‘).
 related_elements:
 - relation: generalizes
   target: recistResponse

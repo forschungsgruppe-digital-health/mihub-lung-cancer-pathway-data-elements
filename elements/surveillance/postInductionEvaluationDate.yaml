@@ -25,8 +25,10 @@ standard_mappings:
   resource: Encounter
   path: Encounter.period.start
 care_process:
-  trigger: '1 Monat nach Abschluss der Induktionstherapie (SCLC: Ansprechen nach frühestens 2, i. d. R.
-    nach 3–4 Zyklen)'
+  trigger: 1 Monat nach Abschluss der Induktionsbehandlung unter Systemtherapie im Stadium IV (S3 Empf.
+    16.9; NSCLC und SCLC) – abzugrenzen von der Zwischen-Verlaufskontrolle während der Induktion (NSCLC
+    nach 2, spätestens 3 Zyklen – S3 Empf. 8.84/8.100; SCLC nach frühestens 2, i. d. R. 3–4 Zyklen – Onkopedia
+    SCLC Kap. 6.1.1.4.1.7), die über restagingImagingDate/recistResponse erfasst wird
   frequency_pattern: once-per-line
   responsible_role: Onkolog:in
 evidence:
@@ -70,3 +72,7 @@ related_elements:
   target: restagingImagingDate
 - relation: hasPart
   target: recistResponse
+- relation: hasPart
+  target: physicalExaminationFinding
+- relation: hasPart
+  target: brainMriUnderTherapy

@@ -18,8 +18,8 @@ value_set:
     code: '263495000'
     display: Gender
   - system: loinc
-    code: 46098-0
-    display: Sex
+    code: 107454-1
+    display: Administrative gender
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient

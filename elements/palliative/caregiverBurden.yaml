@@ -1,9 +1,13 @@
 id: mihub.lung.palliative.caregiverBurden.v0.1
 uuid: b6662975-5d43-57e0-9e6a-1bf2564ba684
 name: caregiverBurden
-label_de: Belastung der Angehörigen
-definition_de: Erfassung der multidimensionalen Belastung pflegender Angehöriger (Zarit Burden Interview,
-  CAREPAL, häusliche Pflegeskala HPS-DEGAM).
+label_de: Belastungserfassung Angehörige (Instrument)
+definition_de: 'Erfassung der subjektiven Belastungen und Unterstützungsbedürfnisse von Angehörigen mit
+  einem validierten Instrument; kodiert wird das verwendete Instrument: multidimensionaler CAREPAL-Fragebogen
+  (8-Item-Version für die spezialisierte, 10-Item-Version für die allgemeine Palliativversorgung, 11-Item-Version
+  für die Sterbephase), Zarit Burden Interview (deutsche Version G-ZBI; Kurzformen ZBI-1/ZBI-7) oder Häusliche
+  Pflegeskala (HPS) der DEGAM (Kurzform HPS-k). Die Kurzformen ZBI-1/ZBI-7 und HPS-k sind laut S3-LL Palliativmedizin
+  3.0 (Kap. 7.4.2) unidimensional. Der Zahlenwert wird in caregiverBurdenScore erfasst.'
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -14,11 +18,10 @@ cardinality: 0..*
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: 'Codes für deutschsprachige Angehörigenbelastungs-Instrumente CAREPAL und HPS-DEGAM. LOINC kennt
-    Zarit Burden Interview (62133-0, oben verwendet), nicht aber CAREPAL oder die Häusliche Pflegeskala
-    der DEGAM. Nur diese beiden Codes sind projekt-lokal. Zarit Burden Interview: weder LOINC 2.83 noch
-    SNOMED CT 20260701 führen auf dem MII TermServ ein Konzept (Stand 2026-10-13); CAREPAL/HPS-DEGAM bleiben
-    projekt-lokal.'
+  notes: Kein LOINC-/SNOMED-CT-Konzept für CAREPAL, das Zarit Burden Interview (G-ZBI, ZBI-1/-7) oder
+    die Häusliche Pflegeskala (HPS/HPS-k) auf dem MII TermServ (LOINC 2.83, SNOMED CT 20260701; $expand-Suche
+    2026-10-14); alle Instrument-Codes sind projekt-lokale Platzhalter. Der frühere Code LOINC 62133-0
+    existiert in LOINC 2.83 nicht.
   codings:
   - system: local-no-standard-binding
     code: CAREPAL
@@ -26,18 +29,31 @@ value_set:
   - system: local-no-standard-binding
     code: HPS-DEGAM
     display: Häusliche Pflegeskala (HPS)
+  - system: local-no-standard-binding
+    code: ZBI
+    display: Zarit Burden Interview (dt. Version G-ZBI; Kurzformen ZBI-1/ZBI-7)
 care_process:
-  trigger: Aufnahme + bei Verschlechterung
-  frequency_pattern: Q1M in SPV
+  trigger: bei Aufnahme sowie proaktiv und wiederholt im Verlauf, insbesondere bei Veränderungen der Situation
+  frequency_pattern: weekly (Beispiel der S3-LL Palliativmedizin 3.0, Kap. 7.4.1; evidenzbasierte Zeitpunkte
+    fehlen)
   responsible_role: Palliativ-Team / Sozialdienst
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 7.4 Bedarfserfassung bei Angehörigen; Tab. 6
-    recommendation_grade: A
+    section: 'Kap. 7.4.2 Standardisierte Instrumente der Bedarfserfassung, Empf. 7.6 (Belastungen/Bedürfnisse
+      proaktiv und wiederholt ermitteln) und Empf. 7.7 (validierte multidimensionale Erfassungsinstrumente);
+      Instrumente: Tab. 6 (Kap. 5.3), Zeile 2 „Belastungen der Angehörigen“'
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 8.2 Konzept der frühzeitigen Integration palliativmedizinischer Versorgung, Empf. 8.5
+      (u. a. Wahrnehmung von Belastungen in der Familie und bei Freunden mit Angebot der Unterstützung)
+    recommendation_grade: B
+    evidence_level: '3'
 iso13972_metadata:
   type: observation
   keywords:
@@ -58,3 +74,7 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Wertemenge unvollständig: Die S3-LL Palliativmedizin 3.0 nennt für das Angehörigen-Screening vier Instrumente,
+  darunter das Distress-Thermometer (Kap. 7.4.2); es fehlt hier (vgl. Element distressThermometerScore).
+  Das kategoriale CAREPAL-Ergebnis (4 Risikogruppen) ist im Katalog nicht abbildbar, siehe Issue bei caregiverBurdenScore.'

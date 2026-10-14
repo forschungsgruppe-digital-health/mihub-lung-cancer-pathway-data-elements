@@ -20,6 +20,9 @@ value_set:
   - system: snomed-ct
     code: '171022008'
     display: Psychological counseling
+  - system: snomed-ct
+    code: '413736002'
+    display: Cancer emotional and psychosocial support and education
 standard_mappings:
 - standard: fhir-r4-base
   resource: Procedure
@@ -43,6 +46,24 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-007 Psychoonkologische Gespräche
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 8.77 (Kap. 8.6.1 NSCLC Stadium IV; EK, geprüft 2026, Starker Konsens: Möglichkeiten
+      der psychoonkologischen Unterstützung sollten angesprochen werden); Empf. 16.1 und 16.2 (EK, geprüft
+      2026, Starker Konsens: strukturierter Nachsorge- bzw. Verlaufsplan sollte geeignet sein, den Bedarf
+      an Psychoonkologie zu erkennen); Empf. 7.6 (Kap. 7.3.1 Diagnosemitteilung; EK, geprüft 2026, Konsens:
+      Angehörige sollen nach ihren Bedürfnissen gefragt und bei Bedarf zum Annehmen von Unterstützungsangeboten
+      ermutigt werden); Kap. 11 (Verweis auf S3-LL Psychoonkologie, ohne eigene Empfehlungen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Principle 4 Supportive care (Screening/Bedarfserhebung bei Patient:innen und Familien; Key
+      review points); Appendix B Psychological needs (Überweisungsanlässe; Unterstützung für Angehörige)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -70,3 +91,5 @@ related_elements:
   target: psychoOncologyReferral
 - relation: dependsOn
   target: distressThermometerScore
+- relation: dependsOn
+  target: mentalHealthStatus

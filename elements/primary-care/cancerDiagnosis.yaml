@@ -2,8 +2,9 @@ id: mihub.lung.primarycare.cancerDiagnosis.v0.1
 uuid: 00fe7f61-d908-5fd1-8723-186011fe6457
 name: cancerDiagnosis
 label_de: Krebsdiagnose(n)
-definition_de: Tumordiagnose(n) der Patient:in mit Diagnosedatum (ICD-10-GM C34.-), ggf. mehrere Primärtumoren;
-  Grundlage der hausärztlichen Mitbetreuung.
+definition_de: 'Tumordiagnose(n) der Patient:in mit Diagnosedatum: Lungenkarzinom (ICD-10-GM C34.0–C34.9)
+  bzw. Lungenkarzinom in der Eigenanamnese (Z85.1); ggf. mehrere Primärtumoren inkl. Zweitkarzinome anderer
+  Lokalisation; Grundlage der hausärztlichen Mitbetreuung.'
 phase: primarycare
 tumor_entity:
 - lung_cancer_any
@@ -11,7 +12,7 @@ category: diagnose
 datatype: CodeableConcept
 cardinality: 1..*
 value_set:
-  binding_strength: required
+  binding_strength: extensible
   standard_binding_status: mapped
   codings:
   - system: icd-10-gm
@@ -21,11 +22,15 @@ value_set:
     code: C34
     display: Bösartige Neubildung der Bronchien und der Lunge
   - system: snomed-ct
-    code: '363358000'
-    display: Malignant neoplasm of lung
+    code: '93880001'
+    display: Primary malignant neoplasm of lung
   - system: icd-10-gm
     code: Z85.1
     display: Bösartige Neubildung der Trachea, der Bronchien oder der Lunge in der Eigenanamnese
+  notes: 'ICD-10-GM endständig kodieren: C34.0–C34.9 (C34 nur Gruppierungsanker, nicht endständig); Lungenkarzinom
+    in der Eigenanamnese: Z85.1; Zweitkarzinome anderer Lokalisation mit dem jeweiligen ICD-10-GM-Kode
+    (Binding extensible). SNOMED CT: 93880001 Primary malignant neoplasm of lung (363358000 schließt Lungenmetastasen
+    ein).'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
@@ -69,9 +74,18 @@ evidence:
     recommendation_grade: n/a
     evidence_level: n/a
   - source: andere
-    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
-    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik)
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Anhang 2 / Abb. 2 (LoTeCaS-GP-Empfehlungen), Dos – Relevante Informationen: Anamnese, Abschlussstatus
+      und Epikrise (onkologische Diagnose und assoziierte Erkrankungen; weitere Diagnosen ohne Details)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.6.5 Communication with the general practitioner (involving the GP from the point of
+      diagnosis; communication about the diagnosis); Step 5.1 Transitioning from active treatment – treatment
+      summary (diagnosis including stage, prognostic or severity score; tumour characteristics)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -95,6 +109,14 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'Das Diagnosedatum steht in definition_de, lässt sich mit datatype CodeableConcept aber nicht abbilden;
+  ein eigenes Datumselement fehlt im Katalog. Entweder ein Teilelement anlegen (date, z. B. Feststellungs-/Erstdiagnosedatum;
+  möglicher Element-Code LOINC 21854-5 ‚Date first Dx Cancer‘) oder im Mapping ausdrücklich das Feststellungsdatum
+  festlegen (MII KDS Modul Diagnose: Condition.extension:Feststellungsdatum, ‚Datum, an dem die Diagnose
+  erstmals festgestellt wurde‘; im MII-Onkologie-Profil Diagnose Primärtumor Pflichtangabe 1..1). Condition.onset[x]
+  (Krankheitsbeginn) und Condition.recordedDate (Aufzeichnungsdatum) sind nicht bedeutungsgleich mit dem
+  Diagnosedatum.'
 related_elements:
 - relation: hasPart
   target: tumorLocalisation

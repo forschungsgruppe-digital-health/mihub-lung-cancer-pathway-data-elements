@@ -4,8 +4,8 @@ name: rehabilitationAndSocialCounselling
 label_de: Information/Beratung zu Rehabilitation und sozialrechtlichen Ansprüchen
 definition_de: Dokumentation, dass die Patient:in frühzeitig über ambulante und stationäre Rehabilitationsmaßnahmen
   sowie weitere sozialrechtliche Ansprüche informiert bzw. an Sozialdienst/Krebsberatungsstelle vermittelt
-  wurde (inkl. Empfehlung einer Klinik mit onkologischem Schwerpunkt unter Berücksichtigung des Patientenwunsches,
-  § 9 SGB IX).
+  wurde (inkl. Empfehlung einer Klinik mit onkologischem Schwerpunkt unter Berücksichtigung des Patientenwunsches
+  — Wunsch- und Wahlrecht, § 8 SGB IX; in Onkopedia noch als § 9 SGB IX a. F. zitiert).
 phase: followup
 tumor_entity:
 - NSCLC
@@ -26,6 +26,9 @@ value_set:
   - system: kdl
     code: AM190203
     display: Einschätzung Sozialdienst
+  - system: snomed-ct
+    code: '308440001'
+    display: Referral to social worker
 standard_mappings:
 - standard: fhir-r4-base
   resource: Procedure / ServiceRequest
@@ -66,9 +69,20 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Empf. 16.1/16.2 (EK: Bedarf an Sozialberatung erkennen); Empf. 8.77 (EK, geprüft 2026: Reha,
-      Sozialberatung, Selbsthilfe ansprechen)'
+    section: 'Empf. 16.1 (EK, geprüft 2026; nach multimodaler Therapie Stadium I–IIIC/OMD) und Empf. 16.2
+      (EK, geprüft 2026; unter systemischer Therapie Stadium IVA/IVB): ein strukturierter Nachsorge-/Verlaufsplan
+      sollte erstellt werden und geeignet sein, u. a. den Bedarf an Psychoonkologie und Sozialberatung
+      zu erkennen; Empf. 8.77 (EK, geprüft 2026; Kap. 8.6 Stadium IV): Möglichkeiten zur Rehabilitation,
+      psychoonkologischen Unterstützung, Sozialberatung bzw. Selbsthilfe sollten angesprochen werden'
     recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 7.3.2 Aufklärung über Behandlungsmaßnahmen (Hintergrundtext, ohne Empfehlungsgrad):
+      Rehabilitation nach abgeschlossener Behandlung sowie Angebote sozialrechtlicher (und psychoonkologischer)
+      Unterstützung ansprechen; bei Bedarf Kontakte vermitteln'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -90,8 +104,16 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+issues:
+- 'Codierung prüfen: KDL AM190203 ''Einschätzung Sozialdienst'' ist eine Dokumentenklasse der Klinischen
+  Dokumentenklassen-Liste (AM ''Administration'' › AM1902 ''Sozialdienst'') und keine Leistung; statt
+  als Procedure.code gegebenenfalls als DocumentReference.type des Sozialdienst-Dokuments führen (eigenes
+  Mapping). 410606002 ''Social service procedure'' ist ein sehr breites Gruppierungskonzept (direktes
+  Kind von ''Procedure''). 410303001 ''Rehabilitation education, guidance, and counseling'' ist seit 2007-01-31
+  inaktiv; für die Information über Rehabilitationsmöglichkeiten ist 410082002 ''Rehabilitation therapy
+  education'' (aktiv; Method: Education - action, Has focus: Rehabilitation therapy) auf Passung zu prüfen,
+  für die Information über sozialrechtliche Ansprüche 223433009 ''Benefits education'' (aktiv) als Ergänzung
+  zu 171001002 ''Benefits counseling''.'
 related_elements:
 - relation: dependsOn
   target: structuredFollowUpPlan
-- relation: hasPart
-  target: rehabilitationMeasure

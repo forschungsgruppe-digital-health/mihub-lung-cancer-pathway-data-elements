@@ -32,6 +32,16 @@ evidence:
       Kap. 16.3.2/16.3.3 (LDCT-Evidenz)'
     recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 5.2 (evidenzbasiertes Statement, geprüft 2026, Starker Konsens: asymptomatische
+      Risikopersonen von 50–75 Jahren mit ≥ 15 Zigaretten/Tag über ≥ 25 Jahre oder ≥ 10 Zigaretten/Tag
+      über ≥ 30 Jahre und Nikotinkarenz < 10 Jahre profitieren in der Regel von jährlicher Niedrigdosis-CT-Früherkennung;
+      gesetzliche Zulässigkeit abweichend nach § 2 LuKrFrühErkV, Fußnote: Zigarettenkonsum ≥ 25 Jahre
+      und ≥ 15 Packungsjahre); Tab. 11 (gesetzliche Vorgaben der LuKrFrühErkV, § 2 Zulässigkeit)'
+    recommendation_grade: Statement
+    evidence_level: '1'
 iso13972_metadata:
   type: plan
   keywords:
@@ -52,6 +62,20 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+issues:
+- 'Status vs. Datentyp/Zulässigkeit: definition_de nennt „Datum/Status“, datatype ist nur dateTime. Ein
+  Einschluss in ein LDCT-Früherkennungsprogramm nach 5 Jahren (S3-LL Lungenkarzinom 5.1, Empf. 16.7) setzt
+  die gesetzliche Zulässigkeit nach § 2 LuKrFrühErkV voraus (S3 Tab. 11: Alter, Tabakrauchexposition,
+  Dauer der Nikotinkarenz und medizinisches Eignungsprofil; Tabakkriterium laut Fußnote zu Statement 5.2:
+  Zigarettenkonsum ≥ 25 Jahre und ≥ 15 Packungsjahre); die Eignungsprüfung regeln Empf. 5.4 und 5.5. Davon
+  zu unterscheiden ist die evidenzbasierte Risikodefinition in Statement 5.2 (50–75 Jahre; ≥ 15 Zigaretten/Tag
+  über ≥ 25 Jahre oder ≥ 10 Zigaretten/Tag über ≥ 30 Jahre; Nikotinkarenz < 10 Jahre). Überlebende sind
+  daher nicht automatisch zulässig. Status (eingeschlossen / nicht zulässig / abgelehnt) zusätzlich zum
+  Datum erfassen oder „Status“ aus der Definition streichen. Für die Zulässigkeitsprüfung fehlen im Katalog
+  zudem Packungsjahre, Rauchdauer und Karenzdauer (smokingStatus erfasst nur den Konsumstatus). Kontext
+  S3 Kap. 16.3.4: „Ob eine weitere Nachsorge nach 5 Jahren sinnvoll ist, ist strittig.“'
 related_elements:
 - relation: dependsOn
   target: followUpInterval
+- relation: dependsOn
+  target: smokingStatus

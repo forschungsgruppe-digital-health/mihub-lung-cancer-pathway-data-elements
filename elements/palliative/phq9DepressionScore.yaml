@@ -2,8 +2,10 @@ id: mihub.lung.palliative.phq9DepressionScore.v0.1
 uuid: 2abc7a8b-6b84-5639-b883-e7215c09087a
 name: phq9DepressionScore
 label_de: PHQ-9 Depressionsscore
-definition_de: Patient Health Questionnaire 9 (PHQ-9), 0–27, zur Diagnose und Schweregrad-Einschätzung
-  einer Depression.
+definition_de: Gesamtscore des Patient Health Questionnaire-9 (PHQ-9; 9 Items, Wertebereich 0–27) als
+  Screening- und Verlaufsinstrument zur Erkennung und Schweregrad-Einschätzung depressiver Symptomatik.
+  Ein auffälliger Wert ersetzt nicht die klinische Diagnosestellung nach ICD-10-Kriterien (S3-LL Palliativmedizin
+  3.0, Empf. 18.5).
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -18,7 +20,10 @@ value_set:
   - system: loinc
     code: 44261-6
     display: Patient Health Questionnaire 9 item (PHQ-9) total score [Reported]
-constraints_de: Wertebereich 0..27. Cut-off ≥10 = mittelschwere Depression.
+constraints_de: Wertebereich 0..27. Cut-off ≥10 = auffälliges Screening-Ergebnis (Schwellenwert aus der
+  PHQ-9-Literatur, nicht Inhalt der S3-LL); Diagnose und Schweregrad sind klinisch nach ICD-10-Kriterien
+  zu sichern (S3-LL Palliativmedizin 3.0, Empf. 18.5). Somatische Items (Appetit, Schlaf, Energie, Konzentration,
+  Psychomotorik) sind bei fortgeschrittener Krebserkrankung nur eingeschränkt verwertbar (Kap. 18.3.2).
 care_process:
   trigger: Screening bei Aufnahme + Verlauf
   frequency_pattern: per-encounter / monthly
@@ -26,11 +31,18 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 18.3 Screening Depression
+    section: Kap. 18.3.1 Screening, Empf. 18.2 (Vorliegen einer Depression aktiv und regelmäßig prüfen)
     recommendation_grade: A
-    evidence_level: n/a
+    evidence_level: '4'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 18.3.1 Screening, Empf. 18.3 (Screeningverfahren zur Erkennung einer Depression; PHQ-9
+      nicht namentlich genannt)
+    recommendation_grade: B
+    evidence_level: 1+
 iso13972_metadata:
   type: observation
   keywords:
@@ -51,3 +63,14 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Instrumentenwahl prüfen: Der Text von Kap. 18.3 der S3-LL Palliativmedizin 3.0 nennt den PHQ-9 nicht
+  (nur indirekt über die dort zitierte Studie Hinz et al. 2016 zur PHQ-9-Schweregradeinschätzung bei Krebspatient:innen).
+  Genannt werden die HADS (HADS-T/HADS-D; laut Metaanalyse als Screeningverfahren geeignet, nicht zur
+  Diagnosestellung; in einer internationalen Delphi-Konsensusrunde niedriger gewertet als die offene Exploration)
+  und das 2-Fragen-Screening nach Whooley (Empf. 18.4, Grad 0, LoE 4). Sonst nennt die Leitlinie den PHQ-9
+  nur in Kap. 7.4.2 (vertiefendes Assessment bei Angehörigen) und als Studienendpunkt (Kap. 18.6.2). Erwägen:
+  Whooley-Screening bzw. HADS-D-Score ergänzen (SNOMED CT 401320004 „HAD scale: depression score“, observable
+  entity, aktiv – MII TermServ 2026-10-14) oder den PHQ-9 ausdrücklich als Expert:innen-Festlegung kennzeichnen
+  (für den PHQ-9 spricht seine Abbildung im MII-KDS-Modul PRO 2026.7.0 mit LOINC 44261-6). „monthly“ in
+  frequency_pattern ist nicht leitlinienbelegt (Kap. 18.3.3: „häufige erneute Einschätzung erforderlich“).'

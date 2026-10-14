@@ -2,9 +2,11 @@ id: mihub.lung.followup.brainMriFinding.v0.1
 uuid: 380a4f95-544d-5848-9438-cdc316b0763c
 name: brainMriFinding
 label_de: Schädel-MRT — Befund
-definition_de: Befund-Kategorisierung der Schädel-MRT. Ergebnisartefakt zur Prozedur 'brainMriHighRisk'
-  (Nachsorge) bzw. 'brainMriUnderTherapy' (Surveillance). Erfasst Hirnmetastasen-Status (neu, persistierend,
-  regredient, kein Befund).
+definition_de: 'Befund-Kategorisierung der Schädel-MRT hinsichtlich Hirnmetastasen. Ergebnisartefakt zur
+  Prozedur ''brainMriHighRisk'' (Nachsorge) bzw. ''brainMriUnderTherapy'' (Surveillance). Erfasst den
+  Hirnmetastasen-Status: Hirnmetastasen neu nachgewiesen (Erstnachweis bzw. Rezidiv nach metastasenfreiem
+  Intervall); bei bestehenden Hirnmetastasen Verlauf stabil (persistierend), regredient oder progredient
+  (zusätzliche und/oder größenprogrediente Herde); kein Nachweis von Hirnmetastasen; unklarer Befund.'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -23,14 +25,20 @@ value_set:
     code: '359746009'
     display: Patient's condition stable
   - system: snomed-ct
-    code: '260413007'
-    display: None
+    code: '260415000'
+    display: Not detected
   - system: snomed-ct
     code: '419984006'
     display: Inconclusive
   - system: kdl
     code: DG020107
     display: MRT-Befund
+  - system: snomed-ct
+    code: '268910001'
+    display: Patient's condition improved
+  - system: snomed-ct
+    code: '271299001'
+    display: Patient's condition worsened
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/
@@ -38,6 +46,13 @@ standard_mappings:
 - standard: obds
   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
   resource: Verlaufsmodul / ZNS-Metastasierung
+instruction_de: 'Ein Eintrag je Schädel-MRT (Cardinality 0..*). Code-Semantik: 94225005 = Hirnmetastasen
+  neu nachgewiesen (Erstnachweis bzw. Rezidiv nach metastasenfreiem Intervall); bei bestehenden Hirnmetastasen
+  Verlaufswerte gemäß der Trend-Konvention von recistResponse/currentTumorStatus (mCODE ConditionStatusTrendVS):
+  359746009 stabil/persistierend, 268910001 regredient, 271299001 progredient (zusätzliche und/oder größenprogrediente
+  Herde); 260415000 = kein Nachweis von Hirnmetastasen; 419984006 = unklarer Befund. KDL DG020107 „MRT-Befund“
+  ist die Dokumentklasse des Befundberichts (Dokumenttyp, z. B. DocumentReference.type), kein Befundwert.
+  Anzahl/Größe der Herde und Freitext gehören in den Befundbericht (DiagnosticReport).'
 care_process:
   trigger: nach jeder Schädel-MRT
   frequency_pattern: per-imaging-event
@@ -47,7 +62,12 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (EK); Kap. 16.3.4 (Watch-and-Wait, MRT alle 3 Mo bei SCLC ED)
+    section: 'Empf. 16.8 (EK, Starker Konsens, geprüft 2026: regelmäßiges Schädel-MRT bei Hochrisiko);
+      Tab. 44 (MRT: Hirn- und Knochenmetastasen); Kap. 16.3.4 Hintergrund (kein Hirnmetastasen-Screening
+      ohne Risikoindikation; ED-SCLC bei Observation statt PCI MRT Schädel alle drei Monate, „Watch and
+      Wait“; graduierte Empfehlung: Empf. 9.26, A, LoE 2 — active surveillance mit MRT 3-monatlich im
+      1. Jahr, danach 6-monatlich); Empf. 16.9 (EK, Starker Konsens: unter Systemtherapie im Stadium IVA/B
+      MRT Schädel bei Verdacht auf Hirnmetastasen)'
     recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
@@ -71,6 +91,17 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'oBDS-Mapping korrigieren: standard_mappings[obds].resource „Verlaufsmodul / ZNS-Metastasierung“ entspricht
+  keinem oBDS-Feld (oBDS-XSD 3.0.4/3.0.5). Fachlich passend ist Verlauf → Tumorstatus Fernmetastasen (oBDS
+  17.5: K keine Fernmetastasen nachweisbar, T Fernmetastasen Residuen, P Fernmetastasen Progress, N Fernmetastasen
+  No Change, R neu aufgetretene Fernmetastase(n) bzw. Metastasenrezidiv, F fraglicher Befund, U unbekannt,
+  X fehlende Angabe) in Kombination mit Fernmetastase → Lokalisation (oBDS 11.1) = BRA „Hirn“ und Diagnosedatum
+  (oBDS 11.2). FHIR-seitig MII KDS Onkologie 2027.0.0-ballot.1: mii-pr-onko-verlauf, component:Fernmetastasen_Verlauf
+  (ValueSet mii-vs-onko-verlauf-fernmetastasen), sowie mii-pr-onko-fernmetastasen (ValueSet mii-vs-onko-fernmetastasen).
+  Der Tumorstatus bezieht sich auf alle Fernmetastasen, nicht nur auf das ZNS, und führt für „regredient“
+  keinen eigenen Wert. Zu entscheiden sind die Zielfelder des Mappings und die Zuordnung der Befundkategorien
+  zu den oBDS-Werten.'
 related_elements:
 - relation: specializes
   target: mihub.lung.followup.brainMriHighRisk.v0.1

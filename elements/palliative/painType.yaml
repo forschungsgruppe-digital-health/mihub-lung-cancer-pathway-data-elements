@@ -19,6 +19,10 @@ value_set:
   - system: snomed-ct
     code: '247398009'
     display: Neuropathic pain
+  notes: 'SNOMED CT 735644008 „Chronic nociceptive pain“ impliziert einen chronischen Verlauf (normalForm:
+    Clinical course = Chronic). Ein allgemeines Konzept für nozizeptiven Schmerz existiert auf dem MII
+    TermServ nicht ($expand „nociceptive pain“: nur 735644008 und 789494008; Stand 2026-10-14). Für Mischschmerz
+    gibt es kein Konzept (siehe issues).'
 care_process:
   trigger: Erstanamnese + bei Therapie-Anpassung
   frequency_pattern: ad-hoc
@@ -26,10 +30,28 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 10.2 (Basisdiagnostik Schmerz)
-    recommendation_grade: Statement
+    section: Kap. 10.2 Schmerzerfassung, Hintergrundtext „Schmerzdiagnostik“/„Klinische Untersuchung“
+      — Basisdiagnostik inkl. Schmerztyp (nozizeptiv, neuropathisch); Differenzierung über Plus-/Minuszeichen
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 10.10 Adjuvanzien bei neuropathischen Schmerzen, Empf. 10.37 (geprüft 2026, Starker
+      Konsens) — bei neuropathischen Tumorschmerzen, die nur teilweise auf Opioid-Analgetika ansprechen,
+      Amitriptylin, Gabapentin oder Pregabalin in Betracht ziehen (therapeutische Konsequenz des Schmerztyps;
+      Grad und Evidenzlevel gelten für die Therapieempfehlung, nicht für die Erhebung des Schmerztyps);
+      Hintergrund: Tumorschmerz als Mischung nozizeptiver und neuropathischer Mechanismen'
+    recommendation_grade: A
+    evidence_level: 1+
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.3.1 Definition / 14.3.2 Schmerzerfassung (Hintergrundtext) — Unterscheidung Nozizeptor-
+      vs. neuropathische Schmerzen; Basisdiagnostik inkl. Schmerztyp (nozizeptiv, neuropathisch)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -52,5 +74,11 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'Mischschmerz (mixed pain): kein SNOMED-CT-Konzept auf dem MII TermServ gefunden (Stand 2026-10-13)
-  — ggf. lokaler Code oder Antrag.'
+- 'Mischschmerz (mixed, siehe definition_de) ist unter dem required-Binding mit 247398009 „Neuropathic
+  pain“ und 735644008 „Chronic nociceptive pain“ nicht abbildbar, auch nicht über einen lokalen Code.
+  Ein SNOMED-CT-Konzept fehlt auf dem MII TermServ (Suche „mixed pain“ nur fachfremde Treffer, Stand 2026-10-14).
+  Klinisch relevant, da Tumorschmerzen durch eine Mischung nozizeptiver und neuropathischer Mechanismen
+  entstehen (S3-LL Palliativmedizin 3.0, Kap. 10.10, Hintergrund). Optionen: (a) binding_strength extensible
+  mit lokalem Code „mixed“; (b) beide Codes gleichzeitig angeben, nur mit ausdrücklicher Regel in instruction_de
+  und Bezug auf denselben Schmerz (z. B. Lokalisation), da sonst nicht von zwei getrennten Schmerzen unterscheidbar;
+  zudem trägt 735644008 die Chronizität mit; (c) SNOMED-CT-Antrag.'

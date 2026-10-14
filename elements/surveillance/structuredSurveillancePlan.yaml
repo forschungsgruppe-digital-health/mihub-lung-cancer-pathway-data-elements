@@ -19,6 +19,9 @@ value_set:
   - system: kdl
     code: SD150101
     display: Follow up-Bogen
+  - system: snomed-ct
+    code: '736252007'
+    display: Cancer care plan
 standard_mappings:
 - standard: fhir-r4-base
   resource: CarePlan
@@ -33,6 +36,14 @@ evidence:
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.2 (EK, geprüft 2026)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.4 / Empf. 16.9 (Systemtherapie Stadium IVA/B: Evaluation einen Monat nach Behandlungsabschluss;
+      festgelegte Wiedervorstellungen bei laufender Erhaltungstherapie mind. alle 3–6 Wochen; CT-Kontrollen
+      im Intervall von 6–9 Wochen)'
     recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:

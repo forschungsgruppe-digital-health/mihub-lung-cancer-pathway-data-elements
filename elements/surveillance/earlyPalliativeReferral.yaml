@@ -2,10 +2,16 @@ id: mihub.lung.surveillance.earlyPalliativeReferral.v0.1
 uuid: d0e10eac-70a7-53f8-9f8f-47c9e7e21673
 name: earlyPalliativeReferral
 label_de: Frühzeitige palliativmedizinische Mitbetreuung
-definition_de: 'Anbindung an Palliativversorgung parallel zur tumorspezifischen Therapie (frühzeitig,
-  gemäß S3-LL Palliativmedizin Kap. 5.5). Empfehlung 8.6 S3-LL Lungenkarzinom v5.01 (modifiziert 2026):
-  begleitend ist ein **standardisiertes Symptomassessment** regelmäßig durchzuführen, um eine bedarfsorientierte
-  Integration der Palliativversorgung zu ermöglichen.'
+definition_de: Anbindung an eine palliativmedizinische Mitbetreuung (Palliativberatung und -versorgung)
+  parallel zur tumorspezifischen Therapie bei nicht-heilbarer Lungenkarzinomerkrankung. Patient:innen
+  sollen nach Diagnosestellung frühzeitig das Angebot einer Integration von Palliativberatung und -versorgung
+  erhalten (S3-LL Lungenkarzinom 5.1, Empf. 8.2, A); das Angebot sollte innerhalb der ersten 2 Monate
+  nach Diagnosestellung erfolgen (Empf. 8.3, B). Optionen der tumorzentrierten onkologischen Therapie
+  und der Palliativversorgung sollen systematisch und patient:innenindividuell in der Behandlungsplanung
+  berücksichtigt werden (S3-LL Palliativmedizin 3.0, Empf. 5.32, EK). Neben einer frühzeitigen Palliativberatung
+  sollte regelmäßig ein standardisiertes Symptomassessment durchgeführt werden, um eine bedarfsorientierte
+  Integration der Palliativversorgung zu ermöglichen (S3-LL Lungenkarzinom 5.1, Statement 8.6, EK, modifiziert
+  2026).
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -22,19 +28,21 @@ value_set:
 care_process:
   trigger: Diagnose Stadium IV / unheilbar
   frequency_pattern: once-then-ongoing
-  responsible_role: Onkologe + Palliativ-Team
+  responsible_role: Onkolog:in / Pneumolog:in (Therapieführung) + Palliativ-Team
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 5.5 Gleichzeitigkeit Palliativversorgung & tumorspezifische Therapie
+    section: Kap. 5.5 Gleichzeitigkeit von Palliativversorgung und tumorspezifischer Therapie, Empf. 5.32
+      (konsensbasiert, neu 2026, Starker Konsens)
     recommendation_grade: EK
     evidence_level: n/a
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 6 (palliative care from diagnosis)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 4.3 Palliative care + Step 6.5 Palliative care (frühe, bedarfs- statt prognosebasierte
+      Überweisung); Step 6.1.3 (ab Diagnose: supportive care, ACP, symptombezogene Interventionen)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
@@ -44,6 +52,35 @@ evidence:
       Palliativberatung); Empf. 16.2 (EK: Bedarf an Palliativmedizin im Verlaufsplan erkennen)'
     recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.2 Konzept der frühzeitigen Integration palliativmedizinischer Versorgung, Empf. 8.2
+      (evidenzbasiert, geprüft 2026, Konsens: frühzeitiges Angebot der Integration von Palliativberatung
+      und -versorgung nach Diagnosestellung)'
+    recommendation_grade: A
+    evidence_level: '3'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.2, Empf. 8.3 (evidenzbasiert, geprüft 2026, Konsens: Angebot innerhalb der ersten
+      2 Monate nach Diagnosestellung)'
+    recommendation_grade: B
+    evidence_level: '3'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.3 Bestimmung der Komplexität der Situation und Indikation für Intensität der Palliativversorgung,
+      Empf. 5.3 (konsensbasiert, neu 2026, Starker Konsens)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.3 Spezialisierte Palliativversorgung (SPV), Empf. 5.7 (evidenzbasiert, geprüft
+      2026, Konsens: hohe Komplexität → SPV)'
+    recommendation_grade: A
+    evidence_level: '3'
 iso13972_metadata:
   type: procedure
   keywords:
@@ -67,3 +104,5 @@ provenance:
 related_elements:
 - relation: dependsOn
   target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1
+- relation: dependsOn
+  target: complexityLevel

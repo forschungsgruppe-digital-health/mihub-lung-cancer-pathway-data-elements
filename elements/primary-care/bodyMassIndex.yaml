@@ -25,6 +25,11 @@ standard_mappings:
 - standard: fhir-r4-base
   resource: Observation (vital-signs BMI)
   path: Observation.valueQuantity
+instruction_de: 'BMI = Körpergewicht (kg) / Körpergröße (m)²; im Verlauf zusammen mit der Gewichtsveränderung
+  (weightChangePercent) interpretieren. Der BMI allein ersetzt kein validiertes Mangelernährungs-Screening:
+  Allen Patient:innen im Verlauf wiederholt ein Screening auf Mangelernährung mit validiertem Tool anbieten,
+  bei Risikokonstellation weitergehende Diagnostik und professionelle Ernährungsberatung (Onkopedia NSCLC,
+  Kap. 5.6.3); auch bei hohem BMI kann eine Mangelernährung vorliegen (OCP Lung, Step 3.6.3).'
 care_process:
   trigger: bei jeder Vorstellung
   frequency_pattern: per-encounter
@@ -44,6 +49,20 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-039 BMI
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.6.3 Ernährungszustand (wiederholtes Screening auf Mangelernährung im Verlauf mit validiertem
+      Tool; BMI nicht ausdrücklich genannt)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.1 Supportive care – Monitoring von Mangelernährung nach Therapie (S. 46); Step 3.6.3
+      Supportive care – Hinweis zur Aussagegrenze des BMI (S. 32)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

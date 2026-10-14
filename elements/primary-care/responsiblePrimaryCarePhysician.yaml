@@ -9,7 +9,7 @@ tumor_entity:
 - lung_cancer_any
 category: administrativ
 datatype: Reference
-cardinality: 1..1
+cardinality: 0..1
 value_set:
   binding_strength: extensible
   standard_binding_status: mapped
@@ -45,6 +45,14 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-025 hausärztliche Versorgung (Gatekeeper-Funktion)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.4.5 Responsibilities of individual team members (Rollen der Hausärzt:in inkl. coordination
+      and continuity of care, S. 30); Step 3.6.4 Communication with patients, carers and families (regular
+      or preferred general practitioner feststellen, S. 33)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

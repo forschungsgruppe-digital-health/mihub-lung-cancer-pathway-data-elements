@@ -16,6 +16,11 @@ value_set:
   - system: loinc
     code: 89262-0
     display: ECOG Performance Status [Interpretation]
+  - system: snomed-ct
+    code: '423740007'
+    display: ECOG performance status
+constraints_de: Wertebereich 0–4 (ECOG/WHO-Grad, S3-LL Lungenkarzinom 5.1, Tab. 19). Grad 5 (Tod; LOINC-Antwort
+  LA9627-6 „Dead“ in der Antwortliste LL529-9) wird nicht als Messwert erfasst.
 care_process:
   trigger: vor jedem Therapiezyklus
   frequency_pattern: per-cycle
@@ -28,6 +33,24 @@ evidence:
     section: Empf. 16.9 (EK, geprüft 2026; Beschwerdebild/körperliche Untersuchung — ECOG nicht explizit
       genannt)
     recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6 Stadium IV (ohne Indikation zur definitiven Lokaltherapie), 8.6.1 Allgemeine Prinzipien
+      (inkl. molek. Testung und Erhebung des Performance Status), Empf. 8.80 (konsensbasiert, geprüft
+      2026, Starker Konsens: ECOG PS vor Einleitung der Therapie erheben; NSCLC-Kapitel; Erhebung je Therapiezyklus
+      nicht abgedeckt)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 3.3 Performance status (Dokumentation mit etablierter Skala, z. B. ECOG/Karnofsky);
+      Step 3.6.1 Prehabilitation („performance status … should be frequently assessed“) — Step 3 Diagnosis,
+      staging and treatment planning: prätherapeutischer Kontext, allgemeiner und nicht surveillance-spezifischer
+      Grundsatz'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation

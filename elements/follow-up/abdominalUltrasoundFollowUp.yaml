@@ -2,8 +2,9 @@ id: mihub.lung.followup.abdominalUltrasoundFollowUp.v0.1
 uuid: 400d524d-d8d4-5c50-8763-07775a31a37d
 name: abdominalUltrasoundFollowUp
 label_de: Sonografie Abdomen in der Nachsorge
-definition_de: Datum einer Abdomensonographie als bildgebende Option des Nachsorgetermins (Leber- und
-  Nebennierenmetastasen, paraaortale Lymphome).
+definition_de: 'Datum einer Abdomensonographie als bildgebende Option des Nachsorgetermins (Indikation
+  laut S3 Tab. 44: Leber- und Nebennierenmetastasen, paraaortale Lymphknotenvergrößerungen — im Original
+  „paraaortale Lymphome“).'
 phase: followup
 tumor_entity:
 - NSCLC

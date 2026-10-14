@@ -2,9 +2,12 @@ id: mihub.lung.followup.petCtFollowUp.v0.1
 uuid: f754adb0-ab88-5b64-a404-0669c0e6b938
 name: petCtFollowUp
 label_de: PET-CT in der Nachsorge
-definition_de: Datum eines FDG-PET-CT in der Nachsorge; indiziert ausschließlich zum Ausschluss von Metastasen
-  vor erneutem thoraxchirurgischem Eingriff bzw. bei V. a. lokalisiertes, lokal behandelbares Rezidiv
-  (kein Vorteil als Routine-Nachsorge).
+definition_de: Datum eines FDG-PET-CT in der Nachsorge; indikationsbezogen zum Ausschluss von Metastasen
+  vor erneutem thoraxchirurgischem Eingriff (S3 Tab. 44) bzw. bei V. a. lokalisiertes oder lokal behandelbares
+  Rezidiv (Onkopedia SCLC Kap. 10.2, Tab. 9 Fußnote); nicht Bestandteil der strukturierten Routine-Nachsorge
+  (Onkopedia NSCLC Tab. 12, SCLC Tab. 9). In einer monozentrischen Studie (n = 98, zweijährige Nachbeobachtung)
+  zeigte die PET/CT in der Nachsorge nach kurativ intendierter NSCLC-Behandlung keinen Vorteil gegenüber
+  CT mit Kontrastmittel (S3 Kap. 6.3.2.1).
 phase: followup
 tumor_entity:
 - NSCLC
@@ -25,14 +28,17 @@ value_set:
   - system: kdl
     code: DG020109
     display: PET-Befund
+  - system: snomed-ct
+    code: '1373815000'
+    display: PET-CT using fluorodeoxyglucose (18-F)
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
   resource: ImagingStudy
   path: ImagingStudy.started
 care_process:
-  trigger: geplanter erneuter thoraxchirurgischer Eingriff bei Rezidiv/Zweittumor; V. a. lokalisiertes
-    Rezidiv (SCLC Tab. 9 Fußnote)
+  trigger: geplanter erneuter thoraxchirurgischer Eingriff bei Rezidiv/Zweittumor (S3 Tab. 44); V. a.
+    lokalisiertes bzw. lokal behandelbares Rezidiv (Onkopedia SCLC Kap. 10.2, Tab. 9 Fußnote)
   frequency_pattern: ad-hoc
   responsible_role: Nuklearmedizin / Radiolog:in / Thoraxchirurg:in
   data_flows:
@@ -54,7 +60,9 @@ evidence:
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: 'Tab. 44 (PET-CT: Ausschluss von Metastasen vor erneutem thoraxchirurgischem Eingriff); Kap.
-      6.3.1'
+      6.3.2.1 (Hintergrundtext: monozentrische Studie, n = 98, nach kurativ intendierter NSCLC-Behandlung
+      – kein Vorteil der PET/CT in der Nachsorge gegenüber CT mit Kontrastmittel [349]); Kap. 6.3.1 (nur
+      Methodik: F-18-FDG als in der Praxis fast ausschließlich eingesetzter Tracer)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia SCLC

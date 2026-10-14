@@ -14,33 +14,49 @@ cardinality: 0..*
 value_set:
   binding_strength: example
   standard_binding_status: pending-mapping
-  notes: Codes für deutsche Palliativ-Assessmentinstrumente (MIDOS2 — Klinik für Palliativmedizin TU Dresden;
-    ESAS-r). LOINC kennt einzelne Items von ESAS und IPOS sowie den Distress-Thermometer-Score, jedoch
-    nicht MIDOS2 oder ESAS-r als Instrumente. Die LOINC-/projekt-lokalen Codes sind hier gemischt; explizit
-    gekennzeichnet sind nur die nicht-standardisierten. IPOS über SNOMED CT 718975008 abgebildet; MIDOS2
-    und ESAS-r ohne Standardcode auf dem MII TermServ (Stand 2026-10-13) — lokale Platzhalter, Mapping
-    offen; NCCN Distress-Thermometer siehe distressThermometerScore.
+  notes: 'Instrumente gemäß S3-LL Palliativmedizin 3.0 Tab. 6 Zeile 1 (Auswahl, ''z.B.''): MIDOS 2 (deutsche
+    Version des ESAS; Stiel et al. 2010), ESAS/ESAS-r, IPOS/POS, Distress-Thermometer mit Problemliste.
+    MII TermServ (Stand 2026-10-14): ESAS = SNOMED CT 451021004 (assessment scale; kein eigenes Konzept
+    für ESAS-r), zusätzlich LOINC-Panel 112503-8 und Gesamtscore 112493-2; IPOS = SNOMED CT 718975008/718973001
+    (Patientenversion 1 Woche/3 Tage), Staff-Versionen 718967002/718971004. Für MIDOS 2, POS und IPOS
+    per Textsuche kein LOINC-Code; für MIDOS 2 und die Original-POS kein SNOMED-CT-Code – lokaler Platzhalter
+    MIDOS2, Mapping offen. NCCN Distress-Thermometer: weder LOINC noch SNOMED CT (siehe distressThermometerScore).'
   codings:
   - system: local-no-standard-binding
     code: MIDOS2
     display: Minimales Dokumentationssystem 2
-  - system: local-no-standard-binding
-    code: ESAS-r
-    display: Edmonton Symptom Assessment System - Revised
   - system: snomed-ct
     code: '718975008'
     display: Integrated Palliative care Outcome Scale Patient Version (1 week recall period)
+  - system: snomed-ct
+    code: '451021004'
+    display: Edmonton Symptom Assessment System
+  - system: snomed-ct
+    code: '718973001'
+    display: Integrated Palliative care Outcome Scale Patient Version (3 day recall period)
 care_process:
-  trigger: Aufnahme + regelmäßig
-  frequency_pattern: Q1W in SPV; per-encounter in APV
-  responsible_role: Palliativ-Team
+  trigger: bei Aufnahme/zu Beginn der Versorgung, wiederholt im Verlauf und bei Änderung der klinischen
+    Situation
+  frequency_pattern: regelmäßig + bei klinischer Veränderung; instrumentabhängig (z. B. MIDOS stationär
+    1–2× täglich, IPOS in regelmäßigen Intervallen, z. B. wöchentlich)
+  responsible_role: Behandlungsteam (Primärbehandelnde/Onkologie; APV-Behandelnde mit palliativmedizinischer
+    Zusatzqualifikation; in SPV Palliativ-Team); Patient:in (Selbsteinschätzung per PROM bevorzugt)
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 Probleme/Bedürfnisse Patient:in
-    recommendation_grade: A
+    section: 'Kap. 5.2, Empf. 5.1 (geprüft 2026: Bedürfnisse/Belastungen wiederholt und bei Änderung der
+      klinischen Situation erfassen) und Empf. 5.2 (geprüft 2026: validierte multidimensionale Erfassungsinstrumente);
+      Tab. 6 Zeile 1 (MIDOS 2, ESAS/ESAS-r, IPOS/POS, Distress-Thermometer)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 8.6 (EK, modifiziert 2026: standardisiertes Symptomassessment regelmäßig neben
+      frühzeitiger Palliativberatung)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation

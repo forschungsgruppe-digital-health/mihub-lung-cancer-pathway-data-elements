@@ -2,8 +2,9 @@ id: mihub.lung.followup.dlcoPercentPredicted.v0.1
 uuid: 9853026d-63f2-5a2c-9847-5c9a01116994
 name: dlcoPercentPredicted
 label_de: DLCO (% vom Soll)
-definition_de: Diffusionskapazität für Kohlenmonoxid (DLCO/TLCO), in Prozent des altersnormierten Sollwerts.
-  Marker für Strahlen-/Pneumonitis-Folgen. Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
+definition_de: Diffusionskapazität für Kohlenmonoxid (DLCO/TLCO, CO-Transferfaktor), in Prozent des Sollwerts.
+  Marker für Lungenfunktionseinschränkung (u. a. Verlust an Lungenfunktion nach Resektion) sowie für Strahlen-/Pneumonitis-Folgen.
+  Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -40,6 +41,15 @@ evidence:
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: 'Tab. 44 (CO-Diffusionskapazität: Lungenfunktionseinschränkung, Pneumonitis); Kap. 16.3.1'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.2.2.1 (Strahlenpneumonitis 6–24 Monate nach RT-Ende; funktionelle Einschränkung mittels
+      Lungenfunktionstestung einschließlich Diffusionskapazität erfasst und quantifiziert); Kap. 8.1 Tab.
+      12 (Lungenfunktion: X Mo 3/6, (X) Mo 12/18/24) + Text (nach RT/RCT Überprüfung bis Ende des Pneumonitis-Risikos
+      fortführen — soll)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

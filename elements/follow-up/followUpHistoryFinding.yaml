@@ -33,14 +33,17 @@ value_set:
     code: '29857009'
     display: Chest pain
   - system: snomed-ct
-    code: '816160009'
-    display: Weight loss
+    code: '262285001'
+    display: Weight decreased
   - system: loinc
     code: 10164-2
     display: History of Present illness Narrative
   - system: kdl
     code: AU010101
     display: Anamnesebogen
+  - system: snomed-ct
+    code: '84387000'
+    display: Asymptomatic
 standard_mappings:
 - standard: fhir-r4-base
   resource: Observation / Condition
@@ -73,7 +76,10 @@ evidence:
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.1, Tab. 12 (Anamnese); Kap. 8.1 (Nachsorgeziele)
+    section: 'Kap. 8.1, Tab. 12 (Anamnese); Kap. 8.1 (Nachsorgeziele); Kap. 4, Tab. 1 (Symptome bei Pat.
+      mit Lungenkarzinom – Beleg für die Symptombeispiele der Definition: Husten, Dyspnoe, Thoraxschmerzen,
+      Hämoptysen, neurologische Ausfälle, Gewichtsverlust; klinisches Bild bei Diagnose, nicht nachsorgespezifisch,
+      auf die Rezidiverkennung übertragen)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia SCLC
@@ -108,6 +114,23 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'followUpHistoryFinding value_set: Element-Code und Antwortwerte trennen. Element- bzw. Sektionsebene:
+  LOINC 10164-2 (Narrativ) bzw. SNOMED 84100007 (Tätigkeit „History taking“), konsistent mit historyTakingPrimaryCare,
+  das diese Codes bereits auf Element-Ebene führt. Antwortwerte nur Clinical findings (Symptome und „unauffällig“).
+  KDL AU010101 nur als DocumentReference.type führen. Im standard_mappings-Pfad Encounter.reasonCode nicht
+  streichen, sondern auf ungeplante, symptomgetriggerte Vorstellungen beschränken (dann Encounter auch
+  als resource führen); bei geplanten Nachsorgeterminen ist der Anlass die Nachsorge selbst, der Befund
+  gehört in Observation.code (Symptom) mit Wert bzw. in Condition.code. Die Rollentrennung katalogweit
+  als Schema-Konvention festlegen (vgl. den offenen Punkt zu followUpVisitDate), nicht nur in diesem Element.'
+- 'Surveillance-Asymmetrie: physicalExaminationFinding ist an surveillanceVisit gekoppelt, followUpHistoryFinding
+  nicht, obwohl S3-LL Lungenkarzinom 5.1 Empf. 16.9 Anamnese und körperliche Untersuchung gemeinsam als
+  Basis der Evaluation einen Monat nach Abschluss der Behandlung nennt (für die folgenden Wiedervorstellungen
+  nur „geeignete Untersuchungsverfahren“) und die Expert:innen-Erhebung DE-042 (Anamnese, Surveillance)
+  kein Befundelement hat. Zu entscheiden: followUpHistoryFinding phasenübergreifend nutzen (isPartOf surveillanceVisit
+  und postInductionEvaluationDate, Trigger und Label erweitern) oder ein eigenes Surveillance-Anamnese-Element
+  anlegen. In beiden Fällen die Abgrenzung zu adverseEventCtcae, patientReportedSymptomWeb und weightChangePercent
+  prüfen, die Teile des Beschwerdebilds bereits abdecken, um Dubletten zu vermeiden.'
 related_elements:
 - relation: isPartOf
   target: followUpVisitDate

@@ -23,6 +23,9 @@ value_set:
   - system: kdl
     code: AU010101
     display: Anamnesebogen
+  - system: loinc
+    code: 11329-0
+    display: History general Narrative - Reported
 standard_mappings:
 - standard: fhir-r4-base
   resource: Observation / Composition.section

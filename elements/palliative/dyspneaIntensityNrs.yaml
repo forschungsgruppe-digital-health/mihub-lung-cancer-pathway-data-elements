@@ -2,8 +2,10 @@ id: mihub.lung.palliative.dyspneaIntensityNrs.v0.1
 uuid: ffde437e-0827-5903-8c6a-34b86ac59c40
 name: dyspneaIntensityNrs
 label_de: Atemnot-Intensität (NRS 0–10)
-definition_de: 'Selbst eingeschätzte Atemnot-Intensität auf einer numerischen Rating-Skala 0–10. Bei kognitiver
-  Einschränkung: Fremdeinschätzung (RDOS).'
+definition_de: Selbst eingeschätzte Intensität der Atemnot (sensorisches Erleben) auf einer numerischen
+  Rating-Skala 0–10. Bei deutlicher kognitiver oder körperlicher Einschränkung (z. B. Verwirrtheit, Sterbephase)
+  erfolgt stattdessen eine Fremdeinschätzung durch Personal oder Angehörige (z. B. RDOS); diese wird nicht
+  als NRS-Wert in diesem Element dokumentiert.
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -22,11 +24,15 @@ value_set:
   - system: icf
     code: b440
     display: Funktionen der Atmung
-  notes: 'Kein LOINC-Code für die Atemnot-NRS 0–10 auf dem MII TermServ (LOINC 2.83) gefunden; PROMIS
-    dyspnea severity 92149-4 ist ein T-Score, MRC-Skala 98070-6 ein Grad — Mapping offen. ICF-Codes sind
-    nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht verfügbar (Stand 2026-10-13); Codes
-    gemäß ICF-Browser belassen.'
-constraints_de: 'Wertebereich 0..10. In Sterbephase: RDOS-Fremdeinschätzung.'
+  notes: LOINC 2.83 (MII TermServ, Stand 2026-10-14) enthält keinen instrumentenunabhängigen Code für
+    die Atemnot-NRS 0–10. 112499-9 „Shortness of breath“ ist das ESAS-Item (Find/Ord, Antwortliste LL7514-4
+    „ESAS shortness of breath scale“, 0–10) und nur bei ESAS-Erfassung geeignet. PROMIS dyspnea severity
+    92149-4 ist ein T-Score, MRC 98070-6 ein Grad; das Mapping bleibt offen. SNOMED CT 267036007 ist ein
+    Befund-, kein Intensitätskonzept. ICF ist auf dem MII TermServ nicht verfügbar; Kategorie gemäß WHO-ICF-Browser.
+constraints_de: Wertebereich 0..10 (ganzzahlig; nur Selbsteinschätzung). Bezugszeitraum (aktuell oder
+  Durchschnitt der letzten 24 h) und Situation (Ruhe/Belastung) mitdokumentieren. Eine Fremdeinschätzung
+  durch Personal oder Angehörige (z. B. RDOS, eigenes Beobachtungsinstrument mit eigenem Wertebereich)
+  wird nicht in dieses Element übernommen; ein eigenes Element dafür fehlt im Katalog derzeit.
 care_process:
   trigger: bei jeder Visite + nach Therapie-Anpassung
   frequency_pattern: per-encounter
@@ -34,18 +40,20 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Empf. 9.1 (A); Tab. 9 Dimensionen Atemnot
-    recommendation_grade: A
+    section: 'Kap. 9.2 Erfassung, Empf. 9.1 (modifiziert 2026, Starker Konsens) — subjektive, wiederholte
+      Erfassung der Atemnot; Tab. 9 Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente
+      (sensorisches Erleben: NRS 0-10, VAS, mod. Borg)'
+    recommendation_grade: EK
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 14.1 (Atemnot; Tab. 42 Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente)
-      — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-068 „Erfassung Atemnot“), Wortlaut-Verifikation
-      ausstehend
-    recommendation_grade: n/a
+    section: Kap. 14.2 Dyspnoe, Empf. 14.1 (geprüft 2026, Konsens) — Atemnot durch subjektive Beurteilung
+      erfassen; Tab. 42 Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente (NRS 0-10,
+      VAS, mod. Borg) — Wortlaut verifiziert 2026-10-14
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -67,3 +75,10 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- ICF-Code b440 (Funktionen der Atmung) bezeichnet laut WHO-ICF-Browser die objektive Atemfunktion (Atemfrequenz,
+  -rhythmus, -tiefe). Die subjektive Atemnot ordnet die ICF b460 zu („Sensations associated with cardiovascular
+  and respiratory functions“, Inklusion „dyspnoea, air hunger“). Die Leitlinie versteht Atemnot als subjektives
+  Erleben, für dessen Erfassung objektive Parameter nicht geeignet sind (S3-LL Palliativmedizin 3.0, Kap.
+  9.2, Hintergrund). b440 durch b460 mit deutschem BfArM-ICF-Titel ersetzen; Code und Titel vorab gegen
+  die BfArM-ICF prüfen, da ICF auf dem MII TermServ nicht verfügbar ist (WHO-ICF-Browser, Stand 2026-10-14).

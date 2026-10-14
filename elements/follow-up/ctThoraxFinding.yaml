@@ -2,9 +2,12 @@ id: mihub.lung.followup.ctThoraxFinding.v0.1
 uuid: 74231537-e826-5758-91c5-1e9bb3fa1be7
 name: ctThoraxFinding
 label_de: CT Thorax — radiologischer Befund
-definition_de: Befund-Kategorisierung des CT Thorax in der Nachsorge. Ergebnisartefakt zum prozeduralen
-  Datenelement 'ctThoraxScan'. Erfasst, ob ein Rezidiv, Zweittumor, neue Läsion oder eine stabile Situation
-  vorliegt.
+definition_de: Befund-Kategorisierung des CT Thorax in der Nachsorge (Tumorkinetik und lokale Ausdehnung).
+  Ergebnisartefakt zum prozeduralen Datenelement 'ctThoraxScan'. Erfasst, ob kein Rezidivnachweis bzw.
+  ein unveränderter (stabiler) Befund, ein lokoregionäres Rezidiv, eine Metastasierung, ein Zweitkarzinom
+  oder ein unklarer bzw. nicht abschließend beurteilbarer Befund (z. B. neue Läsion unklarer Dignität)
+  vorliegt. Therapieassoziierte Veränderungen (Strahlenpneumonitis, Strahlenfibrose) werden im Datenelement
+  'postTherapyComplication' erfasst.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -29,11 +32,11 @@ value_set:
     code: '878806005'
     display: Second primary cancer
   - system: snomed-ct
-    code: '419984006'
-    display: Inconclusive
+    code: '709137006'
+    display: Patient condition undetermined
   - system: loinc
-    code: 59776-5
-    display: Procedure findings Narrative
+    code: 97509-4
+    display: Cancer disease progression
   - system: kdl
     code: DG020103
     display: CT-Befund
@@ -59,7 +62,9 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 44 (CT Thorax: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026)'
+    section: 'Tab. 44 (Thorax CT: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026: CT
+      als bildgebende Option am Nachsorgetermin); Kap. 16.1 (Rezidive vs. Fernmetastasen, Zweitkarzinome)
+      + Empf. 16.1 (EK, geprüft 2026: Nachsorgeplan zur Erkennung von Rezidiven und Zweitkarzinomen)'
     recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
@@ -83,6 +88,23 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'standard_mappings[obds]: Der Feldname „Tumorstatus_Lokoregionaeres“ existiert im oBDS nicht. Das oBDS-XSD
+  3.0.5 (22.09.2025; Felder unverändert gegenüber 3.0.4 vom 15.04.2025) führt in der Verlaufsmeldung (Verlauf):
+  Gesamtbeurteilung_Tumorstatus (V/T/K/P/D/B/R/Y/U/X; Y = Rezidiv, U = Beurteilung unmöglich), Verlauf_Lokaler_Tumorstatus
+  (K kein Tumor nachweisbar, T Tumorreste, P Tumorreste Progress, N Tumorreste No Change, R Lokalrezidiv,
+  F fraglicher Befund, U unbekannt, X fehlende Angabe), Verlauf_Tumorstatus_Lymphknoten und Verlauf_Tumorstatus_Fernmetastasen.
+  Empfohlene Abbildung: resource „Verlauf“, path „Verlauf_Lokaler_Tumorstatus / Verlauf_Tumorstatus_Lymphknoten
+  / Verlauf_Tumorstatus_Fernmetastasen (+ Gesamtbeurteilung_Tumorstatus)“. Ein Zweitkarzinom ist kein
+  Verlaufsstatus, sondern wird als eigener Tumor (eigene Tumorzuordnung) mit Diagnosemeldung gemeldet.
+  Derselbe Feldnamenfehler steht in recurrenceOrSecondPrimary („Tumorstatus_Lokoregionaeres_Tumorstatus“).'
+- 'standard_mappings[fhir-mii-kds] (DiagnosticReport): path fehlt. Im Profil MII_PR_Bildgebung_Radiologischer_Befund
+  (MII-KDS Modul Bildgebung 2026.0.0) gehört die kodierte Befundkategorie auf DiagnosticReport.conclusionCode
+  („Strukturiertes Fazit“; Slice coding:sct mit Required-Binding an MII_VS_Bildgebung_Findings_SCT = <
+  404684003 |Clinical finding|, Slice coding:icd10-gm mit Required-Binding an ICD-10-GM). DiagnosticReport.code
+  trägt dort einen radiologischen Dokument-LOINC (Required-Binding: SCALE_TYP Doc, CLASS RAD; z. B. 24627-2
+  „CT Chest“ aus ctThoraxScan), nicht den Element-Code des Befundes. Empfehlung: path „DiagnosticReport.conclusionCode“
+  ergänzen; die SNOMED-CT-Werte des Elements müssen Clinical findings sein.'
 related_elements:
 - relation: specializes
   target: mihub.lung.followup.ctThoraxScan.v0.1

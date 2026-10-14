@@ -2,8 +2,9 @@ id: mihub.lung.followup.pulmonaryFunctionTest.v0.1
 uuid: f409fdca-e879-5257-aad6-987ce95bd6e6
 name: pulmonaryFunctionTest
 label_de: Lungenfunktionsprüfung in der Nachsorge
-definition_de: Spirometrie und CO-Diffusionskapazität zur Überwachung von Lungenfunktionseinschränkung
-  und Pneumonitis nach RTx/CTx-RTx.
+definition_de: Datum der Lungenfunktionsprüfung (Spirometrie, CO-Diffusionskapazität) in der Nachsorge
+  nach kurativer Therapie zur Erfassung einer Lungenfunktionseinschränkung (z. B. nach Resektion) und
+  einer Pneumonitis (nach RTx/CTx-RTx); Messwerte in fev1PercentPredicted und dlcoPercentPredicted.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -19,21 +20,27 @@ value_set:
     code: '23426006'
     display: Measurement of respiratory function
   - system: loinc
-    code: 19911-7
-    display: Diffusion capacity.carbon monoxide
+    code: 81458-2
+    display: Pulmonary function test panel
   - system: ops
     code: 1-710
     display: Ganzkörperplethysmographie
   - system: kdl
     code: DG060108
     display: Dokumentationsbogen Lungenfunktionsprüfung
+  - system: ops
+    code: 1-711
+    display: Bestimmung der CO-Diffusionskapazität
 standard_mappings:
 - standard: fhir-r4-base
   resource: Observation
   path: Observation.code
-constraints_de: 'Pneumonitis-Risikofenster nach Strahlentherapie: 6–24 Monate nach Ende der Bestrahlung
-  (Onkopedia NSCLC Kap. 6.2.2.1); in diesem Zeitraum soll die Lungenfunktionsprüfung einschließlich Diffusionskapazität
-  fortgeführt werden. „(X)“ in den Onkopedia-Tabellen ist dort nicht legendiert (Lesart: fakultativ).'
+constraints_de: 'Strahlenpneumonitis (symptomatisch bei 5–15 %) mit häufigem Übergang in eine pulmonale
+  Fibrose; Onkopedia NSCLC Kap. 6.2.2.1: „Sie kann innerhalb von 6-24 Monaten nach Ende der Bestrahlung
+  auftreten“ (Bezug Pneumonitis oder Fibrose im Text nicht eindeutig). Nach alleiniger RT/RCT soll die
+  Lungenfunktionsprüfung bis zum Ende des Pneumonitis-Risikos fortgeführt werden (Kap. 8.1), einschließlich
+  Diffusionskapazität (Kap. 6.2.2.1). „(X)“ in den Onkopedia-Tabellen ist dort nicht legendiert (Lesart:
+  fakultativ).'
 care_process:
   trigger: 'Alle kurativ Behandelten Monat 3 und 6 (Onkopedia NSCLC Tab. 12; SCLC Tab. 9: Mo 3/6/9), fakultativ
     Monat 12/18/24; nach alleiniger Strahlentherapie/Radiochemotherapie bis zum Ende des Pneumonitis-Risikos
@@ -82,6 +89,12 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'standard_mappings: Der Pfad „Observation.code“ trägt den Prozedur-/Panelcode, nicht den dateTime-Wert.
+  Für datatype dateTime wäre Procedure.performedDateTime (analog bronchoscopyFollowUp) bzw. Observation.effectiveDateTime
+  der Wertpfad. Das MII-KDS-Modul Lungenfunktion (2027.0.0-ballot.1) bildet die Messung als Procedure
+  ab (Profile „Spirometrie Messung“, „Diffusion Messung“) und Einzelwerte wie FEV1 oder DLCO als Observation
+  mit partOf auf diese Procedure; Zielprofil und Wertpfad zentral zu entscheiden.'
 related_elements:
 - relation: dependsOn
   target: curativeTreatmentModality

@@ -27,8 +27,9 @@ value_set:
     code: 8658-7
     display: History of Allergies
   - system: icd-10-gm
-    code: Z88
-    display: Allergie gegenüber Arzneimitteln, Drogen oder biologisch aktiven Substanzen in der Eigenanamnese
+    code: Z88.9
+    display: Allergie gegenüber nicht näher bezeichneten Arzneimitteln, Drogen oder biologisch aktiven
+      Substanzen in der Eigenanamnese
   - system: icd-10-gm
     code: Z91.0
     display: Allergie, ausgenommen Allergie gegenüber Arzneimitteln, Drogen oder biologisch aktiven Substanzen,
@@ -60,6 +61,15 @@ evidence:
     section: DE-036 Risikofaktoren
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 2.3 Initial referral (S. 24: „medications and allergies“ als essential information
+      der Überweisung); Step 4.5.4 Communication with the general practitioner (S. 41: Zwei-Wege-Kommunikation
+      zwischen Lead clinician und Hausärzt:in u. a. über „the presence of an advance care directive or
+      appointment of a substitute decision-maker“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: condition
   keywords:
@@ -80,6 +90,10 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Redundanz ''Vorliegen einer Patientenverfügung'': wird in riskFactorAndAlert (DE-036), socialSituation
+  (DE-022) und advanceDirectiveDocument erfasst. Führendes Element festlegen (Vorschlag: advanceDirectiveDocument);
+  hier nur als Warnhinweis bzw. Verweis führen.'
 related_elements:
 - relation: dependsOn
   target: advanceDirectiveDocument

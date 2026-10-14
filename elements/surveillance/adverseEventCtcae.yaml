@@ -15,17 +15,21 @@ value_set:
   uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
   codings:
   - system: meddra
-    code: '10025598'
+    code: '10061229'
     display: Lung infection
   - system: meddra
-    code: '10037087'
+    code: '10035742'
     display: Pneumonitis
   - system: meddra
-    code: '10010726'
+    code: '10010300'
     display: Confusion
   standard_binding_status: mapped
-  notes: MedDRA ist auf dem MII TermServ nicht verfügbar (Lizenz); Codes nicht verifiziert (Stand 2026-10-13).
-    CTCAE-Begriffe sind MedDRA-LLT-basiert.
+  notes: 'MedDRA ist auf dem MII TermServ nicht verfügbar (Lizenz). Codes geprüft (2026-10-14) gegen MII
+    KDS Onkologie 2027.0.0-ballot.1 (ValueSet mii-vs-onko-nebenwirkung-art = MedDRA-Codes der CTCAE v4.03;
+    ConceptMap mii-cm-onko-nebenwirkung-meddra-sct) und NCI CTCAE v5.0/v6.0 (Excel-Fassungen): Lung infection
+    10061229, Pneumonitis 10035742, Confusion 10010300 (Grad 5 in v4.03 vorhanden, ab v5.0 gestrichen).
+    In CTCAE v6.0 ist ''Lung infection'' gestrichen und durch ''Pneumonia'' (10035664) ersetzt; 10035664
+    ist nicht im v4.03-basierten MII-ValueSet enthalten. CTCAE-Begriffe sind MedDRA-LLT-basiert.'
 care_process:
   trigger: bei jedem Kontakt unter Therapie
   frequency_pattern: per-encounter
@@ -36,6 +40,13 @@ evidence:
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.9 (Toxizitäten)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.2 (EK, geprüft 2026: strukturierter Verlaufs-/Follow-up-Plan unter Systemtherapie
+      Stadium IVA/IVB zur Erkennung von Komplikationen und Toxizitäten der Therapie)'
     recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
@@ -58,3 +69,16 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'CTCAE-Version je Ereignis mitführen: MII KDS Onkologie 2027.0.0-ballot.1 (Extension mii-ex-onko-nebenwirkung-ctcae-version,
+  required gebunden; in 2026.0.3 noch nicht enthalten) bzw. oBDS 2021 (15.3) kennen nur die CTCAE-Versionen
+  4, 4.03, 5.0 und ''Sonstige''. CTCAE v6.0 (NCI, Juli 2025) wäre daher nur als ''Sonstige'' meldbar,
+  obwohl sich der Termbestand unterscheidet (z. B. v6.0: ''Lung infection'' 10061229 gestrichen, ersetzt
+  durch ''Pneumonia'' 10035664). Standard-Mapping auf mii-pr-onko-nebenwirkung-adverse-event ergänzen
+  (AdverseEvent.event.coding:meddra, required an mii-vs-onko-nebenwirkung-art); dieses ValueSet enthält
+  nur die MedDRA-Codes der CTCAE v4.03 (10035664 nicht enthalten). value_set.uri (ctep.cancer.gov/…/ctc.htm)
+  leitet per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
+  UNSICHER).'
+related_elements:
+- relation: hasPart
+  target: adverseEventCtcaeGrade

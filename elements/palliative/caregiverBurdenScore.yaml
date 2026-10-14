@@ -2,8 +2,11 @@ id: mihub.lung.palliative.caregiverBurdenScore.v0.1
 uuid: b7c0a67b-7c14-5192-8a8f-bc914a131292
 name: caregiverBurdenScore
 label_de: Belastungsscore Angehörige (Zarit / CAREPAL)
-definition_de: 'Numerischer Score aus dem im Element ''caregiverBurden'' referenzierten Instrument: Zarit
-  Burden Interview (Wertebereich 0–88) oder CAREPAL (multi-dimensional, Summenscore variiert).'
+definition_de: Numerischer Gesamtscore des im Element caregiverBurden angegebenen Belastungsinstruments,
+  v. a. Zarit Burden Interview (22-Item-Langform 0–88; in der Palliativversorgung validierte Kurzformen
+  ZBI-1/ZBI-7 mit eigenem Wertebereich) oder Häusliche Pflegeskala (HPS/HPS-k). Für CAREPAL beschreibt
+  die S3-LL Palliativmedizin 3.0 (Kap. 7.4.2) als Ergebnis die Zuordnung zu vier Risikogruppen und nennt
+  keinen Summenscore; ob ein numerischer CAREPAL-Wert in diesem Element zu erfassen ist, ist offen.
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -18,20 +21,25 @@ value_set:
   codings: []
   notes: 'Zarit-Burden-Interview-Gesamtscore: kein LOINC-/SNOMED-CT-Code auf dem MII TermServ gefunden
     (Stand 2026-10-13); Mapping offen.'
-constraints_de: 'Wertebereich abhängig vom Instrument: Zarit ZBI 0–88 (höher = höhere Belastung); ZBI
-  Cut-offs 21 (mild)/40 (mittel)/61 (schwer). CAREPAL ist multi-dimensional; bitte das verwendete Instrument
-  explizit in den begleitenden Notizen vermerken.'
+constraints_de: Wertebereich abhängig von Instrument und Version (ZBI-22-Langform 0–88, höher = stärkere
+  Belastung; Kurzformen ZBI-1/ZBI-7 sowie HPS/HPS-k mit eigenen Wertebereichen). Das Instrument im Element
+  caregiverBurden kodieren; da dessen lokale Codes nur die Instrumentfamilie bezeichnen (CAREPAL, ZBI,
+  HPS-DEGAM), die verwendete Version bzw. Kurzform (z. B. G-ZBI, ZBI-7, ZBI-1, HPS, HPS-k, CAREPAL 8-/10-/11-Item-Version)
+  zusätzlich angeben, z. B. als Text zum Instrument-Code. Instrumentspezifische Cut-offs sind nicht Gegenstand
+  der S3-LL Palliativmedizin 3.0 und vor Nutzung gegen die jeweilige Validierungsstudie zu prüfen.
 care_process:
-  trigger: bei Aufnahme + bei Verschlechterung
-  frequency_pattern: Q1M in SPV
+  trigger: bei Aufnahme sowie proaktiv und wiederholt im Verlauf, insbesondere bei Veränderungen der Situation
+  frequency_pattern: weekly (Beispiel der S3-LL Palliativmedizin 3.0, Kap. 7.4.1; evidenzbasierte Zeitpunkte
+    fehlen)
   responsible_role: Palliativ-Team / Sozialdienst
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 7.4 Bedarfserfassung; Tab. 6
-    recommendation_grade: A
+    section: 'Kap. 7.4.2 Standardisierte Instrumente der Bedarfserfassung, Empf. 7.6 und 7.7; Instrumente:
+      Tab. 6 (Kap. 5.3), Zeile 2 „Belastungen der Angehörigen“'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -54,6 +62,13 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'CAREPAL-Risikogruppe modellieren: Laut S3-LL Palliativmedizin 3.0 (Kap. 7.4.2) ordnet CAREPAL Angehörige
+  vier Risikogruppen zu (aktuell stabil / psychisch belastet / unerfüllte Unterstützungsbedürfnisse /
+  komplexe Unterstützungsbedarfe). Daraus folgen konkrete Versorgungsaufgaben: psychoonkologische Betreuung
+  bzw. Beratung und praktische Unterstützung. Dieses kategoriale Ergebnis ist im Katalog nicht abbildbar
+  (caregiverBurden = Instrument, caregiverBurdenScore = Integer) → eigenes Element oder kodierte Wertemenge
+  ergänzen.'
 related_elements:
 - relation: specializes
   target: mihub.lung.palliative.caregiverBurden.v0.1

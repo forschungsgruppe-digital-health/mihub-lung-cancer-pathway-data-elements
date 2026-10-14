@@ -2,8 +2,11 @@ id: mihub.lung.palliative.functionalStatus.v0.1
 uuid: 3416e88d-dd6c-5487-9952-4670930e892e
 name: functionalStatus
 label_de: Funktionsstatus (AKPS / ECOG)
-definition_de: 'Quantifizierung des Allgemeinzustandes und der Aktivitäten des täglichen Lebens. Empfohlene
-  Instrumente: AKPS, ECOG, ADL (Barthel).'
+definition_de: 'Funktionsstatus der Patient:in: Quantifizierung des Allgemeinzustandes und der Aktivitäten
+  des alltäglichen Lebens, v. a. im Sinne von Aktivität, Selbstversorgung und Selbstbestimmung; Faktor
+  der Komplexitätseinschätzung (S3-LL Palliativmedizin 3.0, Empf. 5.4, Tab. 6). Mögliche Messinstrumente:
+  AKPS, ECOG, ADL-Index (Katz), Barthel-Index (Tab. 6); zusätzlich Karnofsky-Index (KPS; S3-LL Lungenkarzinom
+  5.1, Tab. 19).'
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -28,17 +31,24 @@ value_set:
     code: 89243-0
     display: Karnofsky Performance Status score
   - system: snomed-ct
-    code: '273302005'
-    display: Barthel index
+    code: '725594005'
+    display: Barthel Index of Activities of Daily Living score
   - system: icf
     code: d4
     display: Mobilität (Aktivität & Partizipation)
   - system: icf
     code: d5
     display: Selbstversorgung (Aktivität & Partizipation)
-  notes: 'AKPS (Australia-modified Karnofsky): kein LOINC-/SNOMED-CT-Code auf dem MII TermServ gefunden
-    (Stand 2026-10-13). ICF-Codes sind nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht
-    verfügbar (Stand 2026-10-13); Codes gemäß ICF-Browser belassen.'
+  - system: loinc
+    code: 96761-2
+    display: Total score Barthel Index
+  notes: 'AKPS (Australia-modified Karnofsky Performance Status; Abernethy et al. 2005, revidierte Skala
+    für die Palliativversorgung, S3-LL Palliativmedizin 3.0, Tab. 6): kein LOINC-/SNOMED-CT-Code auf dem
+    MII TermServ (Stand 2026-10-14). AKPS-Werte nicht mit den KPS-Codes (SNOMED CT 761869008, LOINC 89243-0)
+    kodieren – diese bezeichnen die Original-Karnofsky-Skala (S3-LL Lungenkarzinom 5.1, Kap. 6.2/Tab.
+    19; OCP Lung Step 3.3). ADL-Index nach Katz: Instrumentkonzept SNOMED CT 273547007. ICF-Codes sind
+    nicht verifizierbar: ICF (BfArM) ist auf dem MII TermServ nicht verfügbar (Stand 2026-10-13); Codes
+    gemäß ICF-Browser belassen.'
 care_process:
   trigger: bei jeder Visite
   frequency_pattern: per-encounter
@@ -46,10 +56,19 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 (Funktionsstatus)
-    recommendation_grade: Statement
+    section: 'Kap. 5.3, Empf. 5.4 (modifiziert 2026: Funktionsstatus als Faktor der Komplexitätseinschätzung);
+      Tab. 6 Zeile 3 Funktionsstatus (AKPS, ECOG, ADL, Barthel-Index)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 6.2, Tab. 19 (Allgemeinzustand und Leistungsfähigkeit: ECOG/WHO-Grad und Karnofsky-Index);
+      Kap. 8.6.3.1 (Erstlinien-Systemtherapie im Stadium IV: Allgemeinzustand nach Karnofsky oder ECOG
+      als Auswahlkriterium)'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -71,3 +90,15 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'ICF d4 ''Mobilität'' und d5 ''Selbstversorgung'' (Kapitelebene) sind Funktionsdomänen der ICF, keine
+  Messgrößen des Funktionsstatus (AKPS/ECOG/Barthel), und auf dem MII TermServ nicht verifizierbar (HTTP
+  404). Rolle klären (z. B. nur als Domänenhinweis in notes; S3-LL Palliativmedizin 3.0, Tab. 6 nennt
+  ''Selbstversorgung'' als Aspekt des Funktionsstatus) oder die Codes entfernen. Zugleich Datentyp und
+  Wertebereich klären: Die übrigen Codings sind Beobachtungscodes (Observation.code-Kandidaten), ein Wertebereich
+  fehlt. MII KDS Onkologie 2027.0.0-ballot.1 modelliert ECOG (SNOMED CT 423740007, LOINC 89262-0) und
+  Karnofsky (SNOMED CT 761869008, LOINC 89243-0) mit Observation.value[x] CodeableConcept (oBDS-Codes
+  0–4/U bzw. 100 %–0 %, zusätzlich LOINC-Antwortcodes); der Barthel-Index (LOINC 96761-2, Skalentyp Qn)
+  ist ein numerischer Score, für AKPS gibt es keinen Code. Optionen: instrumentspezifische Elemente oder
+  ein Instrument-/Score-Paar (analog caregiverBurden/caregiverBurdenScore); gemeinsam mit ecogPerformanceStatus
+  und ecogPerformanceStatusSurveillance (integer + LOINC 89262-0, ordinal) zentral entscheiden.'

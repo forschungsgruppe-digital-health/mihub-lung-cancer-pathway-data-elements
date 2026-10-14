@@ -2,8 +2,8 @@ id: mihub.lung.followup.fev1PercentPredicted.v0.1
 uuid: f4eda73e-73fb-52b8-9859-432bd0db9e93
 name: fev1PercentPredicted
 label_de: FEV1 (% vom Soll)
-definition_de: Forciertes exspiratorisches Volumen in der ersten Sekunde, in Prozent des altersnormierten
-  Sollwerts. Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
+definition_de: Forciertes exspiratorisches Volumen in der ersten Sekunde (FEV1), in Prozent des Sollwerts.
+  Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -17,14 +17,11 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: loinc
-    code: 20150-9
-    display: FEV1
-  - system: loinc
     code: 20152-5
     display: FEV1 measured/predicted
   - system: snomed-ct
-    code: '59328004'
-    display: Forced expired volume in 1 second
+    code: '313223002'
+    display: Percent predicted FEV1
   - system: kdl
     code: DG060108
     display: Dokumentationsbogen Lungenfunktionsprüfung
@@ -43,7 +40,9 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Tab. 44 (Lungenfunktionsprüfung)
+    section: 'Tab. 44 (Lungenfunktionsprüfung, CO-Diffusionskapazität: Lungenfunktionseinschränkung, Pneumonitis);
+      Kap. 16.3.1 (Hintergrundtext: Verlust an Lungenfunktion nach Resektion, Pneumonitis nach Strahlentherapie;
+      FEV1 nicht explizit genannt)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

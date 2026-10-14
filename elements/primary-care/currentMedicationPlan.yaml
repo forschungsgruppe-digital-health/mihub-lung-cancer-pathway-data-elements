@@ -15,8 +15,8 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '713114000'
-    display: Provision of medication list
+    code: '721912009'
+    display: Medication summary document
   - system: snomed-ct
     code: '430193006'
     display: Medication reconciliation
@@ -32,6 +32,10 @@ value_set:
   - system: kdl
     code: ED110103
     display: Medikationsplan elektronisch (eMP)
+  notes: 'Rollen der Codings: Dokumenttyp des referenzierten Plans = LOINC 56445-0, SNOMED CT 721912009,
+    KDL TH130107 (Medikationsplan) bzw. ED110103 (eMP); Abschnittscode im Bericht = LOINC 10160-0; SNOMED
+    CT 430193006 (Medication reconciliation, procedure) kennzeichnet nur den Abstimmungsprozess (Kontext),
+    nicht den Plan selbst.'
 standard_mappings:
 - standard: gematik-epa-fhir
   profile_or_url: https://gemspec.gematik.de/ig/fhir/
@@ -68,6 +72,21 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-029 Medikation inkl. Änderungen der Medikation (z. B. standardisierter BMP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. (LoTeCaS-GP): Empfehlungsliste Anhang 2 = Abb. 2, Dos › Relevante Informationen
+      › Therapie(n): ''aktuelle Medikation/Medikationsplan''; Ergebnisse S. 95'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 4.5.4 Communication with the general practitioner (S. 41: regelmäßige Zwei-Wege-Kommunikation
+      zwischen Lead clinician und Hausärzt:in u. a. über „changes in treatment or medications“); ergänzend
+      Step 2.3 Initial referral (S. 24: „medications and allergies“ als essential information der Überweisung)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:

@@ -2,8 +2,10 @@ id: mihub.lung.palliative.illnessPhase.v0.1
 uuid: 0df5c457-d366-5c12-b0f4-73d61c24393b
 name: illnessPhase
 label_de: Krankheitsphase
-definition_de: 'Phase im Krankheitsverlauf gemäß Australian Palliative Care Phases: stabil, instabil,
-  verschlechternd, sterbend.'
+definition_de: 'Krankheitsphase im Sinne des australischen, für Deutschland adaptierten Palliative-Care-Phasen-Konzepts
+  (S3-LL Palliativmedizin Kap. 5.3, Tab. 6): klinisch bedeutsamer Zeitraum im Krankheitsverlauf von Patient:in
+  und betreuenden Angehörigen, der anzeigt, ob der Versorgungsplan angemessen ist oder geändert werden
+  muss – stabil, instabil, verschlechternd, sterbend (terminal).'
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -14,11 +16,13 @@ cardinality: 1..1
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: Krankheitsphasen-Konzept der Australian Palliative Care Phases (stable / unstable / deteriorating
-    / dying / bereaved), in der deutschen S3-LL Palliativ Kap. 5.3 + Tab. 6 übernommen. SNOMED CT International
-    hat keine entsprechenden Codes; die Australian SNOMED-CT-Edition pflegt eigene Codes (z. B. Stable
-    phase, Unstable phase) — Migration auf Australian-Edition oder Refset-Vorschlag in nachgelagerter
-    Iteration.
+  notes: Krankheitsphasen-Konzept der Australian Palliative Care Phases (Eagar et al. 2004), für Deutschland
+    adaptiert (Lehmann et al. 2021) und in der S3-LL Palliativmedizin 3.0 Kap. 5.3/Tab. 6 mit vier Phasen
+    übernommen (stabil, instabil, verschlechternd, sterbend); eine fünfte Phase 'bereaved' gehört nicht
+    zu den Krankheitsphasen in Tab. 6 (die Trauer der Angehörigen behandelt die Leitlinie gesondert in
+    Kap. 7.7). SNOMED CT International (MII TermServ, Stand 2026-10-14) enthält keine entsprechenden Konzepte.
+    Ob eine Australian SNOMED-CT-Edition eigene Phasen-Codes führt, ist nicht verifiziert (UNSICHER) –
+    Edition-/Refset-Prüfung in nachgelagerter Iteration.
   codings:
   - system: local-no-standard-binding
     code: stable
@@ -42,10 +46,11 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 5.3 / Tab. 6 (Krankheitsphasen)
-    recommendation_grade: Statement
+    section: 'Kap. 5.3, Empf. 5.4 (modifiziert 2026: Krankheitsphase als Faktor der Komplexitätseinschätzung);
+      Tab. 6 Zeile 4 Krankheitsphase a) stabil – d) sterbend (terminal)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: evaluation
@@ -67,3 +72,7 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'KDL SD110105 (Dokumentklasse ''Palliativmedizinische Komplexbehandlungsdokumentation'') ist kein Phasenwert
+  (datatype code 1..1: stable/unstable/deteriorating/dying), steht aber als valueSet.coding im Wertebereich.
+  Katalogweite Entscheidung zur Rolle der KDL-Codings bei code-Elementen nötig (siehe complexityLevel).'

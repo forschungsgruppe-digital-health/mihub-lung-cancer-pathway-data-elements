@@ -2,8 +2,10 @@ id: mihub.lung.surveillance.molecularResistanceFinding.v0.1
 uuid: 96f79ba3-fbf4-58bf-a603-1ea0eff06d2a
 name: molecularResistanceFinding
 label_de: Molekulares Resistenzergebnis
-definition_de: Ergebnisartefakt der ctDNA- oder Re-Biopsie-Untersuchung bei Progression unter zielgerichteter
-  Therapie. Erfasst Resistenzmechanismen (z. B. EGFR T790M, EGFR C797S, ALK G1202R, KRAS G12C, MET-Amplifikation).
+definition_de: 'Codiertes Ergebnis der erneuten molekularen Testung (Gewebe-Rebiopsie und/oder Liquid
+  Biopsy/ctDNA) bei akquirierter Resistenz bzw. Progression unter zielgerichteter Therapie (insbesondere
+  TKI): nachgewiesener Resistenzmechanismus auf Konzeptebene (Gen + Alterationstyp), z. B. EGFR T790M,
+  EGFR C797S, ALK G1202R, ROS1 G2032R, MET- oder HER2-Amplifikation.'
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -20,15 +22,11 @@ value_set:
     display: EGFR gene mutations found [Identifier] in Blood or Tissue by Targeted gene mutation analysis
       Nominal
   - system: loinc
-    code: 21702-6
-    display: KRAS gene mutations found [Identifier] in Blood or Tissue by Targeted gene mutation analysis
-      Nominal
+    code: 69548-6
+    display: Genetic variant assessment
   - system: snomed-ct
-    code: '55446002'
-    display: Genetic mutation
-  - system: snomed-ct
-    code: '108369006'
-    display: Neoplasm
+    code: '124975008'
+    display: Somatic mutation
   - system: kdl
     code: PT130102
     display: Molekularpathologiebefund
@@ -42,8 +40,10 @@ standard_mappings:
 - standard: obds
   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
   resource: Modul Genetische Veränderungen
-instruction_de: Variant-spezifische Notation (HGVS) gehört in den freien Befundtext oder in eine MolecularSequence-Resource.
-  Hier nur Konzept-Ebene (Gen + Mutationstyp).
+instruction_de: 'Hier nur Konzeptebene (Gen + Alterationstyp). Variantenspezifische Angaben strukturiert
+  als Komponenten der Variant-Observation erfassen (Gen: LOINC 48018-6 „Gene studied [ID]“; 48004-6 „DNA
+  change (c.HGVS)“; 48005-3 „Amino acid change (pHGVS)“), nicht als Freitext. Ergebnis im molekularen
+  Tumorboard besprechen.'
 care_process:
   trigger: nach ctDNA- oder Re-Biopsie-Test bei Progression
   frequency_pattern: ad-hoc
@@ -52,9 +52,23 @@ evidence:
   guideline_references:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 6.1 (re-biopsy / ctDNA bei Rezidiv)
-    recommendation_grade: Statement
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 6.1.1 Recurrent disease (re-biopsy; molecular/immunological biomarker testing; ctDNA)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6.4.2 (Tab. 36; Hintergrund Resistenzmechanismen EGFR T790M, C797S, MET-/HER2-Amplifikation)
+      i. V. m. Kap. 6.6.10 Empf. 6.65/6.66; ALK G1202R: Hintergrund Kap. 8.6.5.3/8.6.5.4'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 6.1.6.2.1.3.1 (Resistenzbiopsie bei Progress unter EGFR-TKI; MET-Amplifikation häufigster
+      Mechanismus), 6.1.6.2.1.3.4 (T790M), 6.1.6.2.1.9 (ROS1 G2032R), 5.3.3.2 (Rebiopsie inkl. MET-/HER2-Amplifikation)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: evaluation
@@ -77,6 +91,10 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'tumor_entity SCLC prüfen: Resistenztestung und -befund unter TKI betreffen das NSCLC. Die SCLC-Transformation
+  EGFR-mutierter NSCLC ist ein histologischer Befund der Gewebe-Rebiopsie und wird leitliniengemäß im
+  NSCLC-Kontext behandelt (Onkopedia SCLC Kap. 2.5; S3 5.1 Empf. 8.122 im NSCLC-Kapitel 8.6.4.2).'
 related_elements:
 - relation: specializes
   target: mihub.lung.surveillance.molecularRetestingCtdna.v0.1

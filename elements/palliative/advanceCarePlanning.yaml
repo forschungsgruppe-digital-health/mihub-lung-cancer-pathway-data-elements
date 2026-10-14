@@ -29,11 +29,31 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.x
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.11
     recommendation_grade: A
+    evidence_level: '2'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.13 (frühzeitig im Verlauf sowie wiederholt
+      bei wesentlichen Veränderungen von Befinden und Prognose anbieten)
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.14 (Einbezug von Angehörigen sowie ggf.
+      Vorsorgebevollmächtigten/Betreuer:innen)
+    recommendation_grade: A
+    evidence_level: '1'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.4 Vorausschauende Versorgungsplanung (Advance Care Planning, ACP); Empf. 7.7
+    recommendation_grade: A
+    evidence_level: '2'
 iso13972_metadata:
   type: plan
   keywords:
@@ -54,3 +74,15 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'ACP-Status: Der boolean (1..1) bildet nicht ab, ob ACP nicht angeboten, angeboten und abgelehnt oder
+  durchgeführt wurde. Die Leitlinie fordert das Angebot (Empf. 6.11, A) und verlangt, eine Ablehnung zu
+  respektieren. Kodierten Status prüfen. Verifizierte Kandidaten (MII TermServ 2026-10-14): SNOMED 713603004
+  „Advance care planning (procedure)“, 713615000 „Advance care planning declined (situation)“.'
+- 'Mapping fhir-r4-base: „Consent.scope=''advance-directive''“ ist kein gültiger Code der FHIR-ConsentScope-Codes;
+  gültig ist ''adr'' (Advanced Care Directive). Zudem wäre der ACP-Prozess (SNOMED 713603004, procedure)
+  eher als Procedure abzubilden. Consent (scope=adr) bzw. DocumentReference gehört zum Ergebnisdokument
+  (advanceDirectiveDocument).'
+related_elements:
+- relation: hasPart
+  target: advanceDirectiveDocument

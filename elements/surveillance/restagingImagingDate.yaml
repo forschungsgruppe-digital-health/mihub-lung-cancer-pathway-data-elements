@@ -38,10 +38,16 @@ value_set:
     code: DG020103
     display: CT-Befund
 care_process:
-  trigger: Basisevaluation 1 Monat nach Abschluss der Induktionsbehandlung (S3 Empf. 16.9), danach alle
-    6–9 Wochen unter Systemtherapie (S3) bzw. 6–8 Wochen (Onkopedia NSCLC); SCLC zyklusbasiert nach 2–4
-    Zyklen
-  frequency_pattern: Q6-9W (S3) · Q6-8W (Onkopedia NSCLC) · per-cycle (SCLC)
+  trigger: 'NSCLC: erste radiologische Verlaufskontrolle unter Erstlinientherapie nach 2 Zyklen (6 Wochen),
+    spätestens nach 3 Zyklen (9 Wochen) (S3 Empf. 8.84/8.100); SCLC: Ansprechensbeurteilung nach frühestens
+    2, i. d. R. 3–4 Induktionszyklen (Onkopedia SCLC Kap. 6.1.1.4.1.7); Basisevaluation 1 Monat nach Abschluss
+    der Induktionsbehandlung (S3 Empf. 16.9); danach unter laufender System-/Erhaltungstherapie alle 6–9
+    Wochen (S3 Empf. 16.9, Kap. 16.4 – NSCLC und SCLC); NSCLC in der therapiefreien Beobachtung nach Erstlinientherapie
+    alle 6–8 Wochen (Onkopedia NSCLC Kap. 8.2, 6.1.6.2.2.1.2.1)'
+  frequency_pattern: 'NSCLC-Erstlinie: erste Kontrolle nach 2, spätestens 3 Zyklen (6–9 W; S3 Empf. 8.84/8.100)
+    · Q6-9W unter laufender System-/Erhaltungstherapie, NSCLC und SCLC (S3 Empf. 16.9, Kap. 16.4) · Q6-8W
+    in der therapiefreien Beobachtung nach Erstlinientherapie, NSCLC (Onkopedia NSCLC Kap. 8.2) · SCLC-Induktion:
+    Ansprechensbeurteilung nach frühestens 2, i. d. R. 3–4 Zyklen (Onkopedia SCLC Kap. 6.1.1.4.1.7)'
   responsible_role: Radiologie
 evidence:
   guideline_references:
@@ -65,6 +71,14 @@ evidence:
     section: Kap. 6.1.1.4.1.7 (Ansprechensbeurteilung nach 2–4 Zyklen); Modalität/Intervall unter Erhaltung
       nicht spezifiziert
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6.2.1 Empf. 8.84 / Kap. 8.6.3.1 Empf. 8.100 (EK, Starker Konsens, geprüft 2026):
+      radiologische Verlaufskontrolle beim NSCLC Stadium IV nach 2 Zyklen (6 Wochen), spätestens nach
+      3 Zyklen (9 Wochen)'
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: procedure

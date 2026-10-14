@@ -68,3 +68,8 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Abgrenzung klären: therapieassoziierte Infekte und Komplikationen (z. B. unter Chemo- oder Immuntherapie,
+  Pneumonitis) → treatmentSideEffectOrComplication; chronische Erkrankungen → comorbidity. acuteIntercurrentIllness
+  nur für therapieunabhängige akute Erkrankungen. Antwortwerte in der Hausarztpraxis i. d. R. ICD-10-GM
+  (KDS Diagnose).'

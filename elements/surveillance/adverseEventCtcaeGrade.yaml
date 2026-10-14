@@ -10,7 +10,7 @@ tumor_entity:
 - NSCLC
 - SCLC
 category: assessment
-datatype: integer
+datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: required
@@ -28,12 +28,26 @@ value_set:
   - system: snomed-ct
     code: '442452003'
     display: Life threatening severity
+  - system: snomed-ct
+    code: '399166001'
+    display: Fatal
   uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+  notes: 'Nationale Referenzkodierung (oBDS 2021, 15.1; MII KDS Onkologie 2027.0.0-ballot.1, AdverseEvent.seriousness,
+    required): ValueSet https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/ValueSet/mii-vs-onko-nebenwirkung-ctcae-grad
+    (CodeSystem mii-cs-onko-nebenwirkung-ctcae-grad: 1 mild, 2 moderat, 3 schwerwiegend, 4 lebensbedrohlich,
+    5 tödlich, U unbekannt, K keine; MII TermServ v2025.1.0, geprüft 2026-10-14). Die SNOMED-CT-Schweregrade
+    (255604002, 6736007, 24484000, 442452003, 399166001) dienen als Zweitkodierung in Anlehnung an die
+    MII-ConceptMap mii-cm-onko-nebenwirkung-sct (laut eigener Beschreibung weder offiziell endorsed noch
+    final qualitätsgesichert; erstellt gegen SNOMED CT 20240401). Abweichend davon ist für Grad 2 bewusst
+    6736007 ''Moderate severity'' (Parent 272141005 Severities, wie die übrigen Grade) statt 1255665007
+    ''Moderate'' (Parent 35105006 Increased) gewählt.'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
   resource: Observation
-constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod).
+constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod); zulässige
+  Grade sind termspezifisch gemäß CTCAE (z. B. Pruritus max. Grad 3; Confusion ohne Grad 5 in v5.0/v6.0).
+  oBDS/MII sehen zusätzlich U (unbekannt) und K (keine) vor.
 care_process:
   trigger: bei jedem Auftreten eines unerwünschten Ereignisses
   frequency_pattern: per-event
@@ -67,8 +81,14 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'standard_mappings[0].resource ''Observation'' entspricht nicht dem MII-KDS-Onkologie-Modell: Der CTCAE-Grad
+  liegt in AdverseEvent.seriousness (required an mii-vs-onko-nebenwirkung-ctcae-grad) im Profil mii-pr-onko-nebenwirkung-adverse-event
+  (2027.0.0-ballot.1). Das Mapping ist zentral zusammen mit profile_or_url zu korrigieren. Zudem leitet
+  value_set.uri (ctep.cancer.gov/…/ctc.htm) per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development
+  um (Abruf 2026-10-14, UNSICHER).'
 related_elements:
-- relation: specializes
-  target: mihub.lung.surveillance.adverseEventCtcae.v0.1
-- relation: specializes
-  target: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1
+- relation: isPartOf
+  target: adverseEventCtcae
+- relation: isPartOf
+  target: immuneRelatedAdverseEvent

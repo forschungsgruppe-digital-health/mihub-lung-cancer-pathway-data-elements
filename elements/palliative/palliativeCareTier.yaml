@@ -35,18 +35,31 @@ value_set:
   - system: icd-10-gm
     code: Z51.5
     display: Palliativbehandlung
+instruction_de: 'Zuordnung nach Komplexität (S3-LL Palliativmedizin 3.0, Empf. 5.3; Indikation spezialisierter
+  Angebote anhand von Komplexität und Aufwand der Versorgung, Kap. 5.4): niedrig → PBP (Empf. 5.5), mittel
+  → APV (Empf. 5.6), hoch → SPV (Empf. 5.7, Grad A). Indikation regelmäßig re-evaluieren; spezialisierte
+  Angebote können auch nur vorübergehend erforderlich sein.'
 care_process:
   trigger: nach Komplexitätsbewertung
   frequency_pattern: ad-hoc / re-evaluierbar
-  responsible_role: Palliativ-Team / MDT
+  responsible_role: Primärbehandelnde (Onkolog:in, Hausärzt:in; Indikationsstellung und Einbeziehung von
+    APV/SPV) bzw. Palliativ-Team / MDT
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 5.4 Drei Stufen der Palliativversorgung
-    recommendation_grade: Statement
+    section: 'Kap. 5.3, Empf. 5.3 (neu 2026: Indikation der Versorgungsstufe regelmäßig stellen); Kap.
+      5.4 Einleitung (Kategorisierung PBP/APV/SPV); Kap. 5.4.1, Empf. 5.5 (neu 2026: PBP bei niedriger
+      Komplexität); Kap. 5.4.2, Empf. 5.6 (modifiziert 2026: APV bei mittlerer Komplexität)'
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.3, Empf. 5.7 (geprüft 2026): SPV bei hoher Komplexität'
+    recommendation_grade: A
+    evidence_level: '3'
 iso13972_metadata:
   type: plan
   keywords:
@@ -67,3 +80,17 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- ICD-10-GM Z51.5 'Palliativbehandlung' (Z51 'Sonstige medizinische Behandlung', Gruppe Z40–Z54) ist ein
+  stufenunabhängiger Behandlungsanlass-Code und weder das Elementkonzept 'Versorgungsstufe' noch einer
+  der Werte PBP/APV/SPV (S3-LL Palliativmedizin 3.0, Kap. 5.4); als value_set.coding erscheint er im generierten
+  Logical Model neben den drei Stufenwerten. Der Code wurde in v0.1.4 bewusst ergänzt (audit-log §7),
+  ebenso auf dyingPhaseDiagnosed. Zusammen mit der KDL-Frage (SD110105) katalogweit entscheiden, wohin
+  solche Kontext-Codings bei code- und boolean-Elementen gehören (entfernen, in notes oder in ein eigenes
+  Feld).
+- 'KDL SD110105 (Dokumentklasse ''Palliativmedizinische Komplexbehandlungsdokumentation'') ist kein Stufenwert
+  (datatype code 1..1: PBP/APV/SPV), steht aber als valueSet.coding im Wertebereich. Katalogweite Entscheidung
+  zur Rolle der KDL-Codings bei code-Elementen nötig (siehe complexityLevel).'
+related_elements:
+- relation: dependsOn
+  target: complexityLevel

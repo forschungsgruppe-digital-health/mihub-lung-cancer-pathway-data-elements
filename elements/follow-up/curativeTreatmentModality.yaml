@@ -3,23 +3,25 @@ uuid: 4cc40010-ff86-505f-bc6d-604b70406e27
 name: curativeTreatmentModality
 label_de: Kurative Therapiemodalität (Eingangsgröße des Nachsorgeplans)
 definition_de: 'Modalität der abgeschlossenen kurativ intendierten Therapie (Operation, alleinige Strahlentherapie,
-  Radiochemotherapie, multimodal inkl. systemischer Therapie/Immuntherapie). Steuert die modalitätsabhängigen
-  Zeitpunkte von CT Thorax (Onkopedia: Mo 3/6/18 nur nach Strahlentherapie) und Lungenfunktion (nach RT/RCT
-  bis Ende des Pneumonitis-Risikos).'
+  Radiochemotherapie, multimodal inkl. systemischer Therapie/Immuntherapie). Steuert beim NSCLC die modalitätsabhängigen
+  Zeitpunkte von CT Thorax (Onkopedia NSCLC Tab. 12: Mo 3/6/18 nur nach Strahlentherapie) und Lungenfunktion
+  (nach RT/RCT bis Ende des Pneumonitis-Risikos). Beim SCLC sind CT Thorax und Lungenfunktion in Onkopedia
+  SCLC Tab. 9 modalitätsunabhängig; modalitätsabhängig ist dort nur das Schädel-MRT (LD ohne PCI, siehe
+  prophylacticCranialIrradiationStatus).'
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
 category: prozedur
 datatype: CodeableConcept
-cardinality: 1..1
+cardinality: 1..*
 value_set:
   binding_strength: extensible
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '173171007'
-    display: Lobectomy of lung
+    code: '119746007'
+    display: Lung excision
   - system: snomed-ct
     code: '1287742003'
     display: Radiotherapy
@@ -41,6 +43,23 @@ value_set:
   - system: icd-10-gm
     code: Z92.3
     display: Bestrahlung in der Eigenanamnese
+  - system: ops
+    code: 5-323
+    display: Segmentresektion der Lunge
+  - system: ops
+    code: 5-327
+    display: Einfache (Pleuro-)Pneum(on)ektomie
+  - system: icd-10-gm
+    code: Z92.6
+    display: Zytostatische Chemotherapie wegen bösartiger Neubildung in der Eigenanamnese
+  notes: 'Codings sind Therapiekomponenten (mehrere Werte je Patient:in möglich). Steuerung beim NSCLC
+    (Onkopedia NSCLC Kap. 8.1, Tab. 12): CT Thorax Mo 3/6/18 („* nach Strahlentherapie“) bei jeder Therapie
+    mit Strahlentherapieanteil, erkennbar an 1287742003 Radiotherapy oder 703423002 Combined chemotherapy
+    and radiation therapy, jeweils einschließlich Subkonzepten (is-a, z. B. stereotaktische Strahlentherapie);
+    Fortführung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos nach alleiniger Strahlentherapie
+    oder Radiochemotherapie. Chemotherapy (367336001) und Immune checkpoint inhibitor therapy (870387009)
+    nur als Komponenten einer kurativen Therapie mit lokal ablativem Verfahren (OP, RTx, CTx/RTx; S3-LL
+    Lungenkarzinom 5.1, Empf. 16.1), nicht als alleinige kurative Modalität.'
 standard_mappings:
 - standard: obds
   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
@@ -77,9 +96,28 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.4/16.5 (Population nach OP bzw. RT/RCT); Empf. 16.7 (nach multimodaler Therapie
-      inkl. OP oder CTx/RTx)
+    section: Empf. 16.1 (strukturierter Nachsorgeplan nach multimodaler Therapie Stadium I–IIIC/OMD mit
+      lokal ablativem Verfahren OP, RTx, CTx/RTx); Empf. 16.4 (Population nach OP Stadium I–III bzw. RT/RCT
+      Stadium I–II); Empf. 16.7 (nach multimodaler Therapie inkl. OP oder CTx/RTx) — alle EK, Starker
+      Konsens, geprüft 2026
     recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.5 (A/B, LoE 2, Konsens, geprüft 2026) — Population NSCLC Stadium III nach RT/RCT:
+      posttherapeutische Komplikationen erfassen (sollte); erste klinische Vorstellung soll innerhalb
+      von 8 Wochen nach Abschluss der Strahlentherapie erfolgen'
+    recommendation_grade: A
+    evidence_level: '2'
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2, Tab. 9 (Strukturierte Nachsorge nach kurativer Therapie; lokalisierte Stadien,
+      Orientierung an den NSCLC-Empfehlungen): CT Thorax an allen 9 Zeitpunkten ohne Modalitätsabhängigkeit;
+      Lungenfunktion X Mo 3/6/9, (X) Mo 12/18/24, ohne Einschränkung auf Bestrahlte; modalitätsabhängig
+      nur „MRT Schädel bei LD ohne PCI“'
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -101,6 +139,3 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
-related_elements:
-- relation: dependsOn
-  target: structuredFollowUpPlan

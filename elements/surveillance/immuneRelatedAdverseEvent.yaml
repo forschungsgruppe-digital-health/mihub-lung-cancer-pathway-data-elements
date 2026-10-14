@@ -18,14 +18,20 @@ value_set:
     code: '62014003'
     display: Adverse reaction to drug
   - system: snomed-ct
-    code: '205237003'
-    display: Pneumonitis
+    code: '427046006'
+    display: Drug-induced pneumonitis
   - system: snomed-ct
-    code: '408335007'
-    display: Autoimmune hepatitis
+    code: '235876009'
+    display: Drug-induced hepatitis
   - system: snomed-ct
     code: '1345085000'
     display: Immune checkpoint inhibitor therapy induced enterocolitis
+  - system: snomed-ct
+    code: '237539004'
+    display: Drug-induced thyroiditis
+  - system: snomed-ct
+    code: '28926001'
+    display: Eruption caused by drug
   standard_binding_status: mapped
 care_process:
   trigger: Verdachtsfall unter Checkpoint-Inhibitor
@@ -36,8 +42,38 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Kap. 16.3 (Einleitung: immun-bezogene Komplikationen); Kap. 16.3.1'
+    section: 'Kap. 16.3 Einleitung (Textpassage: „immun-bezogene Komplikationen“ als Nachsorgeparameter
+      nach lokal ablativer Therapie; keine Empfehlungsbox)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.2.3.2 Immuntherapie (6.2.3.2.1–6.2.3.2.5, 6.2.3.2.7: irAE durch autoimmun-vermittelte
+      Entzündung, Erkennung/Management nach aktuellen Leitlinien); Kap. 6.1.6.2.2.1.2.1 (hepatische, kutane
+      und endokrine Toxizitäten der Immunkombinationstherapie)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 8.3.1.7 Durvalumab („Auf immuntherapiebedingte Nebenwirkungen ist zu achten.“); Kap.
+      8.3.1.13 Serplulimab (autoimmunbedingte Nebenwirkungen wie Pneumonitis, Colitis oder Hepatitis)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.2 (EK, geprüft 2026: strukturierter Verlaufs-/Follow-up-Plan unter Systemtherapie
+      Stadium IVA/IVB zur Erkennung von Komplikationen und Toxizitäten der Therapie)'
     recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 12 Supportive Behandlung (Verweiskapitel auf S3-LL Supportive Therapie, Thema „Immunvermittelte
+      Nebenwirkungen (irAE) durch Immuncheckpoint-Inhibitoren“; keine eigene Empfehlung)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: condition
@@ -59,3 +95,6 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: specializes
+  target: adverseEventCtcae

@@ -37,13 +37,21 @@ evidence:
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
     section: Kap. 5.6 Allgemeinzustand und Komorbidität — ECOG PS als Standard-Erfassung im onkologischen
       Kontext
-    recommendation_grade: Statement
+    recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 (Funktionsstatus, ECOG als anerkanntes Instrument)
+    section: Tab. 6 (Funktionsstatus — ECOG neben AKPS, ADL, Barthel; Kontext Empf. 5.4, EK, modifiziert
+      2026)
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 8.80 (Kap. 8.6.1, NSCLC Stadium IV; EK, Starker Konsens, geprüft 2026 — ECOG-Erhebung
+      vor Therapieeinleitung; in Kap. 16 Nachsorge nicht explizit genannt)
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -65,3 +73,16 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Abweichung vom MII-Profil mii-pr-onko-allgemeiner-leistungszustand-ecog (MII KDS Onkologie 2025.0.4,
+  2026.0.3, 2027.0.0-ballot.1): Observation.value[x] ist dort CodeableConcept 1..1 mit required-Bindung
+  an mii-vs-onko-allgemeiner-leistungszustand-ecog (Codes 0–4 und U „Unbekannt“; ab 2026.0.3 als Slice
+  coding:obds). Der Mapping-Pfad muss daher Observation.valueCodeableConcept.coding:obds.code statt Observation.valueInteger
+  lauten. Zu klären: datatype integer (0..4) beibehalten und beim Mapping in die Profil-Codes übersetzen
+  oder auf CodeableConcept umstellen und „U“ (unbekannt) zulassen.'
+- 'Trigger „bei jeder Visite“ / per-encounter ist nicht wörtlich leitlinienbelegt: S3-LL Lungenkarzinom
+  5.1, Empf. 8.80 „Vor Einleitung der Therapie“ (NSCLC Stadium IV) und Statement 9.2 (SCLC, ohne Zeitpunkt);
+  S3 Kap. 16 und Onkopedia NSCLC Kap. 8.1, Tab. 12 nennen ECOG für die Nachsorge nicht; OCP Lung Step
+  3.6.1 „should be frequently assessed“ (prätherapeutischer Kontext); S3-LL Palliativmedizin 3.0, Empf.
+  5.3 „regelmäßig“ (Komplexitätseinschätzung). Als Expert:innen-Praxis MiHUB kennzeichnen oder Quelle
+  ergänzen.'

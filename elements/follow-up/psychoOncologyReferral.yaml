@@ -2,7 +2,10 @@ id: mihub.lung.followup.psychoOncologyReferral.v0.1
 uuid: ec8d4dcd-eff3-537a-be4a-9410126c4aa0
 name: psychoOncologyReferral
 label_de: Psychoonkologische Anbindung
-definition_de: Identifizierter Bedarf und Vermittlung psychoonkologischer Versorgung im Rahmen der Nachsorge.
+definition_de: 'Psychoonkologische Anbindung im Rahmen der Nachsorge (ja/nein): Vermittlung an psychoonkologische
+  Versorgung (z. B. psychoonkologischer Dienst, Krebsberatungsstelle, ambulante Psychoonkologie) nach
+  identifiziertem Bedarf (z. B. positives Distress-Screening oder im strukturierten Nachsorge-/Verlaufsplan
+  erkannter Bedarf).'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -16,8 +19,13 @@ value_set:
   - system: snomed-ct
     code: '428997004'
     display: Psychosocial counseling about cancer
+  - system: snomed-ct
+    code: '309625004'
+    display: Referral to psychology service
 care_process:
-  trigger: Distress-Screening positiv
+  trigger: positives Distress-Screening (z. B. Distress-Thermometer) oder anderweitig erkannter psychoonkologischer
+    Bedarf im strukturierten Nachsorge-/Verlaufsplan (S3-LL Lungenkarzinom 5.1 Empf. 16.1/16.2); Bedarfsprüfung
+    an Schlüsselzeitpunkten wie Therapieende, Survivorship, Rezidiv (OCP Principle 4)
   frequency_pattern: ad-hoc
   responsible_role: Onkologe / Psychoonkolog:in
 evidence:
@@ -31,8 +39,18 @@ evidence:
     evidence_level: n/a
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 5.4.1 Supportive care
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.1 Supportive care (emotional distress; validierte Screening-Tools, Verweis auf Appendices
+      A–C); Principle 4 Supportive care (Key review points; Entscheidung über Referral an Supportive-Care-Dienste);
+      Appendix B Psychological needs (Referral-Kriterien, u. a. distress that requires specialist intervention)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 7.3.2 Aufklärung über Behandlungsmaßnahmen (Hintergrundtext, ohne Empfehlungsgrad):
+      Angebote psychoonkologischer, spiritueller und sozialrechtlicher Unterstützung ansprechen; bei Bedarf
+      Kontakte vermitteln'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -55,3 +73,8 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: dependsOn
+  target: distressThermometerScore
+- relation: dependsOn
+  target: structuredFollowUpPlan

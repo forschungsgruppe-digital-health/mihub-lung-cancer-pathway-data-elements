@@ -2,9 +2,10 @@ id: mihub.lung.palliative.treatmentDecisionDocumentation.v0.1
 uuid: 111800b7-bd62-5e00-a7dc-8247b4c77908
 name: treatmentDecisionDocumentation
 label_de: Dokumentation der Entscheidungen und Maßnahmen zur Behandlung
-definition_de: Dokumentiertes Ergebnis der Entscheidungsfindung zur (palliativen) Behandlung — Therapieziel,
-  Therapiezieländerung, Begrenzung oder Beendigung tumorspezifischer Maßnahmen, vereinbarte Maßnahmen
-  — nachvollziehbar für alle Mitbehandelnden.
+definition_de: Dokumentiertes Ergebnis der (partizipativen) Entscheidungsfindung zur palliativen Behandlung
+  — Therapieziel bzw. Therapiezieländerung sowie Beginn, Fortsetzung, Begrenzung oder Beendigung tumorspezifischer
+  und weiterer medizinischer (inkl. lebenserhaltender) Maßnahmen, vereinbarte Maßnahmen — nachvollziehbar
+  für alle Mitbehandelnden.
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -23,8 +24,8 @@ value_set:
     code: 18776-5
     display: Plan of Care Note
   - system: snomed-ct
-    code: '247583006'
-    display: Decision making
+    code: '734163000'
+    display: Care plan
 standard_mappings:
 - standard: fhir-r4-base
   resource: CarePlan / DocumentReference
@@ -34,21 +35,23 @@ standard_mappings:
   resource: DocumentReference (MHD)
 care_process:
   trigger: bei jeder Therapieentscheidung / Therapiezieländerung in der Palliativversorgung
-  frequency_pattern: ad-hoc
+  frequency_pattern: ad-hoc (je Therapieentscheidung/Therapiezieländerung) + regelmäßige Re-Evaluation;
+    in der Sterbephase kontinuierlich
   responsible_role: Lead-Clinician / Palliativ-Team
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 14.7 — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-066 „Doku der Entscheidungen
-      und Maßnahmen zur Behandlung“), Wortlaut-Verifikation ausstehend
-    recommendation_grade: n/a
+    section: Kap. 14.4 Betreuung im Terminalstadium; Empf. 14.7 (Entscheidungen und Maßnahmen zur Behandlung
+      in der Sterbephase dokumentieren und kontinuierlich re-evaluieren)
+    recommendation_grade: EK
     evidence_level: n/a
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 6.5 Vorausschauende Versorgungsplanung
+    section: 'Kap. 6.5 Vorausschauende Versorgungsplanung (Hintergrund: Dokumentation der Inhalte und
+      Ergebnisse)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Expert:innen-Erhebung MiHUB
@@ -56,6 +59,24 @@ evidence:
     section: DE-066 Doku der Entscheidungen und Maßnahmen zur Behandlung (Palliativversorgung, Kategorie
       Dokument)
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 8.2 Grundlegende Aspekte im Prozess der Entscheidungsfindung; Empf. 8.1 (partizipative
+      Entscheidungsfindung) und 8.2 (Entscheidungen über das therapeutische Vorgehen am Lebensende frühzeitig,
+      auch antizipierend, fällen und dokumentieren)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 8.4 Entscheidung über Beginn, Fortsetzung oder Beendigung medizinischer Maßnahmen und
+      Kap. 8.5 Besondere Situationen; Empf. 8.10 (regelmäßige Prüfung von Indikation und Einwilligung,
+      ggf. Anpassung des Therapieplans oder Therapiezieländerung) und 8.11 (insbesondere in prognostisch
+      uneindeutigen Erkrankungssituationen die der Indikationsstellung und Therapieentscheidung zugrunde
+      liegenden Kriterien explizit formulieren und dokumentieren)
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: plan

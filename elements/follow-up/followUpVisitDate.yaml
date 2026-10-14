@@ -2,10 +2,12 @@ id: mihub.lung.followup.followUpVisitDate.v0.1
 uuid: 49c79717-1ab6-5eea-9bf2-323a6999954c
 name: followUpVisitDate
 label_de: Nachsorgetermin — Datum (Anamnese und körperliche Untersuchung)
-definition_de: Datum jedes strukturierten Nachsorgetermins nach kurativ intendierter Therapie, an dem
-  eine dezidierte Anamnese und eine körperliche Untersuchung erfolgen. Ergänzt firstFollowUpVisitDate
-  (nur Erstvorstellung) um die Folgetermine und ist der Anker für alle per-encounter-Elemente der Phase;
-  bildet das Zeitraster der strukturierten Nachsorge als Ereignis ab.
+definition_de: Datum jedes strukturierten Nachsorgetermins nach kurativ intendierter (lokal-ablativer)
+  Therapie, an dem eine dezidierte Anamnese und eine körperliche Untersuchung erfolgen – einschließlich
+  der Erstvorstellung innerhalb von 8 Wochen nach Therapieabschluss und aller Folgetermine. Die Erstvorstellung
+  wird zusätzlich gesondert als firstFollowUpVisitDate erfasst; dessen Wert entspricht dem frühesten followUpVisitDate
+  nach Therapieende. Anker für alle per-encounter-Elemente der Phase; bildet das Zeitraster der strukturierten
+  Nachsorge als Ereignis ab.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -103,6 +105,15 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'value_set followUpVisitDate: (a) Elementspezifisch: ICD-10-GM Z08 ist nicht endständig und damit nicht
+  kodierfähig; stattdessen die endständigen Codes Z08.0/Z08.1/Z08.2/Z08.7 (ggf. Z08.8/Z08.9) je Therapiemodalität
+  verwenden, und zwar nur in der Rolle Behandlungsanlass (Encounter.reasonCode bzw. Encounter.diagnosis
+  → Condition). (b) Katalogweit entscheiden, wie Codings unterschiedlicher Rollen getrennt werden: SNOMED
+  185389009/390906007 sind Kontakttypen (Encounter.type), KDL SD150101 ist eine Dokumentklasse (DocumentReference.type
+  des Nachsorgebogens) und steht auch in structuredFollowUpPlan, survivorshipCarePlan und structuredSurveillancePlan.
+  Denkbar ist eine Schema-Erweiterung codings[].role (concept/encounter-type/document-class/answer), statt
+  die Rollen nur in diesem Element zu trennen.'
 related_elements:
 - relation: dependsOn
   target: firstFollowUpVisitDate

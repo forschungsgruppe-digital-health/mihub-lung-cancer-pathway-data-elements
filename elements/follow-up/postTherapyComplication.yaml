@@ -3,8 +3,9 @@ uuid: 7a0cabf4-6853-5562-8e6c-d42815f41d89
 name: postTherapyComplication
 label_de: Posttherapeutische Komplikation
 definition_de: 'Erfassung von Komplikationen nach lokal-ablativer Therapie: nach OP (Schmerz, Infektion,
-  Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom), nach RTx (Ösophagitis, Pneumonitis, Strahlenfibrose,
-  Hautreaktion, kardiale, myelitische Affektionen).'
+  Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom), nach RTx/CTx-RTx (Ösophagitis, Pneumonitis, Strahlenfibrose,
+  Affektionen von Haut, Herz oder Rückenmark) sowie neurokognitive Spätfolgen nach Schädelbestrahlung
+  (PCI, Ganzhirnbestrahlung).'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -25,8 +26,8 @@ value_set:
     code: '235605005'
     display: Radiation esophagitis
   - system: snomed-ct
-    code: '51615001'
-    display: Fibrosis of lung
+    code: '405570007'
+    display: Pulmonary fibrosis due to and following radiotherapy
   - system: snomed-ct
     code: '709073001'
     display: Neurocognitive disorder
@@ -36,6 +37,9 @@ value_set:
   - system: icd-10-gm
     code: J70.1
     display: Chronische und sonstige Lungenbeteiligung bei Strahleneinwirkung
+  - system: icd-10-gm
+    code: J70.0
+    display: Akute Lungenbeteiligung bei Strahleneinwirkung
   standard_binding_status: mapped
 care_process:
   trigger: Bei Erstvorstellung innerhalb von 8 Wochen nach Therapieende (nach OP Stadium I–III; nach RT/RCT
@@ -53,8 +57,10 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.5 (A/B, LoE 2, geprüft 2026) — NSCLC Stadium III nach RT/RCT
-    recommendation_grade: A
+    section: 'Empf. 16.5 (Grad gedruckt „A/B“: Erfassung/Behandlung posttherapeutischer Komplikationen
+      „sollten“ = B; erste Vorstellung „soll … innerhalb von 8 Wochen“ = A; LoE 2, Konsens, geprüft 2026)
+      — NSCLC Stadium III nach RT/RCT'
+    recommendation_grade: B
     evidence_level: '2'
   - source: Onkopedia NSCLC
     version: Stand April 2025
@@ -70,6 +76,13 @@ evidence:
     section: 'Kap. 6.1.1.3 (kognitive Einschränkung nach PCI); Kap. 10.2 (Nachsorgeziel: Nebenwirkungen
       der Therapie)'
     recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.1 (strukturierter Nachsorgeplan geeignet, Komplikationen und Toxizitäten der Therapie
+      zu erkennen; Starker Konsens, geprüft 2026)
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: condition
@@ -91,3 +104,18 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Der Wertebereich deckt die Definition nur teilweise ab. Für Haut-, Rückenmarks- und kardiale RT-Folgen
+  sowie die OP-Komplikationen (Schmerz, Infektion, Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom)
+  fehlen Codings. Per TermServ verifizierte, aktive Kandidaten (SNOMED CT 20260701): 402761000 Disorder
+  of skin due to radiotherapy; 1339018001 Disorder of spinal cord due to and following radiotherapy; 430401005
+  Heart disease caused by ionizing radiation (kardialer Oberbegriff); 33558009 Post-radiation pericarditis
+  (Teilaspekt kardial, kein Subtyp von 430401005); 239175003 Post-thoracotomy pain syndrome (Schmerz nach
+  Thorakotomie). Für das Post-Pneumonektomie-Syndrom fand die $expand-Textsuche kein SNOMED-Konzept (UNSICHER).
+  Zusätzlich ist die Abgrenzung zu immuneRelatedAdverseEvent zu klären: S3-LL Lungenkarzinom 5.1, Kap.
+  16.3 nennt „immun-bezogene Komplikationen“.'
+related_elements:
+- relation: specializes
+  target: treatmentSideEffectOrComplication
+- relation: dependsOn
+  target: curativeTreatmentModality

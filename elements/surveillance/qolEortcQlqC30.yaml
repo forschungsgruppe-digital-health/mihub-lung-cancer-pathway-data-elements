@@ -2,13 +2,15 @@ id: mihub.lung.surveillance.qolEortcQlqC30.v0.1
 uuid: 76bc24d6-e661-50f2-a5f5-0621de7071de
 name: qolEortcQlqC30
 label_de: EORTC QLQ-C30 Globalskala
-definition_de: Globaler Lebensqualitätsscore aus EORTC QLQ-C30 (0–100, höher = besser).
+definition_de: 'Score der Skala ''Global health status/QoL'' (QL2) des EORTC QLQ-C30 (Version 3.0): Mittelwert
+  der Items 29 und 30 (je 1–7), linear transformiert auf 0–100 (S = (RS − 1)/6 × 100); höher = bessere
+  Lebensqualität.'
 phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
 category: prom
-datatype: integer
+datatype: decimal
 cardinality: 0..*
 unit: '{score}'
 value_set:
@@ -21,6 +23,15 @@ value_set:
     code: '709503007'
     display: Assessment of quality of life
   standard_binding_status: mapped
+  notes: 'Kein LOINC- oder SNOMED-CT-Code für den Score der QLQ-C30-Globalskala (QL2): LOINC 2.83 enthält
+    keine EORTC-QLQ-C30-Inhalte (TermServ-Expand ''QLQ-C30'' ohne Treffer, 2026-10-14); SNOMED CT bietet
+    nur 273446001 (assessment scale, Instrument) und das generische 709503007 (procedure, Erhebungsakt).
+    Die vorhandenen Codings bezeichnen daher Instrument bzw. Erhebungsakt, nicht den Messwert. National
+    definiert das MII-KDS-Modul PRO (Paket de.medizininformatikinitiative.kerndatensatz.pros 2026.7.0)
+    den Score-Code eortc-qlq-c30-ql ''EORTC QLQ-C30 Global Health Status / Quality of Life Score'' (CodeSystem
+    https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/CodeSystem/mii-cs-pro-score-catalogue;
+    ObservationDefinition mii-obsdef-pro-eortc-qlq-c30-ql: Einheit {score}, decimalPrecision 2); auf dem
+    MII TermServ am 2026-10-14 nicht auflösbar. Aufnahme als Coding bzw. Mapping prüfen.'
 care_process:
   trigger: in jeder Linie, bei Restaging
   frequency_pattern: Q6-9W oder Q3M
@@ -29,20 +40,32 @@ evidence:
   guideline_references:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 5.4.1 Supportive care; Principle 4 (PROM/QoL als Standard im Survivorship-Phase)
-    recommendation_grade: Statement
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 2: Safe and quality care — Patient-reported experience and outcome measures (PROMs
+      in die Routineversorgung); Step 5 Checkliste ''Patient-reported outcome measures recorded'' (EORTC
+      QLQ-C30 in der OCP nicht genannt)'
+    recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 16.6 Forschungsbedarf — Lebensqualität bei verschiedenen Nachsorgestrategien
-    recommendation_grade: Statement
+    section: Kap. 16.6 Forschungsbedarf, Punkt d. 'Lebensqualität bei verschiedenen Nachsorgestrategien'
+      (Forschungsfrage, keine Empfehlung)
+    recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 9 (EORTC-QLQ-C15-Pal als anerkanntes Instrument)
+    section: Tab. 9 Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente (EORTC-QLQ-C15-Pal
+      für Lebensqualität bei Beeinträchtigung durch Atemnot; nicht QLQ-C30)
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: EORTC QLQ-C30 Scoring Manual, Third edition, 2001 (Fayers PM et al., EORTC Quality of Life
+      Group, Brussels)
+    url: https://www.eortc.org/app/uploads/sites/2/2018/02/SCmanual.pdf
+    section: 'Technical Summary; Table 1 Scoring the QLQ-C30 version 3.0 (Global health status/QoL QL2:
+      Items 29, 30; Item-Spannweite 6)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -65,3 +88,10 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Instrumentenwahl, Trigger und Frequenz sind nicht leitliniengestützt: Keine eingeschlossene Leitlinie
+  empfiehlt den EORTC QLQ-C30 (Globalskala) für die Routine-Verlaufskontrolle. ''In jeder Linie, bei Restaging''
+  und ''Q6-9W oder Q3M'' sind durch die zitierten Stellen nicht belegt (allenfalls an das CT-Restaging
+  alle 6–9 Wochen nach S3 Empf. 16.9 koppelbar) und sollten als MiHUB-Festlegung gekennzeichnet werden.
+  Zusätzlich die Lizenz klären: Laut Scoring Manual (2001) darf der QLQ-C30 nur mit vorheriger schriftlicher
+  Zustimmung des EORTC Data Center genutzt werden (aktuelle Lizenzbedingungen UNSICHER).'

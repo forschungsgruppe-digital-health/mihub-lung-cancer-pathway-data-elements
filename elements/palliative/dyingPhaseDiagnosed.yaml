@@ -2,8 +2,9 @@ id: mihub.lung.palliative.dyingPhaseDiagnosed.v0.1
 uuid: 745ccd2c-b07e-5444-9993-522d9888ce68
 name: dyingPhaseDiagnosed
 label_de: Sterbephase diagnostiziert
-definition_de: Klinische Diagnose der Sterbephase (Tod innerhalb der nächsten Tage wahrscheinlich), inkl.
-  Datum/Zeitpunkt.
+definition_de: Klinische Feststellung, dass die Sterbephase begonnen hat (letzte drei bis sieben Lebenstage;
+  Tod innerhalb der nächsten Tage wahrscheinlich), nach Ausschluss akut reversibler Ursachen, inkl. Datum/Zeitpunkt
+  der Feststellung.
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -18,20 +19,33 @@ value_set:
   - system: snomed-ct
     code: '399069006'
     display: Dying process
-  - system: icd-10-gm
-    code: Z51.5
-    display: Palliativbehandlung
 care_process:
   trigger: klinisches Sterbephasen-Assessment
-  frequency_pattern: tägliche Re-Evaluation
-  responsible_role: Palliativ-Team / Lead-Clinician
+  frequency_pattern: Re-Evaluation der Feststellung spätestens nach 72 h im multiprofessionellen Team
+    (S3-LL Palliativmedizin 3.0, Kap. 21.2)
+  responsible_role: Ärzt:in und Pflegefachperson unter Einbeziehung des multiprofessionellen Teams (Palliativ-Team
+    / Lead-Clinician); Dokumentation durch die verantwortliche Fachperson
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 21.2 Sterben diagnostizieren
-    recommendation_grade: EK
+    section: Kap. 21.2 Das Sterben diagnostizieren; Empf. 21.1 (Kriterien zur Einschätzung des Beginns
+      der Sterbephase nach Ausschluss akut reversibler Ursachen)
+    recommendation_grade: '0'
+    evidence_level: '4'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 21.2 Das Sterben diagnostizieren; Empf. 21.2 (Einschätzung durch Ärzt:innen und Pflegefachpersonen
+      unter Einbeziehung eines multiprofessionellen Teams)
+    recommendation_grade: B
+    evidence_level: '4'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.3, Tab. 6 (Krankheitsphase d) sterbend (terminal))
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: evaluation
@@ -53,3 +67,10 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Konsistenzregel mit illnessPhase festlegen: dyingPhaseDiagnosed = true ⇔ illnessPhase = ''dying'' (Tab.
+  6 d). Zu klären ist die führende Quelle bzw. Ableitungsrichtung: kriteriengestützte Feststellung nach
+  Kap. 21.2 vs. Phasen-Assessment nach Kap. 5.3.'
+related_elements:
+- relation: specializes
+  target: illnessPhase

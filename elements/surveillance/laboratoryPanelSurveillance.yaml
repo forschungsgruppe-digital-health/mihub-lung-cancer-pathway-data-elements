@@ -2,9 +2,12 @@ id: mihub.lung.surveillance.laboratoryPanelSurveillance.v0.1
 uuid: 189d618b-fd56-5cae-8a3b-3b04bfb8ad39
 name: laboratoryPanelSurveillance
 label_de: Basislabor unter Systemtherapie
-definition_de: Symptom- und therapieorientiertes Basislabor im Stadium IV gemäß Onkopedia NSCLC Tab. 2
-  (Blutbild, Elektrolyte, Nierenparameter, Leberparameter, LDH, Gerinnung) — vor jedem Therapiezyklus
-  bzw. bei jeder Verlaufskontrolle; kein Nachsorge-Standard nach kurativer Therapie.
+definition_de: Symptom- und therapieorientiertes Basislabor unter Systemtherapie im Stadium IV (Blutbild,
+  Elektrolyte, Nierenparameter, Leberparameter, LDH, Gerinnung; Zusammensetzung gemäß Onkopedia NSCLC
+  Tab. 2, auf die Kap. 6.1.6.2 für das Stadium IVB verweist). Zeitpunkt und Frequenz sind in der S3-LL
+  Lungenkarzinom und in Onkopedia NSCLC/SCLC für die Verlaufsbeobachtung unter Systemtherapie nicht festgelegt;
+  in der Praxis meist vor jedem Therapiezyklus bzw. bei jeder Verlaufskontrolle (Praxisableitung, nicht
+  leitlinienbelegt). Kein Nachsorge-Standard nach kurativer Therapie.
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -80,6 +83,13 @@ provenance:
   git_commit: ''
 issues:
 - Onkopedia nennt unter Therapie keine Laborfrequenz; „per-cycle“ ist eine Praxisableitung (UNSICHER).
+- 'Codings mit gemischten Achsen: 15220000 (Prozedur), LOINC 11502-2 (CLASS DOC.MISC = Berichts-/Dokumenttyp)
+  und KDL LB120107 (Dokumentklasse). Für den Mapping-Pfad Observation.code (ObservationLab) sind 11502-2/LB120107
+  ungeeignet. Zu prüfen: panel- bzw. analytspezifische LOINC-Codes (TermServ 2026-10-14 aktiv: 58410-2
+  ''CBC panel - Blood by Automated count'', 24326-1 ''Electrolytes 1998 panel - Serum or Plasma'', 34714-6
+  ''INR in Blood by Coagulation assay'', 3173-2 ''aPTT in Blood by Coagulation assay''; LDH 2532-0 ist
+  DISCOURAGED) oder ein Mapping auf einen Laborbefund-Bericht (DiagnosticReport) statt Observation. Die
+  US-Panels ''… 2000 panel'' (Renal/Hepatic) decken sich nicht 1:1 mit ''Nieren-/Leberparameter''.'
 related_elements:
 - relation: dependsOn
   target: surveillanceVisit

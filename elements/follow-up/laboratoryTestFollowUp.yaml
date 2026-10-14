@@ -2,9 +2,9 @@ id: mihub.lung.followup.laboratoryTestFollowUp.v0.1
 uuid: dda008b3-f0ae-5547-a249-6abce2d269cf
 name: laboratoryTestFollowUp
 label_de: Laborparameter in der Nachsorge
-definition_de: Laboruntersuchung am Nachsorgetermin „nach Maßgabe des Behandlers“ (z. B. bei Pneumonitis-
-  oder Toxizitätsverdacht; Panel/Parameter als Coding). Tumormarker sind in der Nachsorge ausdrücklich
-  nicht empfohlen und dürfen nicht als Routinewert erfasst werden.
+definition_de: Laboruntersuchung (Panel/Parameter als LOINC-Coding) am Nachsorgetermin „nach Maßgabe des
+  Behandlers“ (S3 Tab. 44), z. B. bei Pneumonitis- oder Toxizitätsverdacht. Die routinemäßige Bestimmung
+  von Serum-Tumormarkern wird in der Nachsorge nicht empfohlen (S3 Kap. 16.3.4).
 phase: followup
 tumor_entity:
 - NSCLC
@@ -19,19 +19,22 @@ value_set:
   - system: snomed-ct
     code: '15220000'
     display: Laboratory test
-  - system: loinc
-    code: 11502-2
-    display: Laboratory report
   - system: kdl
     code: LB120107
     display: Laborbefund
+  notes: 'Antwortwerte (Panel/Parameter) sind LOINC-codierte Laboruntersuchungen bzw. -panels (Observation.code;
+    MII-KDS-Modul Laborbefund, Profil ObservationLab: Bindung an LOINC-Codes der Laborklasse, CLASSTYPE
+    1). SNOMED CT 15220000 bezeichnet nur das Element (Laborprozedur), KDL LB120107 die Dokumentklasse
+    des Laborbefunds; beide sind keine Antwortwerte.'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab
   resource: Observation (ObservationLab)
   path: Observation.code
-constraints_de: Keine Tumormarker als Routine-Nachsorgeparameter (S3 Kap. 16.3.4, LoE 1a); Onkopedia NSCLC/SCLC
-  sehen in der Nachsorge kein Labor vor.
+constraints_de: Keine routinemäßige Bestimmung von Serum-Tumormarkern in der Nachsorge (S3 Kap. 16.3.4,
+  Hintergrundtext ohne Empfehlungsgrad; „Evidenzgrad 1a“ bezieht sich dort auf die zitierte Literatur
+  [1878] zur kontrovers diskutierten Bedeutung der Serummarker). Onkopedia NSCLC Tab. 12 und SCLC Tab.
+  9 enthalten keine Laborzeile.
 care_process:
   trigger: nach Maßgabe des Behandlers (symptom-/toxizitätsorientiert)
   frequency_pattern: ad-hoc
@@ -54,8 +57,9 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 44 (Laborparameter: nach Maßgabe des Behandlers); Kap. 16.3.4 (Tumormarker in der Nachsorge
-      nicht empfohlen, LoE 1a)'
+    section: 'Tab. 44 (Laborparameter: nach Maßgabe des Behandlers); Kap. 16.3.4 (Hintergrundtext: routinemäßige
+      Bestimmung von Serummarkern nicht empfohlen; „Evidenzgrad 1a“ bezieht sich auf [1878], kontroverse
+      Bedeutung der Serummarker)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Expert:innen-Erhebung MiHUB

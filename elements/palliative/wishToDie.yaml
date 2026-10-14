@@ -2,8 +2,12 @@ id: mihub.lung.palliative.wishToDie.v0.1
 uuid: 7680930b-1dfb-51d2-a687-842ecb799a21
 name: wishToDie
 label_de: Todeswunsch
-definition_de: Erfasster Todeswunsch der Patient:in, inkl. Differenzierung (Lebensmüdigkeit, Wunsch nach
-  Sterbehilfe, Suizidalität).
+definition_de: Vorliegen eines Todeswunsches der Patient:in (Wunsch nach baldigem Sterben bzw. danach,
+  tot zu sein), festgestellt durch aktives Erfragen im Verlauf (S3-LL Palliativmedizin 3.0, Empf. 20.3)
+  oder nach spontanen Äußerungen bzw. nonverbalen Hinweisen, die im Gespräch aufgegriffen und konkretisiert
+  werden. Todeswünsche reichen von Lebenssattheit und Lebensmüdigkeit über den Wunsch nach Beschleunigung
+  des Sterbens bis zur akuten Suizidalität; Form, Ausprägung und Suizidalität bildet dieses Element nicht
+  ab (Differenzierung nach Empf. 20.5 als offener Punkt vermerkt).
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -18,16 +22,27 @@ value_set:
     code: '225876004'
     display: Wanting to die
 care_process:
-  trigger: Sensitiv erfragen bei psychosozialer Belastung; bei Verschlechterung
-  frequency_pattern: ad-hoc
+  trigger: Aktiv im Verlauf bei allen Patient:innen mit nicht heilbarer Krebserkrankung erfragen (Empf.
+    20.3), zusätzlich anlassbezogen bei Verschlechterung/psychosozialer Belastung; bei geäußertem Todeswunsch
+    vertiefte Exploration von Verlauf, Ausprägung, Anlässen sowie Suizidgedanken/-absichten/-plänen (Empf.
+    20.5)
+  frequency_pattern: ongoing
   responsible_role: Palliativ-Team / Psychoonkologie
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 20.3 Screening und Erfassung Todeswunsch
-    recommendation_grade: B
+    section: Kap. 20.3 Screening und Erfassung; Empf. 20.3 (Vorhandensein von Todeswünschen im Verlauf
+      aktiv erfragen)
+    recommendation_grade: A
+    evidence_level: '3'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.5 Thematisieren von Tod und Sterben; Empf. 7.10 (Äußerung eines Sterbe-/Todeswunsches
+      mit Empathie und Gesprächsbereitschaft begegnen)
+    recommendation_grade: EK
     evidence_level: n/a
 iso13972_metadata:
   type: observation
@@ -51,3 +66,14 @@ provenance:
   git_commit: ''
 issues:
 - Schutzbedürftige Information — restriktive Zugriffsrechte / Consent-Behandlung erforderlich.
+- 'Differenzierung des Todeswunsches (Formen nach Abb. 18: Lebenssattheit, Lebensmüdigkeit, distanzierte/latente/akute/perakute
+  Suizidalität) und Suizidabklärung nach Empf. 20.5 (EK) sind mit dem boolean nicht abbildbar; ein eigenes
+  kodiertes Element ist zu prüfen. Verifizierte SNOMED-Kandidaten (MII TermServ 2026-10-14): 247795009
+  „Tedium vitae (finding)“ (Syn. „Tired of life“), 6471006 „Suicidal thoughts (finding)“, 304594002 „Suicidal
+  intent (finding)“, 247650009 „Planning suicide (finding)“.'
+- 'Zugriffskonzept präzisieren: Restriktive Zugriffsrechte dürfen die Dokumentation geäußerter Todeswünsche
+  für das interdisziplinäre Behandlungsteam nicht verhindern; laut S3-LL Palliativmedizin 3.0 (Kap. 20.3,
+  Hintergrund) ist diese Dokumentation für die weitere Behandlung von besonderer Bedeutung. Nach derselben
+  Stelle besteht das Ärzt:innen- bzw. Seelsorgegeheimnis auch bei Suizidalität, und es zu brechen bedarf
+  des Vorliegens einer akuten Lebensgefahr. Die rechtliche Umsetzung im Rechte- und Consent-Konzept ist
+  mit Datenschutzbeauftragten und Justiziariat zu klären.'

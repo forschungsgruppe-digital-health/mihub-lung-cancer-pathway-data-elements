@@ -18,8 +18,8 @@ value_set:
     code: '399537006'
     display: Clinical TNM stage grouping
   - system: snomed-ct
-    code: '405979002'
-    display: Pathologic TNM stage
+    code: '399588009'
+    display: Pathologic TNM stage grouping
   - system: snomed-ct
     code: '399390009'
     display: TNM stage grouping
@@ -43,9 +43,12 @@ standard_mappings:
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
   resource: Observation
 care_process:
-  trigger: Staging bei Diagnose; Re-Staging bei Rezidiv
-  frequency_pattern: once (Update ad-hoc)
-  responsible_role: Radiolog:in / Onkolog:in / Tumorboard
+  trigger: Staging bei Erstdiagnose (cTNM) bzw. nach Resektion (pTNM); nach neoadjuvanter Therapie (yTNM);
+    Re-Staging bei Rezidiv (rTNM); Übernahme in die Hausarztakte
+  frequency_pattern: once je Staging-Ereignis (cTNM vor Therapiebeginn, pTNM nach Resektion, ycTNM/ypTNM
+    nach neoadjuvanter Therapie, rTNM bei Rezidiv); eine festgesetzte Klassifikation bleibt unverändert
+    – Folgeereignisse als eigene Klassifikation mit Präfix erfassen, nicht überschreiben
+  responsible_role: Radiolog:in / Patholog:in / Onkolog:in / Tumorboard
   data_flows:
   - system: kis
     actor_role: Onkolog:in
@@ -65,6 +68,20 @@ evidence:
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-012 Staging
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 6.5/6.5.1 Stadieneinteilung, Empf. 6.45 (TNM-Klassifikation 9. Ausgabe, gültig ab 01/2025;
+      Grundregeln cTNM/pTNM/yTNM/rTNM; Tab. 26 Stadien); Kap. 6.6.6 Empf. 6.52 (pathologisches Staging)
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.2 Staging; Step 5.1 Transitioning from active treatment – treatment summary (diagnosis
+      including stage)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -87,6 +104,12 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Das Element bündelt T/N/M-Kategorien (Präfixe c/p/y/r), UICC-Stadiengruppe und TNM-Auflage in einem
+  CodeableConcept. Die Codings sind nur Element-Codes; LOINC 21917-0 (TNM-Auflage) ist eine andere Frage.
+  Ein Wertebereich (UICC-Stadien 0–IVB nach TNM 9, S3 Tab. 26) fehlt. Empfehlung: Teilelemente (Stadiengruppe,
+  T, N, M, TNM-Auflage) oder ein Wertebereich plus TNM-Auflage als eigene Angabe. Das ist relevant, weil
+  Befunde vor 01/2025 nach TNM 8 klassifiziert sind.'
 related_elements:
 - relation: isPartOf
   target: cancerDiagnosis

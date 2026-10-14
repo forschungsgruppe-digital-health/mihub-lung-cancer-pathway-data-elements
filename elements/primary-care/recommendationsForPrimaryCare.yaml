@@ -15,17 +15,11 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '424900004'
-    display: Recommendation - action
+    code: '427272008'
+    display: Recommendation to physician
   - system: loinc
     code: 18776-5
     display: Plan of Care Note
-  - system: loinc
-    code: 74156-1
-    display: Oncology Plan of Care and Summary Note
-  - system: kdl
-    code: VL040309
-    display: Behandlungsplan
 standard_mappings:
 - standard: hl7-cda
   resource: eArztbrief — Abschnitt Prozedere
@@ -57,9 +51,22 @@ evidence:
     recommendation_grade: n/a
     evidence_level: n/a
   - source: andere
-    version: Klein A-A et al. 2026, Die Onkologie 32:91–99 (doi:10.1007/s00761-025-01867-1)
-    section: Empfehlungen zum onkologischen Abschlussbericht (Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik)
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Empfehlungsliste (Abb. 2 / Anhang 2): Dos › Relevante Informationen › Weiteres (weiteres
+      Prozedere zur hausärztlichen Versorgung inkl. zeitl. Bewertung sowie besprochene, von Patient:innen
+      selbst umzusetzende Maßnahmen) und Dos › Format › Weiteres Prozedere (zur hausärztlichen Versorgung);
+      Ergebnisteil (Synthese – Empfehlungsliste): „Weiteres“ (künftige Kontrolluntersuchungen, Risikoverlauf)
+      und „Weiteres Prozedere (zur hausärztlichen Versorgung)“ (chronologische Sortierung, Risikoklassifizierung,
+      Checklistenformat inkl. Zeitplan, „red flags“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.6.5 Communication with the general practitioner (Behandlungsplan, MDM-Empfehlungen);
+      Step 5.4.4 Communication with the general practitioner (follow-up care plan, late effects, rapid
+      re-entry)
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -87,3 +94,5 @@ related_elements:
   target: survivorshipCarePlan
 - relation: dependsOn
   target: tumorBoardDecision
+- relation: isPartOf
+  target: dischargeOrVisitReport

@@ -28,10 +28,9 @@ value_set:
     display: alle 6 Monate, Jahr 3–5
   - system: local-no-standard-binding
     code: Q12M-PostY5
-    display: jährlich ab Jahr 6 (Screeningprogramm; Intervall nicht aus der S3-LL ableitbar)
-  - system: local-no-standard-binding
-    code: Q6-9W
-    display: alle 6–9 Wochen (palliativ unter Systemtherapie; S3 Empf. 16.9)
+    display: jährlich ab Jahr 6 – Überführung in ein LDCT-Früherkennungsprogramm (S3 Empf. 16.7); jährliche
+      Niedrigdosis-CT nach S3-Statement 5.2 für asymptomatische Risikopersonen, für Patient:innen nach
+      Lungenkarzinom nicht gesondert festgelegt
   - system: local-no-standard-binding
     code: Q3M-Y1;Q6M-Y2;Q12M-Y3-Y5
     display: alle 3 Monate Jahr 1, alle 6 Monate Jahr 2, jährlich Jahr 3–5 (SCLC; Onkopedia SCLC Tab.
@@ -67,6 +66,15 @@ evidence:
     section: 'Kap. 10.2, Tabelle 9 (SCLC: 3,6,9,12,18,24,36,48,60 Mo)'
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 5.2 (Evidenzbasiertes Statement, LoE 1, Starker Konsens, geprüft 2026): asymptomatische
+      Risikopersonen profitieren in der Regel von einem strukturierten Früherkennungsprogramm mittels
+      jährlicher Niedrigdosis-CT – nur indirekter Bezug für Q12M-PostY5 (Population nicht Patient:innen
+      nach Lungenkarzinom; Übertragung über Empf. 16.7)'
+    recommendation_grade: Statement
+    evidence_level: '1'
 iso13972_metadata:
   type: plan
   keywords:
@@ -87,6 +95,17 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'followUpInterval: Die Granularität vereinheitlichen. Entweder einen zusammengesetzten S3-Code „Q3M-Y1-Y2;Q6M-Y3-Y5“
+  analog zu den Onkopedia-Gesamtrastern (und wie in followUpVisitDate.frequency_pattern) einführen, oder
+  bei Phasen-Codes die Kardinalität auf 0..* mit Gültigkeitszeitraum je Phase umstellen bzw. FHIR Timing
+  verwenden (siehe value_set.notes). Bei 1..1 ist das vollständige S3-Schema derzeit nicht mit einem Code
+  darstellbar. Auch Q6-8W-curative-recurrence ist kein eigenständiges Raster, sondern ein Modifikator,
+  der zusätzlich zu einem Basisraster gilt (Onkopedia NSCLC Kap. 8.1: Verkürzung des Nachsorgeintervalls
+  auf 6–8 Wochen bei Rezidiv oder Zweitkarzinom mit kurativem Potenzial) – ein weiteres Argument für 0..*
+  bzw. FHIR Timing.'
 related_elements:
 - relation: dependsOn
   target: curativeRecurrencePotential
+- relation: isPartOf
+  target: structuredFollowUpPlan

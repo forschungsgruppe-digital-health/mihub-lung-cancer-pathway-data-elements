@@ -13,9 +13,18 @@ cardinality: 1..1
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: 'Kein deckungsgleiches ValueSet gefunden; Teilentsprechungen: LOINC 59557-9 Treatment status
-    Cancer (Observation.code), SNOMED CT 182992009 Treatment completed, 1345242003 Maintenance antineoplastic
-    therapy; für „laufend“/„therapiefrei“ kein SNOMED-Konzept auf dem MII TermServ.'
+  notes: 'Kein deckungsgleiches ValueSet gefunden (MII TermServ, Stand 2026-10-14). LOINC 59557-9 Treatment
+    status Cancer (Klasse TUMRRGT) ist nur bedingt als Observation.code geeignet: Seine Antwortliste LL916-8
+    (Treatment given / No treatment given / Active surveillance (watchful waiting) / Unknown if treatment
+    was given) beschreibt, ob behandelt wurde, nicht die aktuelle Therapiephase. SNOMED-CT-Teilentsprechungen:
+    182992009 Treatment completed (situation; spezifischer 413737006 Cancer hospital treatment completed)
+    ≈ completed; 373818007 No anti-cancer treatment - watchful waiting (finding; Kind von 373811001 Reason
+    for no specific anti-cancer treatment) nur für „therapiefrei ohne Vortherapie“. 719864002 Monitoring
+    following treatment for cancer (regime/therapy) beschreibt die Nachsorge nach Therapieabschluss als
+    Maßnahme, nicht als Status; ebenso ist 1345242003 Maintenance antineoplastic therapy ein Regime-/Therapiekonzept
+    (kein Status) und gehört zu cancerTreatmentHistory. Ein Situationskonzept für die laufende Therapie
+    wurde nicht gefunden; am nächsten liegt 395073001 Cancer treatment started (situation), das nur den
+    Therapiebeginn und nicht die Fortdauer bezeichnet.'
   codings:
   - system: local-no-standard-binding
     code: ongoing
@@ -58,6 +67,22 @@ evidence:
     section: DE-037 Therapiestatus
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.4 / Empf. 16.9 (EK, Starker Konsens, geprüft 2026): Stadium IVA/B unter Systemtherapie
+      ohne lokal-ablative Therapie – Evaluation einen Monat nach Abschluss der Behandlung; festgelegte
+      Wiedervorstellungen bei laufender Erhaltungstherapie mindestens alle 3–6 Wochen; CT-Kontrollen unter
+      laufender Systemtherapie im Verlaufsintervall von 6–9 Wochen'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 4.5.4 Communication with the general practitioner („changes in treatment or medications“);
+      Step 5.1 Transitioning from active treatment
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -78,6 +103,16 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Die Werte von treatmentStatus sind nicht disjunkt: „maintenance“ ist ein Unterfall von „ongoing“, „completed“
+  und „treatment-free“ überlappen nach Therapieende. Für code 1..1 mit dem Erhebungskontakt (DE-037 nennt
+  nur „laufend, abgeschlossen, therapiefrei“) Definitionen und eine Vorrangregel festlegen, z. B. maintenance
+  vor ongoing; completed = geplante (Primär-)Therapie abgeschlossen, in Nachsorge. Für treatment-free
+  klären, ob (a) keine tumorspezifische Therapie ohne Vortherapie (watchful waiting, ≈ SNOMED CT 373818007)
+  oder (b) ein therapiefreies Intervall nach einer Vortherapie (z. B. Therapiepause nach Induktion ohne
+  Erhaltung) gemeint ist; die Leitlinien verwenden „therapiefrei“ für das Intervall nach einer Vortherapie
+  (S3-LL Lungenkarzinom 5.1, Kap. 9.6.2; Onkopedia SCLC, Stand August 2026, Kap. 6.1.2). Bei (b) die Abgrenzung
+  zu completed festlegen.'
 related_elements:
 - relation: dependsOn
-  target: therapyLineNumber
+  target: cancerTreatmentHistory

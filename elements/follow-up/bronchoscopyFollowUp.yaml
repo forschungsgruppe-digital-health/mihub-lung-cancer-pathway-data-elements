@@ -4,7 +4,9 @@ name: bronchoscopyFollowUp
 label_de: Bronchoskopie in der Nachsorge
 definition_de: Datum einer (diagnostischen) Bronchoskopie in der Nachsorge; indiziert nur bei hohem Lokalrezidivrisiko
   (z. B. nach Manschettenresektion) oder zur histologischen Sicherung bei Rezidivverdacht — keine Routine
-  (intensive Nachsorge mit jährlicher Bronchoskopie ohne Überlebensvorteil).
+  (nicht Bestandteil des Routine-Nachsorgeschemas nach S3 Empf. 16.7; ein Überlebensvorteil intensiver
+  Nachsorge mit regelmäßiger Bronchoskopie ist bei widersprüchlicher Studienlage nicht gesichert, S3 Kap.
+  16.3.4).
 phase: followup
 tumor_entity:
 - NSCLC
@@ -53,13 +55,21 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 44 (Bronchoskopie: hohes Lokalrezidivrisiko, z. B. Manschettenresektion); Kap. 16.3.4'
+    section: 'Tab. 44 (Bronchoskopie: Hohes Lokalrezidivrisiko, z. B. Manschettenresektion [im Original
+      „Maschettenresektion“]); Empf. 16.7 (EK, geprüft 2026: Routine-Nachsorge = Anamnese, körperliche
+      Untersuchung, Röntgen Thorax/Sonografie Abdomen oder CT — ohne Bronchoskopie); Kap. 16.3.4 (intensive
+      Nachsorge inkl. Bronchoskopie: Virgo et al. kein Überlebensvorteil [2b] vs. Westeel et al. Überlebensverlängerung,
+      Lead-time-Bias offen [2b])'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: Tab. 9 Fußnote („Methoden zur histologischen Sicherung“ bei V. a. lokalisiertes Rezidiv)
+    section: 'Kap. 10.2 Nachsorge, Absatz nach Tab. 9 (bei V. a. lokalisiertes Rezidiv oder lokal behandelbare
+      Rezidivsituation Ergänzung der Diagnostik durch weitere Bildgebung ggf. einschließlich PET-CT und/oder
+      „Methoden zur histologischen Sicherung“); Bronchoskopie selbst nur in Kap. 5.2.1 Tab. 2 genannt
+      (Erstdiagnostik bei Lungentumorverdacht, Stufe 2 „Histologische oder zytologische Sicherung“: „Bronchoskopie
+      mit Biopsie … bei bildgebendem Verdacht“)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: Expert:innen-Erhebung MiHUB

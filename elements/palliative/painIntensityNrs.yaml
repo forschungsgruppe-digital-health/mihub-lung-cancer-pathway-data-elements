@@ -34,22 +34,25 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 10.2 Schmerzerfassung — Selbsteinschätzung NRS 0–10 als Standard
-    recommendation_grade: Statement
+    section: 'Kap. 10.2 Schmerzerfassung, Empf. 10.1 (geprüft 2026, Konsens) — Selbsteinschätzung der
+      Schmerzintensität mit einfachen eindimensionalen Skalen (Hintergrund: VRS 4-stufig oder NRS 0–10)'
+    recommendation_grade: EK
     evidence_level: n/a
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Empf. 10.1 (A) — Fremdeinschätzung bei kognitiver/körperlicher Einschränkung
-    recommendation_grade: A
+    section: Kap. 10.2 Schmerzerfassung, Empf. 10.2 (geprüft 2026, Starker Konsens) — Fremdeinschätzung
+      durch Angehörige oder Personal bei deutlicher kognitiver oder körperlicher Einschränkung
+    recommendation_grade: EK
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 14.3.2 (Schmerz) — Fundstelle aus der Klinik-Erhebung Nachsorge-WG 2026-07 (DE-067 „Schmerzerfassung“),
-      Wortlaut-Verifikation ausstehend
+    section: 'Kap. 14.3.2 Schmerzerfassung (Hintergrundtext ohne Empfehlungskasten, zitiert S3-LL Palliativmedizin:
+      Erfassung zu Beginn und im Verlauf; Intensität per VRS 4-stufig oder NRS 0–10) — Wortlaut verifiziert
+      2026-10-14'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -72,3 +75,13 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Erfassungsmodus kennzeichnen: Selbsteinschätzung (S3-LL Palliativmedizin 3.0, Kap. 10.2, Empf. 10.1,
+  EK) vs. Fremdeinschätzung durch Angehörige oder Personal (Empf. 10.2, EK), z. B. über Observation.performer
+  (Patient vs. RelatedPerson/Practitioner). In dieses Element nur NRS-0–10-Werte übernehmen: Die von der
+  Leitlinie gleichrangig genannte 4-stufige VRS (eine Zuordnung zur NRS nimmt die Leitlinie bewusst nicht
+  vor) und Werte strukturierter Beobachtungsbögen der Fremdeinschätzung (BISAD, BeSD) gehören in eigene
+  Codes bzw. Elemente (analog RDOS bei dyspneaIntensityNrs). Optional den Bezug mitführen (aktuelle, maximale
+  oder minimale Schmerzstärke; Ruhe/Belastung; letzte 24 h). LOINC 72514-3 bezeichnet eine berichtete
+  verbale numerische Einschätzung (Methode „Reported“); klären, ob vom Personal beobachtete Fremdeinschätzungen
+  damit kodiert werden dürfen.'

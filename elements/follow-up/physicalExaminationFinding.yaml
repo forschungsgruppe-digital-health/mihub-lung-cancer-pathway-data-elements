@@ -25,6 +25,9 @@ value_set:
   - system: loinc
     code: 29545-1
     display: Physical findings note
+  - system: snomed-ct
+    code: '282332003'
+    display: No abnormality detected - examination result
 standard_mappings:
 - standard: fhir-r4-base
   resource: Observation
@@ -94,8 +97,19 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'physicalExaminationFinding: (1) Rollen der Codings trennen, als katalogweite Konvention (vgl. die offenen
+  Punkte zu followUpVisitDate und followUpHistoryFinding): 5880005 = Observation.code; 37931006 nur als
+  component.code (Untersuchungsmethode); LOINC 29545-1 (Dokument-Skala) nur als Dokument- bzw. Sektionscode;
+  Antwortwerte aus Clinical findings führen (282332003 „unauffällig“ ist bereits aufgenommen). (2) Surveillance-Trigger
+  beibehalten und die Evidenz trennen: Basisevaluation einen Monat nach Abschluss der Induktion (postInductionEvaluationDate;
+  S3-LL Lungenkarzinom 5.1 Empf. 16.9 nennt die körperliche Untersuchung hier ausdrücklich) und jede Verlaufskontroll-Visite
+  (surveillanceVisit; Expert:innen-Erhebung DE-043, da Empf. 16.9 danach nur „geeignete Untersuchungsverfahren“
+  nennt). Die Trennung in der section der S3-Referenz bzw. in constraints_de kenntlich machen.'
 related_elements:
 - relation: isPartOf
   target: followUpVisitDate
 - relation: isPartOf
   target: surveillanceVisit
+- relation: isPartOf
+  target: postInductionEvaluationDate

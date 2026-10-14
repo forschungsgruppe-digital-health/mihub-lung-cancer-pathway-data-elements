@@ -18,15 +18,15 @@ value_set:
   - system: snomed-ct
     code: '371538006'
     display: Advance directive report
-  - system: snomed-ct
-    code: '425393008'
-    display: Active Durable Power of Attorney for Healthcare
   - system: loinc
     code: 42348-3
     display: Advance Healthcare Directives
   - system: kdl
     code: AM160104
     display: Patientenverfügung
+  - system: kdl
+    code: AM160103
+    display: Vorsorgevollmacht
 standard_mappings:
 - standard: fhir-r4-base
   resource: DocumentReference
@@ -38,11 +38,20 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 6.5 ACP
-    recommendation_grade: A
+    section: 'Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.12 (Gesprächsinhalte inkl. Benennung
+      Vorsorgebevollmächtigte:r / Vorschlag Betreuer:in) und Hintergrund (schriftliche Vorausplanung:
+      Vorsorgevollmacht, Patient:innenverfügung, Notfallanweisung; Aktualisierung)'
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.4 Vorausschauende Versorgungsplanung (Advance Care Planning, ACP); Empf. 7.8 (Gesprächsinhalte
+      inkl. Benennung eines Vorsorgebevollmächtigten oder Vorschlag eines Betreuers)
+    recommendation_grade: A
+    evidence_level: '4'
 iso13972_metadata:
   type: plan
   keywords:
@@ -63,3 +72,16 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Abgrenzung der Dokumenttypen: Als schriftliche Vorausplanung nennt die S3-LL Palliativmedizin 3.0 (Kap.
+  6.5, Hintergrund) Vorsorgevollmacht, individuelle Patient:innenverfügung und Anweisung für Notfallsituationen
+  (Notfallbogen). Empf. 6.12 nennt zudem als Gesprächsinhalt, eine Betreuer:in vorzuschlagen (rechtlich
+  in der Regel über eine Betreuungsverfügung; der Begriff selbst steht nicht in der Leitlinie). Zu entscheiden
+  ist, ob Notfallbogen und Betreuungsverfügung hier (Definition/Value Set) oder als eigenes Element erfasst
+  werden. Zudem setzt „wirksam“ in der Definition eine rechtliche Prüfung voraus (Verbindlichkeit laut
+  Leitlinie im Betreuungsrecht geregelt), die bei der Datenerfassung meist nicht leistbar ist. Stattdessen
+  Vorliegen und Datum der letzten Aktualisierung erfassen (Aktualisierung laut Leitlinie regelmäßig und
+  insbesondere bei wesentlichen gesundheitlichen Veränderungen sinnvoll)?'
+related_elements:
+- relation: isPartOf
+  target: advanceCarePlanning

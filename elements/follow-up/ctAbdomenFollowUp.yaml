@@ -54,8 +54,10 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 44 (Abdomen CT: Abdominelle Metastasen); Empf. 16.7 (EK: „CT-Untersuchungen“ als Option)'
-    recommendation_grade: n/a
+    section: 'Empf. 16.7 (EK, Starker Konsens, geprüft 2026: bildgebende Optionen am Nachsorgetermin „Röntgen
+      Thorax, Sonografie Abdomen oder CT-Untersuchungen“); Tab. 44 (Abdomen CT: Abdominelle Metastasen
+      — Indikationstabelle ohne Grad)'
+    recommendation_grade: EK
     evidence_level: n/a
   - source: Expert:innen-Erhebung MiHUB
     version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
@@ -88,4 +90,4 @@ issues:
   nicht spezifiziert).
 related_elements:
 - relation: dependsOn
-  target: recurrenceOrSecondPrimary
+  target: followUpVisitDate

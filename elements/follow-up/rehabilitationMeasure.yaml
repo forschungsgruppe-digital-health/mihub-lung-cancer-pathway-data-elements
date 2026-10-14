@@ -28,6 +28,12 @@ value_set:
   - system: kdl
     code: AM010201
     display: Antrag auf Rehabilitation
+  - system: snomed-ct
+    code: '413743008'
+    display: Cancer rehabilitation and readaption
+  - system: snomed-ct
+    code: '15081005'
+    display: Pulmonary rehabilitation
 standard_mappings:
 - standard: fhir-r4-base
   resource: ServiceRequest / Procedure
@@ -47,9 +53,18 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 15 Rehabilitation (Kapitel 2026 ausgesetzt; Empf. 15.5, D); Empf. 8.77 (EK, geprüft
-      2026)
-    recommendation_grade: EK
+    section: 'Kap. 15 Rehabilitation (Kapitel ''derzeit wegen laufender Überarbeitung ausgesetzt''): Empf.
+      15.5 (2010: Empfehlungsgrad D, Expertenmeinung; ausgesetzt 2026) — Operierte bzw. nach Radiochemotherapie
+      mit ausgeprägten Folgestörungen einer Rehabilitation zuführen; Empf. 15.4 (2010: D; ausgesetzt 2026)
+      — pneumologische Fachkompetenz der Reha-Einrichtung, Primärbehandelnde an der Klinikauswahl beteiligt'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 9 Rehabilitation (Therapiefolgestörungen; frühzeitige Information über ambulante/stationäre
+      Reha; Patientenwunsch, § 9 SGB IX; Empfehlung einer Klinik mit onkologischem Schwerpunkt)
+    recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
   type: procedure
@@ -73,6 +88,13 @@ provenance:
   git_commit: ''
 issues:
 - 'S3-LL Lungenkarzinom 5.1: Kap. 15 „derzeit wegen laufender Überarbeitung ausgesetzt“ — Referenz vorläufig.'
+- 'Label und Definition nennen Attribute, die als einzelnes CodeableConcept (Maßnahmen-Codes) nicht erfassbar
+  sind: Setting (ambulant/stationär), Status (beantragt/angetreten/abgelehnt) und ob eine Klinik mit onkologischem
+  Schwerpunkt empfohlen bzw. gewählt wurde. Vorschlag: Teil-Elemente oder ein Mapping auf ServiceRequest.status/Procedure.status,
+  Setting über Encounter/Location oder ein eigenes code-Element, Klinik-Schwerpunkt als boolean.'
+- KDL AM010201 'Antrag auf Rehabilitation' ist eine Dokumentenklasse (KDL AM 'Administration' › AM0102
+  'Anträge') und keine Leistung. Sie sollte nicht als Procedure.code, sondern gegebenenfalls als DocumentReference.type
+  des Antragsdokuments (eigenes Mapping) geführt werden.
 related_elements:
-- relation: isPartOf
+- relation: dependsOn
   target: rehabilitationAndSocialCounselling

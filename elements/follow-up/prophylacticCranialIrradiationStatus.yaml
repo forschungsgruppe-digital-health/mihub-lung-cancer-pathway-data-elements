@@ -39,8 +39,10 @@ standard_mappings:
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
   resource: Procedure
 care_process:
-  trigger: Abschluss der simultanen Radiochemotherapie (LD) bzw. Response-Beurteilung nach Erstlinien-Chemo-Immuntherapie
-    (ED)
+  trigger: 'PCI-Entscheidung nach der Erstlinientherapie: nach kurativer Resektion und adjuvanter Chemotherapie
+    (Stadium I/II, VLD); nach Abschluss der (simultanen) Chemo-Strahlentherapie (LD sowie VLD bei primär
+    definitiver Chemo-Strahlentherapie); bei der Response-Beurteilung nach Erstlinien-Chemo(-Immun)therapie
+    (ED). Ein PCI-Angebot setzt Remission (S3 Empf. 9.11, 9.17) bzw. Ansprechen (S3 Empf. 9.26) voraus.'
   frequency_pattern: once-per-treatment-completion
   responsible_role: Strahlentherapeut:in / Onkolog:in
   data_flows:
@@ -61,17 +63,50 @@ evidence:
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: 'Kap. 6.1.1.3 (PCI bei LD: etablierter Therapiebestandteil nach simultaner CT-RT); Kap. 6.1.1.5
-      + 8.2.2 (ED: PCI als Alternative zur Überwachung mit MR-Verlaufskontrollen, individuell zu erörtern);
-      Tab. 9 (Bedingung „LD ohne PCI“)'
+    section: 'Kap. 6.1.1.1 (VLD: Wert der PCI in N0-1 nicht gesichert, Einsatz im Einzelfall); Kap. 6.1.1.3
+      (PCI bei LD: etablierter Therapiebestandteil nach simultaner CT-RT); Kap. 6.1.1.5 + 8.2.2 (ED: PCI
+      als Alternative zur Überwachung mit MR-Verlaufskontrollen, individuell zu erörtern); Tab. 9 (Bedingung
+      „LD ohne PCI“)'
     recommendation_grade: n/a
     evidence_level: n/a
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Kap. 16.3.4 (ED-SCLC bei Watch-and-Wait statt PCI: MRT Schädel alle drei Monate)'
-    recommendation_grade: Statement
+    section: 'Kap. 16.3.4 (Hintergrundtext, keine Empfehlungsbox: bei gewählter Observation statt PCI
+      beim ED-SCLC MRT Schädel alle drei Monate)'
+    recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.17 (evidenzbasiert, geprüft 2026, Konsens: SCLC Stadium III/LD mit Remission nach
+      Chemo-Strahlentherapie – PCI soll angeboten werden; Referenz-Empfehlung für QI 15, Tab. 45)'
+    recommendation_grade: A
+    evidence_level: '1'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.26 (evidenzbasiert, geprüft 2026, Konsens: SCLC Stadium IV/ED mit Ansprechen auf
+      Erstlinientherapie – PCI oder active surveillance mit MRT Schädel 3-monatlich im 1. Jahr, danach
+      6-monatlich)'
+    recommendation_grade: A
+    evidence_level: '2'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.7 (konsensbasiert, geprüft 2026, Starker Konsens: nach kurativer Therapie des SCLC
+      im Stadium I/II neben adjuvanter Chemotherapie PCI anbieten)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.37 (evidenzbasiert, modifiziert 2026, Starker Konsens: ältere Patient:innen mit
+      SCLC-LD – PCI-Indikation wie bei Jüngeren; bei schlechtem Allgemeinzustand oder kognitiven Einschränkungen
+      PCI nicht empfohlen; bei > 70 J. oder Komorbidität partizipative Entscheidung, engmaschige ZNS-MRT
+      als sinnvolle Alternative zur PCI)'
+    recommendation_grade: '0'
+    evidence_level: '3'
 iso13972_metadata:
   type: procedure
   keywords:
@@ -92,6 +127,19 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+issues:
+- 'Wertebereich/Kardinalität: Bei cardinality 1..1 fehlt ein Status „PCI nicht indiziert“. Er betrifft
+  (a) fehlende Remission bzw. fehlendes Ansprechen oder Progress nach der Erstlinientherapie (S3-LL Lungenkarzinom
+  5.1, Empf. 9.11, 9.17 und 9.26 setzen Remission bzw. Ansprechen voraus) und (b) ältere Patient:innen
+  mit SCLC-LD mit schlechtem Allgemeinzustand oder kognitiven Einschränkungen (Empf. 9.37: PCI nicht empfohlen).
+  Solche Fälle würden sonst als leitlinienabweichendes „not-performed-no-surveillance“ fehlklassifiziert;
+  die Bedingung „LD ohne PCI“ (Onkopedia SCLC Tab. 9) bleibt zwar ableitbar, die Bewertung der Leitlinienadhärenz
+  aber nicht. Lokalen Code ergänzen oder Kardinalität 0..1 mit Anwendbarkeitsbedingung (SCLC nach kurativer
+  Resektion oder mit Remission/Ansprechen nach Erstlinientherapie) festlegen und mit care_process.trigger
+  abstimmen. Den Nenner von QI 15 (S3 Kap. 18, Tab. 45: LD mit Remission nach Chemo-Strahlentherapie)
+  über das Ansprechen (recistResponse) ableiten, nicht über diesen Status.'
 related_elements:
 - relation: dependsOn
   target: curativeTreatmentModality
+- relation: dependsOn
+  target: recistResponse

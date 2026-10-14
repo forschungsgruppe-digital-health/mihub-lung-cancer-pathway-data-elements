@@ -2,9 +2,11 @@ id: mihub.lung.followup.survivorshipCarePlan.v0.1
 uuid: b59aa65d-a6a0-572a-845a-b71f6807cfa0
 name: survivorshipCarePlan
 label_de: Survivorship Care Plan / Onkologischer Abschlussbericht
-definition_de: Strukturierter Abschluss-/Survivorship-Care-Plan, der Diagnose, Stadium, erhaltene Therapien,
-  mögliche Lang- und Spätfolgen, Kontrollintervalle, red flags, Impfstatus und Kontaktdaten enthält und
-  an die Hausarztpraxis übergeben wird.
+definition_de: Strukturierter Abschluss-/Survivorship-Care-Plan (Behandlungszusammenfassung und Nachsorgeplan),
+  der Diagnose inkl. Stadium, erhaltene Therapien, aktuelle Medikation/Medikationsplan, Komplikationen
+  sowie mögliche Lang- und Spätfolgen (priorisiert nach Eintrittswahrscheinlichkeit), Kontrollintervalle/weiteres
+  Prozedere, red flags und das Vorgehen bei Rezidivverdacht (rasche Wiedervorstellung), Impfhinweise/Impfstatus
+  (bei Relevanz) sowie Kontaktdaten enthält und an die Hausarztpraxis übergeben wird.
 phase: followup
 tumor_entity:
 - NSCLC
@@ -33,16 +35,33 @@ care_process:
 evidence:
   guideline_references:
   - source: AG LONKO / Survivorship
-    version: 2021/2022; Klein 2026
-    url: https://doi.org/10.1007/s00761-025-01867-1
-    section: Empfehlungsliste; Klein 2026 Ergebnisse 'Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik, Format'
-    recommendation_grade: Statement
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Daten_AG_LONKO_bf.pdf
+    section: 'UAG Daten Kap. 4 (Lost-in-Transition; Nachsorgepässe mit Nachsorgeempfehlungen, Tumordiagnose/-therapie
+      inkl. Komplikationen und Komorbiditäten); UAG Versorgungsmodelle Kap. 1 (Zielsetzung 3: Koordination
+      Spezialist:innen ↔ nachsorgende Ärzt:innen) und Kap. 2 (Survivorship ab Diagnosestellung, ohne zeitliche
+      Begrenzung)'
+    recommendation_grade: n/a
     evidence_level: n/a
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 5.1/5.2 Treatment summary & follow-up care plan
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 5.1 (Treatment summary: u. a. Diagnose inkl. Stadium, Therapien, Spätfolgen, Follow-up-Schema,
+      Kontaktdaten) / Step 5.2 (Survivorship care plan inkl. rascher Wiedervorstellung bei Rezidivverdacht)
+      / Step 5.4.4 (Kommunikation mit dem GP: follow-up care plan, late effects)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie: Interviews mit 14 Hausärzt:innen,
+      Thinking-aloud-Interview mit 1 Onkologin, Workshop mit 6 Hausärzt:innen und 1 Onkologin; keine Empfehlungsgrade)
+      – Abb. 2 (S. 95) bzw. Anhang 2, Empfehlungsliste zum Verfassen onkologischer Abschlussberichte:
+      Dos – Relevante Informationen (Anamnese, Abschlussstatus und Epikrise / Therapie(n) inkl. möglicher
+      Spätfolgen unter Berücksichtigung ihrer Eintrittswahrscheinlichkeit / Weiteres: Prozedere zur hausärztlichen
+      Versorgung inkl. zeitlicher Bewertung, Impfhinweise und Impfstatus, Kontaktdaten); Format (Generelle
+      Formathinweise / Weiteres Prozedere / Diagnostik); Don''ts'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -68,3 +87,19 @@ provenance:
 issues:
 - S3-LL Lungenkarzinom 5.1 enthält keine Empfehlung zu Survivorship Care Plan / Abschlussbericht (Survivorship
   nur als Forschungsbedarf Kap. 16.3) — Fremdquellen (AG LONKO, Klein 2026, OCP) beibehalten.
+- 'Zeitpunkt klären: OCP Lung (AU) Step 5.1 sieht Treatment summary und Survivorship care plan nach Abschluss
+  der Initialtherapie vor, mit Aktualisierung bei Änderungen (Step 5.2); Klein 2026 beschreibt den onkologischen
+  Abschlussbericht nach abgeschlossener onkologischer Nachsorge beim Übergang in die hausärztliche Versorgung.
+  AG LONKO (UAG Daten Kap. 4) begründet Nachsorgepläne und -pässe mit der „Lost in Transition“-Problematik
+  nach Abschluss der regulären Nachsorgephase; der Survivorship-Beginn ab Diagnosestellung (UAG Versorgungsmodelle
+  Kap. 2) betrifft Survivorship-Programme, nicht den Zeitpunkt des Dokuments. Trigger „Abschluss strukturierte
+  Nachsorge / Übergang Hausarzt“ und frequency „once-per-transition“ bilden nur den Zeitpunkt nach Klein
+  2026 ab. Entscheiden, ob das Element beide Dokumente umfasst (dann z. B. „bei Therapieende und bei Übergang
+  in die hausärztliche Versorgung; Aktualisierung bei Änderungen“) oder getrennt wird.'
+- 'Dokumentklasse prüfen: KDL SD150101 „Follow up-Bogen“ (Definition: Angaben im Rahmen der Nachsorge
+  zur Erfassung der Verlaufskontrolle nach Abschluss der Behandlung) beschreibt ein Verlaufsformular,
+  keinen Abschlussbericht oder Survivorship Care Plan an die Hausarztpraxis. Da das Element selbst ein
+  Dokument ist (DocumentReference.type), ist die passende Dokumentklasse maßgeblich. Kandidaten aus der
+  Unterklasse AD0101 „Arztberichte“ (alle aktiv, MII TermServ): AD010110 „Ärztlicher Verlaufsbericht“
+  (wie im übergeordneten Element dischargeOrVisitReport), AD010111 „Ambulanzbrief“ (Zusammenfassung einer
+  ambulanten Behandlung in Briefform) und AD010199 „Sonstiger Arztbericht“. LOINC 74156-1 bleibt passend.'

@@ -22,8 +22,8 @@ value_set:
     code: 85231-9
     display: Tumor Board Note
   - system: snomed-ct
-    code: '1268903003'
-    display: Consultation by multidisciplinary team
+    code: '399414003'
+    display: Multidisciplinary care conference for cancer care planning
 standard_mappings:
 - standard: obds
   profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
@@ -55,6 +55,22 @@ evidence:
     section: DE-004 Therapiebarkeit / DE-005 Tumorboardbeschluss / DE-027 Therapieplanung
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 17: Empf. 17.1 (jeder neu diagnostizierte Pat. im Thorax-Onkologischen Tumorboard;
+      QI 5), Empf. 17.2 (leitlinienorientierte Entscheidungen, Abweichungen im Tumorboardprotokoll begründen
+      und dokumentieren); Empf. 8.26 (Operabilität inkl. Resektabilität im Tumorboard festlegen, NSCLC
+      II/III)'
+    recommendation_grade: EK
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.4.3 Responsibilities of the multidisciplinary team (MDM-Ergebnis und Behandlungsplan
+      dokumentieren und an GP übermitteln); Step 3.6.5 Communication with the general practitioner
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: plan
   keywords:
@@ -78,5 +94,5 @@ provenance:
 related_elements:
 - relation: hasPart
   target: treatmentIntent
-- relation: dependsOn
+- relation: hasPart
   target: curativeRecurrencePotential

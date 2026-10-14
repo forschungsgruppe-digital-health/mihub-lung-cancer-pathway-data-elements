@@ -3,7 +3,8 @@ uuid: 948cb11a-1e41-550d-bc52-0b2fd3c348b0
 name: systemicTherapyRegimen
 label_de: Aktuelles Systemtherapie-Regime
 definition_de: Codiertes aktuelles tumorspezifisches Systemtherapie-Regime (Chemotherapie, zielgerichtete
-  Therapie, Checkpoint-Inhibitor, Kombination).
+  Therapie, Immuntherapie inkl. Checkpoint-Inhibitoren und bispezifischer T-Zell-Engager wie Tarlatamab,
+  Kombinationen) einschließlich Erhaltungs- und Konsolidierungstherapie.
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -38,7 +39,18 @@ value_set:
   - system: atc
     code: L01XA02
     display: Carboplatin
+  - system: atc
+    code: L01CB01
+    display: Etoposid
+  - system: atc
+    code: L01FX33
+    display: Tarlatamab
   standard_binding_status: mapped
+  notes: Die gelisteten ATC-Codes (BfArM ATC) sind Beispiele; vorgesehen sind Wirkstoffe der ATC-Gruppe
+    L01 „Antineoplastische Mittel“. Ein Kombinationsregime wird als mehrere Werte dieses Elements abgebildet
+    (Kardinalität 0..*; je Wirkstoff ein CodeableConcept mit einem ATC-Coding bzw. eine MedicationStatement),
+    nicht als mehrere Codings innerhalb eines CodeableConcept (diese gelten in FHIR als alternative Codierungen
+    desselben Konzepts). Der Protokollname kann ergänzend als Text erfasst werden.
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
@@ -68,6 +80,19 @@ evidence:
       LD, 2 Jahre)
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 9.6.1 Empf. 9.19 (SCLC Stadium IV: Chemo-Immuntherapie Platin/Etoposid + PD-L1-/PD-1-Antikörper;
+      modifiziert 2026)'
+    recommendation_grade: A
+    evidence_level: ⊕⊕⊕⊕
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 9.6.2 Empf. 9.23 (Tarlatamab als systemische Zweitlinientherapie des SCLC; neu 2026)
+    recommendation_grade: B
+    evidence_level: ⊕⊕⊕⊕
 iso13972_metadata:
   type: medication
   keywords:

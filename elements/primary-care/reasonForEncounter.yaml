@@ -23,6 +23,14 @@ value_set:
   - system: loinc
     code: 46239-0
     display: Chief complaint+Reason for visit Narrative
+  notes: 'Die Codings sind Element-/Fragecodes (SNOMED CT 1269489004 |Chief complaint| [observable entity];
+    LOINC 29298-7 [Nom], 46239-0 [Nar]) und keine Antwortwerte. Antwortwerte in Encounter.reasonCode (FHIR-R4-ValueSet
+    encounter-reason, Binding preferred, im MII-Profil KontaktGesundheitseinrichtung unverändert übernommen):
+    primär Symptome/Befunde aus SNOMED CT << 404684003 |Clinical finding| (administrative Anlässe z. B.
+    185351004 |Administrative reason for encounter|), daneben im ValueSet enthalten << 71388002 |Procedure|,
+    << 243796009 |Situation with explicit context| und << 272379006 |Event|; alternativ ICD-10-GM (v.
+    a. Kapitel XVIII „Symptome und abnorme klinische und Laborbefunde, die anderenorts nicht klassifiziert
+    sind“); Freitext über CodeableConcept.text.'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
@@ -51,6 +59,16 @@ evidence:
     section: DE-019 Symptome, Beratungsanlass
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein et al. 2026 (LoTeCaS-GP, qualitative Studie ohne Empfehlungsgrade; Population: Langzeitüberlebende
+      nach abgeschlossener onkologischer Nachsorge): Hintergrund S. 91 (Sekundärzitat Lit. [18]: Hausarztkontakte
+      nach Krebserkrankung meist wegen akuter Beschwerden wie Infektionen oder anderer Symptome); Ergebnisse
+      „Anamnese, Abschlussstatus und Epikrise“ S. 95 (Komplikationen bzw. (Langzeit-)Folgen listen, damit
+      Symptome und Befinden der Patient:innen besser eingeordnet werden können)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: observation
   keywords:
@@ -74,3 +92,5 @@ provenance:
 related_elements:
 - relation: dependsOn
   target: treatmentSideEffectOrComplication
+- relation: dependsOn
+  target: cancerTreatmentHistory

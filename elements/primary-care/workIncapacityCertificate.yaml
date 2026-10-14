@@ -20,9 +20,6 @@ value_set:
   - system: kdl
     code: AD020101
     display: Arbeitsunfähigkeitsbescheinigung
-  - system: icd-10-gm
-    code: Z56
-    display: Kontaktanlässe mit Bezug auf das Berufsleben
 standard_mappings:
 - standard: other
   profile_or_url: https://fhir.kbv.de/
@@ -49,6 +46,17 @@ evidence:
     section: DE-031 Arbeitsunfähigkeit (AU)
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: AG LONKO / Survivorship
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Versorgungsmodelle_AG_LONKO_bf.pdf
+    section: 'UAG Daten Kap. 4 Grundsätzlicher Datenbedarf (Wissenslücke (5) nachhaltige Wiederaufnahme
+      der Erwerbstätigkeit; fehlende Angaben zur Wiederaufnahme der Erwerbstätigkeit) und Anhang Tab.
+      A1 (Soziale Aspekte: „Rückkehr ins Erwerbsleben“, „Arbeitsausfall“, relevant u. a. für die Versorgung);
+      UAG Versorgungsmodelle Kap. 2.2 Soziale und berufliche Situation und Kap. 2.3 Finanzielle Auswirkungen
+      (langandauernde Arbeitsunfähigkeit, kein Krankengeld mehr nach 78 Wochen)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: social
   keywords:
@@ -69,6 +77,11 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- Der in definition_de geforderte Zusammenhang mit Tumorerkrankung bzw. -therapie ist mit datatype Period
+  nicht abbildbar. Die AU-begründende Diagnose (ICD-10-GM, z. B. C34.-) und die Unterscheidung Erst-/Folgebescheinigung
+  sollten als zugehörige Angaben modelliert werden. Die konkreten eAU-Inhalte sind gegen die KBV-eAU-Spezifikation
+  zu prüfen; das wurde lokal nicht verifiziert (UNSICHER).
 related_elements:
 - relation: dependsOn
   target: rehabilitationMeasure

@@ -14,9 +14,6 @@ cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
-  - system: snomed-ct
-    code: '162465004'
-    display: Symptom severity
   - system: loinc
     code: 89194-5
     display: Patient reported outcome measure score
@@ -30,7 +27,8 @@ standard_mappings:
 constraints_de: 'Population lt. Onkopedia: Patient:innen in fortgeschrittenen Stadien ohne Krankheitsprogress
   (Denis et al., JNCI 2017, HR 0,32).'
 care_process:
-  trigger: wöchentliche Selbsterfassung
+  trigger: Beginn der Nachsorge nach medikamentöser Erstlinientherapie in palliativer Situation (fortgeschrittenes
+    Stadium ohne Krankheitsprogress)
   frequency_pattern: weekly
   responsible_role: Patient (PROM); Onkologie-Triage
 evidence:
@@ -40,8 +38,15 @@ evidence:
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
     section: Kap. 8.2 (web-basierte wöchentliche Symptom-Selbsteinschätzung; Denis P et al., JNCI 109:djx029,
       2017)
-    recommendation_grade: Statement
-    evidence_level: 1b
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 2: Safe and quality care — Patient-reported experience and outcome measures (PROMs
+      online erhoben; PROM-Erhebung mit klinischer Reaktion verlängert das Überleben)'
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: observation
   keywords:
@@ -62,3 +67,11 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Modellierung klären: Das Element ist eine wöchentliche PROM-Selbsteinschätzung (FHIR QuestionnaireResponse),
+  der datatype aber CodeableConcept ohne Symptom-Antwortwerte, und die Codings mischen Score- und Prozedurachse.
+  Optionen: (a) datatype Reference mit Zieltyp QuestionnaireResponse (in standard_mappings dokumentiert)
+  und Element-Code 840297006 (Prozedur) bzw. LOINC 89194-5, falls ein Score erhoben wird; oder (b) je
+  Symptom ein Antwort-Value-Set (Symptomcodes für Atemnot, Schmerz, Husten, Müdigkeit; vor Aufnahme per
+  TermServ zu verifizieren) plus Schweregrad, z. B. als Observable SNOMED CT 405162009 „Symptom severity
+  level“ mit Antworten aus den Nachfahren von SNOMED CT 162465004 „Symptom severity“.'

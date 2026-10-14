@@ -2,9 +2,11 @@ id: mihub.lung.followup.brainMriHighRisk.v0.1
 uuid: 371370d3-c946-5219-a108-5e5867b9ec94
 name: brainMriHighRisk
 label_de: Schädel-MRT bei Hochrisiko
-definition_de: 'MRT des Schädels zur ZNS-Metastasen-Detektion bei Patient:innen mit erhöhtem Risiko (NSCLC:
-  EGFR+, ALK+, ROS1+, Adenokarzinom Stadium III, großzellige/undifferenzierte/seltene Histologie; SCLC
-  LD ohne PCI).'
+definition_de: 'MRT des Schädels zur ZNS-Metastasen-Detektion in der Nachsorge nach kurativer Therapie
+  bei Patient:innen mit erhöhtem Risiko: NSCLC mit molekularem/Stadien-Risiko (S3 Empf. 16.8: z. B. EGFR+,
+  ALK+, ROS1+, Adenokarzinom Stadium III) oder histologischem Risiko (Onkopedia NSCLC Kap. 8.1: z. B.
+  großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene
+  Lungentumorhistologien); SCLC LD ohne PCI (Onkopedia SCLC Tab. 9).'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -32,11 +34,16 @@ value_set:
     code: DG020107
     display: MRT-Befund
 care_process:
-  trigger: 'NSCLC: individuell hohes Risiko einer ZNS-Metastasierung — molekular (S3 Empf. 16.8: EGFR+,
-    ALK+, ROS1+, Adenokarzinom Stadium III; nach Maßgabe des interdisziplinären Behandlungsteams) oder
-    histologisch (Onkopedia NSCLC Kap. 8.1: großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige
-    Anteile/Mischtumoren, seltene Histologien), nur in den ersten 3 Jahren nach Lokaltherapie (Kann-Empfehlung).
-    SCLC LD ohne PCI: standardmäßig gemäß Onkopedia SCLC Tab. 9 (Steuerbedingung: prophylacticCranialIrradiationStatus).'
+  trigger: 'NSCLC — individuell hohes Risiko einer ZNS-Metastasierung (Steuerbedingung: brainMetastasisRiskProfile):
+    (a) molekular/Stadium nach S3 Empf. 16.8 (EK, „sollte“): z. B. EGFR+, ALK+, ROS1+, Adenokarzinom Stadium
+    III — regelmäßig nach Maßgabe des interdisziplinären Behandlungsteams; Intervall und Dauer in der
+    S3 nicht festgelegt; (b) histologisch nach Onkopedia NSCLC Kap. 8.1 (ungraduiert: „sollte man durchaus
+    erwägen“): z. B. großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder
+    Mischtumoren, seltene Lungentumorhistologien — in Abständen von 6–9 Monaten, nur in den ersten drei
+    Jahren nach Lokaltherapie. SCLC LD ohne PCI: standardmäßig gemäß Onkopedia SCLC Tab. 9 (Steuerbedingung:
+    prophylacticCranialIrradiationStatus ≠ performed). ED-SCLC mit active surveillance statt PCI („Watch
+    and Wait“, S3 Kap. 16.3.4; S3 Empf. 9.26: MRT 3-monatlich im 1. Jahr, danach 6-monatlich) → brainMriUnderTherapy
+    (Surveillance).'
   frequency_pattern: 'NSCLC: Q6-9M-Y1-Y3 (Onkopedia; S3 nennt kein Intervall) · SCLC LD ohne PCI: Q3M-Y1;Q6M-Y2;Q12M-Y3
     (Mo 3–36 obligat, Mo 48/60 fakultativ; Onkopedia SCLC Tab. 9)'
   responsible_role: Radiologie / Onkologie
@@ -45,8 +52,12 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (EK, geprüft 2026) — regelmäßiges Schädel-MRT bei Hochrisiko, Intervall nicht
-      festgelegt
+    section: 'Empf. 16.8 (EK, Starker Konsens, geprüft 2026) — regelmäßiges Schädel-MRT bei Hochrisikopatient:innen
+      (z. B. EGFR+, ALK+, ROS1+, Adenokarzinome Stadium III) nach Maßgabe des interdisziplinären Behandlungsteams,
+      Intervall nicht festgelegt; Kap. 16.3.4 (Hintergrund: Screening auf Hirnmetastasen ohne Risikoindikation
+      nicht empfohlen; abweichend in Risikosituationen beim LD-SCLC und ED-SCLC [ED-SCLC → brainMriUnderTherapy];
+      Risikokollektive EGFR/ALK/ROS1 im Stadium IVA/IVB mit steigendem kumulativem Risiko); Tab. 44 (MRT:
+      Hirn- und Knochenmetastasen)'
     recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia SCLC

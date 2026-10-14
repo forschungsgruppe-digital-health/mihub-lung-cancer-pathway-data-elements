@@ -20,6 +20,9 @@ value_set:
   - system: loinc
     code: 21112-8
     display: Birth date
+  - system: loinc
+    code: 80904-6
+    display: Birth year
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
@@ -67,3 +70,10 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+issues:
+- 'Präzision klären: Das Element heißt ''Geburtsjahr'', instruction_de erlaubt aber das vollständige Geburtsdatum
+  („sofern das vollständige Geburtsdatum nicht erforderlich ist“). Zwei Optionen: (a) Element strikt auf
+  YYYY begrenzen (Auswertung, Datensparsamkeit) und für Übergabe und Patientenidentifikation das vollständige
+  Geburtsdatum (Patient.birthDate) aus dem Primärsystem verwenden, oder (b) das Element als ''Geburtsdatum
+  (Präzision zweckabhängig)'' fassen. Ob die Übergabe die volle Präzision braucht, sollte klinisch bestätigt
+  werden.'

@@ -3,9 +3,11 @@ uuid: 63a13a5d-0c6e-531e-a1fb-21a6d7388f9b
 name: brainMetastasisRiskProfile
 label_de: Individuelles Risiko für zerebrale Metastasierung
 definition_de: 'Einstufung des individuellen Risikos einer ZNS-Metastasierung zur Steuerung der Schädel-MRT
-  in der Nachsorge: molekulare Hochrisikokriterien (S3 Empf. 16.8: EGFR+, ALK+, ROS1+, Adenokarzinom Stadium
-  III) oder histologische Kriterien (Onkopedia NSCLC Kap. 8.1: großzellige Karzinome, undifferenzierte
-  Adenokarzinome, kleinzellige Anteile/Mischtumoren, seltene Histologien) oder Standardrisiko.'
+  in der Nachsorge nach Lokaltherapie: Hochrisiko molekular/Stadium nach S3 Empf. 16.8 (beispielhaft:
+  EGFR+, ALK+, ROS1+, Adenokarzinom Stadium III), Hochrisiko histologisch nach Onkopedia NSCLC Kap. 8.1
+  (beispielhaft: großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren,
+  seltene Lungentumorhistologien) oder Standardrisiko (kein routinemäßiges Schädel-MRT, S3 Kap. 16.3.4).
+  Festlegung nach Maßgabe des interdisziplinären Behandlungsteams.'
 phase: followup
 tumor_entity:
 - NSCLC
@@ -15,17 +17,30 @@ cardinality: 0..1
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: 'Keine standardisierte Repräsentation einer Risikostratifizierung für ZNS-Metastasierung gefunden
-    (SNOMED CT 20260701 / LOINC 2.83 auf dem MII TermServ); projekt-lokale Platzhalter. Perspektive: FHIR
-    RiskAssessment mit Prognose-Coding.'
+  notes: 'Keine deckungsgleiche standardisierte Repräsentation (MII TermServ, Stand 2026-10-14; SNOMED
+    CT 20260701 / LOINC 2.83). Geprüfte Kandidaten: (1) HL7 http://terminology.hl7.org/CodeSystem/risk-probability
+    (v1.0.0, auf dem TermServ vorhanden; Example-Binding von RiskAssessment.prediction.qualitativeRisk)
+    kodiert eine absolute Wahrscheinlichkeit (high = „The specified outcome is more likely to occur than
+    not.“), nicht die leitlinienbasierte Risikogruppe — nicht übernommen. (2) SNOMED CT 1279908003 „Risk
+    of metastatic malignancy (observable entity)“ ist das nächstgelegene Element-Konzept, jedoch ohne
+    ZNS-Lokalisation; 1255670000 „Finding of increased risk level (finding)“ / 1279548003 „Finding of
+    low risk level (finding)“ wären Wert-Konzepte, jedoch ohne Entsprechung für „Standardrisiko“ und ohne
+    Kriterienbasis; ein Konzept für ein erhöhtes Hirnmetastasen-Risiko wurde nicht gefunden. Daher projekt-lokale
+    Platzhalter; die beiden Hochrisiko-Werte unterscheiden die Quellen- bzw. Kriterienbasis (S3 Empf.
+    16.8: molekulare bzw. Stadienkriterien; Onkopedia NSCLC Kap. 8.1: histologische Kriterien — unterschiedliche
+    Empfehlungsstärke („sollte“ vs. „sollte man durchaus erwägen“) und MRT-Intervalle), nicht die Risikostufe.
+    FHIR-Perspektive: RiskAssessment.prediction.qualitativeRisk = Risikostufe, prediction.outcome = SNOMED
+    CT 94225005 „Metastatic malignant neoplasm to brain“, Kriterienbasis über RiskAssessment.basis (Referenzen
+    auf Histologie-, Staging- und Molekularbefund).'
   codings:
   - system: local-no-standard-binding
     code: high-risk-molecular
-    display: Hochrisiko molekular (EGFR+/ALK+/ROS1+, Adenokarzinom Stadium III — S3 Empf. 16.8)
+    display: 'Hochrisiko molekular/Stadium nach S3 Empf. 16.8 (beispielhaft: EGFR+, ALK+, ROS1+, Adenokarzinom
+      Stadium III)'
   - system: local-no-standard-binding
     code: high-risk-histology
-    display: Hochrisiko histologisch (großzellig, undifferenziertes Adeno, kleinzellige Anteile, seltene
-      Histologien — Onkopedia NSCLC Kap. 8.1)
+    display: 'Hochrisiko histologisch nach Onkopedia NSCLC Kap. 8.1 (beispielhaft: großzellige Karzinome,
+      undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene Lungentumorhistologien)'
   - system: local-no-standard-binding
     code: standard-risk
     display: Standardrisiko — kein routinemäßiges Schädel-MRT (S3 Kap. 16.3.4)
@@ -42,15 +57,22 @@ evidence:
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (EK, geprüft 2026); Kap. 16.3.4 (Hirnmetastasen-Screening ohne Risikoindikation
-      nicht empfohlen)
+    section: 'Empf. 16.8 (EK, Starker Konsens, geprüft 2026; Box in Kap. 16.3 Nachsorge im Anschluss an
+      eine lokal ablative Therapie: Hochrisikopatient:innen beispielhaft EGF-R+, ALK+, ROS-1+, Adenokarzinome
+      mit Stadium III; „sollte“, nach Maßgabe des interdisziplinären Behandlungsteams; kein Intervall
+      festgelegt); Kap. 16.3.4 (Screening auf Hirnmetastasen ohne klare Risikoindikation nicht empfohlen;
+      Hintergrund: Risikokollektive EGFR/ALK/ROS1 im Stadium IVA/IVB)'
     recommendation_grade: EK
     evidence_level: n/a
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.1 (MRT-Schädel 6–9-monatlich in den ersten drei Jahren bei individuell hohem Risiko);
-      Kap. 6.1.6.2.1.1 (ALK+)
+    section: 'Kap. 8.1 (Text nach Tab. 12: bei individuell hohem Risiko — beispielhaft großzellige Karzinome,
+      undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene Lungentumorhistologien
+      — MRT-Schädel alle 6–9 Monate, nur in den ersten drei Jahren nach Lokaltherapie; „sollte man durchaus
+      erwägen“); Kap. 6.1.6.2.1.1 (ALK+ im Stadium IV unter TKI: MRT bei Diagnosestellung, strukturiert
+      z. B. alle 3–6 Monate auch asymptomatisch — stützt ALK+ als ZNS-Risikokriterium, Kontext Systemtherapie,
+      nicht Nachsorge nach Lokaltherapie)'
     recommendation_grade: n/a
     evidence_level: n/a
 iso13972_metadata:
@@ -73,6 +95,15 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+issues:
+- 'Verfügbarkeit der molekularen Kriterien: S3 Empf. 6.58 (EK) sieht in den Stadien IB–IIIA nur die Testung
+  auf EGFR (Exon 19/21) und ALK (Tumoren ≥ 4 cm) vor; ROS1 wird erst bei nicht resezierbarem Stadium III
+  (Empf. 6.59) bzw. Stadium IV (Empf. 6.61; Onkopedia NSCLC Tab. 3) getestet. Nach Resektion früher Stadien
+  kann das Kriterium ROS1+ daher unbekannt sein. Der Katalog enthält kein Eingangselement für den molekularen
+  Basisstatus (EGFR/ALK/ROS1); nur molecularResistanceFinding/molecularRetestingCtdna (Surveillance) tragen
+  molekulare Befunde.'
 related_elements:
 - relation: dependsOn
-  target: brainMriHighRisk
+  target: tumorHistology
+- relation: dependsOn
+  target: tnmStage

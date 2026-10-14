@@ -57,10 +57,16 @@ standard_mappings:
   resource: MEASUREMENT / OBSERVATION (Onkologie-Extension)
   notes: OHDSI Onkologie-Extension; FHIR-OMOP-Brücke via mCODE↔OMOP
 care_process:
-  trigger: 'Restaging-CT alle 6–9 Wochen unter Systemtherapie (S3 Empf. 16.9) bzw. 6–8 Wochen (Onkopedia
-    NSCLC) — auch in der therapiefreien Beobachtung nach Erstlinientherapie; SCLC: Ansprechen nach frühestens
-    2, i. d. R. nach 3–4 Zyklen Chemo-Immuntherapie'
-  frequency_pattern: Q6-9W (S3) · Q6-8W (Onkopedia NSCLC) · per-cycle (SCLC, nach 2–4 Zyklen)
+  trigger: 'nach jeder Restaging-Bildgebung (restagingImagingDate): NSCLC erstmals nach 2, spätestens
+    3 Zyklen Erstlinientherapie (S3 Empf. 8.84/8.100), danach alle 6–9 Wochen unter laufender System-/Erhaltungstherapie
+    (S3 Empf. 16.9) bzw. alle 6–8 Wochen in der therapiefreien Beobachtung nach Erstlinientherapie (Onkopedia
+    NSCLC Kap. 8.2); SCLC nach frühestens 2, i. d. R. 3–4 Zyklen Chemo-Immuntherapie (Onkopedia SCLC Kap.
+    6.1.1.4.1.7), danach alle 6–9 Wochen unter laufender Immunerhaltung (S3 Empf. 16.9, Kap. 16.4)'
+  frequency_pattern: 'per-imaging-event (gekoppelt an restagingImagingDate): NSCLC-Erstlinie erstmals
+    nach 2, spätestens 3 Zyklen (6–9 W; S3 Empf. 8.84/8.100) · Q6-9W unter laufender System-/Erhaltungstherapie,
+    NSCLC und SCLC (S3 Empf. 16.9, Kap. 16.4) · Q6-8W in der therapiefreien Beobachtung nach Erstlinientherapie,
+    NSCLC (Onkopedia NSCLC Kap. 8.2) · SCLC-Induktion: nach frühestens 2, i. d. R. 3–4 Zyklen (Onkopedia
+    SCLC Kap. 6.1.1.4.1.7)'
   responsible_role: Onkologe / Radiologie
 evidence:
   guideline_references:
@@ -84,6 +90,14 @@ evidence:
       3–4 Zyklen beurteilbar)
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6.2.1 Empf. 8.84 / Kap. 8.6.3.1 Empf. 8.100 (EK, Starker Konsens, geprüft 2026):
+      radiologische Verlaufskontrolle beim NSCLC Stadium IV nach 2 Zyklen (6 Wochen), spätestens nach
+      3 Zyklen (9 Wochen)'
+    recommendation_grade: EK
+    evidence_level: n/a
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -104,3 +118,28 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Wertebereich vs. Definition klären: recistResponse ist als RECIST-1.1-Kategorie definiert (CR/PR/SD/PD/NE),
+  required gebunden ist aber der Wertebereich des mCODE-ValueSets ConditionStatusTrend (bewusste Umstellung,
+  audit-log §13). Dessen SNOMED-Konzepte sind Patientenzustands-Befunde (268910001, 359746009, 271299001,
+  709137006; Parent 418138009 ''Patient condition finding'') bzw. ein Qualifier (260415000 ''Not detected'',
+  Parent 272519000 ''Absence findings''), keine Ansprechkategorien; RECIST-Schwellenwerte sind nicht abgebildet.
+  In mCODE STU4 (4.0.0) enthält ConditionStatusTrendVS nur die vier Zustands-Befunde (nicht 260415000)
+  und ist an CancerDiseaseStatus nur ''preferred'' gebunden. Vier der fünf SNOMED-Codes führt auch das
+  generalisierende Element currentTumorStatus; die Abgrenzung beider Elemente ist offen. KDL SD150103
+  ''Tumorkonferenzprotokoll'' ist eine Dokumentklasse und gehört nicht in das Antwortset. Die Leitlinien
+  geben für die Routine kein Bewertungsschema vor (S3-LL Lungenkarzinom 5.1, Empf. 16.9: Ansprechen wird
+  „evaluiert“; Onkopedia NSCLC/SCLC erwähnen RECIST nicht). Zu entscheiden: (a) Element als klinische
+  Ansprechens-/Tumorstatus-Beurteilung (ggf. nach RECIST 1.1) umdefinieren und den mCODE-Wertebereich
+  beibehalten oder (b) an einen Standard-Kategoriensatz binden – LOINC 88040-1 ''Response to cancer treatment''
+  mit Antwortliste LL4721-8 (LA28366-5 Complete response, LA28369-9 Partial response, LA28371-5 Stable
+  disease, LA28370-7 Progressive disease, LA9348-9 Not assessed ≈ NE, nicht deckungsgleich) oder das MII-KDS-Onkologie-CodeSystem
+  mii-cs-onko-verlauf-gesamtbeurteilung (V Vollremission/CR, T Teilremission/PR, K keine Änderung/SD,
+  P Progression, U Beurteilung unmöglich u. a.; entspricht dem oBDS-Mapping) –, mit mCODE/SNOMED (z. B.
+  399056007 Complete therapeutic response, 399204005 Partial therapeutic response, 399178002 Static therapeutic
+  response, 1371415000 Malignant neoplastic disease progression) als Abbildung; ein projekt-lokales CodeSystem
+  ist damit entbehrlich. Bindungsstärke (bisher required) und Datentyp (bisher code) mit entscheiden.
+  Außerdem den Tippfehler ''eviganceType'' → ''evidenceType'' in standard_mappings[mcode].notes korrigieren.'
+related_elements:
+- relation: dependsOn
+  target: restagingImagingDate

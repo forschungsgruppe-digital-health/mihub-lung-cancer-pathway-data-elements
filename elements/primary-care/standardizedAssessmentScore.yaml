@@ -10,14 +10,14 @@ tumor_entity:
 category: assessment
 datatype: integer
 cardinality: 0..*
-unit: score
+unit: '{score}'
 value_set:
   binding_strength: extensible
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '446053003'
-    display: Beck depression inventory score
+    code: '718366000'
+    display: Beck Depression Inventory II score
   - system: snomed-ct
     code: '273306008'
     display: Beck depression inventory
@@ -49,6 +49,20 @@ evidence:
     section: DE-023 Assessments (z. B. BDI)
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 18.3.1 Empf. 18.3 (geprüft 2026, Konsens: Screeningverfahren zur Erkennung einer Depression);
+      Hintergrund: HADS, 2-Fragen-Instrument nach Whooley – BDI nicht als Screeninginstrument genannt'
+    recommendation_grade: B
+    evidence_level: 1+
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 17.2 Empf. 17.2 (geprüft 2026, Konsens: validiertes und standardisiertes Screeninginstrument
+      zur Erkennung einer Angst)'
+    recommendation_grade: '0'
+    evidence_level: '3'
 iso13972_metadata:
   type: observation
   keywords:
@@ -69,6 +83,11 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Rollen trennen: Observation.code = Score-Observable (z. B. 718366000 / LOINC 89209-1), Instrument =
+  Observation.method (falls benötigt, BDI-II-Variante 1344725001 ‚Beck Depression Inventory II (assessment
+  scale)‘ statt 273306008). Mapping-Pfad ‚Observation.code (Instrument)‘ entsprechend korrigieren und
+  273306008 aus dem Observation.code-Value-Set herausnehmen.'
 related_elements:
 - relation: generalizes
   target: phq9DepressionScore

@@ -2,9 +2,11 @@ id: mihub.lung.palliative.complexityLevel.v0.1
 uuid: 3d3d3296-edb9-574a-bc4f-f0b236341d76
 name: complexityLevel
 label_de: Komplexität der Versorgungssituation
-definition_de: Einstufung der Komplexität der Patient:innen- und Angehörigensituation (niedrig, mittel,
-  hoch) basierend auf Symptomen, psychosozialen/spirituellen/ethischen Belastungen und Funktionsstatus
-  + Krankheitsphase.
+definition_de: Einstufung der Komplexität der Situation von Patient:in und Angehörigen (niedrig, mittel,
+  hoch), eingeschätzt anhand der Bedürfnisse und Probleme der Patient:in (Intensität und gleichzeitiges
+  Auftreten von Symptomen sowie psychosozialen, spirituellen oder ethischen Problemen inkl. Komorbiditäten),
+  der Bedürfnisse und Belastungen der Angehörigen, des Funktionsstatus und der Krankheitsphase (S3-LL
+  Palliativmedizin 3.0, Empf. 5.3/5.4, Tab. 6).
 phase: palliative
 tumor_entity:
 - NSCLC
@@ -36,17 +38,27 @@ value_set:
 instruction_de: Hohe Komplexität → SPV-Indikation. Bewertung anhand Bedürfnissen, Belastungen Angehörige,
   Funktionsstatus, Krankheitsphase.
 care_process:
-  trigger: bei Aufnahme + bei Phasenwechsel
+  trigger: ab Diagnose einer nicht-heilbaren Krebserkrankung, danach regelmäßig sowie bei Änderung der
+    klinischen Situation (z. B. Phasenwechsel)
   frequency_pattern: per-encounter
-  responsible_role: Palliativ-Team
+  responsible_role: Primärbehandelnde (Onkolog:in, Hausärzt:in) bzw. APV-Behandelnde mit palliativmedizinischer
+    Zusatzqualifikation / SPV-Palliativ-Team
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 5.3 Komplexitätsbestimmung; Tab. 6
-    recommendation_grade: Statement
+    section: 'Kap. 5.3, Empf. 5.3 (neu 2026: Komplexität niedrig/mittel/hoch regelmäßig evaluieren, Versorgungsstufe
+      indizieren) und Empf. 5.4 (modifiziert 2026: Einschätzung über Patient:innen-/Angehörigenbedürfnisse,
+      Funktionsstatus, Krankheitsphase); Tab. 6'
+    recommendation_grade: EK
     evidence_level: n/a
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.3, Empf. 5.7 (geprüft 2026): hohe Komplexität → spezialisierte Palliativversorgung'
+    recommendation_grade: A
+    evidence_level: '3'
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -67,8 +79,18 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'KDL SD110105 (''Palliativmedizinische Komplexbehandlungsdokumentation'', KDL 2025) ist eine Dokumentklasse:
+  weder Elementkonzept noch zulässiger Wert (datatype code 1..1: low/medium/high). scripts/build-fhir-logical-models.py
+  übernimmt sie trotzdem als valueSet.coding neben die Werte. Katalogweit entscheiden, ob KDL-Dokumentkontext-Codes
+  bei code-Elementen aus value_set.codings in notes oder ein eigenes Feld wandern (betrifft auch illnessPhase,
+  palliativeCareTier und recistResponse).'
 related_elements:
 - relation: dependsOn
   target: mihub.lung.palliative.illnessPhase.v0.1
 - relation: dependsOn
   target: mihub.lung.palliative.functionalStatus.v0.1
+- relation: dependsOn
+  target: symptomAssessmentInstrument
+- relation: dependsOn
+  target: caregiverBurden

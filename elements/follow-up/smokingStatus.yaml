@@ -2,10 +2,17 @@ id: mihub.lung.followup.smokingStatus.v0.1
 uuid: 0e39538d-7ac1-5c78-a7aa-ee553e5bf28e
 name: smokingStatus
 label_de: Rauchstatus
-definition_de: Aktueller Tabakkonsumstatus inkl. E-Zigaretten-Konsum (Vaping) und Passivrauchexposition.
-  Aktive Raucher und E-Zigaretten-Konsumenten haben höheres Risiko für Komplikationen, Zweittumoren und
-  schlechteres Überleben; Passivrauchexposition ist eigenständiger Risikofaktor und in S3-LL 5.1 (Empf.
-  4.1/4.2) explizit Teil der Tabakanamnese.
+definition_de: Aktueller Tabakrauchstatus (nie / ehemals / aktuell, inkl. gelegentlich) sowie Konsum von
+  E-Zigaretten und verwandten Produkten (z. B. Tabakerhitzer) und Passivrauchexposition. Fortgesetztes
+  Tabakrauchen ist beim Lungenkarzinom mit kürzerem Überleben, mehr Therapiekomplikationen und mehr Zweitkarzinomen
+  assoziiert (S3-LL Lungenkarzinom 5.1, Kap. 4.2 und 16.2). Für langjährigen E-Zigarettenkonsum sieht
+  die S3-LL eine hohe Plausibilität für ein erhöhtes Tumorrisiko, beweisende Langzeitstudien fehlen jedoch
+  (Kap. 3.7.2); bei Dual Use von Tabak- und E-Zigarette potenziert sich das Schadenspotenzial (Kap. 4.2.1).
+  Empf. 4.1 fordert, aktives Tabakrauchen, das Rauchen der E-Zigarette und Passivrauchexposition konsequent
+  zu vermeiden; Empf. 4.2 fordert, den Konsum von Tabak- und E-Zigaretten sowie verwandter Produkte regelmäßig
+  zu erfragen und zu dokumentieren. Eine Erfassungsvorgabe für Passivrauch enthält Empf. 4.2 nicht; der
+  Anamnese-/Befundbogen der S3-LL Rauchen und Tabakabhängigkeit (Anhang 2) fragt Rauchende im häuslichen
+  und betrieblichen Umfeld ab ('Raucher zu Hause', 'Raucher im Betrieb').
 phase: followup
 tumor_entity:
 - NSCLC
@@ -36,15 +43,27 @@ value_set:
   - system: snomed-ct
     code: '43381005'
     display: Passive smoker
-  notes: ValueSet http://hl7.org/fhir/ValueSet/smoking-status (HL7 FHIR Core) ist auf dem MII TermServ
-    nicht hinterlegt — Codes einzeln verifiziert (SNOMED CT 20260701).
+  - system: snomed-ct
+    code: '266927001'
+    display: Tobacco smoking consumption unknown
+  notes: 'ValueSet http://hl7.org/fhir/ValueSet/smoking-status ist weder in FHIR R4 Core 4.0.1 noch in
+    R5 Core 5.0.0 noch in den HL7-Terminology-Paketen enthalten (lokale Paketprüfung 2026-10-14; andere
+    Versionen nicht geprüft) und auf dem MII TermServ nicht auflösbar (ValueSet-Suche 2026-10-14: 0 Treffer);
+    als required-Bindungsziel ist es daher ungeeignet, value_set.uri ist zu ersetzen oder zu entfernen.
+    Verifiziert verfügbar: urn:oid:2.16.840.1.113883.11.20.9.38 ''Smoking Status'' (20240606; SNOMED 266919005,
+    266927001, 428041000124106, 449868002, 77176002, 8517006) sowie http://hl7.org/fhir/uv/ips/ValueSet/current-smoking-status-uv-ips
+    bzw. https://gematik.de/fhir/isik/ValueSet/current-smoking-status-uv-ips 1.1.0 (LOINC-LA-Codes). 722499006
+    (E-Zigarette) und 43381005 (Passivrauch) sind in keinem dieser ValueSets enthalten (eigene Achsen).
+    Codes einzeln verifiziert (SNOMED CT 20260701).'
 standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Raucher
   resource: Observation
   path: Observation.valueCodeableConcept
 care_process:
-  trigger: 'bei jeder Vorstellung (opt-out: beim Erstkontakt und wiederholt im Verlauf; S3 Empf. 4.2)'
+  trigger: bei jeder Vorstellung (mind. beim Erstkontakt und wiederholt im Verlauf, opt-out-Ansatz; S3-LL
+    Lungenkarzinom 5.1 Empf. 4.2 'regelmäßig' + Hintergrundtext Kap. 4.2.1; S3-LL Rauchen und Tabakabhängigkeit
+    Empf. 3.2.3.1)
   frequency_pattern: per-encounter
   responsible_role: Onkologe / Hausarzt / Pflege
   data_flows:
@@ -82,11 +101,23 @@ evidence:
     recommendation_grade: B
     evidence_level: '3'
   - source: S3-LL Tabakentwöhnung
-    version: 1.0 (03/2021, AWMF 076-006l)
+    version: 3.1 (Stand 01/2021, Langversion 03/2021, AWMF 076-006; Gültigkeit bis 31.12.2025 abgelaufen,
+      Aktualisierung angemeldet 12/2024)
     url: https://register.awmf.org/de/leitlinien/detail/076-006
-    section: Screening und Diagnostik
+    section: 'Empf. 3.2.3.1 Systematisches Screening (A, LoE 1a): Konsum von Tabak, E-Zigaretten oder
+      verwandten Produkten beim ersten Kontakt und in regelmäßigen Abständen erfragen (Teilaspekt E-Zigaretten/verwandte
+      Produkte nur Klinischer Konsenspunkt, Fußnote 2); Empf. 3.3.3.1 Erfassung in einem Dokumentationssystem
+      (A, LoE 1a; Teilaspekt verwandte Produkte nur Klinischer Konsenspunkt, Fußnote 3); Anhang 2 Anamnese-/Befundbogen
+      (u. a. Raucher zu Hause/im Betrieb)'
     recommendation_grade: A
-    evidence_level: n/a
+    evidence_level: 1a
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 4.1 (A, LoE 1, modifiziert 2026): aktives Tabakrauchen, Rauchen der E-Zigarette und
+      Passivrauchexposition konsequent vermeiden'
+    recommendation_grade: A
+    evidence_level: '1'
 iso13972_metadata:
   type: social
   keywords:
@@ -110,3 +141,13 @@ provenance:
 issues:
 - „Verwandte Produkte“ (z. B. Tabakerhitzer, Nikotinbeutel) gemäß S3 Empf. 4.2 bislang ohne Coding — SNOMED-CT-Kandidaten
   prüfen.
+- 'Achsenmischung im Wertebereich: Der 1..1-required-CodeableConcept vereint Tabakrauchstatus (266919005/8517006/77176002/428041000124106),
+  E-Zigarette (722499006; Parent ''Finding related to substance use'') und Passivrauch (43381005). Diese
+  Merkmale schließen sich nicht aus, z. B. Ex-Raucher:in + E-Zigarette + Passivrauch. Vorschlag: getrennte
+  Achsen, etwa als Observation.component oder als Teil-Elemente. (a) Tabakrauchstatus inkl. 266927001
+  ''Tobacco smoking consumption unknown''. (b) E-Zigarette: 722499006 bzw. 1137690000 ''Never used electronic
+  cigarette''. (c) Verwandte Produkte: 1388653002 ''Uses heated tobacco product'' (Tabakerhitzer); für
+  Nikotinbeutel gibt es kein Nutzer-Befundkonzept (nur 584021000052104 ''Ex-user of nicotine pouches'';
+  generisch 722494001 ''Nicotine user''). (d) Passivrauch: 43381005 bzw. 711563001 ''No known exposure
+  to tobacco smoke''. Alle Kandidaten sind per $lookup auf dem MII TermServ (SNOMED CT 20260701) aktiv.
+  Damit ist zugleich das offene Issue zu den ''verwandten Produkten'' teilweise beantwortet.'

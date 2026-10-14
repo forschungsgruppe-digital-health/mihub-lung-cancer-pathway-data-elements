@@ -58,6 +58,22 @@ evidence:
     section: DE-034 Kontaktdaten Mitbehandler
     recommendation_grade: n/a
     evidence_level: n/a
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein et al. 2026 (LoTeCaS-GP): Ergebnisse, Relevante Informationen – Weiteres (S. 96: Kontaktdaten
+      eines Ansprechpartners für Rückfragen und interkollegialen Austausch); Abb. 2/Anhang 2 Empfehlungsliste,
+      Dos – Weiteres: „Kontaktdaten“'
+    recommendation_grade: n/a
+    evidence_level: n/a
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.6.4 (treatment care plan including contact details for the treating team, S. 33);
+      Step 5.1 Treatment summary (contact information for key healthcare providers, S. 43); Step 5.4.3
+      (contact details of the care team involved, S. 47)
+    recommendation_grade: n/a
+    evidence_level: n/a
 iso13972_metadata:
   type: social
   keywords:
@@ -79,3 +95,6 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+related_elements:
+- relation: isPartOf
+  target: survivorshipCarePlan

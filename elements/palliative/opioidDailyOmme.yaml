@@ -23,18 +23,38 @@ standard_mappings:
 - standard: fhir-r4-base
   resource: MedicationStatement
   path: MedicationStatement.dosage.doseAndRate
+constraints_de: 'Umrechnung in orales Morphin-Äquivalent (mg/d) nach den relativen analgetischen Verhältnissen
+  der S3-LL Palliativmedizin 3.0, Tab. 16: orales Morphin zu oralem Oxycodon 1,5:1, zu oralem Hydromorphon
+  5:1, zu Buprenorphin TTS 75:1, zu Fentanyl TTS 100:1. Die TTS-Faktoren beziehen sich auf die abgegebene
+  Tagesmenge in mg/24 h (z. B. Fentanyl TTS 25 µg/h = 0,6 mg/24 h ≙ 60 mg orales Morphin). Für s.c./i.v.
+  Morphin gilt Empf. 10.17 (oral zu parenteral 3:1 bis 2:1); den gewählten Faktor projektseitig festlegen
+  und dokumentieren. Die Verhältnisse sind nur ungefähre Richtwerte. Für Methadon/Levomethadon enthält
+  die Leitlinie keine Äquivalenzfaktoren; diese sowie alle weiteren nicht durch Tab. 16 oder Empf. 10.17
+  abgedeckten Opioide bzw. Applikationswege nicht einrechnen bzw. gesondert kennzeichnen.'
 care_process:
-  trigger: Titration + Dauerregime
+  trigger: Titration und Dauerregime sowie jede Umstellung auf ein anderes Opioid bzw. eine andere Applikationsform
+    (Umrechnung)
   frequency_pattern: per-encounter
   responsible_role: Palliativ-Team
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 10.4 Opioid-Titration; 10.6 Opioid-Wechsel
-    recommendation_grade: A
-    evidence_level: n/a
+    section: 'Kap. 10.6.1 Äquianalgetische Opioid-Dosierung: Empf. 10.21 (modifiziert 2026, Starker Konsens;
+      Umstellung auf anderes Opioid/andere Applikationsform anhand von Umrechnungsfaktoren) und Empf.
+      10.22 (B, LoE 1-; Anfangsdosis unter Äquipotenztabelle, dann titrieren); Tab. 16 Relatives analgetisches
+      Verhältnis (Bezug orales Morphin)'
+    recommendation_grade: B
+    evidence_level: 1-
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 10.4 Opioid-Titration, Empf. 10.9 (geprüft 2026, Starker Konsens) — Titrationszeitpläne
+      durch orale schnell freisetzende Opioide als Bedarfsmedikation ergänzen (Empf. 10.8 zur Dosistitration:
+      Grad 0, LoE 1-)'
+    recommendation_grade: B
+    evidence_level: 1-
 iso13972_metadata:
   type: medication
   keywords:
@@ -55,3 +75,12 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'standard_mappings (fhir-r4-base): MedicationStatement.dosage.doseAndRate ist für die oMME semantisch
+  falsch, denn dort steht die tatsächliche Dosis des einzelnen Präparats in dessen Einheit. Die abgeleitete
+  Tagesdosis als eigene Observation modellieren (valueQuantity in mg/d; Code: kein Standardkonzept auf
+  dem MII TermServ, daher lokal bzw. offen). Den Bezug zu den zugrunde liegenden MedicationStatement/MedicationAdministration
+  über die R4-Core-Extension http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo herstellen
+  (Kontext Observation, Reference(Any)); Observation.derivedFrom erlaubt in FHIR R4 nur DocumentReference,
+  ImagingStudy, Media, QuestionnaireResponse, Observation und MolecularSequence. Dabei iso13972_metadata.type
+  (medication) und category (medikation) mitprüfen; Mapping zentral korrigieren.'
