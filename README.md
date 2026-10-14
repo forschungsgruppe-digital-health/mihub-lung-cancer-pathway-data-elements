@@ -128,13 +128,14 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 | [`docs/methodology.md`](./docs/methodology.md)                                     | Methodik, Gap-Analyse, Designentscheidungen               |
 | [`docs/audit-log.md`](./docs/audit-log.md)                           | Audit-Trail (Quellen, Codings, Iterationen)               |
 | [`GLOSSARY.md`](./GLOSSARY.md)                                                     | Akronyme, Skalen, Frequenz-Codes, Standard-Identifier     |
-| [`docs/reviews/`](./docs/reviews/)                                                 | Momentaufnahmen der Leitlinien-Abgleiche und der Terminologie-Verifikation (datiert, unveränderlich) |
+| [`docs/reviews/`](./docs/reviews/)                                                 | Momentaufnahmen der Leitlinien-Abgleiche, der Terminologie-Verifikation und der Zweitprüfung gegen die Primärquellen (datiert, unveränderlich) |
+| [`docs/releases/`](./docs/releases/)                                               | Fachliche Release-Notes je Version (ergänzen den automatisch erzeugten `CHANGELOG.md`) |
 
 ### Skripte
 
 | Datei                                                                                              | Funktion                                                        |
 | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [`scripts/validate.py`](./scripts/validate.py)                                                     | YAML gegen JSON-Schema validieren                                |
+| [`scripts/validate.py`](./scripts/validate.py)                                                     | YAML gegen JSON-Schema validieren; katalogweite Konsistenz (IDs, Ordner, Eindeutigkeit, Verweisziele) |
 | [`scripts/build-catalog.py`](./scripts/build-catalog.py)                                           | YAML → CSV + Markdown + Phasen-Übersicht aggregieren            |
 | [`scripts/build-fhir-logical-models.py`](./scripts/build-fhir-logical-models.py)                   | YAML → FHIR Logical Model (FSH, on-demand, projekt-agnostisch)  |
 | [`scripts/build-elicitation-workbook.py`](./scripts/build-elicitation-workbook.py)                 | Excel-Erhebungs-Vorlage erzeugen (schema-getrieben; benötigt `openpyxl`) |
@@ -233,12 +234,13 @@ Das Repository folgt etablierten Mustern der klinischen Modellierung:
 ### Klinische Quellen
 
 - **S3-Leitlinie Lungenkarzinom**, Langversion **5.1** (Juli 2026, final; AWMF 020-007OL) — löst die Konsultationsfassung 5.01 (04/2026) und die Erstfassung 5.0 (06/2026) ab; Kapitel 4.2 (Tabakrauchen, Empf. 4.1–4.5 modifiziert/neu 2026, A/LoE 1), Kapitel 15 (Rehabilitation, 2026 ausgesetzt), Kapitel 16 (Nachsorge / Verlauf / Follow-up; Empf. 16.1–16.9 geprüft 2026 — 16.1/16.2/16.4/16.7/16.8/16.9 EK, 16.3 B, 16.5 A/B, 16.6 A); Tab. 44 (Nachsorge-Indikationen), Tab. 48 (Änderungsübersicht).
-- **S3-Leitlinie Palliativmedizin**, Langversion **3.01** (Konsultationsfassung 03/2026).
-- **AWMF S3-LL Rauchen / Tabakabhängigkeit** (076-006l, 03/2021).
+- **S3-Leitlinie Palliativmedizin für Patient:innen mit einer nicht heilbaren Krebserkrankung**, Langversion **3.0** (Juli 2026, final; AWMF 128-001OL; gültig bis 20.07.2031) — löst die Konsultationsfassung 3.01 (03/2026) ab; Kap. 5, 6, 7.4, 9, 10, 17–21, Tab. 6 und 9.
+- **S3-Leitlinie Rauchen und Tabakabhängigkeit: Screening, Diagnostik und Behandlung** (AWMF 076-006, Version 3.1, Stand 01/2021, Langversion 03/2021; Gültigkeit bis 31.12.2025 abgelaufen, Aktualisierung seit 12/2024 angemeldet) — im Katalog als Quelle `S3-LL Tabakentwöhnung`.
 - **Onkopedia** Lungenkarzinom NSCLC (Stand April 2025; Kap. 7 Rehabilitation, Kap. 8 Nachsorge, Tab. 12) und SCLC (Stand August 2026; Kap. 9 Rehabilitation, Kap. 10 Nachsorge, Tab. 9).
 - **Optimal Care Pathway for People with Lung Cancer**, Cancer Council Victoria, 2nd ed. (2021, Update 07/2025).
-- **Klein A-A et al. (2026).** _Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden — Empfehlungen zum Verfassen von onkologischen Abschlussberichten._ Die Onkologie 32:91–99.
-- **AG LONKO** (Nationaler Krebsplan): Empfehlungspapiere zur Datenerhebung und zu bedarfsgerechten Versorgungsmodellen.
+- Ergänzend (je ein Element): **S3-Leitlinie Psychoonkologie** 2.1 (August 2023, AWMF 032-051OL; Distress-Thermometer, Empf. 7.4) · **Onkopedia** „Impfungen bei malignen Erkrankungen und Immunsuppression“ (Stand Mai 2026; Impfstatus) · **EORTC QLQ-C30 Scoring Manual**, 3rd ed. 2001 (Skalenberechnung).
+- **Klein A-A et al. (2026).** _Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden einer Krebserkrankung. Empfehlungen zum Verfassen von onkologischen Abschlussberichten._ Die Onkologie 32(1):91–99 (online 02.12.2025). doi:10.1007/s00761-025-01867-1 — Empfehlungsliste (Dos/Don'ts) im Zusatzmaterial Anhang 2.
+- **AG LONKO** (Arbeitsgruppe „Langzeitüberleben nach Krebs“ im Nationalen Krebsplan): Empfehlungspapiere der UAG „Datenerhebung und Datenanalyse“ (Stand 17.06.2021) und der UAG „Bedarfsgerechte Versorgungsmodelle“ (Stand 18.06.2021) — eigenständige Quelle, nicht mit Klein 2026 zu vermengen.
 - **Expert:innen-Erhebungen MiHUB** (Klinik-Spur, Excel-Vorlage): Nachsorge-WG eines Lungenkrebszentrums (Stand 2026-07-30; Kategorien + 27 neue Zeilen) und Allgemeinmedizin / LoTeCaS-GP (Stand 2026-10-13; 38 hausärztliche Elemente) — Quelle `Expert:innen-Erhebung MiHUB` in den YAMLs, Abgleich in [`docs/audit-log.md`](./docs/audit-log.md) §13.
 - **MII TermServ** (Ontoserver der Medizininformatik-Initiative; SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3) — Verifikationsquelle aller Codings (mTLS-Zugang über ein Funktionszertifikat; Stand 2026-10-13).
 
