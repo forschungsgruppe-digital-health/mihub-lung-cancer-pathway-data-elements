@@ -281,9 +281,10 @@ Bitte über den **Zenodo-DOI** zitieren — der DOI-Badge oben verweist stets au
 archivierte Release (Concept-DOI, alle Versionen). Maschinenlesbare Metadaten in
 [`CITATION.cff`](./CITATION.cff) (GitHub-Schaltfläche „Cite this repository").
 
-> _Hinweis:_ Die erste archivierte Fassung ist die **Release Candidate `v0.1.0-rc.1`** (Prerelease,
-> Author Draft). Sobald Zenodo sie archiviert hat, sollte der konkrete Concept-DOI zusätzlich in
-> [`CITATION.cff`](./CITATION.cff) eingetragen werden.
+> **Concept-DOI (alle Versionen):** [10.5281/zenodo.21083229](https://doi.org/10.5281/zenodo.21083229) —
+> archivierte Fassungen sind Release Candidates (Prerelease, Author Draft): `v0.1.0-rc.1`
+> ([10.5281/zenodo.21083230](https://doi.org/10.5281/zenodo.21083230)) und `v0.1.0-rc.2`
+> ([10.5281/zenodo.21106995](https://doi.org/10.5281/zenodo.21106995)).
 
 ---
 

@@ -22,8 +22,8 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 ## 3. Zitierbarkeit
 
 - [ ] `CITATION.cff` vorhanden und valide (`cffconvert --validate`); Autor:innen/ORCIDs korrekt.
-- [ ] **Zenodo aktiviert** und erste Release archiviert; **Concept-DOI** in `CITATION.cff`
-      (`doi:`) und als README-Badge eingetragen (analog Pathway-Repo).
+- [x] **Zenodo aktiviert** und erste Release archiviert (v0.1.0-rc.1, 2026-06-30); **Concept-DOI**
+      10.5281/zenodo.21083229 in `CITATION.cff` (`doi:`) und README eingetragen (2026-10-14); Badge vorhanden.
 
 ## 4. Community-Health & Discovery
 
@@ -50,7 +50,7 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 - [ ] Datenelemente bleiben `AuthorDraft` bis zum klinischen Review — im README/DISCLAIMER klar
       kommuniziert. Eine Veröffentlichung als **Entwurf** ist zulässig und transparent gekennzeichnet.
 
-## 7. Release-Automatisierung (release-please) — eingerichtet ✅ (offen: Zenodo)
+## 7. Release-Automatisierung (release-please) — eingerichtet ✅ (Zenodo aktiv ✅)
 
 Mirror des Schwester-Repos [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway):
 Releases entstehen reproduzierbar aus Conventional Commits (`feat`/`fix`/… → Version + CHANGELOG + Tag).
@@ -66,8 +66,7 @@ Releases entstehen reproduzierbar aus Conventional Commits (`feat`/`fix`/… →
       (ApprovedForProductionUse); siehe `docs/github-workflow.md` §4.
 - [x] Konvention dokumentiert: RCs/konkrete Versionen über einen **`Release-As:`-COMMIT-FOOTER** auf
       `main` — **nicht** `release-as` in der Config pinnen (sticky Pin → Duplicate-Tag-Loop).
-- [ ] **Zenodo-GitHub-Integration aktivieren** (offen): jedes erzeugte Tag archivieren →
-      resultierenden **Concept-DOI** in `CITATION.cff` und README-Badge eintragen (schließt §3).
+- [x] **Zenodo-GitHub-Integration aktiv**: jedes Release-Tag wird archiviert (v0.1.0-rc.1 → 10.5281/zenodo.21083230, v0.1.0-rc.2 → 10.5281/zenodo.21106995); Concept-DOI 10.5281/zenodo.21083229 in `CITATION.cff` und README (schließt §3).
 
 ---
 
