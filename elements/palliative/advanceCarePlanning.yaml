@@ -19,9 +19,17 @@ value_set:
     code: '713603004'
     display: Advance care planning
 standard_mappings:
-- standard: fhir-r4-base
-  resource: Consent
-  path: Consent.scope='advance-directive'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct = SNOMED 713603004; Procedure.status; Procedure.performed[x]
+  notes: 'ACP ist ein Prozess (SNOMED 713603004 Advance care planning (procedure)), keine Einwilligung,
+    und wird deshalb als Procedure abgebildet. MII KDS Prozedur (Basismodul 2026.0.1): code.coding:sct
+    ist REQUIRED an https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/ValueSet/procedures-sct
+    gebunden (Nachfahren von 71388002 |Procedure|); status 1..1, performed[x] 1..1. Vorschlag für das
+    Boolean-Element (Entscheidung offen, siehe Issue zur Repräsentation): true = Procedure 713603004 mit
+    status completed (laufend: in-progress), false = keine Procedure bzw. status not-done; performed[x]
+    bleibt auch bei not-done Pflicht. Die aus dem ACP resultierende Verfügung gehört zum Element advanceDirectiveDocument.'
 care_process:
   trigger: Diagnose unheilbar; bei jeder substanziellen Verschlechterung erneut
   frequency_pattern: ongoing
@@ -83,6 +91,13 @@ issues:
   gültig ist ''adr'' (Advanced Care Directive). Zudem wäre der ACP-Prozess (SNOMED 713603004, procedure)
   eher als Procedure abzubilden. Consent (scope=adr) bzw. DocumentReference gehört zum Ergebnisdokument
   (advanceDirectiveDocument).'
+- 'Repräsentation von advanceCarePlanning im Mapping auf MII Prozedur klären. Das Element ist boolean
+  (ACP durchgeführt ja/nein, 1..1). Im Mapping wird ACP als Procedure mit code.coding:sct 713603004 abgebildet;
+  das Profil verlangt status 1..1 und performed[x] 1..1, auch bei status not-done. Festzulegen ist: true
+  = Procedure 713603004 mit status completed bzw. in-progress, false = keine Procedure bzw. status not-done?
+  Zusammen mit dem Issue „ACP-Status“ entscheiden: 713615000 Advance care planning declined (situation)
+  ist kein Nachfahre von 71388002 |Procedure| und im SCT-Slice von MII Prozedur nicht zulässig; eine Ablehnung
+  wäre z. B. als status not-done mit statusReason abzubilden.'
 related_elements:
 - relation: hasPart
   target: advanceDirectiveDocument

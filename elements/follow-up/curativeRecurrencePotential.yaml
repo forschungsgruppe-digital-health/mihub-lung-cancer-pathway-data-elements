@@ -24,11 +24,35 @@ value_set:
     (recurrenceOrSecondPrimary, tumorBoardDecision).
 standard_mappings:
 - standard: fhir-r4-base
-  resource: ClinicalImpression
-  path: ClinicalImpression.finding
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.valueBoolean
+  notes: 'ClinicalImpression.finding nimmt nur itemCodeableConcept oder itemReference auf, ein boolean
+    ist dort nicht abbildbar. Daher Observation mit valueBoolean; Observation.code (1..1) ist festzulegen,
+    ein Standardcode fehlt (siehe value_set.notes). Bezug zum Rezidiv bzw. Zweitkarzinom über Observation.focus;
+    Verknüpfung mit der Tumorkonferenz über CarePlan.supportingInfo (MII-Tumorkonferenz). Alternative:
+    ClinicalImpression.finding.itemCodeableConcept mit einer kodierten Aussage.'
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Tumorkonferenz
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 18 Tumorkonferenz Therapieplanung / 19 Therapieempfehlung (nur teilweise abbildbar)
+  path: '19.1 Tumorkonferenz Therapieempfehlung Typ (Tumorkonferenz/Therapieempfehlung/Menge_Typ_Therapieempfehlung/Typ_Therapieempfehlung,
+    z. B. OP, ST); die kurative Intention steht erst in der Folgemeldung: 13.1 (OP/Intention), 14.1 (ST/Intention)
+    bzw. 16.1 (SYST/Intention) = K'
+  notes: 'Nur teilweise abbildbar: oBDS hat kein Feld für den kurativen Anspruch. Abschnitt 18/19 kennt
+    nur 18.1 Datum, 18.2 Typ (praeth, postop, postth, ther), 19.1 Typ der Therapieempfehlung und 19.2
+    Therapieabweichung auf Wunsch des Patienten. Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
+  resource: CarePlan
+  path: CarePlan.activity:obds.detail.code (Therapieempfehlung, z. B. OP, ST); Verknüpfung mit der Einschätzung
+    über CarePlan.supportingInfo
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Tumorkonferenz, intent fix plan). Nur teilweise abbildbar:
+    Das Profil hat kein Element für den kurativen Anspruch. Kodiert sind der Konferenztyp (category, REQUIRED
+    mii-vs-onko-therapieplanung-typ), die Therapieempfehlung (activity:obds.detail.code 1..1, REQUIRED
+    mii-vs-onko-therapieempfehlung-typ) und die Therapieabweichung (activity:obds.detail.statusReason).
+    Die Einschätzung selbst als Observation (siehe fhir-r4-base) über supportingInfo verknüpfen oder als
+    Freitext in CarePlan.description bzw. note führen. Die kurative Intention steht erst in der Folgetherapie
+    (Procedure.extension:Intention = K in mii-pr-onko-operation, mii-pr-onko-strahlentherapie bzw. mii-pr-onko-systemische-therapie).'
 care_process:
   trigger: Detektion Rezidiv/Zweittumor (recurrenceOrSecondPrimary) → Tumorboard-Entscheid
   frequency_pattern: ad-hoc
@@ -96,6 +120,13 @@ issues:
   ist zudem zeitlich ambig (prospektive Eignung für kurative Salvage-Therapie vs. nach Detektion/Salvage).
   Klinisch zu klären; bis dahin als Onkopedia-Einzelaussage kennzeichnen (betrifft auch followUpInterval,
   Code Q6-8W-curative-recurrence). UNSICHER: ob die S3-Fassung 11/2022 den Passus enthielt (nicht geprüft).'
+- 'Repräsentation von curativeRecurrencePotential (boolean) festlegen. Weder ClinicalImpression.finding
+  (nur itemCodeableConcept oder itemReference) noch die MII-Tumorkonferenz (CarePlan) noch oBDS 18/19
+  haben ein Feld für den kurativen Anspruch. Optionen: (a) eigene Observation mit valueBoolean und lokalem
+  Code (ein Standardcode fehlt laut value_set.notes), verknüpft über CarePlan.supportingInfo der Tumorkonferenz;
+  (b) ClinicalImpression.finding.itemCodeableConcept mit einer kodierten Aussage; (c) Ableitung aus der
+  Therapieempfehlung (oBDS 19.1 bzw. activity:obds.detail.code) zusammen mit der Intention K der Folgetherapie
+  (oBDS 13.1, 14.1, 16.1). Für den Registerexport ist das Element in jedem Fall nur teilweise abbildbar.'
 related_elements:
 - relation: dependsOn
   target: recurrenceOrSecondPrimary

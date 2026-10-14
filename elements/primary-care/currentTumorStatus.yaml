@@ -40,11 +40,28 @@ value_set:
     display: Cancer disease progression
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul — Gesamtbeurteilung Tumorstatus
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf
+  path: 'Verlauf/Gesamtbeurteilung_Tumorstatus (17.2: V, T, K, P, D, B, R, Y, U, X); ergänzend Verlauf_Lokaler_Tumorstatus
+    (17.3), Verlauf_Tumorstatus_Lymphknoten (17.4), Verlauf_Tumorstatus_Fernmetastasen (17.5), Untersuchungsdatum_Verlauf
+    (17.1)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Verlauf_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+  resource: Observation
+  path: 'Observation.valueCodeableConcept (Gesamtbeurteilung, extensible mii-vs-onko-verlauf-gesamtbeurteilung:
+    V, T, K, P, D, B, R, Y, U, X); Observation.component:Tumor_Verlauf, :Lymphknoten_Verlauf, :Fernmetastasen_Verlauf;
+    Observation.focus (1..1) → mii-pr-onko-diagnose-primaertumor'
+  notes: Stabil, Modul Onkologie 2026.0.3. Codes entsprechen oBDS 17.2–17.5; Observation.code Pattern
+    SNOMED 396432002. SNOMED-Zuordnung der Gesamtbeurteilung über die ConceptMap mii-cm-onko-verlauf-gesamtbeurteilung-sct.
 - standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
-  resource: CancerDiseaseStatus
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
+  resource: Observation (Profil CancerDiseaseStatus)
+  path: 'Observation.code = LOINC 97509-4 (Pattern); Observation.valueCodeableConcept (preferred mcode-condition-status-trend-vs:
+    268910001, 359746009, 271299001, 709137006); Evidenzart über Observation.extension:evidenceType'
+  notes: mCODE STU4 (4.0.0). Die Element-Codes 260415000, 445150007 und 1371415000 liegen nicht im Trend-VS;
+    „rezidivfrei/kein Nachweis“ hat dort keine Entsprechung.
 care_process:
   trigger: bei jeder onkologischen Verlaufsbeurteilung; Übergabe an die Hausarztpraxis
   frequency_pattern: per-encounter

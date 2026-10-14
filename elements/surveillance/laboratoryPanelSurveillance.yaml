@@ -30,9 +30,15 @@ value_set:
     display: Laborbefund
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab
-  resource: Observation (ObservationLab)
-  path: Observation.code
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab
+  resource: DiagnosticReport
+  path: DiagnosticReport.code; DiagnosticReport.result
+  notes: 'MII KDS Laborbefund 2026.0.3 (MII_PR_Labor_Laborbefund). Das Basislabor-Panel ist ein Befund,
+    kein Einzelwert: DiagnosticReport.code.coding:loinc-labReport = LOINC 11502-2 (Pattern, 1..1), category:lab-category
+    = LOINC 26436-6 + v2-0074 LAB. Die Einzelparameter (Blutbild, Elektrolyte, Nieren- und Leberwerte,
+    LDH, Gerinnung) über DiagnosticReport.result (1..*) als ObservationLab (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab)
+    mit Analyt-LOINC in Observation.code; die Anforderung über DiagnosticReport.basedOn (1..*) als ServiceRequestLab
+    (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab).'
 care_process:
   trigger: symptom-/therapieorientiert, vor jedem Therapiezyklus bzw. bei jeder Verlaufskontrolle
   frequency_pattern: per-cycle

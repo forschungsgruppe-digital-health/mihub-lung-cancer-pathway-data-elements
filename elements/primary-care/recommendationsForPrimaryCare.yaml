@@ -22,9 +22,16 @@ value_set:
     display: Plan of Care Note
 standard_mappings:
 - standard: hl7-cda
-  resource: eArztbrief — Abschnitt Prozedere
+  profile_or_url: https://download.hl7.de/documents/cdar2-arztbrief/ArztbriefPlus-v312.pdf
+  resource: Sektion „Weitere empfohlene Maßnahmen“ (templateId 1.2.276.0.76.10.3033, code LOINC 18776-5)
+    im Arztbrief Plus
+  path: ClinicalDocument/component/structuredBody/component/section[templateId/@root='1.2.276.0.76.10.3033']
+  notes: Arztbrief Plus v3.12 (Standard zur Probe), Kap. 6.20; eine Sektion „Prozedere“ gibt es dort nicht.
 - standard: fhir-r4-base
-  resource: CarePlan.activity
+  resource: CarePlan
+  path: CarePlan.activity.detail.description (Freitext) bzw. CarePlan.activity.detail.code; Gesamttext
+    in CarePlan.description
+  notes: CarePlan.activity ist ein Element, keine Ressource.
 care_process:
   trigger: bei jeder Übergabe (Arztbrief, Abschlussbericht, Tumorboard)
   frequency_pattern: per-encounter

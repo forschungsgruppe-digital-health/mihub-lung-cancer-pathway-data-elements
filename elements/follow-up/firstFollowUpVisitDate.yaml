@@ -19,6 +19,15 @@ value_set:
     code: '390906007'
     display: Follow-up encounter
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period.start
+  notes: MII KDS Fall, seit 2026 im Paket de.medizininformatikinitiative.kerndatensatz.base (2026.0.1;
+    letzte Einzelversion fall 2025.0.1). Encounter.period.start 0..1 MS; Encounter.class 1..1 REQUIRED
+    http://fhir.de/ValueSet/EncounterClassDE; der Kontakttyp (SNOMED 390906007 Follow-up encounter) passt
+    in Encounter.type (example-gebunden). Wie bei followUpVisitDate; der Wert entspricht dem frühesten
+    followUpVisitDate nach Therapieende.
 - standard: fhir-r4-base
   resource: Encounter
   path: Encounter.period.start

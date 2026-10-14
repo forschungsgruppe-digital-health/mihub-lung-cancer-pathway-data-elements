@@ -42,9 +42,32 @@ value_set:
     6736007 ''Moderate severity'' (Parent 272141005 Severities, wie die übrigen Grade) statt 1255665007
     ''Moderate'' (Parent 35105006 Increased) gewählt.'
 standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 15 Nebenwirkungen von Strahlentherapie oder systemischer Therapie (Meldung SYST bzw. ST)
+  path: '15.1 Nebenwirkungen nach CTCAE-Grad: SYST/Nebenwirkungen/Menge_Nebenwirkung/Nebenwirkung/Grad
+    (3, 4, 5) mit Art (15.2: MedDRA_Code oder Bezeichnung) und Version (15.3); Grad ≤ 2 nur aggregiert
+    über SYST/Nebenwirkungen/Grad_maximal2_oder_unbekannt (K, 1, 2, U)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 15.1: https://basisdatensatz.de/feld/205/nebenwirkungen-nach-ctcae-grad
+    (Link aus der Feldliste). XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd, Nebenwirkung_Typ):
+    Einzelereignisse werden nur ab Grad 3 gemeldet, Grad 1–2 nur als Maximalgrad je Therapie; zulässige
+    CTCAE-Versionen 4, 4.03, 5.0 und ''Sonstige'' (CTCAE v6.0 → ''Sonstige''). Transformation: SNOMED-Schweregrad
+    des Elements → oBDS-Grad (255604002→1, 6736007→2, 24484000→3, 442452003→4, 399166001→5). Für Strahlentherapie
+    analog ST/Nebenwirkungen.'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
-  resource: Observation
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-nebenwirkung-adverse-event
+  resource: AdverseEvent
+  path: AdverseEvent.seriousness
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Nebenwirkung_Adverse_Event); MII bildet Nebenwirkungen
+    als AdverseEvent ab, nicht als Observation. AdverseEvent.seriousness (1..1, MS) ist REQUIRED an mii-vs-onko-nebenwirkung-ctcae-grad
+    gebunden (CodeSystem https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/CodeSystem/mii-cs-onko-nebenwirkung-ctcae-grad:
+    1 mild, 2 moderat, 3 schwerwiegend, 4 lebensbedrohlich, 5 tödlich, U unbekannt, K keine). Transformation:
+    SNOMED-Schweregrad des Elements → MII-Code (255604002→1, 6736007→2, 24484000→3, 442452003→4, 399166001→5).
+    Der MII-Code ist Pflicht; der SNOMED-Code kann als zusätzliches Coding mitgeführt werden (seriousness.coding
+    ist nicht gesliced). Die MII-ConceptMap mii-cm-onko-nebenwirkung-sct führt für Grad 2 den Code 1255665007,
+    das Element bewusst 6736007 (siehe value_set.notes). Art des Ereignisses (MedDRA, AdverseEvent.event.coding:meddra)
+    = Element adverseEventCtcae; AdverseEvent.suspectEntity (1..*) verweist auf die auslösende Therapie
+    (Procedure bzw. MedicationStatement).'
 constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod); zulässige
   Grade sind termspezifisch gemäß CTCAE (z. B. Pruritus max. Grad 3; Confusion ohne Grad 5 in v5.0/v6.0).
   oBDS/MII sehen zusätzlich U (unbekannt) und K (keine) vor.
@@ -82,11 +105,20 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'standard_mappings[0].resource ''Observation'' entspricht nicht dem MII-KDS-Onkologie-Modell: Der CTCAE-Grad
-  liegt in AdverseEvent.seriousness (required an mii-vs-onko-nebenwirkung-ctcae-grad) im Profil mii-pr-onko-nebenwirkung-adverse-event
-  (2027.0.0-ballot.1). Das Mapping ist zentral zusammen mit profile_or_url zu korrigieren. Zudem leitet
-  value_set.uri (ctep.cancer.gov/…/ctc.htm) per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development
-  um (Abruf 2026-10-14, UNSICHER).'
+- 'value_set.uri prüfen: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm leitet
+  per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
+  UNSICHER); ggf. auf die aktuelle CTCAE-Seite des NCI umstellen.'
+- 'Repräsentation CTCAE-Grad: Das Element kodiert den Grad als CodeableConcept mit fünf SNOMED-Schweregraden
+  (255604002, 6736007, 24484000, 442452003, 399166001). Die nationale Referenzkodierung (MII-CodeSystem
+  mii-cs-onko-nebenwirkung-ctcae-grad: 1–5, U, K) steht nur in value_set.notes. MII Onkologie 2026.0.3
+  verlangt in AdverseEvent.seriousness (1..1, REQUIRED) einen Code dieses CodeSystems; SNOMED ist dort
+  nur als zusätzliches Coding möglich. oBDS 3.0.5 meldet Grad 3–5 je Ereignis (Menge_Nebenwirkung/Nebenwirkung/Grad)
+  und Grad ≤ 2 nur aggregiert als Maximalgrad je Therapie (Grad_maximal2_oder_unbekannt: K/1/2/U). Zu
+  entscheiden: (a) ob die MII-Codes 1–5 als zusätzliche Codings ins Element aufgenommen werden oder die
+  Abbildung SNOMED → MII-Code nur als Transformation im Mapping dokumentiert bleibt; (b) wie U (unbekannt)
+  und K (keine) abgebildet werden – in constraints_de erwähnt, aber ohne Coding (MII-ConceptMap: U→261665006,
+  K→260413007); (c) wie für oBDS der Maximalgrad ≤ 2 je Therapie aus den Einzelereignissen gebildet wird.
+  Die Grad-2-Abweichung (6736007 statt ConceptMap-Ziel 1255665007) ist in value_set.notes bereits begründet.'
 related_elements:
 - relation: isPartOf
   target: adverseEventCtcae

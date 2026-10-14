@@ -26,9 +26,15 @@ value_set:
     display: Sonographiebefund
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
   resource: ImagingStudy
   path: ImagingStudy.started
+  notes: MII KDS Bildgebung 2026.0.0 (MII_PR_Bildgebung_Bildgebungsstudie); ImagingStudy.started 0..1
+    MS. Modalität über ImagingStudy.modality bzw. ImagingStudy.series.modality (1..1, REQUIRED DICOM CID
+    33, System http://dicom.nema.org/resources/ontology/DCM), hier US. Das Profil beschreibt eine DICOM-Studie;
+    ohne DICOM-Studie alternativ Procedure https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+    mit Procedure.performed[x] (1..1; code.coding:sct REQUIRED an Nachfahren von 363679005 Imaging, dazu
+    coding:ops und coding:loinc).
 care_process:
   trigger: 'Nachsorgetermin gemäß Nachsorgeplan (S3 Empf. 16.7: Option „Sonografie Abdomen“)'
   frequency_pattern: per-imaging-event

@@ -24,7 +24,12 @@ standard_mappings:
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
   resource: Patient
-  path: Patient.gender (+ Extension gender-other für „divers“/„unbestimmt“)
+  path: Patient.gender; für „divers“/„unbestimmt“ Patient.gender = other + Patient.gender.extension:other-amtlich
+    (http://fhir.de/StructureDefinition/gender-amtlich-de)
+  notes: Die Erweiterung heißt im MII-Profil other-amtlich (Extension gender-amtlich-de), nicht gender-other;
+    ihr valueCoding ist REQUIRED an http://fhir.de/ValueSet/gender-other-de gebunden (z. B. D = divers).
+    Profil im Paket de.medizininformatikinitiative.kerndatensatz.base 2026.0.1 (zuvor Einzelpaket person
+    2025.0.1).
 care_process:
   trigger: Aufnahme / Erstkontakt
   frequency_pattern: once

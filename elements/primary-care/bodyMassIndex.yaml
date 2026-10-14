@@ -23,8 +23,11 @@ value_set:
     display: Body mass index
 standard_mappings:
 - standard: fhir-r4-base
-  resource: Observation (vital-signs BMI)
-  path: Observation.valueQuantity
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/bmi
+  resource: Observation (Vital-Signs-Profil BMI)
+  path: Observation.valueQuantity (UCUM kg/m2)
+  notes: 'R4-Core-Profil bmi (Basis vitalsigns): Observation.code enthält fix LOINC 39156-5 (Slice BMICode);
+    valueQuantity mit system http://unitsofmeasure.org und code kg/m2.'
 instruction_de: 'BMI = Körpergewicht (kg) / Körpergröße (m)²; im Verlauf zusammen mit der Gewichtsveränderung
   (weightChangePercent) interpretieren. Der BMI allein ersetzt kein validiertes Mangelernährungs-Screening:
   Allen Patient:innen im Verlauf wiederholt ein Screening auf Mangelernährung mit validiertem Tool anbieten,

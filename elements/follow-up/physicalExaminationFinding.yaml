@@ -30,8 +30,17 @@ value_set:
     display: No abnormality detected - examination result
 standard_mappings:
 - standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
   resource: Observation
-  path: Observation.code = 5880005 Physical examination; Befund in Observation.value/component
+  path: 'Observation.valueCodeableConcept bzw. Observation.component (Befund, z. B. 282332003); Observation.code
+    offen (siehe offene Punkte): LOINC 29545-1 mit 5880005 bzw. 37931006 in Observation.method oder SNOMED
+    5880005 mit 37931006 als Observation.method bzw. component.code; Bezug zum Nachsorgetermin über Observation.encounter'
+  notes: 'SNOMED 5880005 ''Physical examination procedure (procedure)'' ist ein Prozedurkonzept, über
+    315306007 Examination by method aber ein Nachfahre von 386053000 Evaluation procedure. In R4 ist es
+    damit ein Beispielwert für Observation.method (example-gebunden an observation-methods: is-a 272394005,
+    129264002 oder 386053000); ob es zugleich als Observation.code dient, ist offen. Dasselbe gilt für
+    37931006 ''Auscultation (procedure)'', ebenfalls unter 315306007. LOINC 29545-1 ''Physical findings
+    note'' hat in LOINC 2.83 die Skala Doc und ist ein Dokument- bzw. Sektionscode.'
 care_process:
   trigger: bei jedem Nachsorgetermin (followUpVisitDate); in der Surveillance bei jeder Verlaufskontroll-Visite
     (surveillanceVisit)
@@ -106,6 +115,15 @@ issues:
   S3-LL Lungenkarzinom 5.1 Empf. 16.9 nennt die körperliche Untersuchung hier ausdrücklich) und jede Verlaufskontroll-Visite
   (surveillanceVisit; Expert:innen-Erhebung DE-043, da Empf. 16.9 danach nur „geeignete Untersuchungsverfahren“
   nennt). Die Trennung in der section der S3-Referenz bzw. in constraints_de kenntlich machen.'
+- 'Observation.code für physicalExaminationFinding festlegen (ergänzt den offenen Punkt zur Rollentrennung).
+  Zwei Varianten: (a) Observation.code = LOINC 29545-1 ''Physical findings note'', das Untersuchungsverfahren
+  5880005 bzw. 37931006 in Observation.method (in R4 example-gebunden an observation-methods, das Evaluationsprozeduren
+  wie 5880005 umfasst); dagegen spricht, dass 29545-1 die LOINC-Skala Doc hat und ein Dokument- bzw. Sektionscode
+  ist. (b) Observation.code = SNOMED 5880005 ''Physical examination procedure'', 37931006 als component.code
+  und 29545-1 nur als Dokument- bzw. Sektionscode, wie im offenen Punkt zur Rollentrennung vorgeschlagen.
+  Zu entscheiden ist zwischen (a) und (b). Außerdem fehlt ein ValueSet für die Befunde neben ''unauffällig''
+  (282332003), etwa Auskultationsbefund, Lymphknotenstatus, Narbenverhältnisse, Ödeme und neurologischer
+  Status.'
 related_elements:
 - relation: isPartOf
   target: followUpVisitDate

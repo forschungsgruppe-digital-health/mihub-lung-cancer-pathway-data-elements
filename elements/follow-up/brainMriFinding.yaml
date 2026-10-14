@@ -41,11 +41,29 @@ value_set:
     display: Patient's condition worsened
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
   resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode
+  notes: MII KDS Bildgebung 2026.0.0 (MII_PR_Bildgebung_Radiologischer_Befund). conclusionCode 0..* MS
+    ('Strukturiertes Fazit') mit den Slices coding:sct (REQUIRED https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/ValueSet/mii-vs-bildgebung-findings-sct
+    = < 404684003 |Clinical finding|) und coding:icd10-gm (REQUIRED ICD-10-GM). DiagnosticReport.imagingStudy
+    1..* ist Pflicht (Referenz auf mii-pr-bildgebung-bildgebungsstudie der Untersuchung brainMriHighRisk
+    bzw. brainMriUnderTherapy); DiagnosticReport.code mit LOINC-Slice REQUIRED mii-vs-bildgebung-diagnostic-report-code-lnc
+    (Dokument-LOINC der Radiologie). Anzahl und Größe der Herde optional als Observation https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+    über DiagnosticReport.result. Werte, die keine Clinical findings sind, siehe offener Punkt.
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul / ZNS-Metastasierung
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf; 11 Fernmetastasen
+  path: '17.5 Tumorstatus Fernmetastasen (Verlauf/Verlauf_Tumorstatus_Fernmetastasen: K, T, P, N, R, F,
+    U, X) mit 17.1 Untersuchungsdatum Verlauf (Verlauf/Untersuchungsdatum_Verlauf); neue Hirnmetastasen
+    zusätzlich als 11.1 Lokalisation = BRA (Hirn) mit 11.2 Datum der diagnostischen Sicherung (Verlauf/Menge_FM/Fernmetastase/Lokalisation
+    bzw. /Diagnosedatum)'
+  notes: '''Verlaufsmodul / ZNS-Metastasierung'' ist kein oBDS-Feld. 17.5 beurteilt alle Fernmetastasen,
+    nicht nur das ZNS: K keine Fernmetastasen nachweisbar, T Residuen, P Progress, N No Change, R neu
+    aufgetretene Fernmetastase(n) bzw. Metastasenrezidiv, F fraglicher Befund, U unbekannt, X fehlende
+    Angabe. Feldseite 17.5: https://basisdatensatz.de/feld/223/tumorstatus-fernmetastasen. Feldnummern
+    nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd. Zuordnung der
+    Befundkategorien siehe offene Punkte.'
 instruction_de: 'Ein Eintrag je Schädel-MRT (Cardinality 0..*). Code-Semantik: 94225005 = Hirnmetastasen
   neu nachgewiesen (Erstnachweis bzw. Rezidiv nach metastasenfreiem Intervall); bei bestehenden Hirnmetastasen
   Verlaufswerte gemäß der Trend-Konvention von recistResponse/currentTumorStatus (mCODE ConditionStatusTrendVS):
@@ -92,16 +110,22 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'oBDS-Mapping korrigieren: standard_mappings[obds].resource „Verlaufsmodul / ZNS-Metastasierung“ entspricht
-  keinem oBDS-Feld (oBDS-XSD 3.0.4/3.0.5). Fachlich passend ist Verlauf → Tumorstatus Fernmetastasen (oBDS
-  17.5: K keine Fernmetastasen nachweisbar, T Fernmetastasen Residuen, P Fernmetastasen Progress, N Fernmetastasen
-  No Change, R neu aufgetretene Fernmetastase(n) bzw. Metastasenrezidiv, F fraglicher Befund, U unbekannt,
-  X fehlende Angabe) in Kombination mit Fernmetastase → Lokalisation (oBDS 11.1) = BRA „Hirn“ und Diagnosedatum
-  (oBDS 11.2). FHIR-seitig MII KDS Onkologie 2027.0.0-ballot.1: mii-pr-onko-verlauf, component:Fernmetastasen_Verlauf
-  (ValueSet mii-vs-onko-verlauf-fernmetastasen), sowie mii-pr-onko-fernmetastasen (ValueSet mii-vs-onko-fernmetastasen).
-  Der Tumorstatus bezieht sich auf alle Fernmetastasen, nicht nur auf das ZNS, und führt für „regredient“
-  keinen eigenen Wert. Zu entscheiden sind die Zielfelder des Mappings und die Zuordnung der Befundkategorien
-  zu den oBDS-Werten.'
+- 'Zusätzliches nationales Ziel prüfen: Neben dem radiologischen Befund (MII Bildgebung, DiagnosticReport.conclusionCode)
+  bildet MII KDS Onkologie den Fernmetastasen-Verlauf in mii-pr-onko-verlauf (component:Fernmetastasen_Verlauf,
+  ValueSet mii-vs-onko-verlauf-fernmetastasen) und die Metastase selbst in mii-pr-onko-fernmetastasen
+  ab. Der oBDS-Tumorstatus 17.5 bezieht sich auf alle Fernmetastasen, nicht nur auf das ZNS, und führt
+  für „regredient“ keinen eigenen Wert (Abbildungsregel siehe folgender Punkt).'
+- 'Befundkategorien von brainMriFinding auf die Zielstandards abbilden. (1) MII Bildgebung: DiagnosticReport.conclusionCode.coding:sct
+  ist REQUIRED an Clinical findings (< 404684003) gebunden. 260415000 ''Not detected'' (Elternkonzept
+  272519000 Absence findings) und 419984006 ''Inconclusive'' sind Qualifier-Werte und in diesem Slice
+  unzulässig. Für ''unklar'' kommen Clinical findings wie 442754001 ''Inconclusive evaluation finding''
+  oder 408379005 ''Imaging result equivocal'' in Frage. Für ''kein Nachweis'' ist ein Ersatz zu bestimmen
+  oder die Kategorie nur oBDS-seitig abzubilden. (2) oBDS 17.5 (gilt für alle Fernmetastasen): 94225005
+  → R nur bei zuvor bestehender bzw. durch Therapie erreichter Fernmetastasenfreiheit, bei bereits bestehenden
+  Fernmetastasen P (Hinweis im oBDS-XSD); jeweils mit 11.1 Lokalisation BRA und 11.2 Datum. 359746009
+  → N; 271299001 → P; 260415000 → K, nur wenn auch andernorts keine Fernmetastasen bestehen; 419984006
+  → F. Für 268910001 ''regredient'' gibt es keinen eigenen Wert (allenfalls T Residuen). Zu entscheiden:
+  Ersatzcodes für ''kein Nachweis'' und ''unklar'' sowie die verbindliche Abbildungsregel für oBDS 17.5.'
 related_elements:
 - relation: specializes
   target: mihub.lung.followup.brainMriHighRisk.v0.1

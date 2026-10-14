@@ -38,24 +38,51 @@ value_set:
     oBDS ''Gesamtbeurteilung Tumorstatus'' analog.'
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul (oBDS 2021)
-  path: Verlauf / Beurteilung Tumorstatus
-  notes: Pflichtmeldung gem. §65c SGB V; oBDS-Codes für 'Vollremission/Teilremission/Stable Disease/Progress/Befund
-    unklar'
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf (Meldung Verlauf, XSD Verlauf_Typ)
+  path: 'Verlauf/Gesamtbeurteilung_Tumorstatus (17.2 Gesamtbeurteilung des Tumorstatus); Datum: Verlauf/Untersuchungsdatum_Verlauf
+    (17.1)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 17.2: https://basisdatensatz.de/feld/220/gesamtbeurteilung-des-tumorstatus
+    (Link aus der Feldliste). Wertebereich laut XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd):
+    V Vollremission (CR), T Teilremission (PR), K keine Änderung (NC = stable disease), P Progression,
+    D divergentes Geschehen, B klinische Besserung (Minimal Response), R Vollremission mit residualen
+    Auffälligkeiten (CRr), Y Rezidiv, U Beurteilung unmöglich, X fehlende Angaben; ''Befund unklar'' ist
+    kein oBDS-Wert. Näherungsweise Abbildung RECIST 1.1: CR→V, PR→T, SD→K, PD→P, NE→U. Teilbeurteilungen
+    in 17.3–17.5 (Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen).'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
   resource: Observation
-  notes: MII-KDS Modul Onkologie (Verlaufs-Observation; ggf. Profil neu zu definieren)
-- standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
-  resource: CancerDiseaseStatus
   path: Observation.valueCodeableConcept
-  notes: mCODE STU4 — Cancer Disease Status mit eviganceType (clinical, imaging, pathology, lab)
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Verlauf); ein neues Profil ist nicht nötig. Observation.code
+    = SNOMED 396432002 (Pattern), Observation.focus (1..1) → Primärtumor-Condition (mii-pr-onko-diagnose-primaertumor),
+    Datum in effectiveDateTime. value[x] ist extensible an mii-vs-onko-verlauf-gesamtbeurteilung gebunden
+    (oBDS-Gesamtbeurteilung V/T/K/P/D/B/R/Y/U/X), nicht an RECIST: Transformation CR→V, PR→T, SD→K, PD→P,
+    NE→U; die SNOMED-Trendcodes des Elements nur als zusätzliche Codings. Teilbeurteilungen optional in
+    component:Tumor_Verlauf, :Lymphknoten_Verlauf und :Fernmetastasen_Verlauf.'
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
+  resource: Observation (CancerDiseaseStatus)
+  path: Observation.valueCodeableConcept
+  notes: mCODE STU4 (4.0.0). Observation.code = LOINC 97509-4 (Pattern); value[x] preferred an mcode-condition-status-trend-vs
+    (SNOMED 268910001 improved, 359746009 stable, 271299001 worsened, 709137006 undetermined); 260415000
+    'Not detected' (CR) liegt nicht in diesem VS. Evidenzart über die Erweiterung http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status-evidence-type
+    (z. B. Bildgebung, SNOMED 363679005). CancerDiseaseStatus ist eine qualitative klinische Trendeinschätzung,
+    kein formales RECIST-Ansprechen; Abbildung PR→268910001, SD→359746009, PD→271299001, NE→709137006
+    als Mapping dokumentieren.
 - standard: omop-cdm
   profile_or_url: https://ohdsi.github.io/CommonDataModel/cdm54.html
-  resource: MEASUREMENT / OBSERVATION (Onkologie-Extension)
-  notes: OHDSI Onkologie-Extension; FHIR-OMOP-Brücke via mCODE↔OMOP
+  resource: MEASUREMENT (Einzelbewertung) + EPISODE (Disease Episode) mit EPISODE_EVENT
+  path: MEASUREMENT.measurement_concept_id / value_as_concept_id / measurement_date; EPISODE.episode_concept_id
+    (Domain Episode), EPISODE.episode_object_concept_id (Condition-Domain), EPISODE.episode_start_date;
+    EPISODE_EVENT (MEASUREMENT → EPISODE)
+  notes: 'OMOP CDM v5.4: Eine bildgebungsbasierte Ansprechbewertung mit standardisiertem Ergebnis gehört
+    laut CDM in MEASUREMENT (OBSERVATION-Beschreibung: „If the generation clinical facts requires a standardized
+    testing such as lab testing or imaging and leads to a standardized result, the data item is recorded
+    in the MEASUREMENT table“), nicht in OBSERVATION. Die abgeleitete Krankheitsphase (z. B. Remission,
+    Progression) über EPISODE (episode_concept_id aus der Domain Episode für „disease phase, outcome or
+    treatment“; bei „Disease Episode“ episode_object_concept_id aus der Condition-Domain), mit der Bewertung
+    verknüpft über EPISODE_EVENT. EPISODE und EPISODE_EVENT sind Teil der CDM-v5.4-Spezifikation. Concept-IDs
+    nicht gegen Athena verifiziert.'
 care_process:
   trigger: 'nach jeder Restaging-Bildgebung (restagingImagingDate): NSCLC erstmals nach 2, spätestens
     3 Zyklen Erstlinientherapie (S3 Empf. 8.84/8.100), danach alle 6–9 Wochen unter laufender System-/Erhaltungstherapie
@@ -138,8 +165,7 @@ issues:
   P Progression, U Beurteilung unmöglich u. a.; entspricht dem oBDS-Mapping) –, mit mCODE/SNOMED (z. B.
   399056007 Complete therapeutic response, 399204005 Partial therapeutic response, 399178002 Static therapeutic
   response, 1371415000 Malignant neoplastic disease progression) als Abbildung; ein projekt-lokales CodeSystem
-  ist damit entbehrlich. Bindungsstärke (bisher required) und Datentyp (bisher code) mit entscheiden.
-  Außerdem den Tippfehler ''eviganceType'' → ''evidenceType'' in standard_mappings[mcode].notes korrigieren.'
+  ist damit entbehrlich. Bindungsstärke (bisher required) und Datentyp (bisher code) mit entscheiden.'
 related_elements:
 - relation: dependsOn
   target: restagingImagingDate

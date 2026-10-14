@@ -21,10 +21,24 @@ value_set:
     code: '423740007'
     display: ECOG performance status
 standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 12 Allgemeiner Leistungszustand (in der Verlaufsmeldung 17 bzw. der Diagnosemeldung 5)
+  path: '12.1 Allgemeiner Leistungszustand (XSD: Verlauf/Allgemeiner_Leistungszustand bzw. Diagnose/Allgemeiner_Leistungszustand)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V; im XSD Pflichtfeld der Diagnose- und der Verlaufsmeldung. Allgemeiner_Leistungszustand_Typ:
+    ECOG 0, 1, 2, 3, 4, U (unbekannt) oder Karnofsky 10% bis 100%. Feldseite 12.1: https://basisdatensatz.de/feld/189/allgemeiner-leistungszustand.
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-allgemeiner-leistungszustand-ecog
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-allgemeiner-leistungszustand-ecog
   resource: Observation
-  path: Observation.valueInteger
+  path: 'Observation.valueCodeableConcept.coding:obds (CodeSystem https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/CodeSystem/mii-cs-onko-allgemeiner-leistungszustand-ecog:
+    0, 1, 2, 3, 4, U)'
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Allgemeiner_Leistungszustand_ECOG). value[x] 1..1 nur
+    CodeableConcept, valueInteger ist unzulässig; coding:obds 1..1 REQUIRED mii-vs-onko-allgemeiner-leistungszustand-ecog;
+    optional coding:loinc (MII-ConceptMap mii-cm-onko-allgemeiner-leistungszustand-ecog-loinc: 0 → LA9622-2
+    bis 4 → LA9626-3, U ohne Entsprechung). Observation.code: coding:snomed 1..1 Pattern 423740007 und
+    coding:loinc Pattern 89262-0, also die beiden Codings des Elements. Transformation: Integerwert n
+    → Code ''n''; ''U'' (unbekannt) hat kein Integer-Pendant (siehe offener Punkt zur Abweichung vom MII-Profil).'
 constraints_de: Wertebereich 0..4. Bei Sterbephase ggf. nicht erfassbar.
 care_process:
   trigger: bei jeder Visite
@@ -86,3 +100,8 @@ issues:
   3.6.1 „should be frequently assessed“ (prätherapeutischer Kontext); S3-LL Palliativmedizin 3.0, Empf.
   5.3 „regelmäßig“ (Komplexitätseinschätzung). Als Expert:innen-Praxis MiHUB kennzeichnen oder Quelle
   ergänzen.'
+- 'Ergänzung zum offenen Punkt zur Abweichung vom MII-Profil: Auch oBDS 12.1 erwartet Codes (0 bis 4,
+  U) statt einer Ganzzahl. Mit der Entscheidung über den datatype zugleich festlegen, ob zusätzlich LOINC-Antwortcodes
+  geführt werden (MII-ConceptMap: 0 → LA9622-2, 1 → LA9623-0, 2 → LA9624-8, 3 → LA9625-5, 4 → LA9626-3;
+  für U keine Entsprechung). Die Codings 89262-0 und 423740007 des Elements bezeichnen das Merkmal (Observation.code),
+  nicht den Wert.'

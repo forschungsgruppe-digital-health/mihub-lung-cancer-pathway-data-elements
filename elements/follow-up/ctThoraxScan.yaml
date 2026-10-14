@@ -32,9 +32,15 @@ value_set:
     display: CT-Befund
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-imagingstudy
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
   resource: ImagingStudy
   path: ImagingStudy.started
+  notes: MII KDS Bildgebung 2026.0.0 (MII_PR_Bildgebung_Bildgebungsstudie); ImagingStudy.started 0..1
+    MS. Modalität über ImagingStudy.modality bzw. ImagingStudy.series.modality (1..1, REQUIRED DICOM CID
+    33, System http://dicom.nema.org/resources/ontology/DCM), hier CT. Das Profil beschreibt eine DICOM-Studie;
+    ohne DICOM-Studie alternativ Procedure https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+    mit Procedure.performed[x] (1..1; code.coding:sct REQUIRED an Nachfahren von 363679005 Imaging, dazu
+    coding:ops und coding:loinc).
 care_process:
   trigger: 'gemäß Nachsorgeplan: S3 Empf. 16.7 (CT als eine der bildgebenden Optionen an jedem Nachsorgetermin);
     Onkopedia NSCLC Tab. 12 (jährlich Mo 12–60 für alle, zusätzlich Mo 3/6/18 nur nach Strahlentherapie

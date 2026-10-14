@@ -34,8 +34,11 @@ standard_mappings:
   resource: Condition
   path: Condition.code (ICD-10-GM)
 - standard: kbv-mio
-  profile_or_url: https://mio.kbv.de/
-  resource: Patientenkurzakte
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Condition
+  resource: Condition (MIO Patientenkurzakte 1.0.0, Notfalldaten)
+  path: Condition.code.coding:ICD-10-GM (höchstens ein Coding je Condition); Condition.code.text (1..1)
+  notes: Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle. Die Patientenkurzakte
+    besteht aus Notfalldaten (NFD) und persönlichen Erklärungen (DPE).
 care_process:
   trigger: Anamnese; fortlaufend
   frequency_pattern: per-encounter

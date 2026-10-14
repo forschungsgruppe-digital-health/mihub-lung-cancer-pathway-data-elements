@@ -62,12 +62,48 @@ value_set:
     Lungenkarzinom 5.1, Empf. 16.1), nicht als alleinige kurative Modalität.'
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Module Operation / Strahlentherapie / Systemische Therapie
-  notes: Pflichtmeldung §65c SGB V
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie
+  path: 'Intention = K in 13.1 (OP/Intention), 14.1 (ST/Intention; bei lokal ablativer Bestrahlung einer
+    Oligometastasierung O ''lokal kurativ bei Oligometastasierung'') bzw. 16.1 (SYST/Intention); Modalität
+    über die Meldungsart sowie 13.3 OPS (OP/Menge_OPS/OPS/Code) bzw. 16.3 Art der systemischen oder abwartenden
+    Therapie (SYST/Therapieart, z. B. CH, IM, CI); Radiochemotherapie: ST/Menge_Bestrahlung/Bestrahlung/Applikationsart/Perkutan/Radiochemo
+    = RCJ'
+  notes: 'Pflichtmeldung § 65c SGB V. Die Intention hat je Abschnitt eigene Werte (OP: K, P, D, R, S,
+    X; ST: K, P, O, S, X; SYST: K, P, S, X). Bei einer Radiochemotherapie kennzeichnet RCJ (''mit Chemotherapie/Sensitizer'')
+    die Bestrahlung; die begleitende Chemotherapie ist eine SYST-Meldung. Feldnummern nach der oBDS-Feldliste,
+    XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-operation
   resource: Procedure
+  path: Procedure.code.coding:ops (z. B. OPS 5-323, 5-324, 5-327) bzw. :sct (z. B. 119746007); Procedure.extension:Intention
+    = K
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Operation); baseDefinition ist das generische MII-Prozedur-Profil
+    https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure.
+    extension:Intention 1..1 REQUIRED mii-vs-onko-operation-intention (K, P, D, R, S, X); performed[x]
+    (dateTime) 1..1. Strahlentherapie und systemische Therapie siehe die beiden weiteren Einträge; eine
+    Radiochemotherapie sind zwei Procedures.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
+  resource: Procedure
+  path: Procedure.extension:Intention = K (bei lokal ablativer Bestrahlung einer Oligometastasierung O
+    'lokal kurativ bei Oligometastasierung'); Procedure.code (z. B. SNOMED 1287742003); Zielgebiet je
+    Bestrahlung über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (Procedure.bodySite)
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Strahlentherapie). extension:Intention 1..1 REQUIRED
+    mii-vs-onko-strahlentherapie-intention (K, P, S, X, O); performed[x] (Period) 1..1; code 1..1 mit
+    coding:ops bzw. coding:sct. Strahlentherapie-Anteil der Modalitäten Radiotherapie und Radiochemotherapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: Procedure.code.coding:systemische_therapie_art (z. B. CH, IM, CI); Procedure.extension:Intention
+    = K
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie). Therapieart REQUIRED mii-vs-onko-systemische-therapie-art
+    (oBDS-Codes aus https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/CodeSystem/mii-cs-onko-therapie-typ;
+    laut MII-ConceptMap mii-cm-onko-therapie-typ-sct entspricht CH = 367336001); extension:Intention 1..1
+    REQUIRED mii-vs-onko-systemische-therapie-intention (K, P, S, X); performed[x] (Period) 1..1. Substanzen
+    über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
+    (MedicationStatement).
 care_process:
   trigger: Therapieabschluss / Erstellung des Nachsorgeplans
   frequency_pattern: once-per-treatment-completion
@@ -139,3 +175,18 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+issues:
+- 'Modalitätscodes von curativeTreatmentModality auf die Onko-Profile und oBDS abbilden. Für die durchgeführte
+  Therapie führen MII Onkologie und oBDS keinen eigenen Modalitätscode: Je Therapie wird eine Prozedur
+  (Operation, Strahlentherapie, systemische Therapie) mit Pflicht-Intention geführt (kurativ = K, bei
+  lokal ablativer Strahlentherapie einer Oligometastasierung O); die Modalität ergibt sich aus Profil
+  bzw. Meldungsart. Eine Therapieart-Codierung gibt es nur für Therapieempfehlungen (oBDS 19.1 Typ_Therapieempfehlung
+  = MII mii-cs-onko-therapie-typ: OP, ST, CH, IM, CI …) und für die Art der systemischen Therapie (16.3);
+  sie käme als Wertebereich des Elements in Frage (Radiochemotherapie = ST + CH). Vorschlag: 119746007
+  und OPS 5-323, 5-324, 5-327 → Operation; 1287742003 → Strahlentherapie; 703423002 → Strahlentherapie
+  (oBDS Radiochemo = RCJ) plus systemische Therapie; 367336001 → systemische Therapie, Therapieart CH
+  (MII-ConceptMap mii-cm-onko-therapie-typ-sct: CH = 367336001); 870387009 → systemische Therapie, Therapieart
+  IM bzw. CI (kein direkter ConceptMap-Eintrag). ICD-10-GM Z92.3, Z92.4 und Z92.6 sind Eigenanamnese-Diagnosen,
+  keine Prozedurcodes, und haben in Procedure.code keinen Platz. Zu entscheiden: Abbildungstabelle festschreiben,
+  die Rolle der Z92-Codes klären (Anamnese-Kodierung oder streichen) und entscheiden, ob mii-cs-onko-therapie-typ
+  als Wertebereich übernommen wird.'

@@ -32,14 +32,54 @@ value_set:
     display: Molekularpathologiebefund
 standard_mappings:
 - standard: fhir-genomics
-  profile_or_url: https://hl7.org/fhir/uv/genomics-reporting/
-  resource: Observation (variant)
+  profile_or_url: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant
+  resource: Observation (Variant)
+  path: Observation.component:gene-studied.valueCodeableConcept; Observation.component:representative-protein-hgvs.valueCodeableConcept
+  notes: HL7 Genomics Reporting STU3 (3.0.0). Observation.code ist per Pattern auf LOINC 69548-6 (Genetic
+    variant assessment) festgelegt – das Element führt 69548-6 bereits; valueCodeableConcept REQUIRED
+    an LL1971-2 (present/absent/no call). Gen in component:gene-studied (LOINC 48018-6, HGNC, extensible),
+    Proteinveränderung in component:representative-protein-hgvs (LOINC 48005-3, HGVS, required), z. B.
+    EGFR p.Thr790Met; DNA-Veränderung in component:representative-coding-hgvs (LOINC 48004-6, HGVS, required);
+    Amplifikationen (MET, HER2) über component:copy-number (LOINC 82155-3). Die übrigen Element-Codes
+    (LOINC 21665-5, SNOMED 124975008, KDL PT130102) taugen nicht als Observation.code. Die Resistenzaussage
+    selbst über das Profil therapeutic-implication.
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/variante
   resource: Observation
+  path: Observation.component:gene-studied.valueCodeableConcept; Observation.component:representative-protein-hgvs.valueCodeableConcept
+  notes: MII KDS Molekulargenetischer Befundbericht 2026.0.4 (MII_PR_MolGen_Variante, abgeleitet von genomics-reporting
+    variant 3.0.x). Observation.code ist per Pattern auf LOINC 69548-6 festgelegt (im Element vorhanden);
+    Gen in component:gene-studied (HGNC), Mutation über die HGVS-Komponenten (representative-protein-hgvs,
+    representative-coding-hgvs, genomic-hgvs), Amplifikationen über component:copy-number (LOINC 82155-3);
+    alle genannten Komponenten sind MS. Die Resistenz über das Profil https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/therapeutische-implikation.
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Genetische Veränderungen
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 23 Genetische Variante (XSD Menge_Genetik; bei Progression in der Meldung Verlauf oder Pathologie)
+  path: 'Menge_Genetik/Genetische_Variante/Bezeichnung (23.1, Freitext) und Auspraegung (23.2: M Mutation/positiv,
+    W Wildtyp, P Polymorphismus, N nicht bestimmbar, U unbekannt); optional Datum'
+  notes: 'XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd, Menge_Genetik_Typ); Feldseite
+    23.1: https://basisdatensatz.de/feld/262/genetische-variante-name (Link aus der Feldliste). Ein ''Modul
+    Genetische Veränderungen'' gibt es nicht. oBDS kennt nur Name und Ausprägung der Variante, keinen
+    Resistenzmechanismus: Gen und Mutation (z. B. ''EGFR T790M'') als Bezeichnung mit Ausprägung M; alternativ
+    Sonstige_Auspraegung als Freitext.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/therapeutische-implikation
+  resource: Observation
+  path: Observation.component:therapeutic-implication.valueCodeableConcept; Observation.component:medication-assessed.valueCodeableConcept;
+    Observation.derivedFrom:variant
+  notes: MII KDS Molekulargenetischer Befundbericht 2026.0.4 (MII_PR_MolGen_TherapeutischeImplikation).
+    Die Resistenzaussage als therapeutische Implikation (z. B. LOINC LA6676-6 'Resistant', extensible
+    genetic-therapeutic-implications-vs), Substanz in component:medication-assessed (LOINC 51963-7), derivedFrom:variant
+    (MS) → MII-Variante, die den Resistenzmechanismus (Gen + Alteration) trägt.
+- standard: fhir-genomics
+  profile_or_url: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication
+  resource: Observation (TherapeuticImplication)
+  path: Observation.component:therapeutic-implication.valueCodeableConcept; Observation.component:medication-assessed.valueCodeableConcept;
+    Observation.derivedFrom:variant
+  notes: 'HL7 Genomics Reporting STU3 (3.0.0). Resistenz als therapeutische Implikation: component:therapeutic-implication
+    extensible an genetic-therapeutic-implications-vs (u. a. LOINC LA6676-6 ''Resistant'', LA9660-7 ''Presumed
+    resistant''), betroffene Substanz in component:medication-assessed (LOINC 51963-7), derivedFrom (1..*)
+    → Variant-Observation.'
 instruction_de: 'Hier nur Konzeptebene (Gen + Alterationstyp). Variantenspezifische Angaben strukturiert
   als Komponenten der Variant-Observation erfassen (Gen: LOINC 48018-6 „Gene studied [ID]“; 48004-6 „DNA
   change (c.HGVS)“; 48005-3 „Amino acid change (pHGVS)“), nicht als Freitext. Ergebnis im molekularen
@@ -95,6 +135,18 @@ issues:
 - 'tumor_entity SCLC prüfen: Resistenztestung und -befund unter TKI betreffen das NSCLC. Die SCLC-Transformation
   EGFR-mutierter NSCLC ist ein histologischer Befund der Gewebe-Rebiopsie und wird leitliniengemäß im
   NSCLC-Kontext behandelt (Onkopedia SCLC Kap. 2.5; S3 5.1 Empf. 8.122 im NSCLC-Kapitel 8.6.4.2).'
+- 'Repräsentation Resistenzbefund: Die Variant-Profile (MII variante, genomics-reporting variant) legen
+  Observation.code per Pattern auf LOINC 69548-6 fest (im Element vorhanden) und binden valueCodeableConcept
+  REQUIRED an LL1971-2 (present/absent/no call). Die übrigen Element-Codes (LOINC 21665-5 EGFR-spezifisch,
+  SNOMED 124975008 Somatic mutation, KDL PT130102 Dokumentklasse) taugen dort nicht als Observation.code.
+  Der Konzeptwert des Elements (Gen + Alterationstyp, z. B. EGFR T790M) hat im Profil keinen eigenen Werteplatz:
+  Gen in component:gene-studied (HGNC), Mutation in den HGVS-Komponenten (wie instruction_de bereits vorsieht),
+  Amplifikationen in component:copy-number; die Resistenz selbst als therapeutische Implikation (z. B.
+  LA6676-6 Resistant mit medication-assessed, derivedFrom → Variante). Zu entscheiden: ob das Element
+  auf Konzeptebene bleibt und diese Zerlegung nur als Mapping dokumentiert wird oder ob ein Antwort-Value-Set
+  für Resistenzmechanismen aufgenommen wird, und wie die achsengemischten Codings (Test-, Befund-, Dokumentklassen-Code)
+  bereinigt werden. Für oBDS ist festzulegen, wie Gen und Mutation in der Freitext-Bezeichnung (23.1)
+  notiert werden.'
 related_elements:
 - relation: specializes
   target: mihub.lung.surveillance.molecularRetestingCtdna.v0.1

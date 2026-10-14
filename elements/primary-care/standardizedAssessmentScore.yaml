@@ -25,6 +25,21 @@ value_set:
     code: 89209-1
     display: Beck Depression Inventory II total score [BDI]
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-observation-bdi-ii
+  resource: Observation
+  path: Observation.code = LOINC 89209-1 (Pattern); Observation.valueQuantity (UCUM {score}); Observation.derivedFrom
+    → QuestionnaireResponse
+  notes: 'Stabil: MII PRO 2026.7.0 (Canonical unverändert seit 2026.3.0), Basis mii-pr-pro-score-instance.
+    Das Profil erlaubt nur valueQuantity: Score als Quantity mit system http://unitsofmeasure.org und
+    code {score} statt valueInteger.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-score-instance
+  resource: Observation
+  path: Observation.code (Score des Instruments); Observation.value[x] (Quantity, CodeableConcept oder
+    string); Observation.method; Observation.derivedFrom → QuestionnaireResponse
+  notes: Generisches PRO-Score-Profil für weitere Instrumente (MII PRO 2026.7.0); valueInteger ist nicht
+    vorgesehen.
 - standard: fhir-r4-base
   resource: Observation
   path: Observation.code (Instrument) / Observation.valueInteger
@@ -88,6 +103,10 @@ issues:
   Observation.method (falls benötigt, BDI-II-Variante 1344725001 ‚Beck Depression Inventory II (assessment
   scale)‘ statt 273306008). Mapping-Pfad ‚Observation.code (Instrument)‘ entsprechend korrigieren und
   273306008 aus dem Observation.code-Value-Set herausnehmen.'
+- 'Das Element hat datatype integer mit unit {score} (Mapping derzeit Observation.valueInteger). Die nationalen
+  MII-PRO-Profile (BDI-II, score-instance) lassen für numerische Scores nur valueQuantity zu (BDI-II:
+  UCUM {score}). Zu entscheiden: datatype auf Quantity umstellen (die Einheit {score} ist bereits hinterlegt)
+  oder die Transformation integer → Quantity als Mapping-Regel festhalten.'
 related_elements:
 - relation: generalizes
   target: phq9DepressionScore

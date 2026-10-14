@@ -33,11 +33,30 @@ value_set:
     display: PCI von der Patient:in abgelehnt
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Strahlentherapie (Zielgebiet Schädel, Intention prophylaktisch)
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 14 Strahlentherapie
+  path: '14.3 Strahlentherapie Zielgebiet = 1.1 Ganzhirn (Neurokranium, inklusive Meningen) (XSD: ST/Menge_Bestrahlung/Bestrahlung/Applikationsart/Perkutan/Zielgebiet/CodeVersion2021);
+    14.1 Intention der Strahlentherapie = K bzw. P (ST/Intention)'
+  notes: 'Meldbar ist nur die durchgeführte PCI. Zielgebiet 6.1 ''Schädel'' gehört zur Skelett-Gruppe
+    6 (6.2 Schädelbasis, 6.4 Halswirbelsäule …) und ist für die PCI falsch. Eine Intention ''prophylaktisch''
+    gibt es nicht (K, P, O, S, X); laut XSD-Annotation kann ''Prophylaktisch/Salvage … als kurativ oder
+    palliativ kodiert werden''. Eine Ablehnung ist allenfalls über 19.2 Therapieabweichung auf Wunsch
+    des Patienten (Tumorkonferenz/Therapieempfehlung/Abweichung_Patientenwunsch) abbildbar; für die MRT-Überwachung
+    gibt es kein eigenes Feld (siehe offener Punkt). Feldseite 14.3: https://basisdatensatz.de/feld/197/strahlentherapie-zielgebiet.
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
   resource: Procedure
+  path: Procedure.status (completed bzw. not-done) mit Procedure.statusReason; Procedure.extension:Intention;
+    Zielgebiet 1.1 Ganzhirn über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (Procedure.bodySite)
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Strahlentherapie; baseDefinition MII Prozedur). status
+    1..1 REQUIRED event-status; statusReason 0..1 (example procedure-not-performed-reason); extension:Intention
+    1..1 REQUIRED mii-vs-onko-strahlentherapie-intention (K, P, S, X, O; kein Code 'prophylaktisch');
+    performed[x] (Period) 1..1. Die einzelne Bestrahlung (Bestrahlungsprofil, partOf → Strahlentherapie)
+    trägt das Zielgebiet in bodySite (extensible https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/ValueSet/mii-vs-strahlentherapie-zielgebiet;
+    Code 1.1 'Ganzhirn (Neurokranium, inklusive Meningen)' aus mii-cs-onko-strahlentherapie-zielgebiet).
+    Abbildung der lokalen Statuscodes siehe offener Punkt.
 care_process:
   trigger: 'PCI-Entscheidung nach der Erstlinientherapie: nach kurativer Resektion und adjuvanter Chemotherapie
     (Stadium I/II, VLD); nach Abschluss der (simultanen) Chemo-Strahlentherapie (LD sowie VLD bei primär
@@ -138,6 +157,14 @@ issues:
   Resektion oder mit Remission/Ansprechen nach Erstlinientherapie) festlegen und mit care_process.trigger
   abstimmen. Den Nenner von QI 15 (S3 Kap. 18, Tab. 45: LD mit Remission nach Chemo-Strahlentherapie)
   über das Ansprechen (recistResponse) ableiten, nicht über diesen Status.'
+- 'Lokale Statuscodes von prophylacticCranialIrradiationStatus auf MII und oBDS abbilden. MII mii-pr-onko-strahlentherapie:
+  performed → Procedure.status completed; not-performed-mri-surveillance, not-performed-no-surveillance
+  und declined → status not-done mit statusReason (example-gebunden, lokale Gründe möglich). Das Profil
+  verlangt aber auch bei not-done performed[x] (Period) 1..1 und eine Intention (K, P, S, X, O). oBDS:
+  Meldbar ist nur die durchgeführte PCI (14.3 Zielgebiet 1.1, 14.1 Intention K oder P); eine Ablehnung
+  nur über 19.2 bei vorliegender Therapieempfehlung; für die MRT-Überwachung käme allenfalls 19.1 Therapieempfehlung
+  AS (Active Surveillance) in Frage. Zu entscheiden: Nicht-Durchführung, Ablehnung und MRT-Überwachung
+  als Procedure not-done oder als eigene Observation führen und die Intention der PCI (K oder P) festlegen.'
 related_elements:
 - relation: dependsOn
   target: curativeTreatmentModality

@@ -28,6 +28,33 @@ value_set:
     code: AM160103
     display: Vorsorgevollmacht
 standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_DPE_Consent_Personal_Consent
+  resource: Consent
+  path: Consent.policyRule (Art der Erklärung); Consent.source[x]:sourceReference.display + Extension
+    ablageort
+  notes: 'KBV MIO Patientenkurzakte 1.0.0, Datensatz Persönliche Erklärungen (DPE): Hinweis auf eine vorhandene
+    Patientenverfügung bzw. Vorsorgevollmacht mit Ablageort. scope fix adr, category fix LOINC 59284-0.
+    policyRule ist REQUIRED an https://fhir.kbv.de/ValueSet/KBV_VS_MIO_DPE_Declaration_Type gebunden (SNOMED
+    371538006 Advance directive report, 186065003 Power of attorney medical report, 772790007 Organ donor
+    card). Bevollmächtigte über provision.actor (Rolle SNOMED 54056000). Einen Dokumentverweis gibt es
+    nicht: sourceReference.reference ist verboten (max 0). Vorgesehen sind nur ein Ablageort-Text und
+    die Extension https://fhir.kbv.de/StructureDefinition/KBV_EX_MIO_NFDxDPE_Consent_Description_File_Location
+    (valueAddress). Nicht zu verwechseln mit KBV_PR_MIO_NFDxDPE_Consent_Active_Advance_Directive (Einwilligung
+    der versicherten Person, scope patient-privacy).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding (Slices KDL/LNC/SCT/XDS); DocumentReference.content.attachment
+  notes: 'MII KDS Dokument 2026.0.1 (stabil). type.coding ist nach system gesliced (KDL/LNC/SCT/XDS, je
+    0..1, jeweils REQUIRED gebunden). KDL (http://dvmd.de/fhir/ValueSet/kdl): AM160104 Patientenverfügung,
+    AM160103 Vorsorgevollmacht. LNC an http://hl7.org/fhir/ValueSet/c80-doc-typecodes: LOINC 42348-3 fehlt
+    in der R4-Fassung 4.0.1, enthalten ist 64298-3 Power of attorney (siehe Issue). SCT an https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/ValueSet/mii-vs-dokument-sct-dokument-typ
+    (Nachfahren von 229059009 |Report|): 371538006 Advance directive report (record artifact), Parent
+    423876004 Clinical document, darüber 371524004 Clinical report; Zugehörigkeit per $validate-code bestätigen.
+    Für die Vorsorgevollmacht führt das Element keinen SNOMED-Code (siehe Issue). XDS (IHE-D typeCode):
+    PATD Patienteneigene Dokumente, laut IHE-D-Definition u. a. für Vorsorgevollmacht und Patientenverfügung.
+    Das Dokument selbst über content.attachment (data oder url).'
 - standard: fhir-r4-base
   resource: DocumentReference
   path: DocumentReference.type
@@ -82,6 +109,16 @@ issues:
   Leitlinie im Betreuungsrecht geregelt), die bei der Datenerfassung meist nicht leistbar ist. Stattdessen
   Vorliegen und Datum der letzten Aktualisierung erfassen (Aktualisierung laut Leitlinie regelmäßig und
   insbesondere bei wesentlichen gesundheitlichen Veränderungen sinnvoll)?'
+- 'Codes und Dokumentverweis für advanceDirectiveDocument festlegen. (1) LOINC 42348-3 steht nicht in
+  c80-doc-typecodes (R4 4.0.1) und ist damit im LOINC-Slice von MII Dokument unzulässig. Für die Patientenverfügung
+  enthält das ValueSet keinen passenden Code, für die Vollmacht z. B. 64298-3 Power of attorney. Den LOINC-Slice
+  weglassen oder für die Vollmacht 64298-3 ergänzen? (2) Vorsorgevollmacht: Das Element führt dafür nur
+  KDL AM160103. Für den SNOMED-Slice von MII Dokument (Nachfahren von 229059009 Report) und für KBV_VS_MIO_DPE_Declaration_Type
+  (policyRule, REQUIRED) fehlt ein SNOMED-Dokumenttyp. Kandidat: 186065003 Power of attorney medical report
+  (record artifact), Parent 229059009, im KBV-ValueSet enthalten. Ergänzen? (3) Die KBV-DPE kennt keinen
+  Verweis auf das Dokument, nur Ablageort-Text und Adresse (sourceReference.reference max 0). Genügt das
+  für „inkl. Verweis auf das Dokument“ in der Definition, oder wird parallel eine DocumentReference nach
+  MII Dokument geführt?'
 related_elements:
 - relation: isPartOf
   target: advanceCarePlanning

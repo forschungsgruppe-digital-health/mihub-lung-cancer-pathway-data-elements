@@ -41,11 +41,20 @@ value_set:
     display: Histologiebefund
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Histologie
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 6 Histologie
+  path: 'Histologie/Morphologie_ICD_O/Code (6.3) und /Version (6.4: 31, 32, 33, bb); Histologie/Morphologie_Freitext
+    (6.5); Histologie/Tumor_Histologiedatum (6.1); zusätzlich Tumorzuordnung/Morphologie_ICD_O'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Histologie_Typ).
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
-  resource: Observation (Pathologie-Befund)
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-histologie-icdo3
+  resource: Observation
+  path: Observation.valueCodeableConcept (1..1, REQUIRED mii-vs-onko-icdo3-morphologie, System http://terminology.hl7.org/CodeSystem/icd-o-3);
+    Observation.code = LOINC 59847-4 (Pattern); Observation.specimen (1..1); Observation.focus → mii-pr-onko-diagnose-primaertumor
+  notes: 'Modul Onkologie 2026.0.3, Namensraum …/fhir/ext/modul-onko/. Das Pattern gilt für jedes Coding
+    von Observation.code: Übertragen wird nur LOINC 59847-4, nicht SNOMED 911750741000004104 oder KDL
+    PT080102. Den vollständigen Pathologiebefund ggf. über https://www.medizininformatik-initiative.de/fhir/ext/modul-patho/StructureDefinition/mii-pr-patho-report.'
 instruction_de: Typisierung nach der jeweils gültigen WHO-Klassifikation (S3-LL Lungenkarzinom 5.1, Empf.
   6.50); Übernahme als ICD-O-3-Morphologie mit Dignität wie im Pathologiebefund angegeben. 8046/3 (NSCLC-NOS)
   nur verwenden, wenn der Befund keine genauere Typisierung enthält (laut WHO-Klassifikation so selten
@@ -104,6 +113,11 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Das Profil mii-pr-onko-histologie-icdo3 verlangt eine Probenreferenz (Observation.specimen 1..1 auf
+  mii-pr-onko-specimen), die in der Hausarztpraxis meist fehlt; Observation.code lässt nur LOINC 59847-4
+  zu. Zu entscheiden: ob die Histologie hausärztlich als strukturierte Observation (mit Probenreferenz)
+  oder nur als übernommener Befund (Dokument, KDL PT080102 Histologiebefund) geführt wird.'
 related_elements:
 - relation: isPartOf
   target: cancerDiagnosis

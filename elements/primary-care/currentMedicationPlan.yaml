@@ -38,11 +38,19 @@ value_set:
     nicht den Plan selbst.'
 standard_mappings:
 - standard: gematik-epa-fhir
-  profile_or_url: https://gemspec.gematik.de/ig/fhir/
-  resource: Medication Service (eMP / Medikationsliste)
+  profile_or_url: https://gematik.de/fhir/epa-medication/StructureDefinition/emp-medication-request
+  resource: MedicationRequest (eMP-Eintrag im ePA Medication Service)
+  path: Abruf des gesamten eMP über die Operation $medication-plan (https://gematik.de/fhir/epa-medication/OperationDefinition/get-medication-plan-op,
+    Rückgabe Bundle); Einträge = emp-medication-request; Medikationsliste (eML) über $medication-list
+    (get-medication-list-op)
+  notes: de.gematik.epa.medication 1.3.5 (Profilversion 1.3.2).
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
-  resource: MedicationStatement
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste
+  resource: List (Medikationsliste)
+  path: List.code.coding:medCode = medications (list-example-use-codes); List.code.coding:contextCode
+    (REQUIRED IHE-D FallkontextBeiDokumentenerstellung); List.entry.item → MedicationStatement (https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement)
+  notes: Das Element ist ein Plan bzw. eine Gesamtliste (Reference 1..1); ein einzelnes MedicationStatement
+    bildet das nicht ab. Modul Medikation 2026.0.1.
 care_process:
   trigger: bei jeder Medikationsänderung; Übergabe
   frequency_pattern: per-encounter

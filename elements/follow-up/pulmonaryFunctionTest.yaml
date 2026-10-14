@@ -32,9 +32,25 @@ value_set:
     code: 1-711
     display: Bestimmung der CO-Diffusionskapazität
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-spirometrie-messung
+  resource: Procedure
+  path: Procedure.performed[x] (performedDateTime)
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.lungenfunktion#2027.0.0-ballot.1, kein
+    stabiles Release. Basis MII Prozedur; performed[x] 1..1 MS; category.coding:sct Pattern 23426006 (Measurement
+    of respiratory function); code.coding:sct Pattern 127783003 (Spirometrie). Weitere Messarten mit eigenem
+    Profil: https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-diffusion-messung
+    (36421003, CO-Diffusion) und https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-bodyplethysmographie-messung
+    (28275007); Befundbericht https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-spirometrie
+    (DiagnosticReport.effective[x]).'
 - standard: fhir-r4-base
-  resource: Observation
-  path: Observation.code
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Procedure
+  resource: Procedure
+  path: 'Procedure.performedDateTime (Procedure.code: SNOMED 23426006 bzw. OPS 1-710, 1-711)'
+  notes: Das Element ist ein Untersuchungsdatum; Observation.code trägt kein Datum. SNOMED 23426006 und
+    OPS 1-710/1-711 sind Prozedurcodes. LOINC 81458-2 'Pulmonary function test panel' ist ein Panel-Code
+    (Observation bzw. DiagnosticReport) und gehört nicht in Procedure.code. Alternativ als Befunddatum
+    DiagnosticReport.effectiveDateTime. Analog zu bronchoscopyFollowUp.
 constraints_de: 'Strahlenpneumonitis (symptomatisch bei 5–15 %) mit häufigem Übergang in eine pulmonale
   Fibrose; Onkopedia NSCLC Kap. 6.2.2.1: „Sie kann innerhalb von 6-24 Monaten nach Ende der Bestrahlung
   auftreten“ (Bezug Pneumonitis oder Fibrose im Text nicht eindeutig). Nach alleiniger RT/RCT soll die
@@ -90,11 +106,14 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'standard_mappings: Der Pfad „Observation.code“ trägt den Prozedur-/Panelcode, nicht den dateTime-Wert.
-  Für datatype dateTime wäre Procedure.performedDateTime (analog bronchoscopyFollowUp) bzw. Observation.effectiveDateTime
-  der Wertpfad. Das MII-KDS-Modul Lungenfunktion (2027.0.0-ballot.1) bildet die Messung als Procedure
-  ab (Profile „Spirometrie Messung“, „Diffusion Messung“) und Einzelwerte wie FEV1 oder DLCO als Observation
-  mit partOf auf diese Procedure; Zielprofil und Wertpfad zentral zu entscheiden.'
+- 'Prozedurcodes von pulmonaryFunctionTest an das MII-Lungenfunktion-Ballot angleichen (ergänzt den offenen
+  Punkt zu Zielprofil und Wertpfad). Im Ballot ist SNOMED 23426006 die Procedure.category; Procedure.code
+  ist je Messart fest vorgegeben: Spirometrie 127783003, CO-Diffusion 36421003, Ganzkörperplethysmographie
+  28275007 (OPS über code.coding:ops). OPS 1-711 entspricht der Diffusionsmessung, OPS 1-710 der Ganzkörperplethysmographie;
+  für die Spirometrie führt das Element keinen eigenen Code. LOINC 81458-2 (Panel) ist kein Prozedurcode
+  und auch nicht im LOINC-ValueSet des Spirometrie-Befunds (mii-vs-lufu-lnc-procedure enthält nur 18759-1).
+  Zu entscheiden: ein Datum je Untersuchungstermin (Sammelcode 23426006) oder je Messart (eigene Procedure
+  je Messung) und die Codes entsprechend ergänzen.'
 related_elements:
 - relation: dependsOn
   target: curativeTreatmentModality

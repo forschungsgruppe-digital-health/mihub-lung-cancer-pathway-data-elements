@@ -46,8 +46,18 @@ value_set:
     display: Standardrisiko — kein routinemäßiges Schädel-MRT (S3 Kap. 16.3.4)
 standard_mappings:
 - standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/RiskAssessment
   resource: RiskAssessment
-  path: RiskAssessment.prediction.qualitativeRisk
+  path: RiskAssessment.prediction.qualitativeRisk (Risikostufe); RiskAssessment.prediction.outcome = SNOMED
+    94225005; Kriterien in RiskAssessment.prediction.rationale bzw. RiskAssessment.basis
+  notes: FHIR R4 (4.0.1). prediction.outcome (0..1) = 94225005 Metastatic malignant neoplasm to brain.
+    prediction.qualitativeRisk (0..1) ist nur example-gebunden an http://hl7.org/fhir/ValueSet/risk-probability
+    (negligible, low, moderate, high, certain); 'high' bedeutet dort 'more likely to occur than not',
+    also eine absolute Wahrscheinlichkeit und keine leitlinienbasierte Risikogruppe. Die Kriterien- bzw.
+    Quellenbasis (S3 Empf. 16.8 molekular/Stadium, Onkopedia NSCLC Kap. 8.1 histologisch) gehört nicht
+    in die Stufe, sondern in prediction.rationale (string), RiskAssessment.basis (Referenzen auf Histologie-,
+    Staging- und Molekularbefund) oder RiskAssessment.method. Die lokalen Codes vermischen beides; Transformation
+    siehe offener Punkt.
 care_process:
   trigger: Erstellung des Nachsorgeplans (nach Lokaltherapie)
   frequency_pattern: once-per-treatment-completion
@@ -102,6 +112,14 @@ issues:
   kann das Kriterium ROS1+ daher unbekannt sein. Der Katalog enthält kein Eingangselement für den molekularen
   Basisstatus (EGFR/ALK/ROS1); nur molecularResistanceFinding/molecularRetestingCtdna (Surveillance) tragen
   molekulare Befunde.'
+- 'Repräsentation von brainMetastasisRiskProfile in RiskAssessment klären. Die drei lokalen Codes vermischen
+  Risikostufe und Kriterienbasis: high-risk-molecular und high-risk-histology unterscheiden die Quelle
+  (S3 Empf. 16.8 bzw. Onkopedia NSCLC Kap. 8.1), nicht die Stufe. RiskAssessment.prediction.qualitativeRisk
+  nimmt nur die Stufe auf. Für die Stufe läge das dort example-gebundene ValueSet risk-probability (high
+  bzw. low) nahe; value_set.notes lehnt es ab, weil ''high'' dort ''wahrscheinlicher als nicht'' bedeutet
+  und keine Risikogruppe ist. Zu entscheiden: (a) Stufe mit risk-probability oder mit eigenen Stufencodes
+  (erhöht, Standard) in qualitativeRisk; (b) Kriterienbasis in prediction.rationale, RiskAssessment.method
+  oder als Referenzen in RiskAssessment.basis; (c) ob das Element in Stufe und Kriterium aufgeteilt wird.'
 related_elements:
 - relation: dependsOn
   target: tumorHistology

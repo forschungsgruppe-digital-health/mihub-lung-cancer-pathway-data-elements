@@ -29,8 +29,11 @@ value_set:
     display: Home care by visiting nurse
 standard_mappings:
 - standard: fhir-r4-base
-  resource: CareTeam / ServiceRequest
-  path: CareTeam.participant.role
+  resource: 'ServiceRequest / Procedure (Versorgungsanbindung: EpisodeOfCare / HealthcareService)'
+  path: ServiceRequest.code bzw. Procedure.code (z. B. Physiotherapie, Ergotherapie); laufende Anbindung
+    (SAPV, Pflegedienst) über EpisodeOfCare.type bzw. HealthcareService.type
+  notes: CareTeam.participant.role beschreibt die Rolle eines Teilnehmers, nicht die Leistung; CareTeam
+    nur für die beteiligten Personen und Einrichtungen.
 care_process:
   trigger: Anamnese; bei jeder Änderung der Versorgungssituation
   frequency_pattern: per-encounter

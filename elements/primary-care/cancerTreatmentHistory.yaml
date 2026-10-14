@@ -49,11 +49,49 @@ value_set:
     display: Zytostatische Chemotherapie wegen bösartiger Neubildung in der Eigenanamnese
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Module Operation / Strahlentherapie / Systemische Therapie
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie
+  path: 'OP: Datum (13.2), Menge_OPS/OPS (Code, Version; 13.3, 13.4); ST: Menge_Bestrahlung/Bestrahlung
+    mit Beginn (14.5), Ende (14.6) und Zielgebiet (14.3) unter Bestrahlung/Applikationsart/{Perkutan|Kontakt|Metabolisch|Sonstige}/Zielgebiet;
+    SYST: Therapieart (16.3), Protokoll (16.4), Beginn (16.5), Menge_Substanz/Substanz (16.6), Ende (16.8)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (OP_Typ, ST_Typ, SYST_Typ).
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
-  resource: Procedure / MedicationStatement
+  resource: Procedure
+  path: Procedure.code.coding:ops bzw. :sct; Procedure.performed[x] (dateTime oder Period, 1..1)
+  notes: Generisches Prozedur-Profil (Paket kerndatensatz.base 2026.0.1); es deckt nur Procedure ab, nicht
+    MedicationStatement. Für Tumortherapien die Onko-Profile (Operation, Strahlentherapie, Systemische
+    Therapie mit Pflicht-Extension Intention) verwenden; generisch z. B. für die Port-Implantation.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-operation
+  resource: Procedure
+  path: Procedure.code.coding:ops (OPS); Procedure.performed[x] (dateTime); Procedure.extension:Intention
+    (1..1)
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 13
+    OP.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
+  resource: Procedure
+  path: Procedure.performed[x] (Period); Procedure.extension:Intention (1..1); einzelne Bestrahlungen
+    mit Zielgebiet (Procedure.bodySite) über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (partOf)
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 14
+    Strahlentherapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: 'Procedure.code.coding:systemische_therapie_art (REQUIRED mii-vs-onko-systemische-therapie-art:
+    CH, HO, IM, ZS, SZ, CI, CZ, CIZ, IZ, WW, AS, WS, SO); Procedure.performed[x] (Period); Procedure.extension:Intention
+    (1..1)'
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 16
+    Systemische Therapie. Substanzen über mii-pr-onko-systemische-therapie-medikation.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
+  resource: MedicationStatement
+  path: MedicationStatement.medication[x] (coding:atcClassDe bzw. :atcClassEn, PZN, UNII); MedicationStatement.partOf
+    (1..*) → Systemische Therapie (Procedure); MedicationStatement.effective[x]
+  notes: Medikationsanteil der Systemtherapie (Basis MII MedicationStatement), Modul Onkologie 2026.0.3.
 care_process:
   trigger: Therapieabschluss je Modalität; Übergabe an die Hausarztpraxis
   frequency_pattern: once-per-treatment-completion
@@ -128,6 +166,14 @@ issues:
   über MedicationStatement/Regime (vgl. systemicTherapyRegimen). Der Port ist keine Tumortherapie (Device/Portimplantation);
   ein eigenes Element erwägen oder den Port aus der Definition nehmen. Außerdem die Rolle der ICD-10-GM-Z-Codes
   (Eigenanamnese, Condition im PVS) gegenüber den SNOMED-Prozedurcodes in value_set.notes festhalten.'
+- 'Die Element-Codes passen nur teilweise zu den nationalen Onko-Profilen: Diese verlangen die Therapieintention
+  als Pflicht-Extension mit oBDS-Codes (Quelle wäre das Element treatmentIntent), und die Art der Systemtherapie
+  wird mit oBDS-Codes (z. B. CH, IM, ZS, CI) in Procedure.code.coding:systemische_therapie_art geführt
+  (REQUIRED). Laut MII-ConceptMap mii-cm-onko-therapie-typ-sct entsprechen 367336001 = CH, 1255831008
+  = ZS bzw. CZ und 1287742003 = ST; für 870387009 (Checkpoint-Inhibitor), 1345242003 (Erhaltungstherapie)
+  und 703423002 (Radiochemotherapie) gibt es dort kein direktes Ziel. Zu entscheiden: eine Abbildungstabelle
+  Element-Code → Onko-Profil (Operation, Strahlentherapie, Systemische Therapie) und oBDS-Therapieart
+  festlegen, insbesondere für Checkpoint-Inhibitor-, Erhaltungs- und Radiochemotherapie.'
 related_elements:
 - relation: generalizes
   target: curativeTreatmentModality

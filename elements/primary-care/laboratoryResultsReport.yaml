@@ -25,8 +25,13 @@ value_set:
     display: Laborbefund
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab
-  resource: Observation (ObservationLab)
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab
+  resource: DiagnosticReport (DiagnosticReportLab)
+  path: DiagnosticReport.code.coding:loinc-labReport = LOINC 11502-2 (Pattern); DiagnosticReport.result
+    (1..*) → Einzelwerte als ObservationLab (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab),
+    Auffälligkeiten in Observation.interpretation; DiagnosticReport.conclusion
+  notes: Modul Laborbefund 2026.0.3 (gleich in 2027.0.0-ballot). Das Element ist ein Bericht (Reference,
+    LOINC 11502-2); ObservationLab beschreibt einen Einzelanalyten.
 constraints_de: 'Keine routinemäßige Bestimmung von Serum-Tumormarkern in der Nachsorge (S3-LL Lungenkarzinom
   5.1, Kap. 16.3.4: Hintergrundtext ohne Empfehlungsbox/-grad; „Evidenzgrad 1a“ bezieht sich auf Lit.
   [1878] zur kontrovers diskutierten Bedeutung der Serummarker); Tumormarker nur bei onkologischer Veranlassung.'
@@ -97,8 +102,8 @@ issues:
   im Reference-Element nicht eigenständig abbildbar. Festzulegen ist: Laborflags über Observation.interpretation
   und Referenzbereiche über Observation.referenceRange der referenzierten Laborwerte; die hausärztliche
   Freitext-Bewertung über DiagnosticReport.conclusion bzw. Observation.note – oder als eigenes Text-/Annotation-Element.
-  Die Zielressource (DiagnosticReport für den Befund vs. Observation) ist bei der zentralen Mapping-Prüfung
-  mitzuklären.'
+  Zielressource laut Mapping (Stand 2026-10-14): MII DiagnosticReportLab für den Befund, Einzelwerte als
+  ObservationLab.'
 related_elements:
 - relation: specializes
   target: laboratoryTestFollowUp

@@ -45,9 +45,31 @@ value_set:
     code: '84387000'
     display: Asymptomatic
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-symptom/StructureDefinition/finding-observation
+  resource: Observation
+  path: 'Observation.code und Observation.valueCodeableConcept; Muster offen (siehe offene Punkte): Observation.code
+    LOINC 75325-1 ''Symptom'' mit dem Symptom als valueCodeableConcept oder das Symptom als Observation.code
+    mit einem Wert wie LOINC LA9633-4 ''Present'''
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.symptom#2027.0.0-ballot, kein stabiles
+    Release. Profil MII_PR_Symptom_Observation (Namensraum https://www.medizininformatik-initiative.de/fhir/modul-symptom/);
+    code und value[x] sind im Profil nicht eingeschränkt. Die Ballot-Beispiele zeigen zwei Muster: Observation.code
+    LOINC 75325-1 mit dem Symptom als valueCodeableConcept (Beispiel chestpain) bzw. der Befund als Observation.code
+    mit LOINC LA9633-4 ''Present'' als Wert (Beispiel arachnodactyly). Alternativ je Symptom https://www.medizininformatik-initiative.de/fhir/modul-symptom/StructureDefinition/finding-condition
+    (Condition.code).'
 - standard: fhir-r4-base
-  resource: Observation / Condition
-  path: Observation.code (Symptom) bzw. Encounter.reasonCode
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation / Condition / Encounter
+  path: Symptom als Observation.valueCodeableConcept (Observation.code z. B. LOINC 75325-1 'Symptom')
+    oder als Observation.code mit Wert (Muster offen, siehe offene Punkte) bzw. als Condition.code (http://hl7.org/fhir/StructureDefinition/Condition);
+    Bezug zum Nachsorgetermin über Observation.encounter bzw. Condition.encounter; Encounter.reasonCode
+    nur bei ungeplanten, symptomgetriggerten Vorstellungen
+  notes: Encounter.reasonCode bleibt auf ungeplante, symptomgetriggerte Vorstellungen beschränkt (offener
+    Punkt zur Rollentrennung); bei geplanten Nachsorgeterminen ist der Anlass die Nachsorge selbst. SNOMED
+    84100007 'History taking (procedure)' ist eine Prozedur, LOINC 10164-2 ein Narrativ-Code (Skala Nar,
+    Freitext-Anamnese) und KDL AU010101 eine Dokumentklasse; alle drei sind keine Symptomcodes. Als Symptomcodes
+    eignen sich die Befundcodes des Elements (49727002, 267036007, 66857006, 29857009, 262285001 sowie
+    84387000 'Asymptomatic').
 care_process:
   trigger: bei jedem Nachsorgetermin (followUpVisitDate)
   frequency_pattern: per-encounter
@@ -131,6 +153,13 @@ issues:
   und postInductionEvaluationDate, Trigger und Label erweitern) oder ein eigenes Surveillance-Anamnese-Element
   anlegen. In beiden Fällen die Abgrenzung zu adverseEventCtcae, patientReportedSymptomWeb und weightChangePercent
   prüfen, die Teile des Beschwerdebilds bereits abdecken, um Dubletten zu vermeiden.'
+- Repräsentation der Symptome in followUpHistoryFinding festlegen (ergänzt den offenen Punkt zur Rollentrennung).
+  Möglich sind (a) Observation.code = LOINC 75325-1 'Symptom' mit dem Symptomcode als Observation.valueCodeableConcept,
+  (b) der Symptomcode als Observation.code mit einem Wert für vorhanden bzw. nicht vorhanden oder (c)
+  eine Condition je Symptom (Condition.code). Der offene Punkt zur Rollentrennung sieht (b) bzw. (c) vor;
+  das MII-Symptom-Ballot lässt (a) und (b) zu (Beispiele chestpain bzw. arachnodactyly mit LOINC LA9633-4
+  'Present'). Zu entscheiden ist das Muster; außerdem, wie 'unauffällig' (84387000 'Asymptomatic') im
+  gewählten Muster dargestellt wird.
 related_elements:
 - relation: isPartOf
   target: followUpVisitDate

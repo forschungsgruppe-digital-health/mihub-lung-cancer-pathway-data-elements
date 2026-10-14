@@ -53,8 +53,28 @@ value_set:
     desselben Konzepts). Der Protokollname kann ergänzend als Text erfasst werden.
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
   resource: MedicationStatement
+  path: MedicationStatement.medicationCodeableConcept
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie_Medikation, abgeleitet von https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement).
+    Je Substanz ein MedicationStatement; ATC in medicationCodeableConcept.coding:atcClassDe (http://fhir.de/CodeSystem/bfarm/atc,
+    REQUIRED mii-vs-medikation-atc) bzw. :atcClassEn (http://www.whocc.no/atc). MedicationStatement.partOf
+    (1..*, Slice systemischeTherapie) verweist auf das Regime als Procedure mii-pr-onko-systemische-therapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: 'Procedure (Regime als Ganzes); Procedure.usedCode (Protokoll); Kontext: Procedure.extension:Intention
+    (1..1), Procedure.performedPeriod.start (1..1), Procedure.code.coding:systemische_therapie_art (MS)'
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie, abgeleitet von MII Prozedur).
+    Das Regime als Ganzes ist eine Procedure. Procedure.usedCode (0..*, MS) ist extensible an mii-vs-onko-systemische-therapie-protokolle
+    gebunden (z. B. PE, CarboTax, Gem-Cis) und entspricht dem Regime-/Protokollnamen, den das Element
+    bisher nur als Freitext vorsieht. Pflichtangaben des Profils, die das Element nicht trägt (siehe Issue):
+    Procedure.extension:Intention (1..1, REQUIRED mii-vs-onko-systemische-therapie-intention: K/P/S/X)
+    und performedPeriod.start (1..1). Die Therapieart steht in Procedure.code.coding:systemische_therapie_art
+    (0..1, MS, REQUIRED mii-vs-onko-systemische-therapie-art, u. a. CH Chemotherapie, IM Immun-/Antikörpertherapie,
+    ZS zielgerichtete Substanzen, CI Chemo- + Immun-/Antikörpertherapie, CZ, CIZ, IZ). Die Substanzen
+    (ATC) hängen als MedicationStatement (mii-pr-onko-systemische-therapie-medikation) über partOf an
+    dieser Procedure.'
 care_process:
   trigger: Therapieinitiierung / Linienwechsel
   frequency_pattern: per-line
@@ -113,3 +133,14 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+issues:
+- 'Repräsentation Regime: Im MII-Onko-Modell ist das Regime eine Procedure (mii-pr-onko-systemische-therapie)
+  mit Therapieart (code.coding:systemische_therapie_art, MS, REQUIRED mii-vs-onko-systemische-therapie-art,
+  z. B. CH, IM, ZS, CI, CZ, CIZ, IZ), Pflicht-Intention (extension:Intention 1..1, K/P/S/X), Beginn (performedPeriod.start
+  1..1) und optional kodiertem Protokoll (usedCode, extensible mii-vs-onko-systemische-therapie-protokolle).
+  Die Substanzen sind einzelne MedicationStatements (mii-pr-onko-systemische-therapie-medikation), die
+  über partOf (1..*) auf diese Procedure verweisen. Das Element enthält nur ATC-Substanzcodes; den Protokollnamen
+  sieht es nur als Freitext vor (value_set.notes). oBDS trennt ebenso Therapieart (16.3), Protokoll (16.4,
+  Freitext) und Substanz (16.6, ATC oder Bezeichnung). Zu entscheiden: ob Therapieart und Protokoll als
+  eigene Kodierung im Element (oder in eigenen Elementen) geführt bzw. aus den ATC-Codes abgeleitet werden,
+  und ob die Intention über das Element treatmentIntent (Phase primarycare) verknüpft wird.'

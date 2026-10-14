@@ -21,8 +21,19 @@ value_set:
     (Stand 2026-10-13); Einheit UCUM mg/d, Umrechnung projektseitig.
 standard_mappings:
 - standard: fhir-r4-base
-  resource: MedicationStatement
-  path: MedicationStatement.dosage.doseAndRate
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.code; Observation.valueQuantity (UCUM mg/d); Observation.extension:workflow-supportingInfo
+    -> MedicationStatement/MedicationAdministration
+  notes: 'Die oMME ist ein über alle Opioide berechneter Wert, nicht die Dosis eines einzelnen Arzneimittels
+    (MedicationStatement.dosage.doseAndRate). Sie wird daher als eigene Observation geführt: valueQuantity
+    mit system http://unitsofmeasure.org und code mg/d. Observation.code ist 1..1; ein LOINC- oder SNOMED-CT-Konzept
+    fehlt (siehe value_set.notes), daher projekt-lokaler Code oder nur code.text (siehe Issue). Der Bezug
+    auf die zugrunde liegenden MedicationStatements bzw. MedicationAdministrations läuft über die R4-Core-Extension
+    http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo (Kontext Observation, Reference(Any)).
+    Nicht über derivedFrom (Zieltypen in R4 nur DocumentReference, ImagingStudy, Media, QuestionnaireResponse,
+    Observation, MolecularSequence) und nicht über partOf (größeres Ereignis, dessen Bestandteil die Observation
+    ist). Alternative: focus (Reference(Any)).'
 constraints_de: 'Umrechnung in orales Morphin-Äquivalent (mg/d) nach den relativen analgetischen Verhältnissen
   der S3-LL Palliativmedizin 3.0, Tab. 16: orales Morphin zu oralem Oxycodon 1,5:1, zu oralem Hydromorphon
   5:1, zu Buprenorphin TTS 75:1, zu Fentanyl TTS 100:1. Die TTS-Faktoren beziehen sich auf die abgegebene
@@ -76,11 +87,12 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'standard_mappings (fhir-r4-base): MedicationStatement.dosage.doseAndRate ist für die oMME semantisch
-  falsch, denn dort steht die tatsächliche Dosis des einzelnen Präparats in dessen Einheit. Die abgeleitete
-  Tagesdosis als eigene Observation modellieren (valueQuantity in mg/d; Code: kein Standardkonzept auf
-  dem MII TermServ, daher lokal bzw. offen). Den Bezug zu den zugrunde liegenden MedicationStatement/MedicationAdministration
-  über die R4-Core-Extension http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo herstellen
-  (Kontext Observation, Reference(Any)); Observation.derivedFrom erlaubt in FHIR R4 nur DocumentReference,
-  ImagingStudy, Media, QuestionnaireResponse, Observation und MolecularSequence. Dabei iso13972_metadata.type
-  (medication) und category (medikation) mitprüfen; Mapping zentral korrigieren.'
+- 'Typ und Kategorie prüfen: Die oMME ist im Mapping als eigene, abgeleitete Observation abgebildet (valueQuantity
+  mg/d; Bezug zu den zugrunde liegenden MedicationStatement/MedicationAdministration über die R4-Core-Extension
+  workflow-supportingInfo, da Observation.derivedFrom in FHIR R4 keine Medikationsressourcen erlaubt).
+  Zu prüfen ist, ob iso13972_metadata.type (medication) und category (medikation) zu dieser Modellierung
+  passen. Zum Observation.code siehe den folgenden offenen Punkt.'
+- 'Observation.code für opioidDailyOmme festlegen: Für die oMME gibt es kein LOINC- oder SNOMED-CT-Konzept
+  (siehe value_set.notes). Einen lokalen Code mit eigener CodeSystem-URL festlegen oder nur code.text
+  verwenden? Außerdem klären, ob ATC N02A aus value_set in der Observation mitgeführt wird: N02A bezeichnet
+  die Wirkstoffgruppe der Opioide, nicht die Messgröße oMME, und gehört eher zu den referenzierten MedicationStatements.'

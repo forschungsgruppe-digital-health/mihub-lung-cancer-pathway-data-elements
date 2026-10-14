@@ -26,8 +26,25 @@ value_set:
     display: Multidisciplinary care conference for cancer care planning
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Tumorkonferenz
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 18 Tumorkonferenz Therapieplanung / 19 Therapieempfehlung
+  path: 'Tumorkonferenz/Datum (18.1); Tumorkonferenz/Typ (18.2: praeth, postop, postth, ther); Tumorkonferenz/Therapieempfehlung/Menge_Typ_Therapieempfehlung/Typ_Therapieempfehlung
+    (19.1); Tumorkonferenz/Therapieempfehlung/Abweichung_Patientenwunsch (19.2: J, N, U)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Tumorkonferenz_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
+  resource: CarePlan
+  path: CarePlan.category.coding (REQUIRED mii-vs-onko-therapieplanung-typ = Konferenztyp); CarePlan.activity:obds.detail.code
+    (REQUIRED mii-vs-onko-therapieempfehlung-typ); CarePlan.activity:obds.detail.statusReason (Therapieabweichung,
+    mii-vs-onko-therapieabweichung); CarePlan.created; Freitext in CarePlan.description bzw. CarePlan.note
+  notes: Stabil, Modul Onkologie 2026.0.3 (intent fix plan). Das Profil ist kodiert (oBDS-Codes), das
+    Element hat datatype text.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL = SD150103 (Tumorkonferenzprotokoll); DocumentReference.content.attachment
+  notes: Für das Beschlussdokument (Protokoll); Modul Dokument 2026.0.1.
 - standard: fhir-r4-base
   resource: CarePlan / DocumentReference
 care_process:
@@ -91,6 +108,11 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Das Element ist als Freitext (datatype text) definiert; das nationale Profil mii-pr-onko-tumorkonferenz
+  und oBDS 18/19 verlangen kodierte Angaben (Konferenztyp, Therapieempfehlung nach oBDS-Codes, Abweichung
+  auf Patientenwunsch). Zu entscheiden: kodierte Teil-Elemente (Konferenztyp, Empfehlungstyp, Abweichung)
+  ergänzen oder das Element als Freitext bzw. Dokument (CarePlan.description, MII Dokument) belassen.'
 related_elements:
 - relation: hasPart
   target: treatmentIntent

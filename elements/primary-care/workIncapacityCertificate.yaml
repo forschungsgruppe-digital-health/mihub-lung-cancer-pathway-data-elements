@@ -22,9 +22,12 @@ value_set:
     display: Arbeitsunfähigkeitsbescheinigung
 standard_mappings:
 - standard: other
-  profile_or_url: https://fhir.kbv.de/
-  resource: KBV eAU (FHIR-Profil)
-  notes: Elektronische Arbeitsunfähigkeitsbescheinigung
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_EAU_Condition_AU
+  resource: Condition (eAU, KBV_PR_EAU_Condition_AU)
+  path: Condition.onsetPeriod.start und Condition.onsetPeriod.end (AU-Zeitraum; end 1..1); Condition.extension:Festgestellt_am
+    (Pflicht)
+  notes: Elektronische Arbeitsunfähigkeitsbescheinigung (kbv.ita.eau 1.2.1); Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_EAU_Bundle.
+    Die eAU ist kein MIO, daher standard other.
 care_process:
   trigger: bei Ausstellung / Verlängerung
   frequency_pattern: ad-hoc

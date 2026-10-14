@@ -31,8 +31,17 @@ value_set:
     display: Impfausweis
 standard_mappings:
 - standard: kbv-mio
-  profile_or_url: https://mio.kbv.de/
-  resource: Impfpass (MIO)
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_Vaccination_Record_Prime
+  resource: Immunization (MIO Impfpass 1.1.0)
+  path: Immunization.vaccineCode.coding:snomed_CT (1..1, REQUIRED KBV_VS_MIO_Vaccination_Vaccine), optional
+    :atc; Immunization.protocolApplied.targetDisease (REQUIRED KBV_VS_MIO_Vaccination_TargetDisease);
+    Immunization.occurrence[x]
+  notes: Eine Immunization je dokumentierter Impfung (status fix completed). Die Element-Codes 304250009
+    und 425457005 sind Status- bzw. Anamnesecodes, keine Impfstoffcodes (zur Repräsentation siehe Issue).
+    KBV_PR_MIO_Vaccination_Observation_Immunization_Status bildet Immunitätsnachweise per Labortest ab,
+    nicht den Impfstatus. Nachgetragene Impfungen aus der Impfhistorie (z. B. Übertrag aus dem Papier-Impfausweis)
+    über https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_Vaccination_Record_Addendum (primarySource
+    fix false, reportOrigin 1..1, vaccineCode.coding:snomed_CT 0..1).
 - standard: fhir-r4-base
   resource: Immunization
 care_process:
@@ -107,3 +116,8 @@ issues:
   im Impfstatus oder als Hinweis in recommendationsForPrimaryCare bzw. riskFactorAndAlert führen? Offen
   bleibt der Abgleich mit den aktuellen STIKO-Empfehlungen (Indikationsimpfungen bei Immundefizienz);
   aus dem Issue zur fehlenden S3-Impfempfehlung ist damit nur noch dieser STIKO-Teil offen.'
+- 'Das Element ist als Impfstatus modelliert (CodeableConcept mit 304250009, 425457005, 87273-9, 105580-5,
+  AM160102); das Impfpass-MIO dokumentiert dagegen einzelne Impfungen mit Impfstoffcode (SNOMED/ATC),
+  Zielerkrankung und Datum. Zu entscheiden: den Impfstatus als aus Immunization-Einträgen abgeleitete
+  Zusammenfassung definieren oder das Element um Impfstoff, Zielerkrankung (z. B. Influenza, Pneumokokken,
+  COVID-19, Herpes zoster) und Impfdatum ergänzen.'

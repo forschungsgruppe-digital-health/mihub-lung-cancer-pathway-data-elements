@@ -34,14 +34,31 @@ value_set:
     display: Version used [Identifier] TNM classification
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul TNM
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 8 TNM-Klassifikation (in 5 Diagnose und in Pathologie als cTNM bzw. pTNM, ferner in OP und
+    Verlauf als TNM)
+  path: 'TNM_Typ: Datum (8.1), Version (8.2), c_p_u_Praefix_T/_N/_M (8.6–8.8), T (8.9), N (8.11), M (8.12),
+    UICC_Stadium (8.17)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
 - standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-tnm-stage-group.html
-  resource: TNMStageGroup
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-tnm-stage-group
+  resource: Observation (Profil TNMStageGroup)
+  path: 'Observation.code (preferred mcode-tnm-stage-group-staging-type-vs: 399390009, 399537006, 399588009);
+    Observation.valueCodeableConcept (Stadiengruppe); Observation.method (1..1, z. B. NCI C188404 UICC);
+    Observation.focus → Primary Cancer Condition'
+  notes: mCODE STU4 (4.0.0). Die Stadienwerte folgen AJCC; im deutschen Kontext gilt UICC (oBDS 8.17).
+    Die Element-Codes 399390009, 399537006 und 399588009 liegen im Staging-Typ-VS.
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tnm-klassifikation
   resource: Observation
+  path: 'Observation.code (REQUIRED mii-vs-onko-tnm-klassifikation-typ: 399390009, 399537006 klinisch,
+    399588009 pathologisch); Observation.valueCodeableConcept (REQUIRED UICC-Stadium, mii-vs-onko-tnm-uicc-stadium);
+    Observation.method (REQUIRED TNM-Version, mii-vs-onko-tnm-version); Observation.hasMember → T-, N-,
+    M-Kategorie (mii-pr-onko-tnm-t-kategorie usw.)'
+  notes: Modul Onkologie 2026.0.3, Namensraum …/fhir/ext/modul-onko/. Die Element-Codes 399390009, 399537006
+    und 399588009 liegen im REQUIRED-ValueSet für Observation.code; die LOINC-Codes 21908-9 und 21902-2
+    sind als alleiniger Observation.code nicht zulässig, allenfalls als Zusatz-Coding neben 399537006
+    bzw. 399588009; die TNM-Version (LOINC 21917-0) gehört in Observation.method (mii-cs-onko-tnm-version).
 care_process:
   trigger: Staging bei Erstdiagnose (cTNM) bzw. nach Resektion (pTNM); nach neoadjuvanter Therapie (yTNM);
     Re-Staging bei Rezidiv (rTNM); Übernahme in die Hausarztakte

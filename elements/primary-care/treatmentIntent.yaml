@@ -22,11 +22,19 @@ value_set:
     display: Palliative intent
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Intention (Module OP / ST / SYST)
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie (jeweils Intention)
+  path: 'OP/Intention (13.1: K, P, D, R, S, X); ST/Intention (14.1: K, P, O, S, X); SYST/Intention (16.1:
+    K, P, S, X)'
+  notes: Die Wertebereiche unterscheiden sich je Abschnitt (oBDS_v3.0.5.xsd); die SNOMED-Codes des Elements
+    sind nicht direkt meldbar (Abbildung 373808002 → K, 363676003 → P).
 - standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/
-  resource: procedure-intent (Extension)
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-procedure-intent
+  resource: Extension (Kontext u. a. Procedure, MedicationRequest, MedicationAdministration, ServiceRequest)
+  path: 'Procedure.extension(url = http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-procedure-intent).valueCodeableConcept
+    (extensible mcode-procedure-intent-vs: 373808002, 363676003, 399707004, 261004008, 129428001, 429892002,
+    360156006, 447295008)'
+  notes: mCODE STU4 (4.0.0). Die Element-Codes 373808002 und 363676003 sind im Value Set enthalten.
 care_process:
   trigger: Therapieentscheidung (Tumorboard); Änderung bei Therapiezieländerung
   frequency_pattern: per-line
@@ -94,6 +102,14 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+issues:
+- 'Die Intention wird je Ziel unterschiedlich kodiert: oBDS mit Buchstabencodes je Abschnitt (OP K/P/D/R/S/X,
+  ST K/P/O/S/X, SYST K/P/S/X), MII Onko über Procedure.extension:Intention (REQUIRED, dieselben oBDS-Codes;
+  ConceptMap mii-cm-onko-intention-sct: K = 373808002, P = 363676003, O „lokal kurativ bei Oligometastasierung“
+  nur als „wider“ auf 373808002), mCODE über SNOMED (extensible). Zu entscheiden: die Abbildung der Element-Codes
+  373808002 und 363676003 auf die oBDS-Codes je Therapieabschnitt festschreiben (insbesondere K oder O
+  bei der Strahlentherapie) und klären, ob die MII-Onko-Intention-Extensions (mii-ex-onko-operation-intention,
+  -strahlentherapie-intention, -systemische-therapie-intention) als nationales FHIR-Ziel ergänzt werden.'
 related_elements:
 - relation: isPartOf
   target: tumorBoardDecision

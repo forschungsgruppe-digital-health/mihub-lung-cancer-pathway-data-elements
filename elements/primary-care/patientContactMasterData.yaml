@@ -34,6 +34,17 @@ standard_mappings:
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
   resource: Patient
   path: Patient.address / Patient.telecom / Patient.communication.language
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation (Kategorie social-history)
+  path: Observation.category = social-history; Observation.code = SNOMED 184104002 (Patient occupation);
+    Observation.valueString bzw. Observation.valueCodeableConcept (Beruf)
+  notes: Nur für den Beruf; er ist kein Element des MII-Patient-Profils. Der Arbeitgeber ist durch 184104002
+    nicht abgedeckt; dafür kommt Patient.contact mit relationship v2-0131 E (Employer) und organization
+    in Betracht (im MII-Patient zulässig, nicht mustSupport; siehe Issue zur Strukturierung). Im MII-Modul
+    Soziodemographie (nur Ballot 2027.0.0-ballot) gibt es kein Profil für Beruf oder Arbeitgeber, nur
+    für die berufliche Stellung (mii-pr-sdd-berufliche-stellung). Adresse, Telecom und Sprache bleiben
+    im MII-Patient (telecom und communication sind dort nicht mustSupport).
 constraints_de: Personenbezogen — Anschrift und Telefon/E-Mail direkt identifizierend, Beruf/Arbeitgeber
   indirekt identifizierend; Nutzung nur im Behandlungskontext; für Sekundärnutzung nur pseudonymisiert
   und datensparsam (MII KDS PatientPseudonymisiert).

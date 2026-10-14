@@ -57,9 +57,24 @@ value_set:
     Codes einzeln verifiziert (SNOMED CT 20260701).'
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Raucher
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
   resource: Observation
   path: Observation.valueCodeableConcept
+  notes: nur Ballot de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, kein stabiles
+    Release. MII_PR_Kardio_Observation_Rauchen mit baseDefinition ISiKRaucherStatus (gleiche REQUIRED-Bindung
+    an LOINC-LA-Codes); zusätzlich component:packungsjahre (SNOMED 401201003, {pack-years}), component:zigarettenProTag
+    (LOINC 63640-7), component:rauchbeginn (SNOMED 266929003) und component:rauchdauer (SNOMED 228487000).
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKRaucherStatus
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: 'ISiK Stufe 6 (de.gematik.isik 6.0.0; gleiche Canonical in de.gematik.isik-basismodul 4.0.3),
+    Basisprofil ISiKLebensZustand. category Pattern social-history; Observation.code: coding:loinc Pattern
+    72166-2 (Pflicht), coding:snomed-ct Pattern 77176002; value[x] nur CodeableConcept, valueCodeableConcept
+    (min 1) REQUIRED https://gematik.de/fhir/isik/ValueSet/current-smoking-status-uv-ips (nur LOINC-LA-Codes
+    LA18976-3, LA18977-1, LA15920-4, LA18978-9, LA18979-7, LA18980-5, LA18981-3, LA18982-1); effective[x]
+    1..1. Die SNOMED-Wertecodes des Elements sind daneben nur als zusätzliche Codings möglich; E-Zigarette
+    und Passivrauch lassen sich im Profil nicht abbilden (siehe offener Punkt).'
 care_process:
   trigger: bei jeder Vorstellung (mind. beim Erstkontakt und wiederholt im Verlauf, opt-out-Ansatz; S3-LL
     Lungenkarzinom 5.1 Empf. 4.2 'regelmäßig' + Hintergrundtext Kap. 4.2.1; S3-LL Rauchen und Tabakabhängigkeit
@@ -151,3 +166,16 @@ issues:
   generisch 722494001 ''Nicotine user''). (d) Passivrauch: 43381005 bzw. 711563001 ''No known exposure
   to tobacco smoke''. Alle Kandidaten sind per $lookup auf dem MII TermServ (SNOMED CT 20260701) aktiv.
   Damit ist zugleich das offene Issue zu den ''verwandten Produkten'' teilweise beantwortet.'
+- 'Wertecodes von smokingStatus an ISiKRaucherStatus anpassen. Das Profil und das MII-Kardio-Ballot binden
+  valueCodeableConcept REQUIRED an current-smoking-status-uv-ips (nur LOINC-LA-Codes); 77176002 ''Smoker''
+  ist dort der feste Observation.code, kein Wert. Zuordnung nach Bedeutung (das Paket enthält keine ConceptMap):
+  266919005 → LA18978-9 ''Never smoker''; 8517006 → LA15920-4 ''Former smoker''; 428041000124106 → LA18977-1
+  ''Current some day smoker''; 266927001 → LA18980-5 ''Unknown if ever smoked''; 77176002 ''Smoker'' (ohne
+  Angabe der Häufigkeit) → LA18979-7 ''Smoker, current status unknown''. LA18976-3 ''Current every day
+  smoker'' entspricht 449868002 ''Smokes tobacco daily'', das im Smoking-Status-ValueSet urn:oid:2.16.840.1.113883.11.20.9.38
+  enthalten ist, im Element aber fehlt. E-Zigarette (722499006) und Passivrauch (43381005) sind im Profil
+  nicht abbildbar und bräuchten eigene Observations (vgl. offener Punkt zur Achsenmischung im Wertebereich).
+  Zu entscheiden: Abbildungstabelle festlegen bzw. LOINC-LA-Codes ergänzen (einschließlich der Frage,
+  ob 449868002 aufgenommen wird) und das Bindungsziel von value_set.uri ersetzen (http://hl7.org/fhir/ValueSet/smoking-status
+  ist in hl7.fhir.r4.core 4.0.1 nicht enthalten; Kandidaten laut value_set.notes: urn:oid:2.16.840.1.113883.11.20.9.38
+  oder current-smoking-status-uv-ips).'

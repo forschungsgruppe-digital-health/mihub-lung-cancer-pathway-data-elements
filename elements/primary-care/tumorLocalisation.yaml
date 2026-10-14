@@ -39,12 +39,20 @@ value_set:
     display: Primary site Cancer
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Modul Diagnose (Primärtumor Topographie ICD-O)
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 5 Diagnose
+  path: 'Diagnose/Primaertumor_Topographie_ICD_O (Code = 5.4; Version = 5.5: 31, 32, 33); die Seite steht
+    getrennt in Tumorzuordnung/Seitenlokalisation (5.8: L, R, B, M, U, T; siehe Issue)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
   resource: Condition
-  path: Condition.bodySite
+  path: Condition.bodySite.coding:icd-o-3 (System http://terminology.hl7.org/CodeSystem/icd-o-3, code
+    REQUIRED mii-vs-onko-icdo3-topographie); die Seite steht getrennt in Condition.bodySite.coding:primaertumorSeitenlokalisation
+    (siehe Issue)
+  notes: Das MII-Diagnose-Profil hat in Condition.bodySite nur einen SNOMED-Slice; einen ICD-O-3-Topographie-Slice
+    (C34.x) für den Primärtumor bietet das Onko-Primärtumor-Profil (Modul Onkologie 2026.0.3). Die Konzeptcodes
+    SNOMED 399687005 und LOINC 21855-2 werden nicht übertragen.
 care_process:
   trigger: Diagnosestellung (Radiologie/Pathologie); Übernahme in die Hausarztakte
   frequency_pattern: once

@@ -35,17 +35,49 @@ value_set:
     display: Tumorkonferenzprotokoll
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-diagnose-primaertumor
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
   resource: Condition
+  path: Condition.code.coding:icd10-gm (Zweitkarzinom); Condition.bodySite.coding:icd-o-3; Condition.extension:Feststellungsdatum;
+    Condition.extension:occurredFollowing (frühere Tumorerkrankung)
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Diagnose_Primaertumor; baseDefinition MII Diagnose).
+    Nur für das metachrone Zweitkarzinom als neue Primärtumor-Diagnose (878806005 bzw. ICD-10-GM, z. B.
+    C34.9): code mit den Slices icd10-gm, alpha-id, sct und orphanet; extension:Feststellungsdatum 1..1,
+    recordedDate 1..1; Bezug zum Ersttumor über extension:occurredFollowing (''Frühere Tumorerkrankungen'').
+    Lokal- und Regionalrezidiv sowie Fernmetastasierung über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+    (eigener Eintrag).'
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul (oBDS 2021)
-  path: Allgemeiner Leistungszustand / Tumorstatus_Lokoregionaeres_Tumorstatus
-  notes: Pflichtmeldung gem. §65c SGB V
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: '17 Verlauf; Zweitkarzinom: eigene Meldung mit Diagnose-Teil (5 Diagnose)'
+  path: '17.3 Tumorstatus Primärtumor = R (Lokalrezidiv), 17.4 Tumorstatus Lymphknoten = R (Lymphknotenrezidiv),
+    17.5 Tumorstatus Fernmetastasen = R (neue Fernmetastase bzw. Metastasenrezidiv), 17.2 Gesamtbeurteilung
+    des Tumorstatus = Y (Rezidiv), jeweils mit 17.1 Untersuchungsdatum Verlauf (XSD: Verlauf/Verlauf_Lokaler_Tumorstatus,
+    Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen, Gesamtbeurteilung_Tumorstatus,
+    Untersuchungsdatum_Verlauf); neue Fernmetastasen zusätzlich unter 11 Fernmetastasen (Verlauf/Menge_FM)'
+  notes: Pflichtmeldung gem. § 65c SGB V. 'Allgemeiner Leistungszustand' ist ECOG bzw. Karnofsky (12.1)
+    und hier nicht einschlägig; 'Tumorstatus_Lokoregionaeres_Tumorstatus' existiert in oBDS 3.0.5 nicht.
+    Ein metachrones Zweitkarzinom wird als eigener Tumor (eigene Tumorzuordnung) mit Diagnosemeldung erfasst;
+    der Ersttumor steht dort unter 5.9 Frühere Tumorerkrankungen (Diagnose/Menge_Fruehere_Tumorerkrankung).
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
 - standard: kbv-mio
-  profile_or_url: https://mio.kbv.de/
-  resource: Patientenkurzakte
-  notes: Übergabe Onko ↔ Hausarztpraxis (ePA-Wallet)
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Condition
+  resource: Condition (MIO Patientenkurzakte, Notfalldaten, Sektion Diagnose)
+  path: 'Condition.code (code.coding max. 1: je Condition höchstens ein Coding aus den Slices ICD-10-GM,
+    alpha-id, snomed-ct oder orphanet); Condition.code.text 1..1'
+  notes: MIO Patientenkurzakte 1.0.0 (Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle)
+    aus Notfalldaten (NFD) und persönlichen Erklärungen (DPE); kein onkologisches Übergabeformat. Rezidiv
+    bzw. Zweitkarzinom nur als Diagnose (NFD-Composition, Sektion diagnose, LOINC 29548-5). 'ePA-Wallet'
+    ist kein offizieller Begriff; MIOs liegen in der ePA.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+  resource: Observation
+  path: Observation.component:Tumor_Verlauf / :Lymphknoten_Verlauf / :Fernmetastasen_Verlauf.valueCodeableConcept
+    = R; Observation.valueCodeableConcept = Y (Rezidiv); Observation.focus → Primärtumor-Condition
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Verlauf). Observation.code Pattern SNOMED 396432002;
+    Gesamtbeurteilung value[x] extensible mii-vs-onko-verlauf-gesamtbeurteilung (Y = Rezidiv); Komponenten
+    REQUIRED mii-vs-onko-verlauf-primaertumor (R = Lokalrezidiv), mii-vs-onko-verlauf-lymphknoten (R =
+    neu aufgetretenes Lymphknotenrezidiv) bzw. mii-vs-onko-verlauf-fernmetastasen (R = neu aufgetretene
+    Fernmetastase(n) bzw. Metastasenrezidiv); focus 1..1 → mii-pr-onko-diagnose-primaertumor. Lokalisation
+    neuer Fernmetastasen über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fernmetastasen.
 care_process:
   trigger: Detektion in Nachsorge
   frequency_pattern: ad-hoc
@@ -99,16 +131,18 @@ provenance:
   reviewers: []
   git_commit: ''
 issues:
-- 'oBDS-Mapping korrigieren: Der path „Allgemeiner Leistungszustand / Tumorstatus_Lokoregionaeres_Tumorstatus“
-  ist fehlerhaft. „Allgemeiner_Leistungszustand“ ist im oBDS der Leistungszustand (ECOG oder Karnofsky)
-  und für Rezidiv/Zweittumor nicht einschlägig; ein Feld „Tumorstatus_Lokoregionaeres_Tumorstatus“ existiert
-  nicht (oBDS-XSD 3.0.4 vom 15.04.2025, Verlauf_Typ). Rezidiv und Metastasierung werden in der Verlaufsmeldung
-  über Gesamtbeurteilung_Tumorstatus (Y = Rezidiv), Verlauf_Lokaler_Tumorstatus (R = Lokalrezidiv), Verlauf_Tumorstatus_Lymphknoten
-  (R = neu aufgetretenes Lymphknotenrezidiv) und Verlauf_Tumorstatus_Fernmetastasen (R = neu aufgetretene
-  Fernmetastase(n) bzw. Metastasenrezidiv; neue Metastasen zusätzlich unter Menge_FM mit Lokalisation
-  und Datum) gemeldet, ein Zweitkarzinom als eigene Diagnosemeldung. Pfad entsprechend ändern, gegen die
-  bei Umsetzung gültige oBDS-Fassung prüfen und ctThoraxFinding (gleicher Fehler „Tumorstatus_Lokoregionaeres“)
-  einheitlich korrigieren.'
+- 'recurrenceOrSecondPrimary vereint zwei Sachverhalte, die MII und oBDS getrennt modellieren: Rezidiv
+  und Metastasierung als Verlaufsbeurteilung (mii-pr-onko-verlauf; oBDS 17.2 bis 17.5), das metachrone
+  Zweitkarzinom als neue Primärtumor-Diagnose (mii-pr-onko-diagnose-primaertumor; oBDS eigene Diagnosemeldung).
+  Vorschlag: 314954002 → Tumor_Verlauf bzw. 17.3 = R; 399409002 → Fernmetastasen_Verlauf bzw. 17.5 = R
+  (Lokalisation unter 11); 1259237005 → Gesamtbeurteilung bzw. 17.2 = Y (Lokalisation offen). Bei 314954002
+  und 399409002 zusätzlich Gesamtbeurteilung 17.2 = Y (im MII-Verlauf Observation.valueCodeableConcept
+  = Y): 17.2 ist Pflichtfeld der Verlaufsmeldung, und Y umfasst laut oBDS-XSD Lokalrezidiv und/oder Metastasierung
+  nach vorheriger kompletter Tumorfreiheit. 878806005 und ICD-10-GM C34.9 → neue Condition bzw. Diagnosemeldung.
+  Für ein regionäres Lymphknotenrezidiv (17.4 = R) hat das Element keinen eigenen Code. KDL SD150103 ''Tumorkonferenzprotokoll''
+  ist eine Dokumentklasse, kein Befundwert. Zu entscheiden: Element aufteilen oder Transformationsregeln
+  festschreiben; außerdem, ob das kbv-mio-Mapping (Patientenkurzakte = Notfalldaten, kein Onko-Übergabeformat)
+  beibehalten wird.'
 related_elements:
 - relation: dependsOn
   target: bronchoscopyFollowUp

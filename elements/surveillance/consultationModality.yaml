@@ -26,6 +26,15 @@ value_set:
     code: '386472008'
     display: Telephone consultation
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.type
+  notes: MII KDS Modul Fall (seit 2026 im Paket de.medizininformatikinitiative.kerndatensatz.base, 2026.0.1);
+    derselbe Encounter wie surveillanceVisit. Die Kontaktform als zusätzliches Encounter.type-CodeableConcept
+    mit dem SNOMED-Code des Elements; das Slicing von Encounter.type ist offen, die Slices Kontaktebene
+    und KontaktArt bleiben unberührt. Encounter.class (1..1) ist REQUIRED an http://fhir.de/ValueSet/EncounterClassDE
+    gebunden (HL7 v3 ActCode, z. B. AMB) und nimmt die SNOMED-Codes nicht auf.
 - standard: fhir-r4-base
   resource: Encounter
   path: Encounter.class / Encounter.type

@@ -38,6 +38,14 @@ value_set:
     code: D68.9
     display: Koagulopathie, nicht näher bezeichnet
 standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Allergy_Intolerance
+  resource: AllergyIntolerance (MIO Patientenkurzakte 1.0.0, Notfalldaten)
+  path: AllergyIntolerance.reaction.substance (coding:snomedCode REQUIRED KBV_VS_MIO_NFD_Allergy_Substance,
+    :atcCode, :askCode, text); AllergyIntolerance.reaction.manifestation; AllergyIntolerance.clinicalStatus
+  notes: Nur für den Teil schwere Allergien; AllergyIntolerance.code, type, category und criticality sind
+    im Profil ausgeschlossen (0..0). Gerinnungsstörung und weitere Warnhinweise bleiben bei Condition
+    bzw. Flag. Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle.
 - standard: fhir-r4-base
   resource: AllergyIntolerance / Flag / Condition
 care_process:
@@ -94,6 +102,11 @@ issues:
 - 'Redundanz ''Vorliegen einer Patientenverfügung'': wird in riskFactorAndAlert (DE-036), socialSituation
   (DE-022) und advanceDirectiveDocument erfasst. Führendes Element festlegen (Vorschlag: advanceDirectiveDocument);
   hier nur als Warnhinweis bzw. Verweis führen.'
+- 'Für Allergien verlangt KBV_PR_MIO_NFD_Allergy_Intolerance den Auslöser als Substanzcode in AllergyIntolerance.reaction.substance
+  (SNOMED aus KBV_VS_MIO_NFD_Allergy_Substance, ATC oder ASK); AllergyIntolerance.code ist ausgeschlossen.
+  Die Element-Codes (609328004, 8658-7, Z88.9, Z91.0) sind Kategorie- bzw. Anamnesecodes und keine Substanzcodes.
+  Zu entscheiden: den Allergieauslöser als eigenes Unterelement mit Substanzkodierung aufnehmen oder Allergien
+  nur als Hinweis (Condition bzw. Flag) führen.'
 related_elements:
 - relation: dependsOn
   target: advanceDirectiveDocument

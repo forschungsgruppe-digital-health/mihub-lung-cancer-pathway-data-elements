@@ -25,6 +25,15 @@ value_set:
     code: SD150101
     display: Follow up-Bogen
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:LNC = LOINC 74156-1; DocumentReference.type.coding:KDL; DocumentReference.content.attachment
+  notes: 'MII KDS Dokument 2026.0.1 (stabil). type.coding ist nach System gesliced, alle Slices REQUIRED:
+    LNC an http://hl7.org/fhir/ValueSet/c80-doc-typecodes (enthält 74156-1), KDL an http://dvmd.de/fhir/ValueSet/kdl
+    (derzeit SD150101, siehe offener Punkt zur Dokumentklasse), optional SCT (mii-vs-dokument-sct-dokument-typ)
+    und XDS (IHE-D typeCode); category.coding:XDS optional (IHE-D classCode). content 1..*, content.attachment
+    1..1.'
 - standard: fhir-r4-base
   resource: DocumentReference
   path: DocumentReference.type

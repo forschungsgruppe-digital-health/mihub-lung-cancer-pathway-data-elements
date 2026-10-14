@@ -26,8 +26,11 @@ standard_mappings:
   resource: Patient
   path: Patient.name
 - standard: kbv-mio
-  profile_or_url: https://mio.kbv.de/
-  resource: Patientenkurzakte
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Patient_NFD
+  resource: Patient (MIO Patientenkurzakte 1.0.0)
+  path: Patient.name:name (family mit extension:nachname 1..1, given, prefix)
+  notes: Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle; Basis
+    KBV_PR_Base_Patient 1.1.3; der Geburtsname ist im NFD-Profil ausgeschlossen (name:geburtsname 0..0).
 constraints_de: Personenbezogen — Nutzung nur im Behandlungskontext; für Sekundärnutzung pseudonymisiert
   (MII KDS PatientPseudonymisiert).
 care_process:

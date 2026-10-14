@@ -32,6 +32,18 @@ value_set:
     code: '273446001'
     display: European Organisation for Research and Treatment of Cancer - Quality of Life questionnaire
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-score-instance
+  resource: Observation
+  path: Observation.valueQuantity ({score}); Observation.code; Observation.derivedFrom -> QuestionnaireResponse
+  notes: 'MII KDS PRO 2026.7.0 (stabil), generische Score-Instanz. value[x] erlaubt nur Quantity, CodeableConcept
+    oder string, kein integer. Der Wert kommt daher als valueQuantity mit UCUM {score}. Der Code folgt
+    dem MII-Muster aus https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/CodeSystem/mii-cs-pro-score-catalogue.
+    Für EORTC enthält der Katalog nur QLQ-C30-Scores, für die Lebensqualität eortc-qlq-c30-ql „EORTC QLQ-C30
+    Global Health Status / Quality of Life Score“ (ObservationDefinition mii-obsdef-pro-eortc-qlq-c30-ql:
+    Einheit {score}, 2 Nachkommastellen); für den QLQ-C15-PAL fehlt ein Code (siehe Issue). Die Antworten
+    werden als QuestionnaireResponse nach https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+    geführt und über derivedFrom verknüpft; category survey (MII-Beispiel).'
 - standard: fhir-r4-base
   resource: Observation / QuestionnaireResponse
   path: Observation.valueInteger
@@ -128,6 +140,13 @@ issues:
   kennt kein decimal) oder eine ausdrückliche Rundungsregel; dasselbe für qolEortcQlqC30 prüfen. Offen
   (UNSICHER): ob der QLQ-C15-PAL einen „Gesamtwert“ vorsieht, wie definition_de nahelegt; das Scoring-Manual
   des C15-PAL liegt nicht vor.'
+- 'Observation.code für qualityOfLifeScore im MII-PRO-Profil festlegen. Der MII-Score-Katalog (pros 2026.7.0)
+  enthält für EORTC nur QLQ-C30-Scores, darunter eortc-qlq-c30-ql (Global Health Status/QoL), aber keinen
+  Code für den QLQ-C15-PAL; auch der MII-Fragebogenkatalog kennt den QLQ-C15-PAL nicht. Zu entscheiden
+  ist: eortc-qlq-c30-ql (nur wenn die QoL-Skala des QLQ-C15-PAL als gleichwertig gilt), ein lokaler Code
+  oder 709503007 als instrumentenoffener Code (273446001 laut value_set.notes nur als Instrumentenangabe).
+  Zur Wertdarstellung (valueQuantity {score} statt integer, 2 Nachkommastellen) siehe das Issue zu datatype
+  integer.'
 related_elements:
 - relation: specializes
   target: qolEortcQlqC30

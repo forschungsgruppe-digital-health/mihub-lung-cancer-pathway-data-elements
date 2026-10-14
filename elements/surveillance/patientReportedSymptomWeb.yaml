@@ -21,6 +21,16 @@ value_set:
     code: '840297006'
     display: Assessment of patient reported outcome measures
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item
+  notes: MII KDS PRO 2026.7.0 (MII_PR_PRO_QuestionnaireResponse, SDC-basiert). QuestionnaireResponse.questionnaire
+    (1..1, MS) ist Pflicht und verweist per Canonical auf einen SDC-Fragebogen; die MII-Instrumente sind
+    nach https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire
+    profiliert (Questionnaire.code 1..*, Slices snomed/loinc/mii). authored 1..1; Antworten in item.answer.value[x].
+    Die Element-Codes (LOINC 89194-5, SNOMED 840297006) haben in der QuestionnaireResponse keinen Platz;
+    das Instrument ist noch festzulegen (siehe Issue).
 - standard: fhir-r4-base
   resource: QuestionnaireResponse
   path: QuestionnaireResponse.item
@@ -75,3 +85,13 @@ issues:
   Symptom ein Antwort-Value-Set (Symptomcodes für Atemnot, Schmerz, Husten, Müdigkeit; vor Aufnahme per
   TermServ zu verifizieren) plus Schweregrad, z. B. als Observable SNOMED CT 405162009 „Symptom severity
   level“ mit Antworten aus den Nachfahren von SNOMED CT 162465004 „Symptom severity“.'
+- 'Instrument der wöchentlichen PROM-Erfassung festlegen (ergänzend zum offenen Punkt „Modellierung klären“):
+  Das MII-PRO-Profil mii-pr-pro-questionnaire-response (pros 2026.7.0) verlangt QuestionnaireResponse.questionnaire
+  (1..1) als Canonical eines konkreten Fragebogens (targetProfile sdc-questionnaire; die MII-Instrumente
+  sind nach mii-pr-pro-questionnaire profiliert, Questionnaire.code 1..*). Das Element legt kein Instrument
+  fest; seine generischen Codes (LOINC 89194-5, SNOMED 840297006) sind in der QuestionnaireResponse nicht
+  abbildbar und als Instrument-Code ungeeignet. Zu entscheiden: welches Instrument die wöchentliche Web-Selbsteinschätzung
+  nutzt – ein eigener MiHUB-Fragebogen in Anlehnung an Denis 2017 oder ein vorhandenes MII-Instrument
+  aus pros 2026.7.0 (jeweils Status draft): mii-qst-pro-pro-ctcae-onkologisches-basisscreening (u. a.
+  Schmerzen, Müdigkeit, Kurzatmigkeit) oder mii-qst-pro-midos-midos2 (u. a. Schmerz, Luftnot, Müdigkeit);
+  Husten enthält keines der beiden.'

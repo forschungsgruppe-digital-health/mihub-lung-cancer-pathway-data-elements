@@ -49,6 +49,23 @@ value_set:
     code: Z56
     display: Kontaktanlässe mit Bezug auf das Berufsleben
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-soziodemographie/StructureDefinition/mii-pr-sdd-betreuungssituation
+  resource: Observation
+  path: 'Observation.code = SNOMED 305060004 (Pattern); Observation.valueCodeableConcept (REQUIRED mii-vs-sdd-betreuungssituation:
+    keine Betreuung, auf Anfrage, zeitweise, dauerhaft z. B. Pflegeheim); Observation.category social-history
+    und survey'
+  notes: nur Ballot de.medizininformatikinitiative.kerndatensatz.soziodemographie#2027.0.0-ballot, kein
+    stabiles Release (Status draft). Deckt Pflege-/Unterstützungsbedarf und Heimaufenthalt ab.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-soziodemographie/StructureDefinition/mii-pr-sdd-beschaeftigungsstatus
+  resource: Observation
+  path: Observation.code = LOINC 67875-5 (Pattern); Observation.valueCodeableConcept (coding:minimal REQUIRED
+    mii-vs-sdd-beschaeftigungsstatus-minimal, z. B. nicht berufstätig wegen Erkrankung, Rente, Teilzeit,
+    Vollzeit; coding:lang)
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.soziodemographie#2027.0.0-ballot, kein
+    stabiles Release (Status draft). Weitere Ballot-Profile zur Lebenssituation: mii-pr-sdd-haushaltsgroesse,
+    mii-pr-sdd-partnerschaft, mii-pr-sdd-vertrauensperson.'
 - standard: fhir-r4-base
   resource: Observation (social-history)
 care_process:
@@ -129,6 +146,12 @@ issues:
   advanceDirectiveDocument (Beziehung dependsOn besteht bereits; dort Phase palliative, Entitäten NSCLC/SCLC).
   Abgrenzung von „vorhandene Unterstützung“ (informell, „wer kümmert sich“) zu ongoingSupportiveServices
   (professionelle Dienste, z. B. Pflegedienst) festlegen.'
+- 'Die nationalen Soziodemographie-Profile (nur Ballot) binden die Werte REQUIRED an MII-eigene Codesysteme
+  (z. B. Betreuungssituation 1–5, Beschäftigungsstatus 1–7). Die SNOMED- und ICD-10-GM-Antwortwerte des
+  Elements (z. B. 160734000, 301887005, 184156005, Z74.9, Z60) sind dort als Wert nicht zulässig, und
+  das Element bündelt mehrere Teilaspekte. Zu entscheiden: das Element in Teil-Elemente (Wohn- und Betreuungssituation,
+  Beschäftigung, Bezugspersonen) aufteilen und die MII-Codes übernehmen, sobald das Modul stabil ist,
+  oder bei der generischen social-history-Observation bleiben.'
 related_elements:
 - relation: dependsOn
   target: caregiverBurden
