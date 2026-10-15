@@ -1,0 +1,145 @@
+id: mihub.lung.followup.abdominalUltrasoundFollowUp.v0.1
+uuid: 400d524d-d8d4-5c50-8763-07775a31a37d
+name: abdominalUltrasoundFollowUp
+label_de: Sonografie Abdomen in der Nachsorge
+definition_de: 'Datum einer Abdomensonographie als bildgebende Option des Nachsorgetermins (Indikation
+  laut S3 Tab. 44: Leber- und Nebennierenmetastasen, paraaortale Lymphknotenvergrößerungen — im Original
+  „paraaortale Lymphome“).'
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: bildgebung
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: Die abdominelle Sonographie ohne Spezialverfahren hat im OPS 2026 keinen eigenen Kode (nur 3-03x
+    komplexe differenzialdiagnostische Sonographie) — bewusst kein OPS-Coding.
+  codings:
+  - system: snomed-ct
+    code: '45036003'
+    display: Ultrasonography of abdomen
+  - system: kdl
+    code: DG020111
+    display: Sonographiebefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
+  resource: ImagingStudy
+  path: ImagingStudy.started
+  notes: MII KDS Bildgebung 2026.0.0 (MII_PR_Bildgebung_Bildgebungsstudie); ImagingStudy.started 0..1
+    MS. Modalität über ImagingStudy.modality bzw. ImagingStudy.series.modality (1..1, REQUIRED DICOM CID
+    33, System http://dicom.nema.org/resources/ontology/DCM), hier US. Das Profil beschreibt eine DICOM-Studie;
+    ohne DICOM-Studie alternativ Procedure https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+    mit Procedure.performed[x] (1..1; code.coding:sct REQUIRED an Nachfahren von 363679005 Imaging, dazu
+    coding:ops und coding:loinc).
+care_process:
+  trigger: 'Nachsorgetermin gemäß Nachsorgeplan (S3 Empf. 16.7: Option „Sonografie Abdomen“)'
+  frequency_pattern: per-imaging-event
+  responsible_role: Radiolog:in / Pneumolog:in / Hausärzt:in
+  data_flows:
+  - system: ris-pacs
+    actor_role: Radiolog:in
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: read
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026: bildgebende Option); Tab. 44 (Abdomensonographie: Leber- und
+      Nebennierenmetastasen, paraaortale Lymphome)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei diesen Nachsorgeterminen sind eine dezidierte Anamnese, eine körperliche Untersuchung und
+      geeignete bildgebende Verfahren (Röntgen Thorax, Sonografie Abdomen oder CT-Untersuchungen) durchzuführen.
+      … Abdomensonographie … Leber und Nebennierenmetastasen, paraaortale Lymphome
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3, Empf. 16.7 (EK, Starker Konsens, geprüft 2026), S. 498; Tab. 44, S. 499
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-022 Sonografie Abdomen (Onkologische Nachsorge)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-022
+    quote: Sonografie Abdomen … Erstvorstellung innerhalb von 8 Wochen nach Abschluss der multimodalen
+      Therapie (inklusive OP oder CTx/RTx … S3-LL Lungenkarzinom … 16.7 Apr. 2026
+    accessed: '2026-10-15'
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-022; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 1 Änderung übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- Onkopedia NSCLC/SCLC sehen die Abdomensonographie in der Nachsorge nicht vor (nur im Staging) — Aufnahme
+  auf Wunsch der Nachsorge-WG mit S3-Beleg (Option).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.followUpVisitDate.v0.1

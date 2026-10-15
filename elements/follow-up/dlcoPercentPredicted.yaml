@@ -2,12 +2,14 @@ id: mihub.lung.followup.dlcoPercentPredicted.v0.1
 uuid: 9853026d-63f2-5a2c-9847-5c9a01116994
 name: dlcoPercentPredicted
 label_de: DLCO (% vom Soll)
-definition_de: Diffusionskapazität für Kohlenmonoxid (DLCO/TLCO), in Prozent des altersnormierten Sollwerts.
-  Marker für Strahlen-/Pneumonitis-Folgen. Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
+definition_de: Diffusionskapazität für Kohlenmonoxid (DLCO/TLCO, CO-Transferfaktor), in Prozent des Sollwerts.
+  Marker für Lungenfunktionseinschränkung (u. a. Verlust an Lungenfunktion nach Resektion) sowie für Strahlen-/Pneumonitis-Folgen.
+  Ergebnisartefakt zur Prozedur 'pulmonaryFunctionTest'.
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: messwert
 datatype: decimal
 cardinality: 0..*
 unit: '%'
@@ -16,18 +18,33 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: loinc
-    code: 17129-7
-    display: Carbon monoxide diffusing capacity
+    code: 98130-8
+    display: Diffusion capacity.carbon monoxide/Predicted
   - system: snomed-ct
-    code: '252464004'
-    display: Carbon monoxide diffusing capacity (procedure)
+    code: '36421003'
+    display: Carbon monoxide diffusing capacity measurement
   - system: kdl
     code: DG060108
     display: Dokumentationsbogen Lungenfunktionsprüfung
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-dlco
   resource: Observation
+  path: Observation.component:percentPredicted.valueQuantity (UCUM %), component.code.coding:loinc = LOINC
+    98130-8; Observation.code.coding:loinc = LOINC 19911-7
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.lungenfunktion#2027.0.0-ballot.1, kein
+    stabiles Release. Lungenfunktion statt Labor: …/core/modul-labor/ ist kein Profil. Der Prozentwert
+    vom Soll ist im Profil eine Komponente der DLCO-Observation; Observation.value[x] trägt den Absolutwert
+    (UCUM mmol/(min.kPa)). code.coding:loinc und component:percentPredicted.code.coding:loinc REQUIRED
+    an mii-vs-lufu-lnc-dlco (enthält 19911-7, 19910-9, 98130-8); Observation.code.coding:sct Pattern 1366665001;
+    für component:percentPredicted.code.coding:sct steht im Ballot noch das Platzhalter-Pattern ''TODO''.
+    Observation.partOf → mii-pr-lungenfunktion-diffusion-messung. Übergangsweise zusätzlich fhir-r4-base.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.valueQuantity (UCUM %) mit Observation.code = LOINC 98130-8
+  notes: Stabiles Übergangs-Mapping, bis das MII-Modul Lungenfunktion als stabiles Release vorliegt. Alternativ
+    wie im MII-Ballot als Komponente einer DLCO-Observation (Observation.code LOINC 19911-7).
 constraints_de: Wertebereich realistisch 0..150. UCUM-Einheit '%'. Bei Strahlentherapie verlaufsentscheidend.
 care_process:
   trigger: bei jeder Lungenfunktionsprüfung mit DLCO-Bestimmung
@@ -36,11 +53,30 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Tab. 42 (CO-Diffusionskapazität); Kap. 16.3.1 (Pneumonitis-Risiko)
-    recommendation_grade: EK
+    section: 'Tab. 44 (CO-Diffusionskapazität: Lungenfunktionseinschränkung, Pneumonitis); Kap. 16.3.1'
+    recommendation_grade: n/a
     evidence_level: n/a
+    quote: Nach chirurgischer Resektion stehen Schmerzzustände, Infektionen oder aber der Verlust an Lungenfunktion
+      im Vordergrund, nach Strahlentherapie die Ösophagitis und die Pneumonitis … Lungenfunktionsprüfung,
+      … Lungenfunktionseinschränkung, Pneumonitis … CO-Diffusionskapazität
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3.1, S. 493; Tab. 44, S. 499
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.2.2.1 (Strahlenpneumonitis 6–24 Monate nach RT-Ende; funktionelle Einschränkung mittels
+      Lungenfunktionstestung einschließlich Diffusionskapazität erfasst und quantifiziert); Kap. 8.1 Tab.
+      12 (Lungenfunktion: X Mo 3/6, (X) Mo 12/18/24) + Text (nach RT/RCT Überprüfung bis Ende des Pneumonitis-Risikos
+      fortführen — soll)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Sie kann innerhalb von 6-24 Monaten nach Ende der Bestrahlung auftreten. … Lungenfunktionstestung
+      einschließlich der Diffusionskapazität erfasst und quantifiziert. … Lungenfunktion | X | X | (X)
+      | (X) | (X) | … soll die Überprüfung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos fortgeführt
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 6.2.2.1; Kap. 8.1, Tab. 12 und Text nach Tab. 12
 iso13972_metadata:
   type: observation
   keywords:
@@ -50,7 +86,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -62,6 +98,62 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 2 Änderungen übernommen, 6 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Struktur von dlcoPercentPredicted gegenüber dem MII-Lungenfunktion-Ballot klären. Dort ist ''Prozent
+  vom Soll'' kein eigener Observation-Wert, sondern component:percentPredicted (valueQuantity %, LOINC
+  98130-8) der DLCO-Observation (Observation.code LOINC 19911-7 bzw. SNOMED 1366665001, Wert = Absolutwert
+  in mmol/(min.kPa)); der SNOMED-Slice der Komponente hat im Ballot noch das Platzhalter-Pattern ''TODO''.
+  SNOMED 36421003 ''Carbon monoxide diffusing capacity measurement'' ist eine Prozedur und im Ballot das
+  Procedure.code-Pattern von mii-pr-lungenfunktion-diffusion-messung, kein Observation-Code. Zu entscheiden:
+  Element nach dem stabilen Release als Komponente der DLCO-Observation (ggf. mit Absolutwert) oder als
+  eigenständige Observation (code 98130-8) führen und die Rolle von 36421003 klären (z. B. als Prozedurcode
+  bei pulmonaryFunctionTest).'
 related_elements:
 - relation: specializes
   target: mihub.lung.followup.pulmonaryFunctionTest.v0.1

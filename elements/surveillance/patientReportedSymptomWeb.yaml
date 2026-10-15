@@ -8,33 +8,65 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: prom
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
-  - system: snomed-ct
-    code: '364712001'
-    display: Symptom severity
   - system: loinc
-    code: 89204-2
-    display: Patient reported outcome
+    code: 89194-5
+    display: Patient reported outcome measure score
+  - system: snomed-ct
+    code: '840297006'
+    display: Assessment of patient reported outcome measures
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item
+  notes: MII KDS PRO 2026.7.0 (MII_PR_PRO_QuestionnaireResponse, SDC-basiert). QuestionnaireResponse.questionnaire
+    (1..1, MS) ist Pflicht und verweist per Canonical auf einen SDC-Fragebogen; die MII-Instrumente sind
+    nach https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire
+    profiliert (Questionnaire.code 1..*, Slices snomed/loinc/mii). authored 1..1; Antworten in item.answer.value[x].
+    Die Element-Codes (LOINC 89194-5, SNOMED 840297006) haben in der QuestionnaireResponse keinen Platz;
+    das Instrument ist noch festzulegen (siehe Issue).
 - standard: fhir-r4-base
   resource: QuestionnaireResponse
   path: QuestionnaireResponse.item
+constraints_de: 'Population lt. Onkopedia: Patient:innen in fortgeschrittenen Stadien ohne Krankheitsprogress
+  (Denis et al., JNCI 2017, HR 0,32).'
 care_process:
-  trigger: wöchentliche Selbsterfassung
+  trigger: Beginn der Nachsorge nach medikamentöser Erstlinientherapie in palliativer Situation (fortgeschrittenes
+    Stadium ohne Krankheitsprogress)
   frequency_pattern: weekly
   responsible_role: Patient (PROM); Onkologie-Triage
 evidence:
   guideline_references:
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.2 (web-basierte Nachsorge, Denis 2017)
-    recommendation_grade: Statement
-    evidence_level: 1b
+    section: Kap. 8.2 (web-basierte wöchentliche Symptom-Selbsteinschätzung; Denis P et al., JNCI 109:djx029,
+      2017)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Pat. in fortgeschrittenen Stadien ohne Krankheitsprogress zwischen einer wöchentlichen, Web-basierten
+      Selbsteinschätzung und einer standardisierten 3-bzw. 6-monatlichen CT Kontrolle randomisiert. Pat.
+      im experimentellen Arm hatten ein signifikant längeres, medianes Überleben
+    accessed: '2026-10-15'
+    locator: Kap. 8.2 Nicht-kurativ intendierte Therapie
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 2: Safe and quality care — Patient-reported experience and outcome measures (PROMs
+      online erhoben; PROM-Erhebung mit klinischer Reaktion verlängert das Überleben)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: PROMs measure aspects of a person’s health status such as symptoms, quality of life and needs
+      and are collected directly from patients either online, … Collecting PROMs, and then instigating
+      an appropriate clinical response, has been shown to prolong survival
+    accessed: '2026-10-15'
+    locator: 'Principle 2: Safe and quality care – Patient-reported experience and outcome measures'
 iso13972_metadata:
   type: observation
   keywords:
@@ -43,7 +75,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -55,3 +87,67 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Modellierung klären: Das Element ist eine wöchentliche PROM-Selbsteinschätzung (FHIR QuestionnaireResponse),
+  der datatype aber CodeableConcept ohne Symptom-Antwortwerte, und die Codings mischen Score- und Prozedurachse.
+  Optionen: (a) datatype Reference mit Zieltyp QuestionnaireResponse (in standard_mappings dokumentiert)
+  und Element-Code 840297006 (Prozedur) bzw. LOINC 89194-5, falls ein Score erhoben wird; oder (b) je
+  Symptom ein Antwort-Value-Set (Symptomcodes für Atemnot, Schmerz, Husten, Müdigkeit; vor Aufnahme per
+  TermServ zu verifizieren) plus Schweregrad, z. B. als Observable SNOMED CT 405162009 „Symptom severity
+  level“ mit Antworten aus den Nachfahren von SNOMED CT 162465004 „Symptom severity“.'
+- 'Instrument der wöchentlichen PROM-Erfassung festlegen (ergänzend zum offenen Punkt „Modellierung klären“):
+  Das MII-PRO-Profil mii-pr-pro-questionnaire-response (pros 2026.7.0) verlangt QuestionnaireResponse.questionnaire
+  (1..1) als Canonical eines konkreten Fragebogens (targetProfile sdc-questionnaire; die MII-Instrumente
+  sind nach mii-pr-pro-questionnaire profiliert, Questionnaire.code 1..*). Das Element legt kein Instrument
+  fest; seine generischen Codes (LOINC 89194-5, SNOMED 840297006) sind in der QuestionnaireResponse nicht
+  abbildbar und als Instrument-Code ungeeignet. Zu entscheiden: welches Instrument die wöchentliche Web-Selbsteinschätzung
+  nutzt – ein eigener MiHUB-Fragebogen in Anlehnung an Denis 2017 oder ein vorhandenes MII-Instrument
+  aus pros 2026.7.0 (jeweils Status draft): mii-qst-pro-pro-ctcae-onkologisches-basisscreening (u. a.
+  Schmerzen, Müdigkeit, Kurzatmigkeit) oder mii-qst-pro-midos-midos2 (u. a. Schmerz, Luftnot, Müdigkeit);
+  Husten enthält keines der beiden.'

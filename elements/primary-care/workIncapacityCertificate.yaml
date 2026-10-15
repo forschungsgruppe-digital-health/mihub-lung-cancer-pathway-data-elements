@@ -1,0 +1,139 @@
+id: mihub.lung.primarycare.workIncapacityCertificate.v0.1
+uuid: 951e785b-2c72-54dc-8e14-3b93f587e601
+name: workIncapacityCertificate
+label_de: Arbeitsunfähigkeit (AU)
+definition_de: Zeitraum einer bescheinigten Arbeitsunfähigkeit (AU-Bescheinigung / eAU) im Zusammenhang
+  mit der Tumorerkrankung oder -therapie.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: administrativ
+datatype: Period
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '160910001'
+    display: Unfit for work
+  - system: kdl
+    code: AD020101
+    display: Arbeitsunfähigkeitsbescheinigung
+standard_mappings:
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_EAU_Condition_AU
+  resource: Condition (eAU, KBV_PR_EAU_Condition_AU)
+  path: Condition.onsetPeriod.start und Condition.onsetPeriod.end (AU-Zeitraum; end 1..1); Condition.extension:Festgestellt_am
+    (Pflicht)
+  notes: Elektronische Arbeitsunfähigkeitsbescheinigung (kbv.ita.eau 1.2.1); Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_EAU_Bundle.
+    Die eAU ist kein MIO, daher standard other.
+care_process:
+  trigger: bei Ausstellung / Verlängerung
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-031 Arbeitsunfähigkeit (AU)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-031
+    quote: Arbeitsunfähigkeit (AU)
+    accessed: '2026-10-15'
+  - source: AG LONKO / Survivorship
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Versorgungsmodelle_AG_LONKO_bf.pdf
+    section: 'UAG Daten Kap. 4 Grundsätzlicher Datenbedarf (Wissenslücke (5) nachhaltige Wiederaufnahme
+      der Erwerbstätigkeit; fehlende Angaben zur Wiederaufnahme der Erwerbstätigkeit) und Anhang Tab.
+      A1 (Soziale Aspekte: „Rückkehr ins Erwerbsleben“, „Arbeitsausfall“, relevant u. a. für die Versorgung);
+      UAG Versorgungsmodelle Kap. 2.2 Soziale und berufliche Situation und Kap. 2.3 Finanzielle Auswirkungen
+      (langandauernde Arbeitsunfähigkeit, kein Krankengeld mehr nach 78 Wochen)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: (5) Ausmaß und Einflussfaktoren der nachhaltigen Wiederaufnahme der Erwerbstätigkeit … Rückkehr
+      ins Erwerbsleben … Arbeitsausfall … Für Langzeitüberlebende, die aufgrund langandauernder Arbeitsunfähigkeit
+      nach 78 Wochen von der gesetzlichen Krankenkasse kein Krankengeld mehr erhalten
+    accessed: '2026-10-15'
+    locator: UAG Daten Kap. 4, S. 8, und Anhang Tab. A1; UAG Versorgungsmodelle Kap. 2.3, S. 9
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-031; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- Der in definition_de geforderte Zusammenhang mit Tumorerkrankung bzw. -therapie ist mit datatype Period
+  nicht abbildbar. Die AU-begründende Diagnose (ICD-10-GM, z. B. C34.-) und die Unterscheidung Erst-/Folgebescheinigung
+  sollten als zugehörige Angaben modelliert werden. Die konkreten eAU-Inhalte sind gegen die KBV-eAU-Spezifikation
+  zu prüfen; das wurde lokal nicht verifiziert (UNSICHER).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.rehabilitationMeasure.v0.1

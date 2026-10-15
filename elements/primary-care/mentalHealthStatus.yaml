@@ -1,0 +1,170 @@
+id: mihub.lung.primarycare.mentalHealthStatus.v0.1
+uuid: d9c0636e-ba8a-52d2-b8d9-4d506030fcc4
+name: mentalHealthStatus
+label_de: Mentale und psychische Situation
+definition_de: Einschätzung der mentalen/psychischen Situation der Patient:in (Stimmung, Belastung, Ängste)
+  mit geführten Gesprächen und Empfehlungen.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: assessment
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '391281002'
+    display: Mental health assessment
+  - system: snomed-ct
+    code: '363871006'
+    display: Mental state
+  - system: snomed-ct
+    code: '704488001'
+    display: Impairment of psychological status
+  - system: icd-10-gm
+    code: F32.9
+    display: Depressive Episode, nicht näher bezeichnet
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Observation / ClinicalImpression
+care_process:
+  trigger: bei jeder Vorstellung (orientierend); vertieft bei Belastung
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-033 mentale und psychische Situation
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-033
+    quote: mentale und psychische Situation … Gespräche, Empfehlungen
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 18.3.1 Empf. 18.2 (geprüft 2026, Starker Konsens: Depression aktiv und regelmäßig prüfen)
+      – Geltungsbereich: nicht heilbare Krebserkrankung'
+    recommendation_grade: A
+    evidence_level: '4'
+    quote: Bei Patient:innen mit einer nicht heilbaren Krebserkrankung soll das Vorliegen … Depression
+      aktiv und regelmäßig geprüft werden.
+    accessed: '2026-10-15'
+    locator: S3-LL Palliativmedizin 3.0, Kap. 18.3.1 Screening, Empf. 18.2 (evidenzbasiert, Empfehlungsgrad
+      A, LoE 4, geprüft 2026, Starker Konsens), S. 450
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 17.2 Empf. 17.1 (modifiziert 2026, Starker Konsens: Angst aktiv und regelmäßig prüfen;
+      Anamnese psychischer Vorerkrankungen) und Empf. 17.3 (geprüft 2026, Konsens: vertiefte Exploration
+      bei Angstsymptomen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung soll das Vorliegen von … Angst
+      aktiv und regelmäßig geprüft werden. Eine Anamnese möglicher psychischen Vorerkrankungen soll bei
+      Aufnahme erhoben werden. … soll eine vertiefte Exploration hinsichtlich der Angstinhalte
+    accessed: '2026-10-15'
+    locator: S3-LL Palliativmedizin 3.0, Kap. 17.2 Erfassung, Empf. 17.1 (EK, modifiziert 2026, Starker
+      Konsens) und Empf. 17.3 (EK, geprüft 2026, Konsens), S. 408
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1 und 16.2 (EK, geprüft 2026, Starker Konsens: strukturierter Nachsorge- bzw. Verlaufsplan
+      sollte geeignet sein, den Bedarf an Psychoonkologie zu erkennen); Kap. 11 (Verweis auf S3-LL Psychoonkologie,
+      keine eigenen Empfehlungen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Der strukturierte Nachsorgeplan sollte geeignet sein, Rezidive, Zweitkarzinome, Komplikationen
+      und Toxizitäten der Therapie und den Bedarf an Psychoonkologie und Sozialberatung zu erkennen …
+      den Bedarf an Psychoonkologie, Palliativmedizin und Sozialberatung zu erkennen.
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Kap. 16.1, Empf. 16.1 und 16.2 (EK, geprüft 2026, Starker Konsens),
+      S. 492
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-033; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Abgrenzung zu psychoOncologyContact klären: mentalHealthStatus = Einschätzung/Befund (Observation.code
+  363871006 mit Observation.valueCodeableConcept bzw. ClinicalImpression.code 391281002 mit ClinicalImpression.finding.itemCodeableConcept;
+  Freitext in ClinicalImpression.summary); durchgeführte Gespräche und Interventionen = psychoOncologyContact
+  (Procedure). Da DE-033 der Expert:innen-Erhebung das Element wörtlich als „Gespräche, Empfehlungen“
+  beschreibt, eine Präzisierung von definition_de (z. B. „Ergebnis der Einschätzung inkl. daraus abgeleiteter
+  Empfehlungen“) vorher mit der Erhebungsquelle (Excel-Erhebung Allgemeinmedizin) abstimmen.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.phq9DepressionScore.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.anxietyHadsScore.v0.2
+- relation: dependsOn
+  target: mihub.lung.primarycare.standardizedAssessmentScore.v0.1

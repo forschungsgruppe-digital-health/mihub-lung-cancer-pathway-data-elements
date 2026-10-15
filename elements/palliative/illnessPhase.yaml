@@ -2,22 +2,27 @@ id: mihub.lung.palliative.illnessPhase.v0.1
 uuid: 0df5c457-d366-5c12-b0f4-73d61c24393b
 name: illnessPhase
 label_de: Krankheitsphase
-definition_de: 'Phase im Krankheitsverlauf gemäß Australian Palliative Care Phases: stabil, instabil,
-  verschlechternd, sterbend.'
+definition_de: 'Krankheitsphase im Sinne des australischen, für Deutschland adaptierten Palliative-Care-Phasen-Konzepts
+  (S3-LL Palliativmedizin Kap. 5.3, Tab. 6): klinisch bedeutsamer Zeitraum im Krankheitsverlauf von Patient:in
+  und betreuenden Angehörigen, der anzeigt, ob der Versorgungsplan angemessen ist oder geändert werden
+  muss – stabil, instabil, verschlechternd, sterbend (terminal).'
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungskontext
 datatype: code
 cardinality: 1..1
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: Krankheitsphasen-Konzept der Australian Palliative Care Phases (stable / unstable / deteriorating
-    / dying / bereaved), in der deutschen S3-LL Palliativ Kap. 5.3 + Tab. 6 übernommen. SNOMED CT International
-    hat keine entsprechenden Codes; die Australian SNOMED-CT-Edition pflegt eigene Codes (z. B. Stable
-    phase, Unstable phase) — Migration auf Australian-Edition oder Refset-Vorschlag in nachgelagerter
-    Iteration.
+  notes: Krankheitsphasen-Konzept der Australian Palliative Care Phases (Eagar et al. 2004), für Deutschland
+    adaptiert (Lehmann et al. 2021) und in der S3-LL Palliativmedizin 3.0 Kap. 5.3/Tab. 6 mit vier Phasen
+    übernommen (stabil, instabil, verschlechternd, sterbend); eine fünfte Phase 'bereaved' gehört nicht
+    zu den Krankheitsphasen in Tab. 6 (die Trauer der Angehörigen behandelt die Leitlinie gesondert in
+    Kap. 7.7). SNOMED CT International (MII TermServ, Stand 2026-10-14) enthält keine entsprechenden Konzepte.
+    Ob eine Australian SNOMED-CT-Edition eigene Phasen-Codes führt, ist nicht verifiziert (UNSICHER) –
+    Edition-/Refset-Prüfung in nachgelagerter Iteration.
   codings:
   - system: local-no-standard-binding
     code: stable
@@ -41,11 +46,17 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 5.3 / Tab. 6 (Krankheitsphasen)
-    recommendation_grade: Statement
+    section: 'Kap. 5.3, Empf. 5.4 (modifiziert 2026: Krankheitsphase als Faktor der Komplexitätseinschätzung);
+      Tab. 6 Zeile 4 Krankheitsphase a) stabil – d) sterbend (terminal)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Krankheitsphasen in dem hier verwendeten Sinne werden als stabil, instabil, verschlechternd
+      und sterbend charakterisiert … Krankheitsphasen beschreiben einen klinisch bedeutsamen Zeitraum
+      im Krankheitsverlauf von Patient:innen mit weit fortgeschrittenen, unheilbaren Erkrankungen
+    accessed: '2026-10-15'
+    locator: Kap. 5.3, Empf. 5.4 (S. 55) und Hintergrund; Tab. 6 Zeile 4 (S. 56)
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -54,7 +65,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -66,3 +77,53 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 LOCAL, 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 1/1 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'KDL SD110105 (Dokumentklasse ''Palliativmedizinische Komplexbehandlungsdokumentation'') ist kein Phasenwert
+  (datatype code 1..1: stable/unstable/deteriorating/dying), steht aber als valueSet.coding im Wertebereich.
+  Katalogweite Entscheidung zur Rolle der KDL-Codings bei code-Elementen nötig (siehe complexityLevel).'

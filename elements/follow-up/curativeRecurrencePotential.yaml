@@ -1,0 +1,194 @@
+id: mihub.lung.followup.curativeRecurrencePotential.v0.1
+uuid: f12ad8dd-8e22-5545-b94c-2855e39c9ac8
+name: curativeRecurrencePotential
+label_de: Kuratives Potenzial bei Rezidiv / Zweitkarzinom
+definition_de: Tumorboard-Einschätzung, ob bei einem in der Nachsorge detektierten Rezidiv oder Zweitkarzinom
+  ein kurativer Therapieanspruch besteht. Bei „ja“ kann das Nachsorgeintervall auf 6–8 Wochen verkürzt
+  werden (Onkopedia) und die Rezidivdiagnostik (PET-CT, histologische Sicherung) ergänzt werden.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: versorgungsplanung
+datatype: boolean
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: n/a
+  notes: Boolean ohne Standard-Coding (standard_binding_status n/a). Auf dem MII TermServ (Stand 2026-10-14)
+    existiert kein SNOMED-CT-Befundkonzept für „kuratives Potenzial“ bzw. „potentially curable“. Einziger
+    aktiver Kandidat ist 373808002 „Curative - procedure intent“, ein Qualifier Value der Therapieintention
+    (Wert von treatmentIntent, nicht des kurativen Potenzials); 395078005, 393127004 und 394078002 „Curative
+    treatment“ sind inaktiv. LOINC bietet als Beobachtungscode nur 21963-4 „Curative intent of treatment
+    Radiation treatment“ (strahlentherapiespezifisch, zu eng). Bewusst nicht kodiert; Kontext über related_elements
+    (recurrenceOrSecondPrimary, tumorBoardDecision).
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.valueBoolean
+  notes: 'ClinicalImpression.finding nimmt nur itemCodeableConcept oder itemReference auf, ein boolean
+    ist dort nicht abbildbar. Daher Observation mit valueBoolean; Observation.code (1..1) ist festzulegen,
+    ein Standardcode fehlt (siehe value_set.notes). Bezug zum Rezidiv bzw. Zweitkarzinom über Observation.focus;
+    Verknüpfung mit der Tumorkonferenz über CarePlan.supportingInfo (MII-Tumorkonferenz). Alternative:
+    ClinicalImpression.finding.itemCodeableConcept mit einer kodierten Aussage.'
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 18 Tumorkonferenz Therapieplanung / 19 Therapieempfehlung (nur teilweise abbildbar)
+  path: '19.1 Tumorkonferenz Therapieempfehlung Typ (Tumorkonferenz/Therapieempfehlung/Menge_Typ_Therapieempfehlung/Typ_Therapieempfehlung,
+    z. B. OP, ST); die kurative Intention steht erst in der Folgemeldung: 13.1 (OP/Intention), 14.1 (ST/Intention)
+    bzw. 16.1 (SYST/Intention) = K'
+  notes: 'Nur teilweise abbildbar: oBDS hat kein Feld für den kurativen Anspruch. Abschnitt 18/19 kennt
+    nur 18.1 Datum, 18.2 Typ (praeth, postop, postth, ther), 19.1 Typ der Therapieempfehlung und 19.2
+    Therapieabweichung auf Wunsch des Patienten. Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
+  resource: CarePlan
+  path: CarePlan.activity:obds.detail.code (Therapieempfehlung, z. B. OP, ST); Verknüpfung mit der Einschätzung
+    über CarePlan.supportingInfo
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Tumorkonferenz, intent fix plan). Nur teilweise abbildbar:
+    Das Profil hat kein Element für den kurativen Anspruch. Kodiert sind der Konferenztyp (category, REQUIRED
+    mii-vs-onko-therapieplanung-typ), die Therapieempfehlung (activity:obds.detail.code 1..1, REQUIRED
+    mii-vs-onko-therapieempfehlung-typ) und die Therapieabweichung (activity:obds.detail.statusReason).
+    Die Einschätzung selbst als Observation (siehe fhir-r4-base) über supportingInfo verknüpfen oder als
+    Freitext in CarePlan.description bzw. note führen. Die kurative Intention steht erst in der Folgetherapie
+    (Procedure.extension:Intention = K in mii-pr-onko-operation, mii-pr-onko-strahlentherapie bzw. mii-pr-onko-systemische-therapie).'
+care_process:
+  trigger: Detektion Rezidiv/Zweittumor (recurrenceOrSecondPrimary) → Tumorboard-Entscheid
+  frequency_pattern: ad-hoc
+  responsible_role: MDT (Tumorboard)
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1 („Bei einigen Pat. mit Rezidiv oder einem Zweitkarzinom besteht ein kuratives Potenzial
+      … kann das Nachsorgeintervall auf 6-8 Wochen verkürzt werden“)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei einigen Pat. mit Rezidiv oder einem Zweitkarzinom besteht ein kuratives Potenzial. Bei
+      diesen Pat. kann das Nachsorgeintervall auf 6-8 Wochen verkürzt werden [117].
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 8.1
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Tab. 9 Fußnote (lokalisiertes / lokal behandelbares Rezidiv: weitere Bildgebung ggf. PET-CT
+      und/oder histologische Sicherung); Kap. 6.1.2.1'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei neuem Rundherd … kann hier eine nochmalige primäre Resektion erfolgen. … der V.a. ein lokalisiertes
+      Rezidiv oder eine evtl. lokal behandelbare Rezidivsituation, ist die Diagnostik durch weitere Bildgebung
+      ggf. einschließlich PET-CT und/oder Methoden zur histologischen Sicherung zu ergänzen.
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 6.1.2.1; Kap. 10.2 (Absatz nach Tab. 9)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.1 Allgemeines (Hintergrundtext, Evidenzgrad 2b [1858]: Nachsorgeziel frühzeitige
+      Diagnose von Rezidiv- oder Zweittumoren, um durch die Option eines weiteren kurativen chirurgischen
+      Eingriffes die Heilungschance zu erhalten); Kap. 16.3.2/16.3.4 (in der Nachsorge entdeckte metachrone
+      Zweittumoren und pulmonale Rezidive teilweise kurativ operiert bzw. behandelbar); Tab. 44 (PET-CT:
+      Ausschluss von Metastasen vor erneutem thoraxchirurgischem Eingriff)'
+    recommendation_grade: n/a
+    evidence_level: 2b
+    quote: zielt die Nachsorge auf die möglichst frühzeitige Diagnose von Rezidiv- oder Zweittumoren,
+      um so durch die Option eines weiteren kurativen chirurgischen Eingriffes die Heilungschance zu erhalten
+      [1858] (Evidenzgrad 2b). … PET-CT … Ausschluss von Metastasen vor erneutem thoraxchirurgischem
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.1 Allgemeines, S. 491; Tab. 44 (PET-CT), S. 499
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 6.1.1 Recurrent disease (in der Nachsorge entdecktes Rezidiv: „Prompt referral for
+      management by a multidisciplinary team is recommended …“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Some patients will present with symptoms of recurrent disease; recurrence may also be discovered
+      during surveillance in the post-treatment period. Prompt referral for management by a multidisciplinary
+      team is recommended to achieve the best outcomes for anyone with recurrent disease.
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 6.1.1 Recurrent disease
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 4 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: keine Codings
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- '6–8-Wochen-Intervall nur Onkopedia-gestützt: Die Folgeaussage in definition_de („Bei ja kann das Nachsorgeintervall
+  auf 6–8 Wochen verkürzt werden“) stammt ausschließlich aus Onkopedia NSCLC Kap. 8.1 (Stand 04/2025),
+  das dafür [117] = S3-LL 020-007 (Stand 11/2022) zitiert. In der S3-LL 5.1 Kap. 16 (alle Empfehlungen
+  „geprüft 2026“, keine Tab.-48-Änderung) existiert kein 6–8-Wochen-Intervall für die kurative Rezidivsituation:
+  Empf. 16.7 (EK) = alle 3 Monate in Jahr 1–2, ab Jahr 3 halbjährlich; verkürzte Intervalle (Wiedervorstellung
+  alle 3–6 Wochen, CT alle 6–9 Wochen) nur in Empf. 16.9 unter Systemtherapie Stadium IV. Der Onkopedia-Wortlaut
+  ist zudem zeitlich ambig (prospektive Eignung für kurative Salvage-Therapie vs. nach Detektion/Salvage).
+  Klinisch zu klären; bis dahin als Onkopedia-Einzelaussage kennzeichnen (betrifft auch followUpInterval,
+  Code Q6-8W-curative-recurrence). UNSICHER: ob die S3-Fassung 11/2022 den Passus enthielt (nicht geprüft).'
+- 'Repräsentation von curativeRecurrencePotential (boolean) festlegen. Weder ClinicalImpression.finding
+  (nur itemCodeableConcept oder itemReference) noch die MII-Tumorkonferenz (CarePlan) noch oBDS 18/19
+  haben ein Feld für den kurativen Anspruch. Optionen: (a) eigene Observation mit valueBoolean und lokalem
+  Code (ein Standardcode fehlt laut value_set.notes), verknüpft über CarePlan.supportingInfo der Tumorkonferenz;
+  (b) ClinicalImpression.finding.itemCodeableConcept mit einer kodierten Aussage; (c) Ableitung aus der
+  Therapieempfehlung (oBDS 19.1 bzw. activity:obds.detail.code) zusammen mit der Intention K der Folgetherapie
+  (oBDS 13.1, 14.1, 16.1). Für den Registerexport ist das Element in jedem Fall nur teilweise abbildbar.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1

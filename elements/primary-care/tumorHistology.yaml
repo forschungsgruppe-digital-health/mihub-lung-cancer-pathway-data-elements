@@ -1,0 +1,174 @@
+id: mihub.lung.primarycare.tumorHistology.v0.1
+uuid: c13a775c-29c6-5c92-891c-b59b0d358f77
+name: tumorHistology
+label_de: Histologie
+definition_de: 'Histologischer Tumortyp nach der jeweils gültigen WHO-Klassifikation (laut S3-LL Lungenkarzinom
+  5.1: 5. Auflage 2021), kodiert als ICD-O-3-Morphologie mit Dignität (z. B. 8140/3), bestimmt am Resektat,
+  an einer Biopsie oder an einem zytologischen Präparat.'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: icd-o-3
+    code: 8140/3
+    display: Adenokarzinom o.n.A.
+  - system: icd-o-3
+    code: 8070/3
+    display: Plattenepithelkarzinom o.n.A.
+  - system: icd-o-3
+    code: 8046/3
+    display: Nichtkleinzelliges Karzinom
+  - system: icd-o-3
+    code: 8041/3
+    display: Kleinzelliges Karzinom o.n.A.
+  - system: icd-o-3
+    code: 8012/3
+    display: Großzelliges Karzinom o.n.A.
+  - system: snomed-ct
+    code: '911750741000004104'
+    display: Histologic type of primary malignant neoplasm of lung
+  - system: loinc
+    code: 59847-4
+    display: Histology and Behavior ICD-O-3 Cancer
+  - system: kdl
+    code: PT080102
+    display: Histologiebefund
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 6 Histologie
+  path: 'Histologie/Morphologie_ICD_O/Code (6.3) und /Version (6.4: 31, 32, 33, bb); Histologie/Morphologie_Freitext
+    (6.5); Histologie/Tumor_Histologiedatum (6.1); zusätzlich Tumorzuordnung/Morphologie_ICD_O'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Histologie_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-histologie-icdo3
+  resource: Observation
+  path: Observation.valueCodeableConcept (1..1, REQUIRED mii-vs-onko-icdo3-morphologie, System http://terminology.hl7.org/CodeSystem/icd-o-3);
+    Observation.code = LOINC 59847-4 (Pattern); Observation.specimen (1..1); Observation.focus → mii-pr-onko-diagnose-primaertumor
+  notes: 'Modul Onkologie 2026.0.3, Namensraum …/fhir/ext/modul-onko/. Das Pattern gilt für jedes Coding
+    von Observation.code: Übertragen wird nur LOINC 59847-4, nicht SNOMED 911750741000004104 oder KDL
+    PT080102. Den vollständigen Pathologiebefund ggf. über https://www.medizininformatik-initiative.de/fhir/ext/modul-patho/StructureDefinition/mii-pr-patho-report.'
+instruction_de: Typisierung nach der jeweils gültigen WHO-Klassifikation (S3-LL Lungenkarzinom 5.1, Empf.
+  6.50); Übernahme als ICD-O-3-Morphologie mit Dignität wie im Pathologiebefund angegeben. 8046/3 (NSCLC-NOS)
+  nur verwenden, wenn der Befund keine genauere Typisierung enthält (laut WHO-Klassifikation so selten
+  wie möglich; Hintergrund zu Empf. 6.51). Bei Rebiopsie (z. B. bei TKI-Resistenz, Kap. 8.6.4.2, Tab.
+  36) den neuen Befund ergänzen, da eine histologische Transformation (z. B. zu SCLC) möglich ist.
+care_process:
+  trigger: Histologiebefund; Übernahme in die Hausarztakte
+  frequency_pattern: once (Update bei Re-Biopsie)
+  responsible_role: Patholog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-026 Histologie
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-026
+    quote: Histologie … mikroskopische Untersuchung von entnommenem Gewebe
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 6.6.4 Histopathologische Typisierung, Empf. 6.50 (Tab. 27 WHO-Klassifikation der Thorakalen
+      Tumoren, 5. Aufl. 2021); Kap. 19.1/19.2 Tab. 46/47 (Histologische Typisierung: WHO-Klassifikation;
+      ICD-O-3)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Die histologische Typisierung von Lungentumoren an Resektionspräparaten wie … auch anhand kleiner
+      Biopsien und zytologischer Präparate soll nach den Kriterien der jeweils gültigen WHO-Klassifikation
+      vorgenommen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.6.4, Empf. 6.50, S. 165; Tab. 27; Kap. 19, Tab. 46/47 (S. 514–515)
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-026; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Das Profil mii-pr-onko-histologie-icdo3 verlangt eine Probenreferenz (Observation.specimen 1..1 auf
+  mii-pr-onko-specimen), die in der Hausarztpraxis meist fehlt; Observation.code lässt nur LOINC 59847-4
+  zu. Zu entscheiden: ob die Histologie hausärztlich als strukturierte Observation (mit Probenreferenz)
+  oder nur als übernommener Befund (Dokument, KDL PT080102 Histologiebefund) geführt wird.'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1
+- relation: dependsOn
+  target: mihub.lung.surveillance.molecularResistanceFinding.v0.2

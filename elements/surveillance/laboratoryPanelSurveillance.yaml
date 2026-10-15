@@ -1,0 +1,151 @@
+id: mihub.lung.surveillance.laboratoryPanelSurveillance.v0.1
+uuid: 189d618b-fd56-5cae-8a3b-3b04bfb8ad39
+name: laboratoryPanelSurveillance
+label_de: Basislabor unter Systemtherapie
+definition_de: Symptom- und therapieorientiertes Basislabor unter Systemtherapie im Stadium IV (Blutbild,
+  Elektrolyte, Nierenparameter, Leberparameter, LDH, Gerinnung; Zusammensetzung gemäß Onkopedia NSCLC
+  Tab. 2, auf die Kap. 6.1.6.2 für das Stadium IVB verweist). Zeitpunkt und Frequenz sind in der S3-LL
+  Lungenkarzinom und in Onkopedia NSCLC/SCLC für die Verlaufsbeobachtung unter Systemtherapie nicht festgelegt;
+  in der Praxis meist vor jedem Therapiezyklus bzw. bei jeder Verlaufskontrolle (Praxisableitung, nicht
+  leitlinienbelegt). Kein Nachsorge-Standard nach kurativer Therapie.
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+category: laborbefund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '15220000'
+    display: Laboratory test
+  - system: loinc
+    code: 11502-2
+    display: Laboratory report
+  - system: kdl
+    code: LB120107
+    display: Laborbefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab
+  resource: DiagnosticReport
+  path: DiagnosticReport.code; DiagnosticReport.result
+  notes: 'MII KDS Laborbefund 2026.0.3 (MII_PR_Labor_Laborbefund). Das Basislabor-Panel ist ein Befund,
+    kein Einzelwert: DiagnosticReport.code.coding:loinc-labReport = LOINC 11502-2 (Pattern, 1..1), category:lab-category
+    = LOINC 26436-6 + v2-0074 LAB. Die Einzelparameter (Blutbild, Elektrolyte, Nieren- und Leberwerte,
+    LDH, Gerinnung) über DiagnosticReport.result (1..*) als ObservationLab (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab)
+    mit Analyt-LOINC in Observation.code; die Anforderung über DiagnosticReport.basedOn (1..*) als ServiceRequestLab
+    (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab).'
+care_process:
+  trigger: symptom-/therapieorientiert, vor jedem Therapiezyklus bzw. bei jeder Verlaufskontrolle
+  frequency_pattern: per-cycle
+  responsible_role: Onkolog:in
+  data_flows:
+  - system: lis-patho
+    actor_role: Labor
+    usage_type: capture
+    sector: stationaer
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 6.1.6.2 („Diagnostik erfolgt symptom- und therapieorientiert, siehe Tabelle 2“); Tab.
+      2 (Kap. 5.2.1)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Die Diagnostik erfolgt symptom- und therapieorientiert, siehe Tabelle 2. … Tabelle 2: Diagnostik
+      bei neu aufgetretenen Symptomen … Labor … Blutbild, Elektrolyte, Nierenparameter, Leberparameter,
+      LDH, Gerinnung'
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.6.2 Stadium IVB mit multiplen Metastasen; Tab. 2 (Kap. 5.2.1 Erstdiagnose)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.9 (EK: Nebenwirkungen unter Systemtherapie evaluieren)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Unter einer Systemtherapie im Stadium IVA/B sollten Ansprechen, … Beschwerdebild einen Monat
+      nach Abschluss der Behandlung durch das den Patienten betreuende Team evaluiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.4, Empf. 16.9 (EK, geprüft 2026), S. 499
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 2 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- Onkopedia nennt unter Therapie keine Laborfrequenz; „per-cycle“ ist eine Praxisableitung (UNSICHER).
+- 'Codings mit gemischten Achsen: 15220000 (Prozedur), LOINC 11502-2 (CLASS DOC.MISC = Berichts-/Dokumenttyp)
+  und KDL LB120107 (Dokumentklasse). Für den Mapping-Pfad Observation.code (ObservationLab) sind 11502-2/LB120107
+  ungeeignet. Zu prüfen: panel- bzw. analytspezifische LOINC-Codes (TermServ 2026-10-14 aktiv: 58410-2
+  ''CBC panel - Blood by Automated count'', 24326-1 ''Electrolytes 1998 panel - Serum or Plasma'', 34714-6
+  ''INR in Blood by Coagulation assay'', 3173-2 ''aPTT in Blood by Coagulation assay''; LDH 2532-0 ist
+  DISCOURAGED) oder ein Mapping auf einen Laborbefund-Bericht (DiagnosticReport) statt Observation. Die
+  US-Panels ''… 2000 panel'' (Renal/Hepatic) decken sich nicht 1:1 mit ''Nieren-/Leberparameter''.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1

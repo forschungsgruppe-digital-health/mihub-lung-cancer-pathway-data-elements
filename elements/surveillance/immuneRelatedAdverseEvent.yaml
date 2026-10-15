@@ -8,20 +8,31 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: snomed-ct
-    code: '1217138004'
-    display: Immune-related adverse event
+    code: '62014003'
+    display: Adverse reaction to drug
   - system: snomed-ct
-    code: '233604007'
-    display: Pneumonitis
+    code: '427046006'
+    display: Drug-induced pneumonitis
   - system: snomed-ct
-    code: '190787008'
-    display: Autoimmune hepatitis
+    code: '235876009'
+    display: Drug-induced hepatitis
+  - system: snomed-ct
+    code: '1345085000'
+    display: Immune checkpoint inhibitor therapy induced enterocolitis
+  - system: snomed-ct
+    code: '237539004'
+    display: Drug-induced thyroiditis
+  - system: snomed-ct
+    code: '28926001'
+    display: Eruption caused by drug
+  standard_binding_status: mapped
 care_process:
   trigger: Verdachtsfall unter Checkpoint-Inhibitor
   frequency_pattern: per-encounter
@@ -29,11 +40,65 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Kap. 16.3.1 (immun-bezogene Komplikationen)
+    section: 'Kap. 16.3 Einleitung (Textpassage: „immun-bezogene Komplikationen“ als Nachsorgeparameter
+      nach lokal ablativer Therapie; keine Empfehlungsbox)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Die Nachsorge beinhaltet mehrere Parameter. Dazu gehören zunehmend auch die Erfassung posttherapeutischer
+      Komplikationen (Stichworte: Post-Pneumonektomiesyndrom nach OP, Strahlenfibrose nach CTx/RTx, immun-bezogene
+      Komplikationen)'
+    accessed: '2026-10-15'
+    locator: Kap. 16.3 Nachsorge im Anschluss an eine lokal ablative Therapie, Einleitungstext, S. 493
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.2.3.2 Immuntherapie (6.2.3.2.1–6.2.3.2.5, 6.2.3.2.7: irAE durch autoimmun-vermittelte
+      Entzündung, Erkennung/Management nach aktuellen Leitlinien); Kap. 6.1.6.2.2.1.2.1 (hepatische, kutane
+      und endokrine Toxizitäten der Immunkombinationstherapie)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Im Verlauf einer ICI-basierten Therapie können immunvermittelte Nebenwirkungen (irAE) durch
+      autoimmun-vermittelte Entzündung verschiedener Gewebe bzw. Organe auftreten. … Die Nebenwirkungen
+      der Immunkombinationstherapie … betreffen vor allem hepatische, kutane und endokrine Toxizitäten.
+    accessed: '2026-10-15'
+    locator: Kap. 6.2.3.2.1–6.2.3.2.5, 6.2.3.2.7 (je gleichlautend); Kap. 6.1.6.2.2.1.2.1 Nicht-Plattenepithelkarzinom
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 8.3.1.7 Durvalumab („Auf immuntherapiebedingte Nebenwirkungen ist zu achten.“); Kap.
+      8.3.1.13 Serplulimab (autoimmunbedingte Nebenwirkungen wie Pneumonitis, Colitis oder Hepatitis)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Auf immuntherapiebedingte Nebenwirkungen ist zu achten. … Bei der Anwendung sind auf die auch
+      für andere PD1-/PD-L1-Inhibitoren relevanten, vor allem autoimmunbedingten, Nebenwirkungen wie Pneumonitis,
+      Colitis oder Hepatitis zu achten.
+    accessed: '2026-10-15'
+    locator: Kap. 8.3.1.7 Durvalumab; Kap. 8.3.1.13 Serplulimab
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.2 (EK, geprüft 2026: strukturierter Verlaufs-/Follow-up-Plan unter Systemtherapie
+      Stadium IVA/IVB zur Erkennung von Komplikationen und Toxizitäten der Therapie)'
     recommendation_grade: EK
-    evidence_level: 1b
+    evidence_level: n/a
+    quote: Im Verlauf einer systemischen Therapie (Stadium IVA, IVB) sollte für jeden Patienten ein strukturierter
+      Verlaufsplan/Follow-up-Plan erstellt werden. … Komplikationen und Toxizitäten der Therapie
+    accessed: '2026-10-15'
+    locator: Kap. 16.1, Empf. 16.2 (EK, geprüft 2026, Starker Konsens), S. 492
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 12 Supportive Behandlung (Verweiskapitel auf S3-LL Supportive Therapie, Thema „Immunvermittelte
+      Nebenwirkungen (irAE) durch Immuncheckpoint-Inhibitoren“; keine eigene Empfehlung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'In der S3-Leitlinie zur supportiven Therapie von onkologischen Patienten wird auf die folgenden
+      Themen detailliert eingegangen: … Immunvermittelte Nebenwirkungen (irAE) durch Immuncheckpoint-Inhibitoren'
+    accessed: '2026-10-15'
+    locator: Kap. 12 Supportive Behandlung beim Lungenkarzinom (Verweis auf S3-LL Supportive Therapie),
+      S. 471
 iso13972_metadata:
   type: condition
   keywords:
@@ -42,7 +107,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -54,3 +119,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 10 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: specializes
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1

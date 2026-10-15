@@ -2,12 +2,15 @@ id: mihub.lung.palliative.phq9DepressionScore.v0.1
 uuid: 2abc7a8b-6b84-5639-b883-e7215c09087a
 name: phq9DepressionScore
 label_de: PHQ-9 Depressionsscore
-definition_de: Patient Health Questionnaire 9 (PHQ-9), 0–27, zur Diagnose und Schweregrad-Einschätzung
-  einer Depression.
+definition_de: Gesamtscore des Patient Health Questionnaire-9 (PHQ-9; 9 Items, Wertebereich 0–27) als
+  Screening- und Verlaufsinstrument zur Erkennung und Schweregrad-Einschätzung depressiver Symptomatik.
+  Ein auffälliger Wert ersetzt nicht die klinische Diagnosestellung nach ICD-10-Kriterien (S3-LL Palliativmedizin
+  3.0, Empf. 18.5).
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
@@ -16,8 +19,11 @@ value_set:
   codings:
   - system: loinc
     code: 44261-6
-    display: PHQ-9 total score
-constraints_de: Wertebereich 0..27. Cut-off ≥10 = mittelschwere Depression.
+    display: Patient Health Questionnaire 9 item (PHQ-9) total score [Reported]
+constraints_de: Wertebereich 0..27. Cut-off ≥10 = auffälliges Screening-Ergebnis (Schwellenwert aus der
+  PHQ-9-Literatur, nicht Inhalt der S3-LL); Diagnose und Schweregrad sind klinisch nach ICD-10-Kriterien
+  zu sichern (S3-LL Palliativmedizin 3.0, Empf. 18.5). Somatische Items (Appetit, Schlaf, Energie, Konzentration,
+  Psychomotorik) sind bei fortgeschrittener Krebserkrankung nur eingeschränkt verwertbar (Kap. 18.3.2).
 care_process:
   trigger: Screening bei Aufnahme + Verlauf
   frequency_pattern: per-encounter / monthly
@@ -25,11 +31,26 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 18.3 Screening Depression
+    section: Kap. 18.3.1 Screening, Empf. 18.2 (Vorliegen einer Depression aktiv und regelmäßig prüfen)
     recommendation_grade: A
-    evidence_level: n/a
+    evidence_level: '4'
+    quote: Bei Patient:innen mit einer nicht heilbaren Krebserkrankung soll das Vorliegen einer Depression
+      aktiv und regelmäßig geprüft werden.
+    accessed: '2026-10-15'
+    locator: Kap. 18.3.1, Empf. 18.2 (S. 450)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 18.3.1 Screening, Empf. 18.3 (Screeningverfahren zur Erkennung einer Depression; PHQ-9
+      nicht namentlich genannt)
+    recommendation_grade: B
+    evidence_level: 1+
+    quote: Bei Patient:innen mit einer nicht heilbaren Krebserkrankung sollte zur Erkennung … einer Depression
+      ein Screeningverfahren eingesetzt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 18.3.1, Empf. 18.3 (S. 450)
 iso13972_metadata:
   type: observation
   keywords:
@@ -38,7 +59,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -50,3 +71,60 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Instrumentenwahl prüfen: Der Text von Kap. 18.3 der S3-LL Palliativmedizin 3.0 nennt den PHQ-9 nicht
+  (nur indirekt über die dort zitierte Studie Hinz et al. 2016 zur PHQ-9-Schweregradeinschätzung bei Krebspatient:innen).
+  Genannt werden die HADS (HADS-T/HADS-D; laut Metaanalyse als Screeningverfahren geeignet, nicht zur
+  Diagnosestellung; in einer internationalen Delphi-Konsensusrunde niedriger gewertet als die offene Exploration)
+  und das 2-Fragen-Screening nach Whooley (Empf. 18.4, Grad 0, LoE 4). Sonst nennt die Leitlinie den PHQ-9
+  nur in Kap. 7.4.2 (vertiefendes Assessment bei Angehörigen) und als Studienendpunkt (Kap. 18.6.2). Erwägen:
+  Whooley-Screening bzw. HADS-D-Score ergänzen (SNOMED CT 401320004 „HAD scale: depression score“, observable
+  entity, aktiv – MII TermServ 2026-10-14) oder den PHQ-9 ausdrücklich als Expert:innen-Festlegung kennzeichnen
+  (für den PHQ-9 spricht seine Abbildung im MII-KDS-Modul PRO 2026.7.0 mit LOINC 44261-6). „monthly“ in
+  frequency_pattern ist nicht leitlinienbelegt (Kap. 18.3.3: „häufige erneute Einschätzung erforderlich“).'

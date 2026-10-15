@@ -8,15 +8,16 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: messwert
 datatype: decimal
 cardinality: 0..*
 unit: '%'
 value_set:
   binding_strength: preferred
   codings:
-  - system: loinc
-    code: 8341-0
-    display: Body weight change
+  - system: snomed-ct
+    code: '248349002'
+    display: Percentage weight loss
 care_process:
   trigger: bei jeder Visite
   frequency_pattern: per-encounter
@@ -25,10 +26,27 @@ evidence:
   guideline_references:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Section 5.4 (malnutrition)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.1 Supportive care (Mangelernährung nach Therapie, z. B. Gewichtsverlust → Monitoring
+      und Ernährungsintervention); ergänzend Step 3.6.1 (Screening auf Mangelernährung mit validiertem
+      Tool, z. B. MST)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: malnutrition following treatment due to ongoing treatment side effects (e.g. weight loss, reduced
+      oral intake) – this requires monitoring and nutrition intervention where indicated
+    accessed: '2026-10-15'
+    locator: Step 5.4.1 Supportive care, S. 46
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.6.3 Ernährungszustand (wiederholtes Screening auf Mangelernährung im Verlauf mit validiertem
+      Tool)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Allen Pat. sollte im Verlauf wiederholt ein Screening auf Mangelernährung mit einem validierten
+      Tool [63] angeboten werden.
+    accessed: '2026-10-15'
+    locator: Kap. 5.6.3 Ernährungszustand
 iso13972_metadata:
   type: observation
   keywords:
@@ -37,7 +55,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -49,3 +67,55 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Vorzeichen- und Bezugskonvention festlegen: Der Name ''weightChangePercent'' (Änderung) passt nicht
+  zu Label, Definition und Code ''Gewichtsverlust'' (SNOMED 248349002 ''Percentage weight loss''). Werden
+  Zu- und Abnahme vorzeichenbehaftet erfasst, passt das verifizierte Elternkonzept SNOMED 248347000 ''Percentage
+  change in weight (observable entity)''; andernfalls den Constraint ''Verlust ≥ 0 %, Zunahme nicht erfasst''
+  ergänzen.'

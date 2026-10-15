@@ -1,0 +1,237 @@
+id: mihub.lung.primarycare.cancerTreatmentHistory.v0.1
+uuid: 6538983e-79df-57d1-8cdf-1763c68714b4
+name: cancerTreatmentHistory
+label_de: Erfolgte Tumortherapie
+definition_de: Durchgeführte tumorspezifische Behandlungen (Operation, Strahlentherapie, Chemotherapie,
+  Immuntherapie, zielgerichtete Therapie, Erhaltungstherapie) inkl. Schema, Zeitraum, Port.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: prozedur
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '173171007'
+    display: Lobectomy of lung
+  - system: snomed-ct
+    code: '1287742003'
+    display: Radiotherapy
+  - system: snomed-ct
+    code: '367336001'
+    display: Chemotherapy
+  - system: snomed-ct
+    code: '870387009'
+    display: Immune checkpoint inhibitor therapy
+  - system: snomed-ct
+    code: '1345242003'
+    display: Maintenance antineoplastic therapy
+  - system: snomed-ct
+    code: '703423002'
+    display: Combined chemotherapy and radiation therapy
+  - system: icd-10-gm
+    code: Z92.3
+    display: Bestrahlung in der Eigenanamnese
+  - system: icd-10-gm
+    code: Z92.4
+    display: Größerer operativer Eingriff in der Eigenanamnese, anderenorts nicht klassifiziert
+  - system: snomed-ct
+    code: '119746007'
+    display: Lung excision
+  - system: snomed-ct
+    code: '1255831008'
+    display: Targeted chemotherapy for cancer
+  - system: icd-10-gm
+    code: Z92.6
+    display: Zytostatische Chemotherapie wegen bösartiger Neubildung in der Eigenanamnese
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie
+  path: 'OP: Datum (13.2), Menge_OPS/OPS (Code, Version; 13.3, 13.4); ST: Menge_Bestrahlung/Bestrahlung
+    mit Beginn (14.5), Ende (14.6) und Zielgebiet (14.3) unter Bestrahlung/Applikationsart/{Perkutan|Kontakt|Metabolisch|Sonstige}/Zielgebiet;
+    SYST: Therapieart (16.3), Protokoll (16.4), Beginn (16.5), Menge_Substanz/Substanz (16.6), Ende (16.8)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (OP_Typ, ST_Typ, SYST_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:ops bzw. :sct; Procedure.performed[x] (dateTime oder Period, 1..1)
+  notes: Generisches Prozedur-Profil (Paket kerndatensatz.base 2026.0.1); es deckt nur Procedure ab, nicht
+    MedicationStatement. Für Tumortherapien die Onko-Profile (Operation, Strahlentherapie, Systemische
+    Therapie mit Pflicht-Extension Intention) verwenden; generisch z. B. für die Port-Implantation.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-operation
+  resource: Procedure
+  path: Procedure.code.coding:ops (OPS); Procedure.performed[x] (dateTime); Procedure.extension:Intention
+    (1..1)
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 13
+    OP.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
+  resource: Procedure
+  path: Procedure.performed[x] (Period); Procedure.extension:Intention (1..1); einzelne Bestrahlungen
+    mit Zielgebiet (Procedure.bodySite) über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (partOf)
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 14
+    Strahlentherapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: 'Procedure.code.coding:systemische_therapie_art (REQUIRED mii-vs-onko-systemische-therapie-art:
+    CH, HO, IM, ZS, SZ, CI, CZ, CIZ, IZ, WW, AS, WS, SO); Procedure.performed[x] (Period); Procedure.extension:Intention
+    (1..1)'
+  notes: Onko-Profil auf Basis des MII-Prozedur-Profils (Modul Onkologie 2026.0.3); entspricht oBDS 16
+    Systemische Therapie. Substanzen über mii-pr-onko-systemische-therapie-medikation.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
+  resource: MedicationStatement
+  path: MedicationStatement.medication[x] (coding:atcClassDe bzw. :atcClassEn, PZN, UNII); MedicationStatement.partOf
+    (1..*) → Systemische Therapie (Procedure); MedicationStatement.effective[x]
+  notes: Medikationsanteil der Systemtherapie (Basis MII MedicationStatement), Modul Onkologie 2026.0.3.
+care_process:
+  trigger: Therapieabschluss je Modalität; Übergabe an die Hausarztpraxis
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-075 Erfolgte Behandlung (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-075
+    quote: Erfolgte Behandlung (Strahlentherapie, Chemo, Op, Immuntherapie, zielgerichtete Therapie, Erhaltungstherpaie,
+      systemische Therapie..)
+    accessed: '2026-10-15'
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-017 Tumortherapie
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-017
+    quote: Tumortherapie … Chemo, Bestrahlung, OP, Immuntherapie + Schema, Medikation, Port
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie, keine Empfehlungsgrade) –
+      Empfehlungsliste Abb. 2 (S. 95) bzw. Anhang 2: Dos – Relevante Informationen – Therapie(n): „erfolgte
+      Therapie(n) mit möglichen Spätfolgen unter Berücksichtigung ihrer Eintrittswahrscheinlichkeit“;
+      Ergebnisse (Synthese – Empfehlungsliste, S. 95 f.): tabellarische Gegenüberstellung der erhaltenen
+      Medikamente und ggf. Bestrahlung(en) inkl. Dauer der Einnahme/Anwendung mit den möglichen Spätfolgen'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: erfolgte Therapie(n) mit möglichen Spätfolgen unter Berücksichtigung ihrer Eintrittswahrscheinlichkeit
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Therapie(n), Seite
+      1
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.1 Transitioning from active treatment – treatment summary („treatment received (types
+      and dates)“)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'The treatment summary should cover, but is not limited to: … treatment received (types and
+      dates)'
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 5.1 Transitioning from active treatment (Treatment summary), S. 43
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-075, DE-017; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 7 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 11 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'definition_de verlangt ''Schema, Zeitraum, Port'', mit datatype CodeableConcept ist aber nur die Modalität
+  abbildbar. Vorschlag: Zeitraum über Procedure.performed[x] bzw. MedicationStatement.effective[x], Schema
+  über MedicationStatement/Regime (vgl. systemicTherapyRegimen). Der Port ist keine Tumortherapie (Device/Portimplantation);
+  ein eigenes Element erwägen oder den Port aus der Definition nehmen. Außerdem die Rolle der ICD-10-GM-Z-Codes
+  (Eigenanamnese, Condition im PVS) gegenüber den SNOMED-Prozedurcodes in value_set.notes festhalten.'
+- 'Die Element-Codes passen nur teilweise zu den nationalen Onko-Profilen: Diese verlangen die Therapieintention
+  als Pflicht-Extension mit oBDS-Codes (Quelle wäre das Element treatmentIntent), und die Art der Systemtherapie
+  wird mit oBDS-Codes (z. B. CH, IM, ZS, CI) in Procedure.code.coding:systemische_therapie_art geführt
+  (REQUIRED). Laut MII-ConceptMap mii-cm-onko-therapie-typ-sct entsprechen 367336001 = CH, 1255831008
+  = ZS bzw. CZ und 1287742003 = ST; für 870387009 (Checkpoint-Inhibitor), 1345242003 (Erhaltungstherapie)
+  und 703423002 (Radiochemotherapie) gibt es dort kein direktes Ziel. Zu entscheiden: eine Abbildungstabelle
+  Element-Code → Onko-Profil (Operation, Strahlentherapie, Systemische Therapie) und oBDS-Therapieart
+  festlegen, insbesondere für Checkpoint-Inhibitor-, Erhaltungs- und Radiochemotherapie.'
+related_elements:
+- relation: generalizes
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1
+- relation: generalizes
+  target: mihub.lung.surveillance.systemicTherapyRegimen.v0.1

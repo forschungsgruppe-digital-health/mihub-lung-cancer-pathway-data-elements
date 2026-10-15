@@ -2,12 +2,14 @@ id: mihub.lung.palliative.dyingPhaseDiagnosed.v0.1
 uuid: 745ccd2c-b07e-5444-9993-522d9888ce68
 name: dyingPhaseDiagnosed
 label_de: Sterbephase diagnostiziert
-definition_de: Klinische Diagnose der Sterbephase (Tod innerhalb der nächsten Tage wahrscheinlich), inkl.
-  Datum/Zeitpunkt.
+definition_de: Klinische Feststellung, dass die Sterbephase begonnen hat (letzte drei bis sieben Lebenstage;
+  Tod innerhalb der nächsten Tage wahrscheinlich), nach Ausschluss akut reversibler Ursachen, inkl. Datum/Zeitpunkt
+  der Feststellung.
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungskontext
 datatype: boolean
 cardinality: 0..1
 value_set:
@@ -15,23 +17,50 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '419099009'
-    display: Dying
-  - system: icd-10-gm
-    code: Z51.5
-    display: Palliativbehandlung
+    code: '399069006'
+    display: Dying process
 care_process:
   trigger: klinisches Sterbephasen-Assessment
-  frequency_pattern: tägliche Re-Evaluation
-  responsible_role: Palliativ-Team / Lead-Clinician
+  frequency_pattern: Re-Evaluation der Feststellung spätestens nach 72 h im multiprofessionellen Team
+    (S3-LL Palliativmedizin 3.0, Kap. 21.2)
+  responsible_role: Ärzt:in und Pflegefachperson unter Einbeziehung des multiprofessionellen Teams (Palliativ-Team
+    / Lead-Clinician); Dokumentation durch die verantwortliche Fachperson
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 21.2 Sterben diagnostizieren
-    recommendation_grade: EK
+    section: Kap. 21.2 Das Sterben diagnostizieren; Empf. 21.1 (Kriterien zur Einschätzung des Beginns
+      der Sterbephase nach Ausschluss akut reversibler Ursachen)
+    recommendation_grade: '0'
+    evidence_level: '4'
+    quote: 'Zur Einschätzung, ob die Sterbephase von Patient:innen mit einer nicht-heilbaren … Krebserkrankung
+      begonnen hat, können, wenn akut reversible Ursachen ausgeschlossen wurden, folgende Kriterien herangezogen
+      werden:'
+    accessed: '2026-10-15'
+    locator: Kap. 21.2, Empf. 21.1 (0, LoE 4, geprüft 2026), S. 536
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 21.2 Das Sterben diagnostizieren; Empf. 21.2 (Einschätzung durch Ärzt:innen und Pflegefachpersonen
+      unter Einbeziehung eines multiprofessionellen Teams)
+    recommendation_grade: B
+    evidence_level: '4'
+    quote: Die Einschätzung von Ärzt:innen und Pflegefachpersonen, ob die Sterbephase d. … Patient:in
+      mit einer nicht-heilbaren Krebserkrankung begonnen hat, sollte unter Einbeziehung eines multiprofessionellen
+      Teams erfolgen.
+    accessed: '2026-10-15'
+    locator: Kap. 21.2, Empf. 21.2 (B, LoE 4, modifiziert 2026), S. 536
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 5.3, Tab. 6 (Krankheitsphase d) sterbend (terminal))
+    recommendation_grade: n/a
     evidence_level: n/a
+    quote: sterbend (termi … Tod innerhalb der nächsten Tage wahrscheinlich mit Notwendigkeit der regel
+      … täglichen Überprüfung des Betreuungsplans
+    accessed: '2026-10-15'
+    locator: Kap. 5.3, Tab. 6, Krankheitsphase d), S. 56
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -40,7 +69,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -52,3 +81,56 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Konsistenzregel mit illnessPhase festlegen: dyingPhaseDiagnosed = true ⇔ illnessPhase = ''dying'' (Tab.
+  6 d). Zu klären ist die führende Quelle bzw. Ableitungsrichtung: kriteriengestützte Feststellung nach
+  Kap. 21.2 vs. Phasen-Assessment nach Kap. 5.3.'
+related_elements:
+- relation: specializes
+  target: mihub.lung.palliative.illnessPhase.v0.1

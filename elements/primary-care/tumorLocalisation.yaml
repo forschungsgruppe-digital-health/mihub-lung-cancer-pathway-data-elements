@@ -1,0 +1,171 @@
+id: mihub.lung.primarycare.tumorLocalisation.v0.1
+uuid: f13a89ec-d5f2-5de8-b7cb-8af67c18beda
+name: tumorLocalisation
+label_de: Tumorlokalisation
+definition_de: Sitz des Primärtumors in der Lunge (Lappen/Bronchus; ICD-O-3-Topographie C34.0–C34.9).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '399687005'
+    display: Anatomic location of primary malignant neoplasm
+  - system: icd-o-3
+    code: C34.1
+    display: Lungenoberlappen
+  - system: icd-o-3
+    code: C34.2
+    display: Lungenmittellappen
+  - system: icd-o-3
+    code: C34.3
+    display: Lungenunterlappen
+  - system: icd-o-3
+    code: C34.0
+    display: Hauptbronchus
+  - system: icd-o-3
+    code: C34.8
+    display: Lunge, mehrere Teilbereiche überlappend
+  - system: icd-o-3
+    code: C34.9
+    display: Lunge o.n.A.
+  - system: loinc
+    code: 21855-2
+    display: Primary site Cancer
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 5 Diagnose
+  path: 'Diagnose/Primaertumor_Topographie_ICD_O (Code = 5.4; Version = 5.5: 31, 32, 33); die Seite steht
+    getrennt in Tumorzuordnung/Seitenlokalisation (5.8: L, R, B, M, U, T; siehe Issue)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
+  resource: Condition
+  path: Condition.bodySite.coding:icd-o-3 (System http://terminology.hl7.org/CodeSystem/icd-o-3, code
+    REQUIRED mii-vs-onko-icdo3-topographie); die Seite steht getrennt in Condition.bodySite.coding:primaertumorSeitenlokalisation
+    (siehe Issue)
+  notes: Das MII-Diagnose-Profil hat in Condition.bodySite nur einen SNOMED-Slice; einen ICD-O-3-Topographie-Slice
+    (C34.x) für den Primärtumor bietet das Onko-Primärtumor-Profil (Modul Onkologie 2026.0.3). Die Konzeptcodes
+    SNOMED 399687005 und LOINC 21855-2 werden nicht übertragen.
+care_process:
+  trigger: Diagnosestellung (Radiologie/Pathologie); Übernahme in die Hausarztakte
+  frequency_pattern: once
+  responsible_role: Radiolog:in / Patholog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-003 Lokalisation
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-003
+    quote: Lokalisation … wo genau der Tumor in der Lunge liegt
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 19.2 Template Pathologiebefund-Resektionspräparat, Tab. 47 (Stand 03/2025), Makroskopie:
+      Tumorlokalisation – anatomische Lokalisation im Resektat (z. B. zentral oder subpleural, Lungensegment);
+      ergänzend Kap. 19.1 Template Pathologiebefund-Biopsie, Tab. 46 (Stand 03/2025), Makroskopie: Lokalisation
+      der Bioptate (Angabe der einsendenden Stelle)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Tabelle 47: Pathologiebericht Lungenkarzinom – Resektionspräparat (Stand: 03/2025) … Angabe
+      anatomische Lokalisation im Resektat: z.B. zentral … oder subpleural, welches Lungensegment (soweit
+      erkennbar) … Angabe Lokalisation durch Einsender'
+    accessed: '2026-10-15'
+    locator: Kap. 19.2, Tab. 47 (Stand 03/2025), S. 515; Kap. 19.1, Tab. 46, S. 514
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-003; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Seitenlokalisation des Primärtumors (rechts/links; ggf. beidseitig/unbekannt) als eigene Teilangabe
+  bzw. Qualifier ergänzen: Die ICD-O-3-Topographie C34.x kodiert keine Seite, ‚Lungenoberlappen‘ allein
+  ist daher mehrdeutig. National wird die Seite getrennt geführt (oBDS-Seitenlokalisation; MII KDS Onkologie:
+  Condition.bodySite.coding:primaertumorSeitenlokalisation, CodeSystem mii-cs-onko-seitenlokalisation
+  L/R/B/M/U/T; SNOMED CT laut MII-ConceptMap L = 7771000 Left, R = 24028007 Right, B = 51440002 Right
+  and left). Nicht in die Topographie-Werteliste mischen. Klinische Zusatzrelevanz: Die Seite ist Bezugsgröße
+  für die Zuordnung weiterer Herde (getrennter Herd in einem anderen Lappen derselben Seite = T4, in einem
+  kontralateralen Lungenlappen = M1a; S3-LL Lungenkarzinom 5.1, Kap. 6.5.1.1.1 Tab. 21 und Kap. 6.5.1.1.4
+  Tab. 25).'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1

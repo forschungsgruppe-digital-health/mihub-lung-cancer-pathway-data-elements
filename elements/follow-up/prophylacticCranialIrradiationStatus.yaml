@@ -1,0 +1,240 @@
+id: mihub.lung.followup.prophylacticCranialIrradiationStatus.v0.1
+uuid: fc877f9f-2c14-51b2-ab7d-4bf9c47e34f2
+name: prophylacticCranialIrradiationStatus
+label_de: Prophylaktische Schädelbestrahlung (PCI) — Status
+definition_de: Dokumentiert, ob nach Abschluss der Erstlinientherapie beim SCLC eine prophylaktische Schädelbestrahlung
+  durchgeführt wurde, nicht durchgeführt wurde (zugunsten einer MRT-Überwachung bzw. ohne Überwachung)
+  oder abgelehnt wurde. Steuerbedingung für „MRT Schädel bei LD ohne PCI“ (Onkopedia SCLC Tab. 9) und
+  die MRT-Überwachung bei ED (Watch-and-Wait).
+phase: followup
+tumor_entity:
+- SCLC
+category: prozedur
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: Kein SNOMED-CT-Prozedurkonzept für die prophylaktische Schädelbestrahlung auf dem MII TermServ
+    (SNOMED CT 20260701) gefunden; OPS 8-52x codiert nur die Bestrahlungstechnik. Projekt-lokale Statuscodes;
+    perspektivisch FHIR Procedure (PCI) + Procedure.status.
+  codings:
+  - system: local-no-standard-binding
+    code: performed
+    display: PCI durchgeführt
+  - system: local-no-standard-binding
+    code: not-performed-mri-surveillance
+    display: PCI nicht durchgeführt — MRT-Überwachung (Watch-and-Wait)
+  - system: local-no-standard-binding
+    code: not-performed-no-surveillance
+    display: PCI nicht durchgeführt — keine strukturierte MRT-Überwachung
+  - system: local-no-standard-binding
+    code: declined
+    display: PCI von der Patient:in abgelehnt
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 14 Strahlentherapie
+  path: '14.3 Strahlentherapie Zielgebiet = 1.1 Ganzhirn (Neurokranium, inklusive Meningen) (XSD: ST/Menge_Bestrahlung/Bestrahlung/Applikationsart/Perkutan/Zielgebiet/CodeVersion2021);
+    14.1 Intention der Strahlentherapie = K bzw. P (ST/Intention)'
+  notes: 'Meldbar ist nur die durchgeführte PCI. Zielgebiet 6.1 ''Schädel'' gehört zur Skelett-Gruppe
+    6 (6.2 Schädelbasis, 6.4 Halswirbelsäule …) und ist für die PCI falsch. Eine Intention ''prophylaktisch''
+    gibt es nicht (K, P, O, S, X); laut XSD-Annotation kann ''Prophylaktisch/Salvage … als kurativ oder
+    palliativ kodiert werden''. Eine Ablehnung ist allenfalls über 19.2 Therapieabweichung auf Wunsch
+    des Patienten (Tumorkonferenz/Therapieempfehlung/Abweichung_Patientenwunsch) abbildbar; für die MRT-Überwachung
+    gibt es kein eigenes Feld (siehe offener Punkt). Feldseite 14.3: https://basisdatensatz.de/feld/197/strahlentherapie-zielgebiet.
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
+  resource: Procedure
+  path: Procedure.status (completed bzw. not-done) mit Procedure.statusReason; Procedure.extension:Intention;
+    Zielgebiet 1.1 Ganzhirn über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (Procedure.bodySite)
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Strahlentherapie; baseDefinition MII Prozedur). status
+    1..1 REQUIRED event-status; statusReason 0..1 (example procedure-not-performed-reason); extension:Intention
+    1..1 REQUIRED mii-vs-onko-strahlentherapie-intention (K, P, S, X, O; kein Code 'prophylaktisch');
+    performed[x] (Period) 1..1. Die einzelne Bestrahlung (Bestrahlungsprofil, partOf → Strahlentherapie)
+    trägt das Zielgebiet in bodySite (extensible https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/ValueSet/mii-vs-strahlentherapie-zielgebiet;
+    Code 1.1 'Ganzhirn (Neurokranium, inklusive Meningen)' aus mii-cs-onko-strahlentherapie-zielgebiet).
+    Abbildung der lokalen Statuscodes siehe offener Punkt.
+care_process:
+  trigger: 'PCI-Entscheidung nach der Erstlinientherapie: nach kurativer Resektion und adjuvanter Chemotherapie
+    (Stadium I/II, VLD); nach Abschluss der (simultanen) Chemo-Strahlentherapie (LD sowie VLD bei primär
+    definitiver Chemo-Strahlentherapie); bei der Response-Beurteilung nach Erstlinien-Chemo(-Immun)therapie
+    (ED). Ein PCI-Angebot setzt Remission (S3 Empf. 9.11, 9.17) bzw. Ansprechen (S3 Empf. 9.26) voraus.'
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Strahlentherapeut:in / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 6.1.1.1 (VLD: Wert der PCI in N0-1 nicht gesichert, Einsatz im Einzelfall); Kap. 6.1.1.3
+      (PCI bei LD: etablierter Therapiebestandteil nach simultaner CT-RT); Kap. 6.1.1.5 + 8.2.2 (ED: PCI
+      als Alternative zur Überwachung mit MR-Verlaufskontrollen, individuell zu erörtern); Tab. 9 (Bedingung
+      „LD ohne PCI“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Wert einer prophylaktischen Schädelbestrahlung ist in den Stadien N0-1 nicht gesichert.
+      … Die PCI ist daher etablierter Therapiebestandteil für Pat. nach simultaner CT-RT. … als Alternative
+      zur Überwachung mit MR-Verlaufskontrollen angeboten … MRT Schädel bei LD ohne PCI
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1.1; 6.1.1.3; 6.1.1.5; Kap. 10.2, Tab. 9
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.3.4 (Hintergrundtext, keine Empfehlungsbox: bei gewählter Observation statt PCI
+      beim ED-SCLC MRT Schädel alle drei Monate)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Im Gegenteil MUSS hier bei einer gewählten Observation Strategie wie in der japanischen Studie
+      beim ED-SCLC ein MRT Schädel alle drei Monate durchgeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.3.4 (Hintergrundtext), S. 496
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.17 (evidenzbasiert, geprüft 2026, Konsens: SCLC Stadium III/LD mit Remission nach
+      Chemo-Strahlentherapie – PCI soll angeboten werden; Referenz-Empfehlung für QI 15, Tab. 45)'
+    recommendation_grade: A
+    evidence_level: '1'
+    quote: Bei allen Patienten mit SCLC Stadium III mit Remission nach Abschluss der Chemo- … Strahlentherapie
+      soll eine prophylaktische Schädelbestrahlung angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.17 (evidenzbasiert, geprüft 2026, Konsens), Kap. 9.5.2.4, S. 427; QI 15 (Tab. 45)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.26 (evidenzbasiert, geprüft 2026, Konsens: SCLC Stadium IV/ED mit Ansprechen auf
+      Erstlinientherapie – PCI oder active surveillance mit MRT Schädel 3-monatlich im 1. Jahr, danach
+      6-monatlich)'
+    recommendation_grade: A
+    evidence_level: '2'
+    quote: Bei SCLC-Patienten mit Ansprechen auf die Erstlinienchemotherapie soll die prophylaktische
+      Schädelbestrahlung oder eine active surveillance mit 3-monatiger MRT- Kontrolle des Gehirns im 1.
+      Jahr, anschließend aller 6 Monate, angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.26 (evidenzbasiert, geprüft 2026, Konsens), Kap. 9.6.3.1, S. 442
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.7 (konsensbasiert, geprüft 2026, Starker Konsens: nach kurativer Therapie des SCLC
+      im Stadium I/II neben adjuvanter Chemotherapie PCI anbieten)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Nach kurativer Therapie des SCLC im Stadium I/II sollte neben der adjuvanten … Chemotherapie
+      eine prophylaktische Radiatio des Schädels angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.7 (EK, geprüft 2026, Starker Konsens), Kap. 9.4.3, S. 416
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 9.37 (evidenzbasiert, modifiziert 2026, Starker Konsens: ältere Patient:innen mit
+      SCLC-LD – PCI-Indikation wie bei Jüngeren; bei schlechtem Allgemeinzustand oder kognitiven Einschränkungen
+      PCI nicht empfohlen; bei > 70 J. oder Komorbidität partizipative Entscheidung, engmaschige ZNS-MRT
+      als sinnvolle Alternative zur PCI)'
+    recommendation_grade: '0'
+    evidence_level: '3'
+    quote: Bei Patienten mit schlechtem Allgemeinzustand oder kognitiven Einschränkungen wird eine PCI
+      nicht empfohlen. Für Patienten > 70 Jahre … kann die Entscheidung im Rahmen eines partizipativen
+      Prozesses getroffen werden; eine engmaschige MRT-Kontrolle des ZNS stellt hierbei eine sinnvolle
+    accessed: '2026-10-15'
+    locator: Empf. 9.37 (evidenzbasiert, modifiziert 2026, Starker Konsens), Kap. 9.7, S. 450
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 LOCAL
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 6/6 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Wertebereich/Kardinalität: Bei cardinality 1..1 fehlt ein Status „PCI nicht indiziert“. Er betrifft
+  (a) fehlende Remission bzw. fehlendes Ansprechen oder Progress nach der Erstlinientherapie (S3-LL Lungenkarzinom
+  5.1, Empf. 9.11, 9.17 und 9.26 setzen Remission bzw. Ansprechen voraus) und (b) ältere Patient:innen
+  mit SCLC-LD mit schlechtem Allgemeinzustand oder kognitiven Einschränkungen (Empf. 9.37: PCI nicht empfohlen).
+  Solche Fälle würden sonst als leitlinienabweichendes „not-performed-no-surveillance“ fehlklassifiziert;
+  die Bedingung „LD ohne PCI“ (Onkopedia SCLC Tab. 9) bleibt zwar ableitbar, die Bewertung der Leitlinienadhärenz
+  aber nicht. Lokalen Code ergänzen oder Kardinalität 0..1 mit Anwendbarkeitsbedingung (SCLC nach kurativer
+  Resektion oder mit Remission/Ansprechen nach Erstlinientherapie) festlegen und mit care_process.trigger
+  abstimmen. Den Nenner von QI 15 (S3 Kap. 18, Tab. 45: LD mit Remission nach Chemo-Strahlentherapie)
+  über das Ansprechen (recistResponse) ableiten, nicht über diesen Status.'
+- 'Lokale Statuscodes von prophylacticCranialIrradiationStatus auf MII und oBDS abbilden. MII mii-pr-onko-strahlentherapie:
+  performed → Procedure.status completed; not-performed-mri-surveillance, not-performed-no-surveillance
+  und declined → status not-done mit statusReason (example-gebunden, lokale Gründe möglich). Das Profil
+  verlangt aber auch bei not-done performed[x] (Period) 1..1 und eine Intention (K, P, S, X, O). oBDS:
+  Meldbar ist nur die durchgeführte PCI (14.3 Zielgebiet 1.1, 14.1 Intention K oder P); eine Ablehnung
+  nur über 19.2 bei vorliegender Therapieempfehlung; für die MRT-Überwachung käme allenfalls 19.1 Therapieempfehlung
+  AS (Active Surveillance) in Frage. Zu entscheiden: Nicht-Durchführung, Ablehnung und MRT-Überwachung
+  als Procedure not-done oder als eigene Observation führen und die Intention der PCI (K oder P) festlegen.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1
+- relation: dependsOn
+  target: mihub.lung.surveillance.recistResponse.v0.2

@@ -1,0 +1,183 @@
+id: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1
+uuid: a39d89a0-6c3c-5e31-897d-bea6b942c0fe
+name: rehabilitationAndSocialCounselling
+label_de: Information/Beratung zu Rehabilitation und sozialrechtlichen Ansprüchen
+definition_de: Dokumentation, dass die Patient:in frühzeitig über ambulante und stationäre Rehabilitationsmaßnahmen
+  sowie weitere sozialrechtliche Ansprüche informiert bzw. an Sozialdienst/Krebsberatungsstelle vermittelt
+  wurde (inkl. Empfehlung einer Klinik mit onkologischem Schwerpunkt unter Berücksichtigung des Patientenwunsches
+  — Wunsch- und Wahlrecht, § 8 SGB IX; in Onkopedia noch als § 9 SGB IX a. F. zitiert).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: mitbetreuung
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '171001002'
+    display: Benefits counseling
+  - system: snomed-ct
+    code: '410606002'
+    display: Social service procedure
+  - system: kdl
+    code: AM190203
+    display: Einschätzung Sozialdienst
+  - system: snomed-ct
+    code: '308440001'
+    display: Referral to social worker
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Procedure / ServiceRequest
+  path: Procedure.code
+care_process:
+  trigger: Therapieabschluss; spätestens bei der Erstvorstellung in der Nachsorge (firstFollowUpVisitDate);
+    bei erkanntem Bedarf im Nachsorge-/Verlaufsplan
+  frequency_pattern: once-per-treatment-completion (Aktualisierung ad-hoc)
+  responsible_role: Onkolog:in / Sozialdienst
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 7 Rehabilitation („sollen … frühzeitig informiert werden“; „Empfehlung für eine Klinik
+      mit onkologischem Schwerpunkt“)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Pat. sollen über die Möglichkeiten ambulanter und stationärer Rehabilitationsmaßnahmen
+      sowie weiterer Ansprüche, die sich aus dem Sozialrecht ergeben, frühzeitig informiert werden. …
+      (§9 SGB IX). Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben
+      werden
+    accessed: '2026-10-15'
+    locator: Kap. 7 Rehabilitation
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 9 Rehabilitation
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Pat. sollen über die Möglichkeiten ambulanter und stationärer Rehabilitationsmaßnahmen
+      sowie weiterer Ansprüche, die sich aus dem Sozialrecht ergeben, frühzeitig informiert werden. …
+      (§9 SGB IX). Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben
+      werden
+    accessed: '2026-10-15'
+    locator: Kap. 9 Rehabilitation
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1 (EK, geprüft 2026; nach multimodaler Therapie Stadium I–IIIC/OMD) und Empf. 16.2
+      (EK, geprüft 2026; unter systemischer Therapie Stadium IVA/IVB): ein strukturierter Nachsorge-/Verlaufsplan
+      sollte erstellt werden und geeignet sein, u. a. den Bedarf an Psychoonkologie und Sozialberatung
+      zu erkennen; Empf. 8.77 (EK, geprüft 2026; Kap. 8.6 Stadium IV): Möglichkeiten zur Rehabilitation,
+      psychoonkologischen Unterstützung, Sozialberatung bzw. Selbsthilfe sollten angesprochen werden'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Neben der medizinischen Behandlung sollten die Möglichkeiten zur Rehabilitation, psychoonkologischen
+      Unterstützung, Sozialberatung bzw. Unterstützung durch Selbsthilfegruppen und der frühen palliativen
+      Therapie angesprochen werden.
+    accessed: '2026-10-15'
+    locator: Empf. 8.77 (EK, geprüft 2026), Kap. 8.6, S. 287; Empf. 16.1/16.2 (EK, geprüft 2026), S. 492
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 7.3.2 Aufklärung über Behandlungsmaßnahmen (Hintergrundtext, ohne Empfehlungsgrad):
+      Rehabilitation nach abgeschlossener Behandlung sowie Angebote sozialrechtlicher (und psychoonkologischer)
+      Unterstützung ansprechen; bei Bedarf Kontakte vermitteln'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Möglichkeiten einer onkologischen Nachsorge und der Rehabilitation nach abgeschlossener
+      Behandlung sollen ebenfalls angesprochen werden, wie auch vorhandene Angebote psychoonkologischer,
+      spiritueller und sozialrechtlicher Unterstützung … Bei Bedarf sind entsprechende Kontakte sind zu
+      vermitteln.
+    accessed: '2026-10-15'
+    locator: Kap. 7.3.2 (Hintergrundtext), S. 196
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Codierung prüfen: KDL AM190203 ''Einschätzung Sozialdienst'' ist eine Dokumentenklasse der Klinischen
+  Dokumentenklassen-Liste (AM ''Administration'' › AM1902 ''Sozialdienst'') und keine Leistung; statt
+  als Procedure.code gegebenenfalls als DocumentReference.type des Sozialdienst-Dokuments führen (eigenes
+  Mapping). 410606002 ''Social service procedure'' ist ein sehr breites Gruppierungskonzept (direktes
+  Kind von ''Procedure''). 410303001 ''Rehabilitation education, guidance, and counseling'' ist seit 2007-01-31
+  inaktiv; für die Information über Rehabilitationsmöglichkeiten ist 410082002 ''Rehabilitation therapy
+  education'' (aktiv; Method: Education - action, Has focus: Rehabilitation therapy) auf Passung zu prüfen,
+  für die Information über sozialrechtliche Ansprüche 223433009 ''Benefits education'' (aktiv) als Ergänzung
+  zu 171001002 ''Benefits counseling''.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.2

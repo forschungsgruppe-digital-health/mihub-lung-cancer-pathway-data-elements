@@ -1,0 +1,198 @@
+id: mihub.lung.palliative.treatmentDecisionDocumentation.v0.1
+uuid: 111800b7-bd62-5e00-a7dc-8247b4c77908
+name: treatmentDecisionDocumentation
+label_de: Dokumentation der Entscheidungen und Maßnahmen zur Behandlung
+definition_de: Dokumentiertes Ergebnis der (partizipativen) Entscheidungsfindung zur palliativen Behandlung
+  — Therapieziel bzw. Therapiezieländerung sowie Beginn, Fortsetzung, Begrenzung oder Beendigung tumorspezifischer
+  und weiterer medizinischer (inkl. lebenserhaltender) Maßnahmen, vereinbarte Maßnahmen — nachvollziehbar
+  für alle Mitbehandelnden.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+category: dokument
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: VL040309
+    display: Behandlungsplan
+  - system: loinc
+    code: 18776-5
+    display: Plan of Care Note
+  - system: snomed-ct
+    code: '734163000'
+    display: Care plan
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan / DocumentReference
+  path: CarePlan.activity / DocumentReference.type
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference
+  path: DocumentReference.type; DocumentReference.category
+  notes: 'ePA MHD Service 1.1.3 (ePA 3.1.3), Profil EPAMHDDocumentReference auf Basis von IHE MHD Minimal
+    DocumentReference. type 1..1 und category 1..1. coding ist REQUIRED gebunden an https://gematik.de/fhir/terminology/ValueSet/epa-xds-type-code-vs
+    (IHE-D typeCode, OID 1.3.6.1.4.1.19376.3.276.1.5.9) bzw. https://gematik.de/fhir/terminology/ValueSet/epa-xds-class-code-vs
+    (IHE-D classCode, OID 1.3.6.1.4.1.19376.3.276.1.5.8); außer IHE-D ist nur LOINC 57016-8 zugelassen.
+    KDL-, LOINC- und SNOMED-Codes des Elements sind dort unzulässig und müssen auf IHE-D-Codes abgebildet
+    werden. Der Service definiert nur Suche und Abruf (Document Consumer/Responder: search-type, read).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding (Slices KDL/LNC/SCT/XDS); DocumentReference.category.coding (Slice
+    XDS)
+  notes: 'MII KDS Dokument 2026.0.1 (stabil). type.coding ist nach system gesliced (KDL/LNC/SCT/XDS, je
+    0..1, jeweils REQUIRED gebunden). KDL (http://dvmd.de/fhir/ValueSet/kdl): VL040309 Behandlungsplan.
+    LNC an http://hl7.org/fhir/ValueSet/c80-doc-typecodes: 18776-5 fehlt in der R4-Fassung 4.0.1, enthalten
+    sind 56447-6 Plan of care note und 74156-1 Oncology treatment plan and summary Document. SCT an https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/ValueSet/mii-vs-dokument-sct-dokument-typ
+    (Nachfahren von 229059009 |Report|): Für den Element-Code 734163000 Care plan (record artifact), Parent
+    184216000 Patient record type, ist die Zugehörigkeit nicht belegt (siehe Issue). Dazu type.coding:XDS
+    (IHE-D typeCode) und category.coding:XDS (IHE-D classCode, z. B. PLA Planungsdokument). Strukturierte
+    Therapieziele und Maßnahmen laufen weiter über CarePlan (fhir-r4-base-Eintrag).'
+care_process:
+  trigger: bei jeder Therapieentscheidung / Therapiezieländerung in der Palliativversorgung
+  frequency_pattern: ad-hoc (je Therapieentscheidung/Therapiezieländerung) + regelmäßige Re-Evaluation;
+    in der Sterbephase kontinuierlich
+  responsible_role: Lead-Clinician / Palliativ-Team
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.4 Betreuung im Terminalstadium; Empf. 14.7 (Entscheidungen und Maßnahmen zur Behandlung
+      in der Sterbephase dokumentieren und kontinuierlich re-evaluieren)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei Patienten mit Lungenkarzinom sollen Entscheidungen und Maßnahmen zur Behandlung in der
+      Sterbephase dokumentiert und kontinuierlich re-evaluiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 14.4, Empf. 14.7 (S. 483)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 6.5 Vorausschauende Versorgungsplanung (Hintergrund: Dokumentation der Inhalte und
+      Ergebnisse)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Dokumentation der Inhalte und Ergebnisse der vorausschauenden Versorgungsplanung ist für
+      die zukünftige Behandlung hilfreich.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5, Hintergrund (S. 117)
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-066 Doku der Entscheidungen und Maßnahmen zur Behandlung (Palliativversorgung, Kategorie
+      Dokument)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-066
+    quote: Doku der Entscheidungen und Maßnahmen zur Behandlung … S3-LL Lungenkrebs Apr. 2026 Empf. 14.7
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 8.2 Grundlegende Aspekte im Prozess der Entscheidungsfindung; Empf. 8.1 (partizipative
+      Entscheidungsfindung) und 8.2 (Entscheidungen über das therapeutische Vorgehen am Lebensende frühzeitig,
+      auch antizipierend, fällen und dokumentieren)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Die Festsetzung von Therapiezielen … sollen im Rahmen einer partizipativen Entscheidungsfindung
+      … erfolgen. … Entscheidungen über das therapeutische Vorgehen am Lebensende sollten frühzeitig im
+      Erkrankungsverlauf - auch antizipierend - gefällt und dokumentiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Empf. 8.1 (S. 147) und Empf. 8.2 (S. 148)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 8.4 Entscheidung über Beginn, Fortsetzung oder Beendigung medizinischer Maßnahmen und
+      Kap. 8.5 Besondere Situationen; Empf. 8.10 (regelmäßige Prüfung von Indikation und Einwilligung,
+      ggf. Anpassung des Therapieplans oder Therapiezieländerung) und 8.11 (insbesondere in prognostisch
+      uneindeutigen Erkrankungssituationen die der Indikationsstellung und Therapieentscheidung zugrunde
+      liegenden Kriterien explizit formulieren und dokumentieren)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: … eine Anpassung des Therapieplans oder eine Therapiezieländerung erfolgen. … Insbesondere
+      in prognostisch uneindeutigen Erkrankungssituationen sollten die … der Indikationsstellung und der
+      Therapieentscheidung zugrunde liegenden Kriterien explizit formuliert und dokumentiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 8.4, Empf. 8.10 (S. 152); Kap. 8.5, Empf. 8.11 (S. 155)
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-066; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Dokumenttyp-Codes für treatmentDecisionDocumentation festlegen. MII Dokument nimmt im LOINC-Slice nur
+  Codes aus c80-doc-typecodes an. 18776-5 steht in R4 4.0.1 nicht darin; Kandidaten sind 56447-6 Plan
+  of care note oder 74156-1 Oncology treatment plan and summary Document. Im SNOMED-Slice sind nur Nachfahren
+  von 229059009 Report zulässig. Für den Element-Code 734163000 Care plan (record artifact), Parent 184216000
+  Patient record type, ist das nicht belegt; per $validate-code prüfen, sonst den SNOMED-Code dort weglassen.
+  Die ePA (MHD) verlangt IHE-D-Codes in type und category, daher die Abbildung von KDL VL040309 festlegen.
+  Kandidaten aus IHE-D: classCode PLA Planungsdokument; typeCode z. B. ONKO Onkologische Dokumente oder
+  FPRO Therapiedokumentation (laut IHE-D-Definition für die Durchführung von Therapien, daher nur bedingt
+  passend).'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1

@@ -89,6 +89,8 @@ Characteristics: #can-be-target
 * phase from PhasesVS (required)
 * tumorEntity 1..* code "Tumorentität"
 * tumorEntity from TumorEntityVS (extensible)
+* category 0..1 code "Klinische Kategorie (optional; Sortier-/Review-Hilfe)"
+* category from CategoryVS (extensible)
 
 // --- Datentyp & Kardinalität ---------------------------------------
 * dataType 1..1 code "Datentyp gemäß ISO 21090 / FHIR R4"
@@ -188,6 +190,7 @@ Title: "Care Pathway Phases"
 * #followup "Onkologische Nachsorge nach kurativer Therapie"
 * #surveillance "Verlaufsbeobachtung unter Systemtherapie"
 * #palliative "Palliativversorgung"
+* #primarycare "Hausärztliche Versorgung / sektorenübergreifende Basisdaten"
 * #screening "Prävention / Früherkennung (geplant)"
 * #diagnostics "Diagnostik & Staging (geplant)"
 * #treatment "Therapie kurativ + palliativ (geplant)"
@@ -214,6 +217,35 @@ ValueSet: TumorEntityVS
 Id: tumor-entity-vs
 * ^url = "{NAMESPACE_BASE}/ValueSet/tumor-entity"
 * include codes from system TumorEntityCS
+
+// --- Klinische Kategorie (optional) --------------------------------
+CodeSystem: CategoryCS
+Id: category
+Title: "Clinical Category of a Data Element"
+* ^url = "{NAMESPACE_BASE}/CodeSystem/category"
+* ^content = #complete
+* #befund "Befund / Ergebnis"
+* #bildgebung "Bildgebende Untersuchung"
+* #assessment "Assessment / Score / Instrument"
+* #messwert "Messwert"
+* #kontakt-visite "Kontakt / Visite / Termin"
+* #versorgungsplanung "Versorgungsplanung / Plan / Intervall"
+* #mitbetreuung "Mitbetreuung / Anbindung"
+* #prozedur "Prozedur / Untersuchung"
+* #diagnose "Diagnose / Zustand"
+* #sozialanamnese "Sozialanamnese"
+* #dokument "Dokument / Bericht"
+* #laborbefund "Laborbefund"
+* #prom "PROM / Selbsteinschätzung"
+* #medikation "Medikation"
+* #versorgungskontext "Versorgungskontext / -stufe"
+* #stammdaten "Stammdaten"
+* #administrativ "Administrative Angabe"
+
+ValueSet: CategoryVS
+Id: category-vs
+* ^url = "{NAMESPACE_BASE}/ValueSet/category"
+* include codes from system CategoryCS
 
 // --- Datentypen ----------------------------------------------------
 CodeSystem: DataTypesCS
@@ -451,7 +483,8 @@ def render_instance(doc: dict) -> str:
     definition = doc.get("definition_de", "")
 
     out.append(f"// Auto-generated from {yaml_id}")
-    out.append(f"// Source: elements/{doc['phase'].replace('followup','follow-up')}/{name}.yaml")
+    phase_dir = {"followup": "follow-up", "primarycare": "primary-care"}.get(doc["phase"], doc["phase"])
+    out.append(f"// Source: elements/{phase_dir}/{name}.yaml")
     out.append("// FHIR-Form: Instance of Logical Model 'BaseDataElement' (EHDS-Pattern, ohne Extensions)")
     out.append("")
     out.append(f"Instance: {inst}")
@@ -472,6 +505,8 @@ def render_instance(doc: dict) -> str:
     out.append(f"* phase = {fsh_code(doc['phase'])}")
     for i, te in enumerate(doc.get("tumor_entity", []) or []):
         out.append(f"* tumorEntity[{i}] = {fsh_code(te)}")
+    if doc.get("category"):
+        out.append(f"* category = {fsh_code(doc['category'])}")
     out.append(f"* dataType = {fsh_code(doc['datatype'])}")
     out.append(f"* cardinality = {fsh_str(doc['cardinality'])}")
     if doc.get("unit"):

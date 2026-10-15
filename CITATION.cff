@@ -37,8 +37,9 @@ authors:
     affiliation: "Forschungsgruppe Digital Health, Technische Universität Dresden"
     orcid: "https://orcid.org/0000-0002-6513-9017"
 license: CC-BY-4.0
-# TODO (Veröffentlichungs-Checkliste): nach der ersten Zenodo-Archivierung den Concept-DOI
-# (alle Versionen) hier eintragen, z. B.:  doi: "10.5281/zenodo.XXXXXXXX"
+# Concept-DOI (alle Versionen; Zenodo-Archivierung seit v0.1.0-rc.1). Versions-DOIs:
+# v0.1.0-rc.1 10.5281/zenodo.21083230 · v0.1.0-rc.2 10.5281/zenodo.21106995
+doi: "10.5281/zenodo.21083229"
 repository-code: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
 url: "https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements"
 version: "0.1.0-rc.2" # x-release-please-version

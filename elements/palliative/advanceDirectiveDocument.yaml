@@ -8,6 +8,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: dokument
 datatype: Reference
 cardinality: 0..*
 value_set:
@@ -16,14 +17,44 @@ value_set:
   codings:
   - system: snomed-ct
     code: '371538006'
-    display: Advance directive
-  - system: snomed-ct
-    code: '470611000124106'
-    display: Healthcare proxy
+    display: Advance directive report
+  - system: loinc
+    code: 42348-3
+    display: Advance Healthcare Directives
   - system: kdl
     code: AM160104
     display: Patientenverfügung
+  - system: kdl
+    code: AM160103
+    display: Vorsorgevollmacht
 standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_DPE_Consent_Personal_Consent
+  resource: Consent
+  path: Consent.policyRule (Art der Erklärung); Consent.source[x]:sourceReference.display + Extension
+    ablageort
+  notes: 'KBV MIO Patientenkurzakte 1.0.0, Datensatz Persönliche Erklärungen (DPE): Hinweis auf eine vorhandene
+    Patientenverfügung bzw. Vorsorgevollmacht mit Ablageort. scope fix adr, category fix LOINC 59284-0.
+    policyRule ist REQUIRED an https://fhir.kbv.de/ValueSet/KBV_VS_MIO_DPE_Declaration_Type gebunden (SNOMED
+    371538006 Advance directive report, 186065003 Power of attorney medical report, 772790007 Organ donor
+    card). Bevollmächtigte über provision.actor (Rolle SNOMED 54056000). Einen Dokumentverweis gibt es
+    nicht: sourceReference.reference ist verboten (max 0). Vorgesehen sind nur ein Ablageort-Text und
+    die Extension https://fhir.kbv.de/StructureDefinition/KBV_EX_MIO_NFDxDPE_Consent_Description_File_Location
+    (valueAddress). Nicht zu verwechseln mit KBV_PR_MIO_NFDxDPE_Consent_Active_Advance_Directive (Einwilligung
+    der versicherten Person, scope patient-privacy).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding (Slices KDL/LNC/SCT/XDS); DocumentReference.content.attachment
+  notes: 'MII KDS Dokument 2026.0.1 (stabil). type.coding ist nach system gesliced (KDL/LNC/SCT/XDS, je
+    0..1, jeweils REQUIRED gebunden). KDL (http://dvmd.de/fhir/ValueSet/kdl): AM160104 Patientenverfügung,
+    AM160103 Vorsorgevollmacht. LNC an http://hl7.org/fhir/ValueSet/c80-doc-typecodes: LOINC 42348-3 fehlt
+    in der R4-Fassung 4.0.1, enthalten ist 64298-3 Power of attorney (siehe Issue). SCT an https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/ValueSet/mii-vs-dokument-sct-dokument-typ
+    (Nachfahren von 229059009 |Report|): 371538006 Advance directive report (record artifact), Parent
+    423876004 Clinical document, darüber 371524004 Clinical report; Zugehörigkeit per $validate-code bestätigen.
+    Für die Vorsorgevollmacht führt das Element keinen SNOMED-Code (siehe Issue). XDS (IHE-D typeCode):
+    PATD Patienteneigene Dokumente, laut IHE-D-Definition u. a. für Vorsorgevollmacht und Patientenverfügung.
+    Das Dokument selbst über content.attachment (data oder url).'
 - standard: fhir-r4-base
   resource: DocumentReference
   path: DocumentReference.type
@@ -34,11 +65,29 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 6.5 ACP
-    recommendation_grade: A
+    section: 'Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.12 (Gesprächsinhalte inkl. Benennung
+      Vorsorgebevollmächtigte:r / Vorschlag Betreuer:in) und Hintergrund (schriftliche Vorausplanung:
+      Vorsorgevollmacht, Patient:innenverfügung, Notfallanweisung; Aktualisierung)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Benennung eines Vorsorgebevollmächtigten oder Vorschlag einem/einer Betreuer:in. … Hierzu zählen
+      insbesondere die Erstellung einer Vorsorgevollmacht, einer individuellen Patient:innenverfügung
+      und einer Anweisung für Notfallsituationen.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5, Empf. 6.12 (EK, geprüft 2026), S. 113; Hintergrund S. 117
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.4 Vorausschauende Versorgungsplanung (Advance Care Planning, ACP); Empf. 7.8 (Gesprächsinhalte
+      inkl. Benennung eines Vorsorgebevollmächtigten oder Vorschlag eines Betreuers)
+    recommendation_grade: A
+    evidence_level: '4'
+    quote: 'Gegenstand der Gespräche zur vorausschauenden Versorgungsplanung soll sein: … • Benennung
+      eines Vorsorgebevollmächtigten oder Vorschlag eines Betreuers.'
+    accessed: '2026-10-15'
+    locator: Kap. 7.3.4, Empf. 7.8 (A, LoE 4, geprüft 2026), S. 197
 iso13972_metadata:
   type: plan
   keywords:
@@ -47,7 +96,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -59,3 +108,72 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Abgrenzung der Dokumenttypen: Als schriftliche Vorausplanung nennt die S3-LL Palliativmedizin 3.0 (Kap.
+  6.5, Hintergrund) Vorsorgevollmacht, individuelle Patient:innenverfügung und Anweisung für Notfallsituationen
+  (Notfallbogen). Empf. 6.12 nennt zudem als Gesprächsinhalt, eine Betreuer:in vorzuschlagen (rechtlich
+  in der Regel über eine Betreuungsverfügung; der Begriff selbst steht nicht in der Leitlinie). Zu entscheiden
+  ist, ob Notfallbogen und Betreuungsverfügung hier (Definition/Value Set) oder als eigenes Element erfasst
+  werden. Zudem setzt „wirksam“ in der Definition eine rechtliche Prüfung voraus (Verbindlichkeit laut
+  Leitlinie im Betreuungsrecht geregelt), die bei der Datenerfassung meist nicht leistbar ist. Stattdessen
+  Vorliegen und Datum der letzten Aktualisierung erfassen (Aktualisierung laut Leitlinie regelmäßig und
+  insbesondere bei wesentlichen gesundheitlichen Veränderungen sinnvoll)?'
+- 'Codes und Dokumentverweis für advanceDirectiveDocument festlegen. (1) LOINC 42348-3 steht nicht in
+  c80-doc-typecodes (R4 4.0.1) und ist damit im LOINC-Slice von MII Dokument unzulässig. Für die Patientenverfügung
+  enthält das ValueSet keinen passenden Code, für die Vollmacht z. B. 64298-3 Power of attorney. Den LOINC-Slice
+  weglassen oder für die Vollmacht 64298-3 ergänzen? (2) Vorsorgevollmacht: Das Element führt dafür nur
+  KDL AM160103. Für den SNOMED-Slice von MII Dokument (Nachfahren von 229059009 Report) und für KBV_VS_MIO_DPE_Declaration_Type
+  (policyRule, REQUIRED) fehlt ein SNOMED-Dokumenttyp. Kandidat: 186065003 Power of attorney medical report
+  (record artifact), Parent 229059009, im KBV-ValueSet enthalten. Ergänzen? (3) Die KBV-DPE kennt keinen
+  Verweis auf das Dokument, nur Ablageort-Text und Adresse (sourceReference.reference max 0). Genügt das
+  für „inkl. Verweis auf das Dokument“ in der Definition, oder wird parallel eine DocumentReference nach
+  MII Dokument geführt?'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1

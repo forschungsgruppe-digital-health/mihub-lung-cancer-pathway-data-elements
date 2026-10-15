@@ -1,0 +1,178 @@
+id: mihub.lung.followup.brainMetastasisRiskProfile.v0.1
+uuid: 63a13a5d-0c6e-531e-a1fb-21a6d7388f9b
+name: brainMetastasisRiskProfile
+label_de: Individuelles Risiko für zerebrale Metastasierung
+definition_de: 'Einstufung des individuellen Risikos einer ZNS-Metastasierung zur Steuerung der Schädel-MRT
+  in der Nachsorge nach Lokaltherapie: Hochrisiko molekular/Stadium nach S3 Empf. 16.8 (beispielhaft:
+  EGFR+, ALK+, ROS1+, Adenokarzinom Stadium III), Hochrisiko histologisch nach Onkopedia NSCLC Kap. 8.1
+  (beispielhaft: großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren,
+  seltene Lungentumorhistologien) oder Standardrisiko (kein routinemäßiges Schädel-MRT, S3 Kap. 16.3.4).
+  Festlegung nach Maßgabe des interdisziplinären Behandlungsteams.'
+phase: followup
+tumor_entity:
+- NSCLC
+category: assessment
+datatype: CodeableConcept
+cardinality: 0..1
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Keine deckungsgleiche standardisierte Repräsentation (MII TermServ, Stand 2026-10-14; SNOMED
+    CT 20260701 / LOINC 2.83). Geprüfte Kandidaten: (1) HL7 http://terminology.hl7.org/CodeSystem/risk-probability
+    (v1.0.0, auf dem TermServ vorhanden; Example-Binding von RiskAssessment.prediction.qualitativeRisk)
+    kodiert eine absolute Wahrscheinlichkeit (high = „The specified outcome is more likely to occur than
+    not.“), nicht die leitlinienbasierte Risikogruppe — nicht übernommen. (2) SNOMED CT 1279908003 „Risk
+    of metastatic malignancy (observable entity)“ ist das nächstgelegene Element-Konzept, jedoch ohne
+    ZNS-Lokalisation; 1255670000 „Finding of increased risk level (finding)“ / 1279548003 „Finding of
+    low risk level (finding)“ wären Wert-Konzepte, jedoch ohne Entsprechung für „Standardrisiko“ und ohne
+    Kriterienbasis; ein Konzept für ein erhöhtes Hirnmetastasen-Risiko wurde nicht gefunden. Daher projekt-lokale
+    Platzhalter; die beiden Hochrisiko-Werte unterscheiden die Quellen- bzw. Kriterienbasis (S3 Empf.
+    16.8: molekulare bzw. Stadienkriterien; Onkopedia NSCLC Kap. 8.1: histologische Kriterien — unterschiedliche
+    Empfehlungsstärke („sollte“ vs. „sollte man durchaus erwägen“) und MRT-Intervalle), nicht die Risikostufe.
+    FHIR-Perspektive: RiskAssessment.prediction.qualitativeRisk = Risikostufe, prediction.outcome = SNOMED
+    CT 94225005 „Metastatic malignant neoplasm to brain“, Kriterienbasis über RiskAssessment.basis (Referenzen
+    auf Histologie-, Staging- und Molekularbefund).'
+  codings:
+  - system: local-no-standard-binding
+    code: high-risk-molecular
+    display: 'Hochrisiko molekular/Stadium nach S3 Empf. 16.8 (beispielhaft: EGFR+, ALK+, ROS1+, Adenokarzinom
+      Stadium III)'
+  - system: local-no-standard-binding
+    code: high-risk-histology
+    display: 'Hochrisiko histologisch nach Onkopedia NSCLC Kap. 8.1 (beispielhaft: großzellige Karzinome,
+      undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene Lungentumorhistologien)'
+  - system: local-no-standard-binding
+    code: standard-risk
+    display: Standardrisiko — kein routinemäßiges Schädel-MRT (S3 Kap. 16.3.4)
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/RiskAssessment
+  resource: RiskAssessment
+  path: RiskAssessment.prediction.qualitativeRisk (Risikostufe); RiskAssessment.prediction.outcome = SNOMED
+    94225005; Kriterien in RiskAssessment.prediction.rationale bzw. RiskAssessment.basis
+  notes: FHIR R4 (4.0.1). prediction.outcome (0..1) = 94225005 Metastatic malignant neoplasm to brain.
+    prediction.qualitativeRisk (0..1) ist nur example-gebunden an http://hl7.org/fhir/ValueSet/risk-probability
+    (negligible, low, moderate, high, certain); 'high' bedeutet dort 'more likely to occur than not',
+    also eine absolute Wahrscheinlichkeit und keine leitlinienbasierte Risikogruppe. Die Kriterien- bzw.
+    Quellenbasis (S3 Empf. 16.8 molekular/Stadium, Onkopedia NSCLC Kap. 8.1 histologisch) gehört nicht
+    in die Stufe, sondern in prediction.rationale (string), RiskAssessment.basis (Referenzen auf Histologie-,
+    Staging- und Molekularbefund) oder RiskAssessment.method. Die lokalen Codes vermischen beides; Transformation
+    siehe offener Punkt.
+care_process:
+  trigger: Erstellung des Nachsorgeplans (nach Lokaltherapie)
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Onkolog:in / MDT (Tumorboard)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.8 (EK, Starker Konsens, geprüft 2026; Box in Kap. 16.3 Nachsorge im Anschluss an
+      eine lokal ablative Therapie: Hochrisikopatient:innen beispielhaft EGF-R+, ALK+, ROS-1+, Adenokarzinome
+      mit Stadium III; „sollte“, nach Maßgabe des interdisziplinären Behandlungsteams; kein Intervall
+      festgelegt); Kap. 16.3.4 (Screening auf Hirnmetastasen ohne klare Risikoindikation nicht empfohlen;
+      Hintergrund: Risikokollektive EGFR/ALK/ROS1 im Stadium IVA/IVB)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Screening auf Hirnmetastasen … ohne klare vorliegende Risikoindikation nicht empfohlen werden
+      kann. … Bei Hochrisikopatienten (z.B. EGF-R+, ALK+, ROS-1+, Adenokarzinome mit Stadium … III) sollte,
+      nach Maßgabe des interdisziplinären Behandlungsteams, regelmäßig ein Schädel-MRT durchgeführt werden.
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3.4, S. 496; Empf. 16.8 (EK, Starker Konsens, geprüft 2026), S. 498
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1 (Text nach Tab. 12: bei individuell hohem Risiko — beispielhaft großzellige Karzinome,
+      undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene Lungentumorhistologien
+      — MRT-Schädel alle 6–9 Monate, nur in den ersten drei Jahren nach Lokaltherapie; „sollte man durchaus
+      erwägen“); Kap. 6.1.6.2.1.1 (ALK+ im Stadium IV unter TKI: MRT bei Diagnosestellung, strukturiert
+      z. B. alle 3–6 Monate auch asymptomatisch — stützt ALK+ als ZNS-Risikokriterium, Kontext Systemtherapie,
+      nicht Nachsorge nach Lokaltherapie)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: individuell hohen Risiko der Entwicklung einer cerebralen Metastasierung (z. B. großzellige
+      Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene Lungentumorhistologien)
+      sollte man durchaus erwägen, … in den ersten drei Jahren nach Lokaltherapie, MRT-Schädel
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 8.1 (Text nach Tab. 12); Kap. 6.1.6.2.1.1
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 10 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 LOCAL
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Verfügbarkeit der molekularen Kriterien: S3 Empf. 6.58 (EK) sieht in den Stadien IB–IIIA nur die Testung
+  auf EGFR (Exon 19/21) und ALK (Tumoren ≥ 4 cm) vor; ROS1 wird erst bei nicht resezierbarem Stadium III
+  (Empf. 6.59) bzw. Stadium IV (Empf. 6.61; Onkopedia NSCLC Tab. 3) getestet. Nach Resektion früher Stadien
+  kann das Kriterium ROS1+ daher unbekannt sein. Der Katalog enthält kein Eingangselement für den molekularen
+  Basisstatus (EGFR/ALK/ROS1); nur molecularResistanceFinding/molecularRetestingCtdna (Surveillance) tragen
+  molekulare Befunde.'
+- 'Repräsentation von brainMetastasisRiskProfile in RiskAssessment klären. Die drei lokalen Codes vermischen
+  Risikostufe und Kriterienbasis: high-risk-molecular und high-risk-histology unterscheiden die Quelle
+  (S3 Empf. 16.8 bzw. Onkopedia NSCLC Kap. 8.1), nicht die Stufe. RiskAssessment.prediction.qualitativeRisk
+  nimmt nur die Stufe auf. Für die Stufe läge das dort example-gebundene ValueSet risk-probability (high
+  bzw. low) nahe; value_set.notes lehnt es ab, weil ''high'' dort ''wahrscheinlicher als nicht'' bedeutet
+  und keine Risikogruppe ist. Zu entscheiden: (a) Stufe mit risk-probability oder mit eigenen Stufencodes
+  (erhöht, Standard) in qualitativeRisk; (b) Kriterienbasis in prediction.rationale, RiskAssessment.method
+  oder als Referenzen in RiskAssessment.basis; (c) ob das Element in Stufe und Kriterium aufgeteilt wird.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.primarycare.tumorHistology.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tnmStage.v0.1

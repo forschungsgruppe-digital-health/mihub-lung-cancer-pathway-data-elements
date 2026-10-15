@@ -1,0 +1,178 @@
+id: mihub.lung.primarycare.immunizationStatus.v0.1
+uuid: 24fe6203-fd48-526c-80ca-822d37016d78
+name: immunizationStatus
+label_de: Impfstatus
+definition_de: Impfstatus der Patient:in (Impfausweis/Impfhistorie), insbesondere Influenza-, Pneumokokken-,
+  COVID-19- und Herpes-zoster-Impfung bei onkologischen Patient:innen.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: medikation
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '304250009'
+    display: Immunization status
+  - system: snomed-ct
+    code: '425457005'
+    display: History of vaccination
+  - system: loinc
+    code: 87273-9
+    display: Immunization Note
+  - system: loinc
+    code: 105580-5
+    display: Immunization Certificate
+  - system: kdl
+    code: AM160102
+    display: Impfausweis
+standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_Vaccination_Record_Prime
+  resource: Immunization (MIO Impfpass 1.1.0)
+  path: Immunization.vaccineCode.coding:snomed_CT (1..1, REQUIRED KBV_VS_MIO_Vaccination_Vaccine), optional
+    :atc; Immunization.protocolApplied.targetDisease (REQUIRED KBV_VS_MIO_Vaccination_TargetDisease);
+    Immunization.occurrence[x]
+  notes: Eine Immunization je dokumentierter Impfung (status fix completed). Die Element-Codes 304250009
+    und 425457005 sind Status- bzw. Anamnesecodes, keine Impfstoffcodes (zur Repräsentation siehe Issue).
+    KBV_PR_MIO_Vaccination_Observation_Immunization_Status bildet Immunitätsnachweise per Labortest ab,
+    nicht den Impfstatus. Nachgetragene Impfungen aus der Impfhistorie (z. B. Übertrag aus dem Papier-Impfausweis)
+    über https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_Vaccination_Record_Addendum (primarySource
+    fix false, reportOrigin 1..1, vaccineCode.coding:snomed_CT 0..1).
+- standard: fhir-r4-base
+  resource: Immunization
+care_process:
+  trigger: Anamnese; vor Beginn der Tumortherapie (sofern der Therapiebeginn nicht dringlich ist); bei
+    jeder Impfung; Übergabe (onkologischer Abschlussbericht)
+  frequency_pattern: per-event
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-076 Impfstatus (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-076
+    quote: Impfstatus
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. (LoTeCaS-GP): Empfehlungsliste Anhang 2 = Abb. 2, Dos › Relevante Informationen
+      › Weiteres: ''bei Einfluss auf zukünftige Impfungen: Hinweise zum Impfen + Impfstatus''; Ergebnisse
+      S. 96'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'bei Einfluss auf zukünftige Impfungen: Hinweise zum Impfen + Impfstatus'
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Weiteres; Ergebnisse
+      S. 96
+  - source: andere
+    version: Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen und Immunsuppression“ (DGHO/AGIHO),
+      Stand Mai 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/impfungen-bei-malignen-erkrankungen-und-immunsuppression
+    section: 'Kap. 6.1 Solide Tumore, Tab. 5 (SoR/QoE nach AGIHO/ESCMID, Tab. 1–3: COVID-19 A/IIu; Influenza
+      A/IIu,r,h; Pneumokokken-Konjugatimpfstoff A/I; RSV A/IIu; adjuvantierte rekombinante gE-VZV-Vakzine
+      A/I); ergänzend ohne Graduierung: Kap. 2.1.1 Lebendimpfung, Kap. 2.1.3 Zeitpunkt der Impfung mit
+      Tab. 4'
+    recommendation_grade: A
+    evidence_level: I–IIu (AGIHO/ESCMID-Skala, nicht AWMF)
+    quote: 'Empfehlungen zur Impfung von Pat. mit soliden Tumoren … COVID-19 Impfung … A IIu Influenza
+      Impfung Reduktion von Mortalität A IIu,r,h … Pneumokokken: Konjugat Impfstoff … A I … RSV-Impfung
+      … A IIu … Adjuvanted Glycoprotein E-based rekombinante Vakzine Verhinderung einer VZV-Reaktivierung
+      A I'
+    accessed: '2026-10-15'
+    locator: Onkopedia „Impfungen bei malignen Erkrankungen und Immunsuppression“ (Mai 2026), Kap. 6.1
+      Solide Tumore, Tabelle 5
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-076; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- S3-LL Lungenkarzinom 5.1 enthält keine Impfempfehlung (Kap. 12 verweist auf S3-LL Supportive Therapie);
+  Quelle STIKO/Onkopedia „Impfungen“ noch zu prüfen.
+- 'Stand 2026-10-14 zu den Impfempfehlungen: Die Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen
+  und Immunsuppression“ (DGHO/AGIHO, Stand Mai 2026; Webabruf 2026-10-14, außerhalb des kuratierten Quellkorpus,
+  UNSICHER) ist geprüft. Ihre Tab. 5 empfiehlt für Patient:innen mit soliden Tumoren u. a. Influenza-,
+  Pneumokokken-Konjugat-, COVID-19-, RSV- und rekombinante Zoster-Impfung (je SoR A, AGIHO/ESCMID-Skala).
+  Zur Entscheidung: (a) RSV in die Aufzählung in definition_de aufnehmen? (b) Therapiebedingte Besonderheiten
+  (z. B. Lebendimpfungen im Kontext der Tumortherapie nicht empfohlen, Onkopedia Kap. 2.1.1; Abweichungen
+  von den allgemeinen Impfempfehlungen zusammen mit dem Impfstatus darstellen, Klein et al. 2026, S. 96)
+  im Impfstatus oder als Hinweis in recommendationsForPrimaryCare bzw. riskFactorAndAlert führen? Offen
+  bleibt der Abgleich mit den aktuellen STIKO-Empfehlungen (Indikationsimpfungen bei Immundefizienz);
+  aus dem Issue zur fehlenden S3-Impfempfehlung ist damit nur noch dieser STIKO-Teil offen.'
+- 'Das Element ist als Impfstatus modelliert (CodeableConcept mit 304250009, 425457005, 87273-9, 105580-5,
+  AM160102); das Impfpass-MIO dokumentiert dagegen einzelne Impfungen mit Impfstoffcode (SNOMED/ATC),
+  Zielerkrankung und Datum. Zu entscheiden: den Impfstatus als aus Immunization-Einträgen abgeleitete
+  Zusammenfassung definieren oder das Element um Impfstoff, Zielerkrankung (z. B. Influenza, Pneumokokken,
+  COVID-19, Herpes zoster) und Impfdatum ergänzen.'

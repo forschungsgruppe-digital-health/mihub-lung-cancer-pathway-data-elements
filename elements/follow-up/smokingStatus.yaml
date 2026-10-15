@@ -1,15 +1,23 @@
-id: mihub.lung.followup.smokingStatus.v0.1
+id: mihub.lung.followup.smokingStatus.v0.2
 uuid: 0e39538d-7ac1-5c78-a7aa-ee553e5bf28e
 name: smokingStatus
 label_de: Rauchstatus
-definition_de: Aktueller Tabakkonsumstatus inkl. E-Zigaretten-Konsum (Vaping) und Passivrauchexposition.
-  Aktive Raucher und E-Zigaretten-Konsumenten haben höheres Risiko für Komplikationen, Zweittumoren und
-  schlechteres Überleben; Passivrauchexposition ist eigenständiger Risikofaktor und in v5.01 explizit
-  Teil der Tabakanamnese.
+definition_de: Aktueller Tabakrauchstatus (nie / ehemals / aktuell, inkl. gelegentlich) sowie Konsum von
+  E-Zigaretten und verwandten Produkten (z. B. Tabakerhitzer) und Passivrauchexposition. Fortgesetztes
+  Tabakrauchen ist beim Lungenkarzinom mit kürzerem Überleben, mehr Therapiekomplikationen und mehr Zweitkarzinomen
+  assoziiert (S3-LL Lungenkarzinom 5.1, Kap. 4.2 und 16.2). Für langjährigen E-Zigarettenkonsum sieht
+  die S3-LL eine hohe Plausibilität für ein erhöhtes Tumorrisiko, beweisende Langzeitstudien fehlen jedoch
+  (Kap. 3.7.2); bei Dual Use von Tabak- und E-Zigarette potenziert sich das Schadenspotenzial (Kap. 4.2.1).
+  Empf. 4.1 fordert, aktives Tabakrauchen, das Rauchen der E-Zigarette und Passivrauchexposition konsequent
+  zu vermeiden; Empf. 4.2 fordert, den Konsum von Tabak- und E-Zigaretten sowie verwandter Produkte regelmäßig
+  zu erfragen und zu dokumentieren. Eine Erfassungsvorgabe für Passivrauch enthält Empf. 4.2 nicht; der
+  Anamnese-/Befundbogen der S3-LL Rauchen und Tabakabhängigkeit (Anhang 2) fragt Rauchende im häuslichen
+  und betrieblichen Umfeld ab ('Raucher zu Hause', 'Raucher im Betrieb').
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: sozialanamnese
 datatype: CodeableConcept
 cardinality: 1..1
 value_set:
@@ -30,18 +38,47 @@ value_set:
     code: '428041000124106'
     display: Occasional tobacco smoker
   - system: snomed-ct
-    code: '722498003'
-    display: Smokes electronic cigarettes (finding)
+    code: '722499006'
+    display: Electronic cigarette user
   - system: snomed-ct
     code: '43381005'
-    display: Passive smoker (finding)
+    display: Passive smoker
+  - system: snomed-ct
+    code: '266927001'
+    display: Tobacco smoking consumption unknown
+  notes: 'ValueSet http://hl7.org/fhir/ValueSet/smoking-status ist weder in FHIR R4 Core 4.0.1 noch in
+    R5 Core 5.0.0 noch in den HL7-Terminology-Paketen enthalten (lokale Paketprüfung 2026-10-14; andere
+    Versionen nicht geprüft) und auf dem MII TermServ nicht auflösbar (ValueSet-Suche 2026-10-14: 0 Treffer);
+    als required-Bindungsziel ist es daher ungeeignet, value_set.uri ist zu ersetzen oder zu entfernen.
+    Verifiziert verfügbar: urn:oid:2.16.840.1.113883.11.20.9.38 ''Smoking Status'' (20240606; SNOMED 266919005,
+    266927001, 428041000124106, 449868002, 77176002, 8517006) sowie http://hl7.org/fhir/uv/ips/ValueSet/current-smoking-status-uv-ips
+    bzw. https://gematik.de/fhir/isik/ValueSet/current-smoking-status-uv-ips 1.1.0 (LOINC-LA-Codes). 722499006
+    (E-Zigarette) und 43381005 (Passivrauch) sind in keinem dieser ValueSets enthalten (eigene Achsen).
+    Codes einzeln verifiziert (SNOMED CT 20260701).'
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Raucher
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
   resource: Observation
   path: Observation.valueCodeableConcept
+  notes: nur Ballot de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, kein stabiles
+    Release. MII_PR_Kardio_Observation_Rauchen mit baseDefinition ISiKRaucherStatus (gleiche REQUIRED-Bindung
+    an LOINC-LA-Codes); zusätzlich component:packungsjahre (SNOMED 401201003, {pack-years}), component:zigarettenProTag
+    (LOINC 63640-7), component:rauchbeginn (SNOMED 266929003) und component:rauchdauer (SNOMED 228487000).
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKRaucherStatus
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: 'ISiK Stufe 6 (de.gematik.isik 6.0.0; gleiche Canonical in de.gematik.isik-basismodul 4.0.3),
+    Basisprofil ISiKLebensZustand. category Pattern social-history; Observation.code: coding:loinc Pattern
+    72166-2 (Pflicht), coding:snomed-ct Pattern 77176002; value[x] nur CodeableConcept, valueCodeableConcept
+    (min 1) REQUIRED https://gematik.de/fhir/isik/ValueSet/current-smoking-status-uv-ips (nur LOINC-LA-Codes
+    LA18976-3, LA18977-1, LA15920-4, LA18978-9, LA18979-7, LA18980-5, LA18981-3, LA18982-1); effective[x]
+    1..1. Die SNOMED-Wertecodes des Elements sind daneben nur als zusätzliche Codings möglich; E-Zigarette
+    und Passivrauch lassen sich im Profil nicht abbilden (siehe offener Punkt).'
 care_process:
-  trigger: bei jeder Vorstellung
+  trigger: bei jeder Vorstellung (mind. beim Erstkontakt und wiederholt im Verlauf, opt-out-Ansatz; S3-LL
+    Lungenkarzinom 5.1 Empf. 4.2 'regelmäßig' + Hintergrundtext Kap. 4.2.1; S3-LL Rauchen und Tabakabhängigkeit
+    Empf. 3.2.3.1)
   frequency_pattern: per-encounter
   responsible_role: Onkologe / Hausarzt / Pflege
   data_flows:
@@ -66,17 +103,54 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.3 (B, 2b)
-    recommendation_grade: B
-    evidence_level: 2b
-  - source: S3-LL Tabakentwöhnung
-    version: 1.0 (03/2021, AWMF 076-006l)
-    url: https://register.awmf.org/de/leitlinien/detail/076-006
-    section: Screening und Diagnostik
+    section: 'Empf. 4.2 (A, LoE 1, modifiziert 2026): Konsum von Tabak- und E-Zigaretten sowie verwandter
+      Produkte regelmäßig erfragen und dokumentieren'
     recommendation_grade: A
-    evidence_level: n/a
+    evidence_level: '1'
+    quote: Bei Patienten mit Lungenkarzinom soll der Konsum von Tabak- und E-Zigaretten … sowie verwandter
+      Produkte regelmäßig erfragt und dokumentiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.2 (A, LoE 1, modifiziert 2026), S. 61
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.3 (B, LoE 3, geprüft 2026)
+    recommendation_grade: B
+    evidence_level: '3'
+    quote: Patienten mit Lungenkarzinom sollten nachhaltig motiviert werden, mit dem Tabakrauchen aufzuhören.
+      Zur Unterstützung sollten die Patienten wirksame Hilfen zur Raucherentwöhnung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 16.2, Empf. 16.3 (B, LoE 3, geprüft 2026), S. 493
+  - source: S3-LL Tabakentwöhnung
+    version: 3.1 (Stand 01/2021, Langversion 03/2021, AWMF 076-006; Gültigkeit bis 31.12.2025 abgelaufen,
+      Aktualisierung angemeldet 12/2024)
+    url: https://register.awmf.org/de/leitlinien/detail/076-006
+    section: 'Empf. 3.2.3.1 Systematisches Screening (A, LoE 1a): Konsum von Tabak, E-Zigaretten oder
+      verwandten Produkten beim ersten Kontakt und in regelmäßigen Abständen erfragen (Teilaspekt E-Zigaretten/verwandte
+      Produkte nur Klinischer Konsenspunkt, Fußnote 2); Empf. 3.3.3.1 Erfassung in einem Dokumentationssystem
+      (A, LoE 1a; Teilaspekt verwandte Produkte nur Klinischer Konsenspunkt, Fußnote 3); Anhang 2 Anamnese-/Befundbogen
+      (u. a. Raucher zu Hause/im Betrieb)'
+    recommendation_grade: A
+    evidence_level: 1a
+    quote: Alle Patientinnen und Patienten sollen … in regelmäßigen Abständen im Behandlungsverlauf nach
+      ihrem Konsum von Tabak oder E-Zigaretten oder verwandten Produkten2 gefragt werden. … Der Konsum
+      von Tabak und verwandten Produkten soll in der Patientendokumentation erfasst werden
+    accessed: '2026-10-15'
+    locator: Empf. 3.2.3.1 Systematisches Screening (A, LoE 1a), S. 39; Empf. 3.3.3.1 (A, LoE 1a), S.
+      47
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 4.1 (A, LoE 1, modifiziert 2026): aktives Tabakrauchen, Rauchen der E-Zigarette und
+      Passivrauchexposition konsequent vermeiden'
+    recommendation_grade: A
+    evidence_level: '1'
+    quote: Aktives Tabakrauchen, das Rauchen der E-Zigarette und eine Passivrauchexposition sollen konsequent
+      vermieden werden.
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.1 (A, LoE 1, modifiziert 2026), S. 61
 iso13972_metadata:
   type: social
   keywords:
@@ -85,7 +159,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -97,3 +171,76 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.followup.smokingStatus.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''snomed-ct|722498003'']. Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 7 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- „Verwandte Produkte“ (z. B. Tabakerhitzer, Nikotinbeutel) gemäß S3 Empf. 4.2 bislang ohne Coding — SNOMED-CT-Kandidaten
+  prüfen.
+- 'Achsenmischung im Wertebereich: Der 1..1-required-CodeableConcept vereint Tabakrauchstatus (266919005/8517006/77176002/428041000124106),
+  E-Zigarette (722499006; Parent ''Finding related to substance use'') und Passivrauch (43381005). Diese
+  Merkmale schließen sich nicht aus, z. B. Ex-Raucher:in + E-Zigarette + Passivrauch. Vorschlag: getrennte
+  Achsen, etwa als Observation.component oder als Teil-Elemente. (a) Tabakrauchstatus inkl. 266927001
+  ''Tobacco smoking consumption unknown''. (b) E-Zigarette: 722499006 bzw. 1137690000 ''Never used electronic
+  cigarette''. (c) Verwandte Produkte: 1388653002 ''Uses heated tobacco product'' (Tabakerhitzer); für
+  Nikotinbeutel gibt es kein Nutzer-Befundkonzept (nur 584021000052104 ''Ex-user of nicotine pouches'';
+  generisch 722494001 ''Nicotine user''). (d) Passivrauch: 43381005 bzw. 711563001 ''No known exposure
+  to tobacco smoke''. Alle Kandidaten sind per $lookup auf dem MII TermServ (SNOMED CT 20260701) aktiv.
+  Damit ist zugleich das offene Issue zu den ''verwandten Produkten'' teilweise beantwortet.'
+- 'Wertecodes von smokingStatus an ISiKRaucherStatus anpassen. Das Profil und das MII-Kardio-Ballot binden
+  valueCodeableConcept REQUIRED an current-smoking-status-uv-ips (nur LOINC-LA-Codes); 77176002 ''Smoker''
+  ist dort der feste Observation.code, kein Wert. Zuordnung nach Bedeutung (das Paket enthält keine ConceptMap):
+  266919005 → LA18978-9 ''Never smoker''; 8517006 → LA15920-4 ''Former smoker''; 428041000124106 → LA18977-1
+  ''Current some day smoker''; 266927001 → LA18980-5 ''Unknown if ever smoked''; 77176002 ''Smoker'' (ohne
+  Angabe der Häufigkeit) → LA18979-7 ''Smoker, current status unknown''. LA18976-3 ''Current every day
+  smoker'' entspricht 449868002 ''Smokes tobacco daily'', das im Smoking-Status-ValueSet urn:oid:2.16.840.1.113883.11.20.9.38
+  enthalten ist, im Element aber fehlt. E-Zigarette (722499006) und Passivrauch (43381005) sind im Profil
+  nicht abbildbar und bräuchten eigene Observations (vgl. offener Punkt zur Achsenmischung im Wertebereich).
+  Zu entscheiden: Abbildungstabelle festlegen bzw. LOINC-LA-Codes ergänzen (einschließlich der Frage,
+  ob 449868002 aufgenommen wird) und das Bindungsziel von value_set.uri ersetzen (http://hl7.org/fhir/ValueSet/smoking-status
+  ist in hl7.fhir.r4.core 4.0.1 nicht enthalten; Kandidaten laut value_set.notes: urn:oid:2.16.840.1.113883.11.20.9.38
+  oder current-smoking-status-uv-ips).'

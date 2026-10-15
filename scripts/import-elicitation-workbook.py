@@ -49,14 +49,8 @@ def camel_name(label: str) -> str:
 
 
 def _rows(ws, columns) -> list[dict]:
-    keys = [c[0] for c in columns]
-    out = []
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        if not any(v not in (None, "") for v in row):
-            continue
-        out.append({keys[i]: (str(row[i]).strip() if i < len(row) and row[i] is not None else "")
-                    for i in range(len(keys))})
-    return out
+    """Zeilen eines Blatts, Spalten über die Kopfzeile zugeordnet (robust gegen eingefügte Spalten)."""
+    return E.rows_by_header(ws, columns)
 
 
 def build_flows(flow_rows: list[dict], local_id: str) -> list[dict]:
@@ -102,7 +96,10 @@ def build_codings(code_rows: list[dict], local_id: str) -> list[dict]:
 def to_element(er: dict, flow_rows: list[dict], code_rows: list[dict], today: str) -> dict:
     phase = E.map_value(er.get("phase"), E.PHASE_LAYMEN, default="")
     if phase == "other" or not phase:
-        phase = re.sub(r"[^a-z]", "", (er.get("phase_other") or "newphase").lower()) or "newphase"
+        other = (er.get("phase_other") or "newphase").lower()
+        for k, v in _UMLAUT.items():
+            other = other.replace(k.lower(), v.lower())
+        phase = re.sub(r"[^a-z]", "", other)[:40] or "newphase"
     name = camel_name(er.get("label_de", ""))
     datatype = E.map_value(er.get("datatype"), E.DATATYPE_LAYMEN, default="string")
     cardinality = E.map_value(er.get("cardinality"), E.CARDINALITY_LAYMEN, default="0..1")
@@ -120,6 +117,9 @@ def to_element(er: dict, flow_rows: list[dict], code_rows: list[dict], today: st
     if er.get("tumor_entity"):
         ents = [e.strip() for e in er["tumor_entity"].replace(";", ",").split(",") if e.strip()]
         doc["tumor_entity"] = ents or ["lung_cancer_any"]
+    category = E.map_value(er.get("category"), E.CATEGORY_LAYMEN, default="")
+    if category in E.CATEGORY_LAYMEN.values():
+        doc["category"] = category
     if er.get("unit"):
         doc["unit"] = er["unit"]
 
@@ -206,10 +206,17 @@ def main() -> int:
         if E.is_example(er.get("local_id")):
             print(f"  ignoriert (Beispielzeile): {er.get('local_id')}")
             continue
-        if not (er.get("label_de") and er.get("definition_de")):
-            print(f"  übersprungen (Pflichtfelder fehlen): {er.get('local_id') or er.get('label_de')}")
+        if not er.get("label_de"):
+            print(f"  übersprungen (Bezeichnung fehlt): {er.get('local_id')}")
             continue
+        if not er.get("definition_de"):
+            # Klinische Mappen enthalten oft nur Bezeichnungen (z. B. Export des Katalogs ohne Definitionsspalte):
+            # Entwurf trotzdem erzeugen, Platzhalter setzen und als offenen Punkt markieren.
+            er["definition_de"] = "TBD — klinische Definition fehlt in der Erhebung (vom MI-Team mit den Einreichenden zu ergänzen)."
+            er["_definition_missing"] = True
         doc = to_element(er, flow_rows, code_rows, today)
+        if er.get("_definition_missing"):
+            doc.setdefault("issues", []).insert(0, "Klinische Definition fehlte in der Excel-Erhebung — Platzhalter, bitte ergänzen.")
         fp = out_dir / f"{doc['phase']}__{doc['name']}.yaml"
         fp.write_text(yaml.safe_dump(doc, allow_unicode=True, sort_keys=False), encoding="utf-8")
         written.append(fp)

@@ -1,4 +1,4 @@
-id: mihub.lung.palliative.painType.v0.1
+id: mihub.lung.palliative.painType.v0.2
 uuid: 41a4cfba-e46f-562c-9c29-16ef87dadd34
 name: painType
 label_de: Schmerztyp
@@ -7,20 +7,22 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: code
 cardinality: 0..*
 value_set:
   binding_strength: required
   codings:
   - system: snomed-ct
-    code: '410429000'
-    display: Nociceptive pain
+    code: '735644008'
+    display: Chronic nociceptive pain
   - system: snomed-ct
     code: '247398009'
     display: Neuropathic pain
-  - system: snomed-ct
-    code: '278860009'
-    display: Chronic mixed pain
+  notes: 'SNOMED CT 735644008 „Chronic nociceptive pain“ impliziert einen chronischen Verlauf (normalForm:
+    Clinical course = Chronic). Ein allgemeines Konzept für nozizeptiven Schmerz existiert auf dem MII
+    TermServ nicht ($expand „nociceptive pain“: nur 735644008 und 789494008; Stand 2026-10-14). Für Mischschmerz
+    gibt es kein Konzept (siehe issues).'
 care_process:
   trigger: Erstanamnese + bei Therapie-Anpassung
   frequency_pattern: ad-hoc
@@ -28,11 +30,44 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 10.2 (Basisdiagnostik Schmerz)
-    recommendation_grade: Statement
+    section: Kap. 10.2 Schmerzerfassung, Hintergrundtext „Schmerzdiagnostik“/„Klinische Untersuchung“
+      — Basisdiagnostik inkl. Schmerztyp (nozizeptiv, neuropathisch); Differenzierung über Plus-/Minuszeichen
+    recommendation_grade: n/a
     evidence_level: n/a
+    quote: Die Basisdiagnostik dient zur Erfassung der Ausbreitung und Dynamik der Schmerzen, der Schmerzursache
+      … des Schmerztyps (nozizeptiv, neuropathisch) und der Schmerzintensität. … Zur Differenzierung zwischen
+      nozizeptiven und neuropathischen Schmerzen sollte nach Pluszeichen
+    accessed: '2026-10-15'
+    locator: Kap. 10.2, Hintergrund „Schmerzdiagnostik“ und „Klinische Untersuchung“ (S. 186)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 10.10 Adjuvanzien bei neuropathischen Schmerzen, Empf. 10.37 (geprüft 2026, Starker
+      Konsens) — bei neuropathischen Tumorschmerzen, die nur teilweise auf Opioid-Analgetika ansprechen,
+      Amitriptylin, Gabapentin oder Pregabalin in Betracht ziehen (therapeutische Konsequenz des Schmerztyps;
+      Grad und Evidenzlevel gelten für die Therapieempfehlung, nicht für die Erhebung des Schmerztyps);
+      Hintergrund: Tumorschmerz als Mischung nozizeptiver und neuropathischer Mechanismen'
+    recommendation_grade: A
+    evidence_level: 1+
+    quote: Bei Patient:innen mit neuropathischen Tumorschmerzen, die nur teilweise auf … Opioid-Analgetika
+      ansprechen, soll Amitriptylin, Gabapentin oder Pregabalin in Be- … Tumorschmerzen werden durch eine
+      Mischung aus nozizeptiven und neuropathischen Mechanismen generiert.
+    accessed: '2026-10-15'
+    locator: Kap. 10.10, Empf. 10.37 (S. 216) und Hintergrund
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.3.1 Definition / 14.3.2 Schmerzerfassung (Hintergrundtext) — Unterscheidung Nozizeptor-
+      vs. neuropathische Schmerzen; Basisdiagnostik inkl. Schmerztyp (nozizeptiv, neuropathisch)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zu unterscheiden sind Nozizeptorschmerzen, die durch die direkte Reizung von Schmerzrezeptoren
+      ausgelöst werden, und neuropathische Schmerzen, welche durch Irritation und Kompression peripherer
+      Nerven entstehen. … des Schmerztyps (nozizeptiv, neuropathisch)
+    accessed: '2026-10-15'
+    locator: Kap. 14.3.1 Definition und 14.3.2 Schmerzerfassung (S. 481)
 iso13972_metadata:
   type: observation
   keywords:
@@ -41,7 +76,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -53,3 +88,60 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.palliative.painType.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''snomed-ct|278860009'', ''snomed-ct|410429000'']. Zudem Leitlinien-Resync,
+      Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Mischschmerz (mixed, siehe definition_de) ist unter dem required-Binding mit 247398009 „Neuropathic
+  pain“ und 735644008 „Chronic nociceptive pain“ nicht abbildbar, auch nicht über einen lokalen Code.
+  Ein SNOMED-CT-Konzept fehlt auf dem MII TermServ (Suche „mixed pain“ nur fachfremde Treffer, Stand 2026-10-14).
+  Klinisch relevant, da Tumorschmerzen durch eine Mischung nozizeptiver und neuropathischer Mechanismen
+  entstehen (S3-LL Palliativmedizin 3.0, Kap. 10.10, Hintergrund). Optionen: (a) binding_strength extensible
+  mit lokalem Code „mixed“; (b) beide Codes gleichzeitig angeben, nur mit ausdrücklicher Regel in instruction_de
+  und Bezug auf denselben Schmerz (z. B. Lokalisation), da sonst nicht von zwei getrennten Schmerzen unterscheidbar;
+  zudem trägt 735644008 die Chronizität mit; (c) SNOMED-CT-Antrag.'

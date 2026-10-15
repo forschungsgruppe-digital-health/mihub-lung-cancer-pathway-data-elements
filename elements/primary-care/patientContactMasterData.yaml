@@ -1,0 +1,166 @@
+id: mihub.lung.primarycare.patientContactMasterData.v0.1
+uuid: 0edb074e-adf7-57ef-9f0f-46f39950b588
+name: patientContactMasterData
+label_de: Kontakt-, Adress- und Sprachangaben der Patient:in
+definition_de: 'Weitere Stammdaten: Kontakt- und Adressdaten, bevorzugte Sprache, Beruf/Arbeitgeber (sozialmedizinisch
+  relevant).'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: stammdaten
+datatype: string
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '184097001'
+    display: Patient address
+  - system: snomed-ct
+    code: '184103008'
+    display: Patient telephone number
+  - system: snomed-ct
+    code: '428996008'
+    display: Language preference
+  - system: snomed-ct
+    code: '184104002'
+    display: Patient occupation
+  - system: loinc
+    code: 54899-0
+    display: Preferred language
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient
+  resource: Patient
+  path: Patient.address / Patient.telecom / Patient.communication.language
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation (Kategorie social-history)
+  path: Observation.category = social-history; Observation.code = SNOMED 184104002 (Patient occupation);
+    Observation.valueString bzw. Observation.valueCodeableConcept (Beruf)
+  notes: Nur für den Beruf; er ist kein Element des MII-Patient-Profils. Der Arbeitgeber ist durch 184104002
+    nicht abgedeckt; dafür kommt Patient.contact mit relationship v2-0131 E (Employer) und organization
+    in Betracht (im MII-Patient zulässig, nicht mustSupport; siehe Issue zur Strukturierung). Im MII-Modul
+    Soziodemographie (nur Ballot 2027.0.0-ballot) gibt es kein Profil für Beruf oder Arbeitgeber, nur
+    für die berufliche Stellung (mii-pr-sdd-berufliche-stellung). Adresse, Telecom und Sprache bleiben
+    im MII-Patient (telecom und communication sind dort nicht mustSupport).
+constraints_de: Personenbezogen — Anschrift und Telefon/E-Mail direkt identifizierend, Beruf/Arbeitgeber
+  indirekt identifizierend; Nutzung nur im Behandlungskontext; für Sekundärnutzung nur pseudonymisiert
+  und datensparsam (MII KDS PatientPseudonymisiert).
+care_process:
+  trigger: Aufnahme / Erstkontakt; Aktualisierung bei Änderung
+  frequency_pattern: once (Update ad-hoc)
+  responsible_role: Hausärzt:in / MFA
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-035 Stammdaten (Kontakt- und Adressdaten, Beruf, Arbeitgeber, Sprache)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-035
+    quote: 'Stammdaten … von Patient: Kontakt - und Adressdaten, Beruf, Arbeitgeber, Sprache..'
+    accessed: '2026-10-15'
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Principle 5 Care coordination (translation/interpreter services, S. 15); Principle 6 Communication
+      (professionally trained interpreters, S. 16); Step 2.3 Initial referral (notification if an interpreter
+      service is required, S. 24)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: translation or interpreter services arranged if the patient/carer is from a non-English-speaking
+      … use professionally trained interpreters if required … notification if an interpreter service is
+      required.
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Principle 5 Care coordination (S. 15); Principle 6 Communication (S. 16);
+      Step 2.3 Initial referral (S. 24)
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-035; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Strukturierung prüfen: Das Sammelelement (Anschrift, Telefon/E-Mail, bevorzugte Sprache, Beruf/Arbeitgeber)
+  ist als string 0..1 modelliert, die Mapping-Ziele im Patient-Profil sind aber strukturierte FHIR-Typen
+  (Patient.address: Address, Patient.telecom: ContactPoint, Patient.communication.language: CodeableConcept).
+  Aufteilung in Teil-Elemente oder eine Gruppe prüfen. Mapping der bevorzugten Sprache präzisieren: Patient.communication.language
+  mit Patient.communication.preferred = true. Für den Arbeitgeber kommt neben einer social-history-Observation
+  auch Patient.contact (relationship v2-0131 „E“ Employer, organization) in Betracht. Abgrenzung zu socialSituation
+  („berufliche Situation“, SNOMED CT 224362002 Employment status) festlegen, um Doppelerfassung zu vermeiden.'
+- 'Fachliche Lücke: „Beruf/Arbeitgeber“ als Stammdatum ersetzt nicht die nach S3-LL Lungenkarzinom 5.1
+  (Juli 2026, AWMF 020-007OL), Kap. 3.7, Empf. 3.1 (EK, modifiziert 2026, Starker Konsens) geforderte
+  Erhebung: Bei allen Patient:innen mit Lungenkarzinom sollen Rauchen, berufliche Noxen und die Familienanamnese
+  bezüglich maligner Erkrankungen anamnestisch erfragt werden; „Die Erhebung einer umfassenden Arbeitsanamnese
+  ist erforderlich.“ Laut Hintergrundtext sollte die Arbeitsanamnese chronologisch-tabellarisch erfolgen
+  (Muster Tab. 9); berufliche Kanzerogene werden für ca. 9–15 % aller Lungenkrebsfälle verantwortlich
+  gemacht. Bei begründetem Verdacht auf eine Berufskrankheit besteht die Pflicht zur Verdachtsanzeige
+  (Kap. 4.3, Hintergrundtext). Eigenes Element (Arbeitsanamnese/berufliche Exposition) im Umfeld von historyTakingPrimaryCare
+  bzw. riskFactorAndAlert prüfen und die Phasenzuordnung klären (Empf. 3.1 nennt keinen Erhebungszeitpunkt).'

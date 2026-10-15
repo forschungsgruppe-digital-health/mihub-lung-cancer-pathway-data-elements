@@ -1,0 +1,161 @@
+id: mihub.lung.primarycare.riskFactorAndAlert.v0.1
+uuid: 792d5313-7bd8-5c33-99aa-e489f4415a9c
+name: riskFactorAndAlert
+label_de: Risikofaktoren / Warnhinweise
+definition_de: 'Behandlungsrelevante Risikofaktoren und Warnhinweise: schwere Allergien, Gerinnungsstörung,
+  Vorliegen einer Patientenverfügung, besondere Konstellationen (z. B. junge Patient:innen nach Krebserkrankung).'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '80943009'
+    display: Risk factor
+  - system: snomed-ct
+    code: '609328004'
+    display: Allergic disposition
+  - system: snomed-ct
+    code: '64779008'
+    display: Blood coagulation disorder
+  - system: loinc
+    code: 8658-7
+    display: History of Allergies
+  - system: icd-10-gm
+    code: Z88.9
+    display: Allergie gegenüber nicht näher bezeichneten Arzneimitteln, Drogen oder biologisch aktiven
+      Substanzen in der Eigenanamnese
+  - system: icd-10-gm
+    code: Z91.0
+    display: Allergie, ausgenommen Allergie gegenüber Arzneimitteln, Drogen oder biologisch aktiven Substanzen,
+      in der Eigenanamnese
+  - system: icd-10-gm
+    code: D68.9
+    display: Koagulopathie, nicht näher bezeichnet
+standard_mappings:
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Allergy_Intolerance
+  resource: AllergyIntolerance (MIO Patientenkurzakte 1.0.0, Notfalldaten)
+  path: AllergyIntolerance.reaction.substance (coding:snomedCode REQUIRED KBV_VS_MIO_NFD_Allergy_Substance,
+    :atcCode, :askCode, text); AllergyIntolerance.reaction.manifestation; AllergyIntolerance.clinicalStatus
+  notes: Nur für den Teil schwere Allergien; AllergyIntolerance.code, type, category und criticality sind
+    im Profil ausgeschlossen (0..0). Gerinnungsstörung und weitere Warnhinweise bleiben bei Condition
+    bzw. Flag. Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle.
+- standard: fhir-r4-base
+  resource: AllergyIntolerance / Flag / Condition
+care_process:
+  trigger: Anamnese; bei Bekanntwerden
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-036 Risikofaktoren
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-036
+    quote: Risikofaktoren … schwere Allergien, Gerinnungsstörung, Patientenverfügung, junge Pat. z.n.
+      Krebserkrankung
+    accessed: '2026-10-15'
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 2.3 Initial referral (S. 24: „medications and allergies“ als essential information
+      der Überweisung); Step 4.5.4 Communication with the general practitioner (S. 41: Zwei-Wege-Kommunikation
+      zwischen Lead clinician und Hausärzt:in u. a. über „the presence of an advance care directive or
+      appointment of a substitute decision-maker“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: • family history, current symptoms, medications and allergies … - the presence of an advance
+      care directive or appointment of a substitute decision-maker
+    accessed: '2026-10-15'
+    locator: Step 2.3 Initial referral, S. 24; Step 4.5.4, S. 41
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-036; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 7 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Redundanz ''Vorliegen einer Patientenverfügung'': wird in riskFactorAndAlert (DE-036), socialSituation
+  (DE-022) und advanceDirectiveDocument erfasst. Führendes Element festlegen (Vorschlag: advanceDirectiveDocument);
+  hier nur als Warnhinweis bzw. Verweis führen.'
+- 'Für Allergien verlangt KBV_PR_MIO_NFD_Allergy_Intolerance den Auslöser als Substanzcode in AllergyIntolerance.reaction.substance
+  (SNOMED aus KBV_VS_MIO_NFD_Allergy_Substance, ATC oder ASK); AllergyIntolerance.code ist ausgeschlossen.
+  Die Element-Codes (609328004, 8658-7, Z88.9, Z91.0) sind Kategorie- bzw. Anamnesecodes und keine Substanzcodes.
+  Zu entscheiden: den Allergieauslöser als eigenes Unterelement mit Substanzkodierung aufnehmen oder Allergien
+  nur als Hinweis (Condition bzw. Flag) führen.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1

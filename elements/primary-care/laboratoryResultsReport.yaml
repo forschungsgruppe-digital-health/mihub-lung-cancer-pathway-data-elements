@@ -1,0 +1,164 @@
+id: mihub.lung.primarycare.laboratoryResultsReport.v0.1
+uuid: d199bb2b-c0a8-5054-b7e3-08144768b721
+name: laboratoryResultsReport
+label_de: Laborbefund (inkl. Auffälligkeiten)
+definition_de: Laborwerte aus hausärztlicher Diagnostik bei Symptomen oder aus Kontrollen in der Nachsorge,
+  inkl. markierter Auffälligkeiten; Tumormarker nur, wenn onkologisch veranlasst.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: laborbefund
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: loinc
+    code: 11502-2
+    display: Laboratory report
+  - system: snomed-ct
+    code: '4241000179101'
+    display: Laboratory report
+  - system: kdl
+    code: LB120107
+    display: Laborbefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab
+  resource: DiagnosticReport (DiagnosticReportLab)
+  path: DiagnosticReport.code.coding:loinc-labReport = LOINC 11502-2 (Pattern); DiagnosticReport.result
+    (1..*) → Einzelwerte als ObservationLab (https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab),
+    Auffälligkeiten in Observation.interpretation; DiagnosticReport.conclusion
+  notes: Modul Laborbefund 2026.0.3 (gleich in 2027.0.0-ballot). Das Element ist ein Bericht (Reference,
+    LOINC 11502-2); ObservationLab beschreibt einen Einzelanalyten.
+constraints_de: 'Keine routinemäßige Bestimmung von Serum-Tumormarkern in der Nachsorge (S3-LL Lungenkarzinom
+  5.1, Kap. 16.3.4: Hintergrundtext ohne Empfehlungsbox/-grad; „Evidenzgrad 1a“ bezieht sich auf Lit.
+  [1878] zur kontrovers diskutierten Bedeutung der Serummarker); Tumormarker nur bei onkologischer Veranlassung.'
+care_process:
+  trigger: bei Symptomen; Kontrollen nach Maßgabe der Onkologie
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: lis-patho
+    actor_role: Labor
+    usage_type: capture
+    sector: ambulant
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-014 Laborwerte / DE-015 Auffälligkeiten der Werte
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-014 (weitere Zeilen: DE-015)'
+    quote: Laborwerte … Hausarzt bei Symptomen, Kontrollen in Nachsorge; Tumormarker … Auffälligkeiten
+      der Werte
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (Laborparameter: „Nach Maßgabe des Behandlers“); Kap. 16.3.4 (Hintergrundtext ohne
+      Empfehlungsbox: routinemäßige Bestimmung von Serummarkern in der Nachsorge nicht empfohlen; „Evidenzgrad
+      1a“ bezieht sich auf Lit. [1878], kontroverse Bedeutung der Serummarker)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Laborparameter Nach Maßgabe des Behandlers … Die Bedeutung von Serummarkern beim Lungenkarzinom
+      wird kontrovers diskutiert [1878] (Evidenzgrad 1a). … Daher wird die routinemäßige Bestimmung von
+      Serummarkern in der Nachsorge des Lungenkarzinoms nicht empfohlen.
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Tabelle 44 (S. 499); Kap. 16.3.4 Hintergrundtext (S. 496)
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein et al. 2026 (LoTeCaS-GP, qualitative Studie; ungraduierte Empfehlungsliste zu onkologischen
+      Abschlussberichten an Hausarztpraxen): Ergebnisse „Anamnese, Abschlussstatus und Epikrise“ (S. 95:
+      Laborwerte tabellarisch inkl. Normwerten) und Abb. 2 (S. 95) bzw. Anhang 2, Dos – Relevante Informationen:
+      „aktuelle Diagnostik im Anhang (bei Laborwerten inkl. Normwerten)“'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei Laborwerten ist auf eine … tabellarische Darstellung inkl. Normwer … ten zu achten. … aktuelle
+      Diagnostik im Anhang (bei Laborwerten inkl. Normwerten)
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Ergebnisse „Anamnese, Abschlussstatus und Epikrise“, S. 95; Anhang 2 (=
+      Abb. 2), Dos › Relevante Informationen
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-014, DE-015;
+      Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'DE-015 „Auffälligkeiten der Werte“ wurde als eigenes Freitext-Element der Hausärzt:in erhoben und ist
+  im Reference-Element nicht eigenständig abbildbar. Festzulegen ist: Laborflags über Observation.interpretation
+  und Referenzbereiche über Observation.referenceRange der referenzierten Laborwerte; die hausärztliche
+  Freitext-Bewertung über DiagnosticReport.conclusion bzw. Observation.note – oder als eigenes Text-/Annotation-Element.
+  Zielressource laut Mapping (Stand 2026-10-14): MII DiagnosticReportLab für den Befund, Einzelwerte als
+  ObservationLab.'
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.laboratoryTestFollowUp.v0.1

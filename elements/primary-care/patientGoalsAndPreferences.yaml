@@ -1,0 +1,149 @@
+id: mihub.lung.primarycare.patientGoalsAndPreferences.v0.1
+uuid: 60efee65-a641-5f95-abf3-f25ed8459f17
+name: patientGoalsAndPreferences
+label_de: Zielsetzungen und Wünsche der Patient:in
+definition_de: Individuelle Ziele, Wünsche und Präferenzen der Patient:in zur Behandlung und Versorgung
+  (Shared Decision Making); meist nicht in Berichten vermerkt, wird hausärztlich individuell besprochen.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungsplanung
+datatype: text
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '1186606009'
+    display: Patient request observable
+  - system: loinc
+    code: 61146-7
+    display: Goals Narrative
+  - system: loinc
+    code: 75773-2
+    display: Goals, preferences, and priorities for medical treatment Narrative - Reported
+standard_mappings:
+- standard: fhir-r4-base
+  resource: Goal
+  path: Goal.description
+care_process:
+  trigger: bei jedem Gespräch über Therapieziele; bei Verschlechterung erneut
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-006 Zielsetzungen/Wunsch des Pat.
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-006
+    quote: Zielsetzungen/Wunsch des Pat. … meist nicht in den Berichten vermerkt, bespricht HA individuell
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.2 Empf. 7.1 (patientenzentrierte Kommunikation, die eine partizipative Entscheidungsfindung
+      ermöglicht) und Kap. 7.3.1 Empf. 7.4 (Vorstellungen, Hoffnungen und Befürchtungen erfragen); jeweils
+      EK, geprüft 2026
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: einer patientenzentrierten Kommunikation, die eine partizipative Entscheidungsfindung ermöglicht
+      … Vor der Informationsübermittlung soll erfragt werden, mit welchem Wissen, mit … welchen Vorstellungen,
+      Hoffnungen und Befürchtungen im Zusammenhang mit seiner Erkrankung
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Kap. 7.2, Empf. 7.1 (EK, geprüft 2026, S. 191); Kap. 7.3.1, Empf.
+      7.4 (EK, geprüft 2026, S. 193)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.1 Empf. 5.5 (EK, neu 2026, Starker Konsens: Aufgabenfeld der palliativmedizinischen
+      Basisversorgung durch Primärbehandelnde bei niedriger Komplexität „Konsentierung der patient:innenindividuellen
+      Therapiezielfindung“); Kap. 6.2 Empf. 6.1 (EK, modifiziert 2026, Starker Konsens: Informationen
+      „orientiert an deren aktuellen Wünschen und Präferenzen“ vermitteln); Kap. 6.5 Empf. 6.13 (EK, geprüft
+      2026, Starker Konsens: Gesprächsbegleitung zur vorausschauenden Versorgungsplanung frühzeitig und
+      wiederholt bei wesentlichen Veränderungen von Befinden und Prognose anbieten – ACP-spezifisch, nur
+      analog für den Trigger „bei Verschlechterung erneut“) – Geltungsbereich: nicht heilbare Krebserkrankung'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Konsentierung der patient:innenindividuellen Therapiezielfindung … orientiert an deren aktuellen
+      Wünschen und Präferenzen … Die Gesprächsbegleitung zur vorausschauenden Versorgungsplanung soll
+      … wiederholt bei wesentlichen Veränderungen von Befinden und Prognose angeboten werden.
+    accessed: '2026-10-15'
+    locator: S3-LL Palliativmedizin 3.0, Kap. 5.4.1, Empf. 5.5 (S. 58); Kap. 6.2, Empf. 6.1 (S. 104);
+      Kap. 6.5, Empf. 6.13 (S. 114); jeweils EK
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-006; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1

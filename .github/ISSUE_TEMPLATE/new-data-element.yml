@@ -22,6 +22,7 @@ body:
         - Onkologische Nachsorge (kurativ behandelt)
         - Verlaufsbeobachtung / Surveillance (unter Systemtherapie)
         - Palliativversorgung
+        - Hausärztliche Versorgung / sektorenübergreifende Basisdaten
         - Andere / neue Phase (bitte unten angeben)
     validations:
       required: true
@@ -31,6 +32,32 @@ body:
     attributes:
       label: "Phase (falls 'Andere'): Name"
       placeholder: "z. B. Rehabilitation, Diagnostik, Therapie"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Kategorie (optional)
+      description: Klinische Kategorie als Sortier-/Review-Hilfe (Taxonomie der Nachsorge-WG).
+      options:
+        - Befund
+        - Bildgebung
+        - Assessment
+        - Messwert
+        - Kontakt/Visite
+        - Versorgungsplanung
+        - Mitbetreuung
+        - Prozedur
+        - Diagnose
+        - Sozialanamnese
+        - Dokument
+        - Laborbefund
+        - PROM (Selbsteinschätzung)
+        - Medikation
+        - Versorgungskontext
+        - Stammdaten
+        - Administrativ
     validations:
       required: false
 

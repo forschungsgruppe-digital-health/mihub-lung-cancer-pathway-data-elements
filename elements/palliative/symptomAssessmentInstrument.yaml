@@ -8,40 +8,65 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: example
-  standard_binding_status: no-standard-found
-  notes: Codes für deutsche Palliativ-Assessmentinstrumente (MIDOS2 — Klinik für Palliativmedizin TU Dresden;
-    ESAS-r). LOINC kennt einzelne Items von ESAS und IPOS sowie den Distress-Thermometer-Score, jedoch
-    nicht MIDOS2 oder ESAS-r als Instrumente. Die LOINC-/projekt-lokalen Codes sind hier gemischt; explizit
-    gekennzeichnet sind nur die nicht-standardisierten.
+  standard_binding_status: pending-mapping
+  notes: 'Instrumente gemäß S3-LL Palliativmedizin 3.0 Tab. 6 Zeile 1 (Auswahl, ''z.B.''): MIDOS 2 (deutsche
+    Version des ESAS; Stiel et al. 2010), ESAS/ESAS-r, IPOS/POS, Distress-Thermometer mit Problemliste.
+    MII TermServ (Stand 2026-10-14): ESAS = SNOMED CT 451021004 (assessment scale; kein eigenes Konzept
+    für ESAS-r), zusätzlich LOINC-Panel 112503-8 und Gesamtscore 112493-2; IPOS = SNOMED CT 718975008/718973001
+    (Patientenversion 1 Woche/3 Tage), Staff-Versionen 718967002/718971004. Für MIDOS 2, POS und IPOS
+    per Textsuche kein LOINC-Code; für MIDOS 2 und die Original-POS kein SNOMED-CT-Code – lokaler Platzhalter
+    MIDOS2, Mapping offen. NCCN Distress-Thermometer: weder LOINC noch SNOMED CT (siehe distressThermometerScore).'
   codings:
   - system: local-no-standard-binding
     code: MIDOS2
     display: Minimales Dokumentationssystem 2
-  - system: local-no-standard-binding
-    code: ESAS-r
-    display: Edmonton Symptom Assessment System - Revised
-  - system: loinc
-    code: 89200-0
-    display: IPOS Integrated Palliative Care Outcome Scale
-  - system: loinc
-    code: 63994-4
-    display: NCCN Distress Thermometer
+  - system: snomed-ct
+    code: '718975008'
+    display: Integrated Palliative care Outcome Scale Patient Version (1 week recall period)
+  - system: snomed-ct
+    code: '451021004'
+    display: Edmonton Symptom Assessment System
+  - system: snomed-ct
+    code: '718973001'
+    display: Integrated Palliative care Outcome Scale Patient Version (3 day recall period)
 care_process:
-  trigger: Aufnahme + regelmäßig
-  frequency_pattern: Q1W in SPV; per-encounter in APV
-  responsible_role: Palliativ-Team
+  trigger: bei Aufnahme/zu Beginn der Versorgung, wiederholt im Verlauf und bei Änderung der klinischen
+    Situation
+  frequency_pattern: regelmäßig + bei klinischer Veränderung; instrumentabhängig (z. B. MIDOS stationär
+    1–2× täglich, IPOS in regelmäßigen Intervallen, z. B. wöchentlich)
+  responsible_role: Behandlungsteam (Primärbehandelnde/Onkologie; APV-Behandelnde mit palliativmedizinischer
+    Zusatzqualifikation; in SPV Palliativ-Team); Patient:in (Selbsteinschätzung per PROM bevorzugt)
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 Probleme/Bedürfnisse Patient:in
-    recommendation_grade: A
+    section: 'Kap. 5.2, Empf. 5.1 (geprüft 2026: Bedürfnisse/Belastungen wiederholt und bei Änderung der
+      klinischen Situation erfassen) und Empf. 5.2 (geprüft 2026: validierte multidimensionale Erfassungsinstrumente);
+      Tab. 6 Zeile 1 (MIDOS 2, ESAS/ESAS-r, IPOS/POS, Distress-Thermometer)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: sollte die Erfassung der Bedürfnisse so … mit Hilfe von validierten multidimensionalen Erfassungsinstrumenten
+      … Minimales Dokumentationssystem (MIDOS 2) … Edmonton Symptom … Assessment System (ESAS/revised
+      version ESAS-r)
+    accessed: '2026-10-15'
+    locator: Kap. 5.2, Empf. 5.2 (S. 52); Tab. 6 Zeile 1 (S. 56)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 8.6 (EK, modifiziert 2026: standardisiertes Symptomassessment regelmäßig neben
+      frühzeitiger Palliativberatung)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Neben einer frühzeitigen Palliativberatung sollte ein standardisiertes Symptomassessment regelmässig
+      durchgeführt werden, um eine bedarfsorientierte In-tegration von Palliativversorgung zu ermöglichen.
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Statement 8.6 (S. 203)
 iso13972_metadata:
   type: observation
   keywords:
@@ -50,7 +75,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -62,3 +87,49 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 LOCAL, 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8

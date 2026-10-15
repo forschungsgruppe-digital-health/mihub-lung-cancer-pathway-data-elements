@@ -19,11 +19,11 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| **NSCLC** | Non-Small Cell Lung Cancer | Nicht-kleinzelliges Lungenkarzinom; ca. 85 % aller Lungenkarzinome; Histologie u. a. Adeno-, Plattenepithel-, großzelliges Karzinom | S3-LL Lungenkarzinom v5.01 Kap. 6.6, Onkopedia NSCLC |
-| **SCLC** | Small Cell Lung Cancer | Kleinzelliges Lungenkarzinom; ca. 12–15 % aller Lungenkarzinome; hochproliferativ, hohe initiale Chemo-/Radiosensitivität | S3-LL Lungenkarzinom v5.01 Kap. 9, Onkopedia SCLC |
-| **LD-SCLC** | Limited Disease SCLC | SCLC-Stadium auf Hemithorax begrenzt (T1–4 N0–3 M0) | S3-LL Lungenkarzinom v5.01 Kap. 9.5 |
-| **ED-SCLC** | Extensive Disease SCLC | SCLC-Stadium mit Fernmetastasen (M1) | S3-LL Lungenkarzinom v5.01 Kap. 9.6 |
-| **VLD** | Very Limited Disease | SCLC T1–2 N0–1 M0 (kuratives Setup, ggf. inkl. Operation) | S3-LL Lungenkarzinom v5.01 Kap. 9.4 |
+| **NSCLC** | Non-Small Cell Lung Cancer | Nicht-kleinzelliges Lungenkarzinom; ca. 85 % aller Lungenkarzinome; Histologie u. a. Adeno-, Plattenepithel-, großzelliges Karzinom | S3-LL Lungenkarzinom v5.1 Kap. 6.6, Onkopedia NSCLC |
+| **SCLC** | Small Cell Lung Cancer | Kleinzelliges Lungenkarzinom; ca. 12–15 % aller Lungenkarzinome; hochproliferativ, hohe initiale Chemo-/Radiosensitivität | S3-LL Lungenkarzinom v5.1 Kap. 9, Onkopedia SCLC |
+| **LD-SCLC** | Limited Disease SCLC | SCLC-Stadium auf Hemithorax begrenzt (T1–4 N0–3 M0) | S3-LL Lungenkarzinom v5.1 Kap. 9.5 |
+| **ED-SCLC** | Extensive Disease SCLC | SCLC-Stadium mit Fernmetastasen (M1) | S3-LL Lungenkarzinom v5.1 Kap. 9.6 |
+| **VLD** | Very Limited Disease | SCLC T1–2 N0–1 M0 (kuratives Setup, ggf. inkl. Operation) | S3-LL Lungenkarzinom v5.1 Kap. 9.4 |
 | **OMD** | Oligometastatic Disease | Begrenzte Anzahl Fernmetastasen, oft lokal-ablativ behandelbar | ESMO/ESTRO/EORTC Konsens 2020 (Lancet Oncol 21:e18–e28) |
 | **TNM** | Tumor – Node – Metastasis | UICC-Klassifikation des Tumorstadiums; aktuell 9. Auflage 2024 | IASLC Staging Project; UICC TNM 9th ed. (2024) |
 | **R0/R1/R2** | Residualtumor-Klassifikation | R0 = mikroskopisch tumorfrei; R1 = mikroskopisch positiv; R2 = makroskopisch positiv | UICC TNM Supplement |
@@ -35,7 +35,7 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 | --- | --- | --- | --- |
 | **ECOG** | Eastern Cooperative Oncology Group Performance Status | 0 = asymptomatisch · 1 = symptomatisch, ambulant · 2 = bettlägerig <50 % · 3 = bettlägerig >50 % · 4 = bettlägerig 100 % · 5 = Tod | Oken MM et al. Am J Clin Oncol 5:649–655 (1982); LOINC 89262-0 |
 | **KPS** | Karnofsky Performance Status | 0–100 in 10er-Schritten; höher = besser; 100 = normal, 50 = Hilfe nötig, 10 = moribund | Karnofsky DA, Burchenal JH (1949); SNOMED 373802001 |
-| **AKPS** | Australian-modified Karnofsky Performance Status | Adaption an Palliativkontext (insb. häuslich); 0–100 | Abernethy AP et al. BMC Palliat Care (2005); LOINC 70924-1 |
+| **AKPS** | Australian-modified Karnofsky Performance Status | Adaption an Palliativkontext (insb. häuslich); 0–100 | Abernethy AP et al. BMC Palliat Care (2005); kein LOINC-/SNOMED-CT-Code auf dem MII TermServ (2026-10) |
 | **ADL** | Activities of Daily Living | Aktivitäten des täglichen Lebens (i. d. R. Barthel, ADL-Index) | Katz S et al. JAMA 185:914 (1963) |
 | **Barthel-Index** | — | Selbstversorgungs-Skala 0–100 (10er-Schritte); höher = mehr Selbstständigkeit | Mahoney FI, Barthel DW. Md State Med J 14:61 (1965); LOINC 65488-5 |
 
@@ -44,23 +44,23 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
 | **PROM** | Patient-Reported Outcome Measurement | Übergreifender Begriff für Selbsteinschätzungs-Instrumente | ISO 9001 / FDA Guidance (2009) |
-| **NRS** | Numerische Rating-Skala | 0–10; verwendet für Schmerz, Atemnot, Distress u. a. | S3-LL Palliativ v3.01 Kap. 9.2 + 10.2 |
+| **NRS** | Numerische Rating-Skala | 0–10; verwendet für Schmerz, Atemnot, Distress u. a. | S3-LL Palliativ v3.0 Kap. 9.2 + 10.2 |
 | **VAS** | Visuelle Analogskala | i. d. R. 0–100 mm | Wewers ME, Lowe NK. Res Nurs Health 13:227 (1990) |
 | **EORTC QLQ-C30** | European Org. for Research and Treatment of Cancer · Quality of Life Questionnaire — Core 30 | 30 Items in 5 Funktions-Skalen + 9 Symptom-Skalen + globale QoL; 0–100 (höher = besser bei QoL/Funktion) | Aaronson NK et al. JNCI 85:365 (1993); LOINC 73831-0 |
 | **EORTC QLQ-LC13** | EORTC Lung Cancer Module | 13 Items, ergänzt QLQ-C30 für Lungenkarzinom | Bergman B et al. Eur J Cancer 30A:635 (1994) |
 | **EORTC QLQ-C15-Pal** | Palliativ-Modul (15 Items) | Verkürzte palliative Version von QLQ-C30 | Groenvold M et al. Eur J Cancer 42:55 (2006); S3-LL Palliativ Tab. 9 |
 | **MIDOS2** | Minimales Dokumentationssystem 2 | Symptomerfassung in der dt. Palliativversorgung; 7+ Items | Stiel S et al. Schmerz 24:596 (2010); S3-LL Palliativ Tab. 6 |
 | **ESAS-r** | Edmonton Symptom Assessment System — Revised | 0–10 für 9 Kernsymptome (Schmerz, Müdigkeit, Atemnot, …) | Watanabe SM et al. J Pain Symptom Manage 41:456 (2011); S3-LL Palliativ Tab. 6 |
-| **IPOS** | Integrated Palliative care Outcome Scale | 17 Items (Patient + Personal); mehrdimensional | Murtagh FE et al. Palliat Med 33:1045 (2019); LOINC 89200-0 |
+| **IPOS** | Integrated Palliative care Outcome Scale | 17 Items (Patient + Personal); mehrdimensional | Murtagh FE et al. Palliat Med 33:1045 (2019); SNOMED CT 718975008 (Patient Version, 1 week recall) — LOINC 89200-0 war ein Fehlcode |
 | **POS** | Palliative care Outcome Scale | Vorgänger von IPOS; 12 Items | Hearn J, Higginson IJ. Qual Health Care 8:219 (1999) |
-| **Distress-Thermometer** | NCCN Distress Thermometer + Problemliste | 0–10; Cut-off ≥ 5 = Indikation für Psychoonkologie/Sozialberatung | NCCN Guidelines for Distress Management; Mehnert A et al. (deutsche Validierung); LOINC 63994-4 |
+| **Distress-Thermometer** | NCCN Distress Thermometer + Problemliste | 0–10; Cut-off ≥ 5 = Indikation für Psychoonkologie/Sozialberatung | NCCN Guidelines for Distress Management; Mehnert A et al. (deutsche Validierung); kein LOINC-/SNOMED-CT-Code auf dem MII TermServ (2026-10) — Mapping offen |
 | **PHQ-9** | Patient Health Questionnaire (9 Items) — Depression | 0–27; Cut-off ≥ 5 mild · ≥ 10 mittelschwer · ≥ 15 schwer · ≥ 20 sehr schwer | Kroenke K et al. JGIM 16:606 (2001); LOINC 44261-6 |
 | **HADS** | Hospital Anxiety and Depression Scale | 14 Items, Subskalen Angst (HADS-A) und Depression (HADS-D), je 0–21; Cut-off ≥ 8 auffällig · ≥ 11 wahrscheinlich klinisch | Zigmond AS, Snaith RP. Acta Psychiatr Scand 67:361 (1983); LOINC 62106-6 |
-| **Zarit ZBI** | Zarit Burden Interview | 22 Items × 0–4 → 0–88; Cut-offs 0–21 (gering) / 21–40 (mild-moderat) / 41–60 (moderat-schwer) / 61–88 (schwer) | Zarit SH et al. Gerontologist 20:649 (1980); LOINC 62133-0 |
-| **CAREPAL** | Multidimensionaler CAREPAL-Fragebogen | Belastung Angehöriger pflegebedürftiger Krebspatient:innen, mehrdimensional | S3-LL Palliativ v3.01 Tab. 6 |
+| **Zarit ZBI** | Zarit Burden Interview | Langform (ZBI-22): 22 Items × 0–4 → 0–88; in der Literatur gebräuchliche Cut-offs der Langform 0–20 (gering) / 21–40 (mild-moderat) / 41–60 (moderat-schwer) / 61–88 (schwer) — nicht Teil der S3-LL Palliativmedizin; Kurzformen (z. B. ZBI-7, ZBI-1) und die deutsche Fassung G-ZBI haben eigene Wertebereiche | Zarit SH et al. Gerontologist 20:649 (1980); kein LOINC-Code in LOINC 2.83 (MII TermServ 2026-10) — Mapping offen |
+| **CAREPAL** | Multidimensionaler CAREPAL-Fragebogen | Belastung Angehöriger pflegebedürftiger Krebspatient:innen, mehrdimensional | S3-LL Palliativ v3.0 Tab. 6 |
 | **HPS-DEGAM** | Häusliche Pflegeskala der DEGAM | Hausärztliches Belastungs-Assessment, mehrdimensional | DEGAM Praxisempfehlung Pflege |
 | **MRC-Skala** | Medical Research Council Dyspnoea Scale | 0–4 Belastungsdyspnoe (0 = Atemnot nur bei starker Belastung; 4 = Atemnot bei An- und Auskleiden) | Fletcher CM, MRC. BMJ 2:1665 (1959) |
-| **RDOS** | Respiratory Distress Observation Scale | 8 Items zur Fremdeinschätzung Atemnot bei kognitiver Einschränkung; 0–16 | Campbell ML. J Palliat Med 11:44 (2008); S3-LL Palliativ v3.01 Kap. 9.2 |
+| **RDOS** | Respiratory Distress Observation Scale | 8 Items zur Fremdeinschätzung Atemnot bei kognitiver Einschränkung; 0–16 | Campbell ML. J Palliat Med 11:44 (2008); S3-LL Palliativ v3.0 Kap. 9.2 |
 
 ## 4 Therapieansprechen & Onkologische Endpunkte
 
@@ -91,31 +91,31 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| **PBP** | Palliativmedizinische Basisversorgung durch Primärbehandelnde | Niedrige Komplexität (Symptome wenig ausgeprägt, stabile Situation) | S3-LL Palliativ v3.01 Kap. 5.4 |
-| **APV** | Allgemeine Palliativversorgung | Mittlere Komplexität (Symptome, Plan-Anpassungen, kurzfristige Interventionen) | S3-LL Palliativ v3.01 Kap. 5.4 |
-| **SPV** | Spezialisierte Palliativversorgung | Hohe Komplexität (Schwer behandelbare Symptome, dauerhaft spezialisierte Expertise) | S3-LL Palliativ v3.01 Kap. 5.4 |
+| **PBP** | Palliativmedizinische Basisversorgung durch Primärbehandelnde | Niedrige Komplexität (Symptome wenig ausgeprägt, stabile Situation) | S3-LL Palliativ v3.0 Kap. 5.4 |
+| **APV** | Allgemeine Palliativversorgung | Mittlere Komplexität (Symptome, Plan-Anpassungen, kurzfristige Interventionen) | S3-LL Palliativ v3.0 Kap. 5.4 |
+| **SPV** | Spezialisierte Palliativversorgung | Hohe Komplexität (Schwer behandelbare Symptome, dauerhaft spezialisierte Expertise) | S3-LL Palliativ v3.0 Kap. 5.4 |
 | **SAPV** | Spezialisierte Ambulante Palliativversorgung | Gesetzlicher Anspruch; SAPV-Teams (Mediziner + Pflegende + ggf. Sozial-/Seelsorge) | §37b SGB V; SAPV-Richtlinie G-BA |
 | **AAPV** | Allgemeine Ambulante Palliativversorgung | Hausärztliche Palliativbetreuung außerhalb SAPV | KBV-Vereinbarung BAnz 2010 |
-| **ACP** | Advance Care Planning | Vorausschauende Versorgungsplanung mit Patient:in (+ ggf. Angehörigen): Therapieziele, Patientenverfügung, Vorsorgevollmacht | S3-LL Palliativ v3.01 Kap. 6.5; SNOMED 713600000 |
+| **ACP** | Advance Care Planning | Vorausschauende Versorgungsplanung mit Patient:in (+ ggf. Angehörigen): Therapieziele, Patientenverfügung, Vorsorgevollmacht | S3-LL Palliativ v3.0 Kap. 6.5; SNOMED 713600000 |
 | **OL** | Leitlinienprogramm Onkologie | DKG / DKH / AWMF gemeinsam | leitlinienprogramm-onkologie.de |
 
 ## 7 Therapie-Modalitäten
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| **OP** | Operation (Resektion) | Kurative oder palliative chirurgische Entfernung | S3-LL Lungenkarzinom v5.01 Kap. 8 |
-| **VATS** | Video-Assisted Thoracic Surgery | Videoassistierte Thorakoskopie; minimal-invasiv | S3-LL Lungenkarzinom v5.01 Empf. 8.15 |
-| **RATS** | Robotic-Assisted Thoracic Surgery | Roboter-assistierte minimal-invasive Thoraxchirurgie | S3-LL Lungenkarzinom v5.01 Empf. 8.15 |
-| **RTx / RT** | Radiotherapie / Strahlentherapie | Externe oder interne Strahlentherapie | S3-LL Lungenkarzinom v5.01 Kap. 8.5 |
-| **CTx** | Chemotherapie | Systemische Zytostatika-Therapie | S3-LL Lungenkarzinom v5.01 Kap. 8.6 |
+| **OP** | Operation (Resektion) | Kurative oder palliative chirurgische Entfernung | S3-LL Lungenkarzinom v5.1 Kap. 8 |
+| **VATS** | Video-Assisted Thoracic Surgery | Videoassistierte Thorakoskopie; minimal-invasiv | S3-LL Lungenkarzinom v5.1 Empf. 8.15 |
+| **RATS** | Robotic-Assisted Thoracic Surgery | Roboter-assistierte minimal-invasive Thoraxchirurgie | S3-LL Lungenkarzinom v5.1 Empf. 8.15 |
+| **RTx / RT** | Radiotherapie / Strahlentherapie | Externe oder interne Strahlentherapie | S3-LL Lungenkarzinom v5.1 Kap. 8.5 |
+| **CTx** | Chemotherapie | Systemische Zytostatika-Therapie | S3-LL Lungenkarzinom v5.1 Kap. 8.6 |
 | **CRT** | Chemoradiotherapie | Kombinierte Chemo- und Strahlentherapie (sequenziell oder konkurrent) | Aupérin A et al. JCO 28:2181 (2010) |
 | **SBRT / SABR** | Stereotactic Body Radiation Therapy / Ablative Radiotherapy | Hochpräzise hypofraktionierte Strahlentherapie | Chang JY et al. Lancet Oncol 16:630 (2015) |
-| **PCI** | Prophylactic Cranial Irradiation | Prophylaktische Schädelbestrahlung (insb. SCLC) | S3-LL Lungenkarzinom v5.01 Kap. 9 |
+| **PCI** | Prophylactic Cranial Irradiation | Prophylaktische Schädelbestrahlung (insb. SCLC) | S3-LL Lungenkarzinom v5.1 Kap. 9 |
 | **TKI** | Tyrosine Kinase Inhibitor | Zielgerichtete orale Therapie (z. B. Osimertinib, Alectinib) | Onkopedia NSCLC Kap. 6 |
 | **ICI** | Immune Checkpoint Inhibitor | Anti-PD-1, anti-PD-L1, anti-CTLA-4 (z. B. Pembrolizumab, Atezolizumab, Durvalumab) | Onkopedia NSCLC Kap. 6 |
-| **NRT** | Nikotinersatztherapie | Pflaster, Kaugummi, Lutschtablette, Spray, Inhaler | S3-LL Tabakentwöhnung 076-006l (03/2021); ATC N07BA01 |
+| **NRT** | Nikotinersatztherapie | Pflaster, Kaugummi, Lutschtablette, Spray, Inhaler | S3-LL Rauchen und Tabakabhängigkeit v3.1 (AWMF 076-006, Langversion 03/2021); ATC N07BA01 |
 | **DiGA** | Digitale Gesundheitsanwendung | BfArM-zugelassene Software-Medizinprodukte; verordnungsfähig nach §33a SGB V | BfArM DiGA-Verzeichnis [diga.bfarm.de](https://diga.bfarm.de/) |
-| **ABC-Schema** | — | Tabakentwöhnungs-Algorithmus: **A**sk – **B**rief advice – **C**essation support | S3-LL Lungenkarzinom v5.01 Empf. 4.3 |
+| **ABC-Schema** | — | Tabakentwöhnungs-Algorithmus: **A**sk – **B**rief advice – **C**essation support | S3-LL Lungenkarzinom v5.1 Empf. 4.3 |
 
 ## 8 Genetische Marker & Molekularpathologie
 
@@ -156,15 +156,15 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| **SCP** | Survivorship Care Plan | Strukturierter Onkologischer Abschlussbericht: Diagnose, Therapie, Spätfolgen, Kontrollintervalle, Kontaktdaten | Klein A-A et al. Die Onkologie 32:91 (2026); AG LONKO Empfehlungen |
+| **SCP** | Survivorship Care Plan | Behandlungszusammenfassung und Nachsorgeplan für die Weiterbetreuung (u. a. Diagnose inkl. Stadium, Therapien, Spät- und Langzeitfolgen, Kontrollintervalle, Vorgehen bei Rezidivverdacht, Kontaktdaten); deutsches Pendant beim Übergang in die hausärztliche Versorgung: onkologischer Abschlussbericht | OCP Lung (AU) Step 5.1/5.2; Klein A-A et al., Die Onkologie 32(1):91–99 (2026); AG LONKO UAG Daten Kap. 4 (Nachsorgepass) |
 | **MDT** | Multidisciplinary Team | Tumorboard; interdisziplinäre Therapieentscheidung | OCP Lung 2nd ed. Principle 3 |
 | **OCP** | Optimal Care Pathway | Strukturierter Versorgungspfad (AU); Cancer Council Victoria | cancer.org.au/OCP |
-| **AG LONKO** | Arbeitsgemeinschaft Langzeitüberleben nach Krebs | Im Nationalen Krebsplan; Empfehlungen Survivorship | bundesgesundheitsministerium.de Nationaler Krebsplan |
+| **AG LONKO** | Arbeitsgruppe „Langzeitüberleben nach Krebs“ | Expert:innen-Arbeitsgruppe im Nationalen Krebsplan (2018–2021); Empfehlungspapiere der UAG „Daten“ (17.06.2021) und UAG „Versorgungsmodelle“ (18.06.2021) | bundesgesundheitsministerium.de, Nationaler Krebsplan |
 | **SaxoForN** | Sächsisch-Hessisches Forschungspraxennetz Allgemeinmedizin | Hausarzt-Forschungs-Konsortium; BMBF-gefördert | Mergenthal K et al. Bundesgesundheitsbl 66:1042 (2023) |
 
 ## 11 Frequenz- und Zeitmuster (projekt-eigenes Vokabular)
 
-Diese Codes sind als `local-no-standard-binding` markiert (kein etabliertes ValueSet); siehe `docs/design-faq.md` Sektion „Standardlücken".
+Diese Codes sind als `local-no-standard-binding` markiert (kein etabliertes ValueSet); siehe `value_set.standard_binding_status` im Schema (`schemas/data-element.schema.json`) und `docs/methodology.md` (Versionshistorie, „Standardlücken explizit“).
 
 > **Lese-Hilfe `Q…`:** Das vorangestellte `Q` ist die medizinisch-lateinische Abkürzung **`q` / *quaque* = „alle" / „jede(r/s)"** (analog zur Verordnungs-Notation `q4h` = alle 4 Stunden). Es bedeutet **nicht** „Quartal". Die nachfolgende Einheit ergibt sich aus dem Suffix: `W` = Wochen, `M` = Monate. `Q3M` ist somit nur dann „quartalsweise", wenn `n=3` zufällig genau einem Quartal entspricht — die Notation selbst ist einheiten-neutral.
 
@@ -179,10 +179,17 @@ Diese Codes sind als `local-no-standard-binding` markiert (kein etabliertes Valu
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| `Q3M-Y1-Y2` | alle 3 Monate, Jahr 1–2 | dreimonatlich (≈ quartalsweise) in den ersten beiden Jahren nach Therapieabschluss | S3-LL Lungenkarzinom v5.01 Empf. 16.7 (B) |
-| `Q6M-Y3-Y5` | halbjährlich, Jahr 3–5 | alle 6 Monate, in Jahr 3 bis 5 | S3-LL Lungenkarzinom v5.01 Empf. 16.7 |
-| `Q12M-PostY5` | jährlich ab Jahr 6 | jährliches Screening (LDCT-Anschluss) | S3-LL Lungenkarzinom v5.01 Empf. 16.7 |
-| `Q6-9W` | alle 6–9 Wochen | unter palliativer Systemtherapie | S3-LL Lungenkarzinom v5.01 Empf. 16.9 (B) |
+| `Q3M-Y1-Y2` | alle 3 Monate, Jahr 1–2 | dreimonatlich (≈ quartalsweise) in den ersten beiden Jahren nach Therapieabschluss | S3-LL Lungenkarzinom v5.1 Empf. 16.7 (EK) |
+| `Q6M-Y3-Y5` | halbjährlich, Jahr 3–5 | alle 6 Monate, in Jahr 3 bis 5 | S3-LL Lungenkarzinom v5.1 Empf. 16.7 |
+| `Q12M-PostY5` | jährlich ab Jahr 6 | jährliches Screening (LDCT-Anschluss) | S3-LL Lungenkarzinom v5.1 Empf. 16.7 |
+| `Q6-9W` | alle 6–9 Wochen | unter palliativer Systemtherapie | S3-LL Lungenkarzinom v5.1 Empf. 16.9 (EK) |
+| `Q6-8W` | alle 6–8 Wochen | nach Erstlinientherapie / als Alternative zur Erhaltungstherapie; bei kurativem Rezidivpotenzial (`Q6-8W-curative-recurrence`) | Onkopedia NSCLC (April 2025) Kap. 8.1, 8.2, 6.1.6.2.2.1.2.1 |
+| `Q3-6W` | alle 3–6 Wochen | Wiedervorstellung unter laufender Erhaltungstherapie | S3-LL Lungenkarzinom v5.1 Empf. 16.9 (EK) |
+| `Q3M-Y1;Q6M-Y2;Q12M-Y3-Y5` | alle 3 Mo Jahr 1, alle 6 Mo Jahr 2, jährlich Jahr 3–5 | SCLC-Nachsorgeraster (Monate 3/6/9/12/18/24/36/48/60) | Onkopedia SCLC (August 2026) Tab. 9 |
+| `M3;M6;M12;M18;M24;M36;M48;M60` | feste Monatszeitpunkte | NSCLC-Nachsorgeraster nach kurativer Therapie | Onkopedia NSCLC (April 2025) Tab. 12 |
+| `Q6-9M-Y1-Y3` | alle 6–9 Monate, Jahr 1–3 | Schädel-MRT bei Hochrisiko (Kann-Empfehlung) | Onkopedia NSCLC (April 2025) Kap. 8.1 |
+| `Q3-6M` | alle 3–6 Monate | ZNS-Bildgebung bei ALK+ auch asymptomatisch | Onkopedia NSCLC (April 2025) Kap. 6.1.6.2.1.1 |
+| `per-line` / `once-per-line` | je Therapielinie | Systemtherapie-Regime, Verlaufsplan, Basisevaluation | projekt-spezifisch |
 | `per-encounter` | bei jedem Patientenkontakt | übergreifend | projekt-spezifisch |
 | `per-imaging-event` | nach jeder Bildgebung | Bildbefund-Erfassung | projekt-spezifisch |
 | `per-procedure` | nach jeder Prozedur | Funktionsdiagnostik, Lungenfunktion | projekt-spezifisch |
@@ -190,10 +197,11 @@ Diese Codes sind als `local-no-standard-binding` markiert (kein etabliertes Valu
 | `per-event` | pro Ereignis | Toxizität (AE/CTCAE) | projekt-spezifisch |
 | `once` / `once-per-treatment-completion` / `once-per-transition` | einmalig | Pläne, Übergaben | projekt-spezifisch |
 | `weekly` | wöchentlich | Web-PROM (Denis 2017) | Onkopedia NSCLC Kap. 8.2 |
-| `Q1M in SPV` | monatlich in spezialisierter Palliativversorgung | Caregiver-Burden-Verlauf | S3-LL Palliativ v3.01 Kap. 7.4 |
+| `Q1M in SPV` | monatlich in spezialisierter Palliativversorgung | Caregiver-Burden-Verlauf | S3-LL Palliativ v3.0 Kap. 7.4 |
 | `ad-hoc` | bei Bedarf | situativ | projekt-spezifisch |
-| `tägliche Re-Evaluation` | täglich | Sterbephase | S3-LL Palliativ v3.01 Kap. 21 |
-| `ongoing` | fortlaufend | ACP über Erkrankungsverlauf | S3-LL Palliativ v3.01 Kap. 6.5 |
+| `Re-Evaluation ≤ 72 h` | Re-Evaluation der Feststellung der Sterbephase spätestens nach 72 h im multiprofessionellen Team | Sterbephase (`dyingPhaseDiagnosed`) | S3-LL Palliativ v3.0 Kap. 21.2 (Hintergrund zu Empf. 21.2) |
+| `täglich in Sterbephase` | i. d. R. tägliche Überprüfung des Betreuungsplans | Krankheitsphase „sterbend“ (`illnessPhase`) | S3-LL Palliativ v3.0 Tab. 6, Zeile d |
+| `ongoing` | fortlaufend | ACP über Erkrankungsverlauf | S3-LL Palliativ v3.0 Kap. 6.5 |
 
 ## 12 Krankheitsphasen (Palliativ)
 
@@ -201,10 +209,10 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| `stable` | stabil | Symptome durch Versorgungsplan kontrolliert; keine neuen Probleme | S3-LL Palliativ v3.01 Tab. 6 |
-| `unstable` | instabil | Akute Verschlechterung; Plan-Anpassung erforderlich | S3-LL Palliativ v3.01 Tab. 6 |
-| `deteriorating` | verschlechternd | Erwartbare graduelle Verschlechterung | S3-LL Palliativ v3.01 Tab. 6 |
-| `dying` | sterbend (terminal) | Tod innerhalb der nächsten Tage wahrscheinlich | S3-LL Palliativ v3.01 Tab. 6 |
+| `stable` | stabil | Symptome durch Versorgungsplan kontrolliert; keine neuen Probleme | S3-LL Palliativ v3.0 Tab. 6 |
+| `unstable` | instabil | Akute Verschlechterung; Plan-Anpassung erforderlich | S3-LL Palliativ v3.0 Tab. 6 |
+| `deteriorating` | verschlechternd | Erwartbare graduelle Verschlechterung | S3-LL Palliativ v3.0 Tab. 6 |
+| `dying` | sterbend (terminal) | Tod innerhalb der nächsten Tage wahrscheinlich | S3-LL Palliativ v3.0 Tab. 6 |
 
 ## 13 Standards & Implementation Guides
 
@@ -300,11 +308,13 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | Score-Bereiche (PHQ-9, HADS, Zarit, NRS, EORTC, ECOG, Karnofsky) | ✓ stichprobenartig verifiziert | Zarit per Web-Lookup bestätigt; übrige aus Primärpublikation |
 | RECIST 1.1 (CR/PR/SD/PD/NE) | ✓ verifiziert | Eisenhauer 2009 |
 | CTCAE-Grade 1–5 | ✓ verifiziert | NCI-Standard |
-| LL-Empfehlungs-Verweise (S3-LL Lung v5.01, S3-LL Palliativ v3.01) | ✓ verifiziert | direkter Bezug zu im Audit-Log dokumentierten Quellen |
-| SNOMED-CT-IDs (in Codings-Tabellen ggf. erwähnt) | ⚠ teilweise verifiziert | vollständige Terminologie-Server-Validierung steht aus (siehe `audit-log.md` §5) |
-| LOINC-Codes (Score-Instrumente) | ⚠ teilweise verifiziert | Stichprobenverifikation; finale Liste über LOINC-Browser empfohlen |
+| LL-Empfehlungs-Verweise (S3-LL Lung v5.1 Juli 2026, Onkopedia NSCLC April 2025 / SCLC August 2026, S3-LL Palliativ v3.0, OCP, AG LONKO, Klein 2026, S3-LL Tabak 3.1) | ✓ verifiziert (2026-10-13; Zweitprüfung aller Elemente 2026-10-14) | Leitlinien-Abgleiche in `docs/reviews/2026-10-13-leitlinien-abgleich/`; Erratum zu den Empfehlungsgraden in `audit-log.md` §13.1 |
+| SNOMED-CT-IDs | ✓ verifiziert (2026-10-13; erneut 2026-10-14/15) | alle Codings per `$lookup` gegen den MII TermServ (SNOMED CT 20260701) — `docs/reviews/2026-10-13-terminologie-verifikation.md`; Anzeigetexte = Server-Displays |
+| LOINC-, ICD-10-GM-, OPS-, ATC-, KDL-, ICD-O-3-Codes | ✓ verifiziert (2026-10-13) | MII TermServ (LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3); Instrumente ohne Code (Distress-Thermometer, Zarit, AKPS, Atemnot-NRS) als `pending-mapping` markiert |
+| ICF- und MedDRA-Codes | ⚠ nicht verifizierbar | Codesysteme nicht auf dem MII TermServ (Stand 2026-10-15); ICF gemäß ICF-Browser; MedDRA gegen das MII-ValueSet `mii-vs-onko-nebenwirkung-art` (CTCAE v4.03) geprüft |
 | Genetische Marker / Drug-Indications | ✓ aus Onkopedia/NEJM-Primärquellen | Stand der aktuellen Onkologie-Leitfäden |
-| Frequenz-Code-Pattern | ✓ projekt-eigene Konvention | dokumentiert in §11 + `docs/design-faq.md` |
+| Frequenz-Code-Pattern | ✓ projekt-eigene Konvention | dokumentiert in §11 |
+| Standard-Mapping-Ziele (`standard_mappings`) | ✓ verifiziert (2026-10-14/15) | alle FHIR-Canonicals als StructureDefinition-`url` in den publizierten Paketen (MII KDS, ISiK, KBV, gematik, mCODE, Genomics Reporting); oBDS gegen Feldliste und XSD 3.0.5 — `docs/reviews/2026-10-14-zweitpruefung.md` |
 
 **Bei Aktualisierungen:** Der `data-element-validator`-Sub-Agent prüft pro Lauf, ob die hier aufgeführten LL-/Standard-Versionen noch aktuell sind, und schlägt Updates vor.
 
@@ -339,6 +349,30 @@ Einträge je Element möglich (ISO 13940 ContSys / HL7 HSRA Care Coordination).
 
 > Beispiel `smokingStatus`: Hausärzt:in erfasst im `pvs` (capture, ambulant); Onkolog:in liest im
 > `kis` (read, stationär); Forscher:in nutzt im `forschung-dwh-diz` (secondary-use).
+
+## 20 Klinische Kategorie — `category` (projekt-eigenes Vokabular)
+
+Optionale Sortier-/Review-Hilfe je Datenelement (Taxonomie der Nachsorge-WG, Excel-Erhebung 2026-07); ergänzt — ersetzt nicht — `iso13972_metadata.type`. In der Excel-Vorlage als Spalte »Kategorie«, im Issue-Formular als Dropdown, im Katalog als Spalte `category`.
+
+| Code | Anzeigetext | Bedeutung |
+| --- | --- | --- |
+| `befund` | Befund | Ergebnis/Befund einer Untersuchung oder Anamnese |
+| `bildgebung` | Bildgebung | bildgebende Untersuchung (Durchführung/Datum) |
+| `assessment` | Assessment | Score, Skala, Screening-Instrument |
+| `messwert` | Messwert | Mess-/Laborwert mit Einheit |
+| `kontakt-visite` | Kontakt/Visite | Termin, Visite, Kontakt(datum), Kontaktform |
+| `versorgungsplanung` | Versorgungsplanung | Plan, Intervall, Entscheidung, Empfehlung |
+| `mitbetreuung` | Mitbetreuung | Anbindung an weitere Versorger:innen/Dienste |
+| `prozedur` | Prozedur | Untersuchung/Maßnahme (nicht bildgebend) |
+| `diagnose` | Diagnose | Diagnose, Zustand, Komplikation |
+| `sozialanamnese` | Sozialanamnese | soziale Situation, Rauchstatus u. ä. |
+| `dokument` | Dokument | Bericht, Brief, Plan als Dokument |
+| `laborbefund` | Laborbefund | Laboruntersuchung/-befund |
+| `prom` | PROM (Selbsteinschätzung) | patientenberichtetes Outcome |
+| `medikation` | Medikation | Medikation, Medikationsplan, Impfung |
+| `versorgungskontext` | Versorgungskontext | Versorgungsstufe, Phase, Status |
+| `stammdaten` | Stammdaten | Identität, Geburtsjahr, Geschlecht, Kontakt |
+| `administrativ` | Administrativ | administrative Angabe (Überweisung, AU, Kontakte) |
 
 ## Pflege
 

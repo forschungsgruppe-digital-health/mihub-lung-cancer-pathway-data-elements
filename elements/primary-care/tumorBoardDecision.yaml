@@ -1,0 +1,176 @@
+id: mihub.lung.primarycare.tumorBoardDecision.v0.1
+uuid: bb88ab00-c383-5f7c-bcdf-ae444c587861
+name: tumorBoardDecision
+label_de: Tumorboardbeschluss (inkl. Therapiebarkeit und Therapieplanung)
+definition_de: 'Gemeinsam durch mehrere Fachdisziplinen festgelegte Empfehlung zur weiteren Behandlung:
+  Therapiebarkeit (ob und wie gut behandelbar, Resektabilität), geplante Behandlung, nächste Schritte
+  und Aufgabenverteilung (was macht die Hausarztpraxis, was andere Ärzt:innen).'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungsplanung
+datatype: text
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: SD150103
+    display: Tumorkonferenzprotokoll
+  - system: loinc
+    code: 85231-9
+    display: Tumor Board Note
+  - system: snomed-ct
+    code: '399414003'
+    display: Multidisciplinary care conference for cancer care planning
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 18 Tumorkonferenz Therapieplanung / 19 Therapieempfehlung
+  path: 'Tumorkonferenz/Datum (18.1); Tumorkonferenz/Typ (18.2: praeth, postop, postth, ther); Tumorkonferenz/Therapieempfehlung/Menge_Typ_Therapieempfehlung/Typ_Therapieempfehlung
+    (19.1); Tumorkonferenz/Therapieempfehlung/Abweichung_Patientenwunsch (19.2: J, N, U)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Tumorkonferenz_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
+  resource: CarePlan
+  path: CarePlan.category.coding (REQUIRED mii-vs-onko-therapieplanung-typ = Konferenztyp); CarePlan.activity:obds.detail.code
+    (REQUIRED mii-vs-onko-therapieempfehlung-typ); CarePlan.activity:obds.detail.statusReason (Therapieabweichung,
+    mii-vs-onko-therapieabweichung); CarePlan.created; Freitext in CarePlan.description bzw. CarePlan.note
+  notes: Stabil, Modul Onkologie 2026.0.3 (intent fix plan). Das Profil ist kodiert (oBDS-Codes), das
+    Element hat datatype text.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL = SD150103 (Tumorkonferenzprotokoll); DocumentReference.content.attachment
+  notes: Für das Beschlussdokument (Protokoll); Modul Dokument 2026.0.1.
+- standard: fhir-r4-base
+  resource: CarePlan / DocumentReference
+care_process:
+  trigger: nach jeder Tumorkonferenz
+  frequency_pattern: ad-hoc
+  responsible_role: Tumorboard / MDT
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-004 Therapiebarkeit / DE-005 Tumorboardbeschluss / DE-027 Therapieplanung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-004 (weitere Zeilen: DE-005, DE-027)'
+    quote: Therapiebarkeit … ob und wie gut der Tumor behandelt werden kann … Tumorboardbeschluss … gemeinsam
+      festgelegte Empfehlung zur weiteren Behandlung eines Patienten durch mehrere Fachärzte … Therapieplanung
+      … Festlegung der geeigneten Behandlung, was sind nächsten Schritte, was muss HÄ tun, was machen
+      andere Ärzte
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 17: Empf. 17.1 (jeder neu diagnostizierte Pat. im Thorax-Onkologischen Tumorboard;
+      QI 5), Empf. 17.2 (leitlinienorientierte Entscheidungen, Abweichungen im Tumorboardprotokoll begründen
+      und dokumentieren); Empf. 8.26 (Operabilität inkl. Resektabilität im Tumorboard festlegen, NSCLC
+      II/III)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Jeder neu diagnostizierte Patient mit Lungenkarzinom soll in einem Thorax-Onko- … Die im Thorax-Onkologischen
+      Tumorboard getroffenen Entscheidungen sollen … Abweichende Therapieentscheidungen sollen im Tumorboardprotokoll
+      begründet und dokumentiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 17, Empf. 17.1 und 17.2, S. 501
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.4.3 Responsibilities of the multidisciplinary team (MDM-Ergebnis und Behandlungsplan
+      dokumentieren und an GP übermitteln); Step 3.6.5 Communication with the general practitioner
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: A member of the team records the outcomes of the discussion and treatment plan in the patient
+      history and ensures these details are communicated to the patient’s general practitioner.
+    accessed: '2026-10-15'
+    locator: Step 3.4.3 Responsibilities of the multidisciplinary team, S. 29; Step 3.6.5, S. 33
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-004, DE-005,
+      DE-027; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 4 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Das Element ist als Freitext (datatype text) definiert; das nationale Profil mii-pr-onko-tumorkonferenz
+  und oBDS 18/19 verlangen kodierte Angaben (Konferenztyp, Therapieempfehlung nach oBDS-Codes, Abweichung
+  auf Patientenwunsch). Zu entscheiden: kodierte Teil-Elemente (Konferenztyp, Empfehlungstyp, Abweichung)
+  ergänzen oder das Element als Freitext bzw. Dokument (CarePlan.description, MII Dokument) belassen.'
+related_elements:
+- relation: hasPart
+  target: mihub.lung.primarycare.treatmentIntent.v0.1
+- relation: hasPart
+  target: mihub.lung.followup.curativeRecurrencePotential.v0.1

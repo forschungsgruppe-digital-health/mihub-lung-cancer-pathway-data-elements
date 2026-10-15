@@ -1,0 +1,156 @@
+id: mihub.lung.followup.rehabilitationMeasure.v0.1
+uuid: 42171a7a-ac22-5f3c-a6c0-3552d83f189c
+name: rehabilitationMeasure
+label_de: Rehabilitationsmaßnahme (Setting, onkologischer Schwerpunkt)
+definition_de: Beantragte/durchgeführte onkologisch-pneumologische Rehabilitationsmaßnahme nach Therapie
+  (AHB/Reha; ambulant/stationär; beantragt, angetreten, abgelehnt) mit Angabe, ob eine Klinik mit onkologischem
+  Schwerpunkt empfohlen bzw. gewählt wurde.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: prozedur
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '52052004'
+    display: Rehabilitation therapy
+  - system: snomed-ct
+    code: '307374004'
+    display: Referral to rehabilitation service
+  - system: icd-10-gm
+    code: Z50.9
+    display: Rehabilitationsmaßnahme, nicht näher bezeichnet
+  - system: kdl
+    code: AM010201
+    display: Antrag auf Rehabilitation
+  - system: snomed-ct
+    code: '413743008'
+    display: Cancer rehabilitation and readaption
+  - system: snomed-ct
+    code: '15081005'
+    display: Pulmonary rehabilitation
+standard_mappings:
+- standard: fhir-r4-base
+  resource: ServiceRequest / Procedure
+  path: Procedure.code
+care_process:
+  trigger: Antrag / Antritt einer Rehabilitationsmaßnahme; Therapieabschluss (OP, RCT) mit Folgestörungen
+  frequency_pattern: ad-hoc
+  responsible_role: Sozialdienst / Onkolog:in / Reha-Einrichtung
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 7 Rehabilitation (Klinik mit onkologischem Schwerpunkt, § 9 SGB IX)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Pat. sollen über die Möglichkeiten ambulanter und stationärer Rehabilitationsmaßnahmen
+      sowie weiterer Ansprüche, die sich aus dem Sozialrecht ergeben, frühzeitig informiert werden. …
+      Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben werden
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC, Kap. 7 Rehabilitation
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 15 Rehabilitation (Kapitel ''derzeit wegen laufender Überarbeitung ausgesetzt''): Empf.
+      15.5 (2010: Empfehlungsgrad D, Expertenmeinung; ausgesetzt 2026) — Operierte bzw. nach Radiochemotherapie
+      mit ausgeprägten Folgestörungen einer Rehabilitation zuführen; Empf. 15.4 (2010: D; ausgesetzt 2026)
+      — pneumologische Fachkompetenz der Reha-Einrichtung, Primärbehandelnde an der Klinikauswahl beteiligt'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Primärbehandelnde Ärzte sollten bei der Auswahl der geeigneten Klinik beteiligt sein. … Operierte
+      Patienten und jene nach eingreifenden anderen Therapien (kombinierte … Radiochemotherapie) und mit
+      ausgeprägten Folgestörungen sollten in Bezug auf … einer Rehabilitation zugeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 15 Rehabilitation (ausgesetzt), Empf. 15.4 und 15.5, S. 490
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 9 Rehabilitation (Therapiefolgestörungen; frühzeitige Information über ambulante/stationäre
+      Reha; Patientenwunsch, § 9 SGB IX; Empfehlung einer Klinik mit onkologischem Schwerpunkt)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Medikamentöse Tumortherapie, Operation, Strahlentherapie und Komorbidität können bei Pat. mit
+      kleinzelligem Lungenkarzinom zu Therapiefolgestörungen unterschiedlichen Schwergrades führen. …
+      Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben werden
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC, Kap. 9 Rehabilitation
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'S3-LL Lungenkarzinom 5.1: Kap. 15 „derzeit wegen laufender Überarbeitung ausgesetzt“ — Referenz vorläufig.'
+- 'Label und Definition nennen Attribute, die als einzelnes CodeableConcept (Maßnahmen-Codes) nicht erfassbar
+  sind: Setting (ambulant/stationär), Status (beantragt/angetreten/abgelehnt) und ob eine Klinik mit onkologischem
+  Schwerpunkt empfohlen bzw. gewählt wurde. Vorschlag: Teil-Elemente oder ein Mapping auf ServiceRequest.status/Procedure.status,
+  Setting über Encounter/Location oder ein eigenes code-Element, Klinik-Schwerpunkt als boolean.'
+- KDL AM010201 'Antrag auf Rehabilitation' ist eine Dokumentenklasse (KDL AM 'Administration' › AM0102
+  'Anträge') und keine Leistung. Sie sollte nicht als Procedure.code, sondern gegebenenfalls als DocumentReference.type
+  des Antragsdokuments (eigenes Mapping) geführt werden.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1

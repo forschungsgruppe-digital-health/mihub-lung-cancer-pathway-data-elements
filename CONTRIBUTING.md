@@ -37,7 +37,7 @@ automatische **Dubletten-Prüfung** den Vorschlag und kommentiert mögliche Tref
 ### 🟡 Weg 2 — Excel-Vorlage (viele Elemente, auch im Workshop)
 
 → [`templates/datenelement-erhebung.xlsx`](templates/README.md) herunterladen, das Blatt
-**„Anleitung"** lesen und ausfüllen. Eine Zeile je Datenelement; die Datennutzung (System ·
+**„Anleitung"** lesen und ausfüllen. Eine Zeile je Datenelement (optional mit **Kategorie**); die Datennutzung (System ·
 Rolle · Nutzung) tragen Sie im zweiten Blatt ein. Mappe an `digital-health@tu-dresden.de`
 senden oder an ein Issue anhängen. Das MI-Team importiert sie automatisch
 (`scripts/import-elicitation-workbook.py`) zu YAML-Entwürfen und prüft auf Dubletten.
@@ -54,6 +54,7 @@ pip install -r requirements.txt                       # pyyaml + jsonschema (+ o
 python scripts/validate.py                            # YAML gegen das JSON-Schema prüfen
 python scripts/build-catalog.py                       # CSV + Markdown + Phasen-Übersicht regenerieren
 python scripts/check-duplicates.py --candidates <neu.yaml>   # vor Aufnahme: Dubletten prüfen
+python scripts/verify-terminology.py --cert <crt> --key <key> <neu.yaml>   # optional: Codings gegen den MII TermServ prüfen
 ```
 
 ---

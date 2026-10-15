@@ -1,0 +1,198 @@
+id: mihub.lung.primarycare.cancerDiagnosis.v0.1
+uuid: 00fe7f61-d908-5fd1-8723-186011fe6457
+name: cancerDiagnosis
+label_de: Krebsdiagnose(n)
+definition_de: 'Tumordiagnose(n) der Patient:in mit Diagnosedatum: Lungenkarzinom (ICD-10-GM C34.0–C34.9)
+  bzw. Lungenkarzinom in der Eigenanamnese (Z85.1); ggf. mehrere Primärtumoren inkl. Zweitkarzinome anderer
+  Lokalisation; Grundlage der hausärztlichen Mitbetreuung.'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: icd-10-gm
+    code: C34.9
+    display: 'Bösartige Neubildung: Bronchus oder Lunge, nicht näher bezeichnet'
+  - system: icd-10-gm
+    code: C34
+    display: Bösartige Neubildung der Bronchien und der Lunge
+  - system: snomed-ct
+    code: '93880001'
+    display: Primary malignant neoplasm of lung
+  - system: icd-10-gm
+    code: Z85.1
+    display: Bösartige Neubildung der Trachea, der Bronchien oder der Lunge in der Eigenanamnese
+  notes: 'ICD-10-GM endständig kodieren: C34.0–C34.9 (C34 nur Gruppierungsanker, nicht endständig); Lungenkarzinom
+    in der Eigenanamnese: Z85.1; Zweitkarzinome anderer Lokalisation mit dem jeweiligen ICD-10-GM-Kode
+    (Binding extensible). SNOMED CT: 93880001 Primary malignant neoplasm of lung (363358000 schließt Lungenmetastasen
+    ein).'
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 5 Diagnose (Meldung mit Tumorzuordnung)
+  path: Tumorzuordnung/Primaertumor_ICD (Code, Version; 5.1, 5.2); Tumorzuordnung/Diagnosedatum (5.6);
+    Diagnose/Primaertumor_Diagnosetext (5.3); Diagnose/Menge_Fruehere_Tumorerkrankung (5.9)
+  notes: Pflichtmeldung §65c SGB V. Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach
+    dem Schema https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Condition
+  resource: Condition (MIO Patientenkurzakte 1.0.0, Notfalldaten)
+  path: Condition.code.coding (Slices ICD-10-GM, alpha-id, snomed-ct, orphanet; höchstens ein Coding);
+    Condition.code.text (1..1, Diagnoseerläuterung)
+  notes: Transport im Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle. Die Patientenkurzakte
+    besteht aus Notfalldaten (NFD) und persönlichen Erklärungen (DPE); sie ist kein onkologisches Übergabeformat.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
+  resource: Condition
+  path: Condition.code.coding:icd10-gm (C34.0–C34.9 bzw. ICD-10-GM-Kode eines Zweitkarzinoms); Diagnosedatum
+    in Condition.extension:Feststellungsdatum (condition-assertedDate, 1..1)
+  notes: Spezialisierung des MII-Diagnose-Profils für Primärtumoren (Modul Onkologie 2026.0.3; gleiche
+    Canonical in 2025.0.4 und 2027.0.0-ballot.1). Für Z85.1 bzw. frühere Tumorerkrankungen (oBDS 5.9)
+    alternativ https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fruehere-tumorerkrankung
+    (ab 2026.0.3, code.text 1..1); weitere Diagnosen über das generische Diagnose-Profil.
+care_process:
+  trigger: Diagnosestellung; Übernahme in die Hausarztakte
+  frequency_pattern: once (Update bei Zweittumor)
+  responsible_role: Onkolog:in / Hausärzt:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-073 Krebsdiagnose(n) (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-073
+    quote: Krebsdiagnose(n)
+    accessed: '2026-10-15'
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-008 Diagnose(n)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-008
+    quote: Diagnose(n)
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Anhang 2 / Abb. 2 (LoTeCaS-GP-Empfehlungen), Dos – Relevante Informationen: Anamnese, Abschlussstatus
+      und Epikrise (onkologische Diagnose und assoziierte Erkrankungen; weitere Diagnosen ohne Details)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Relevante Informationen Anamnese, Abschlussstatus und Epikrise ▪ onkologische Diagnose und
+      assoziierte Erkrankungen; weitere Diagnosen ohne Details
+    accessed: '2026-10-15'
+    locator: Anhang 2 (Wortlaut Abb. 2, S. 95), Dos – Relevante Informationen
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.6.5 Communication with the general practitioner (involving the GP from the point of
+      diagnosis; communication about the diagnosis); Step 5.1 Transitioning from active treatment – treatment
+      summary (diagnosis including stage, prognostic or severity score; tumour characteristics)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: involving the general practitioner from the point of diagnosis • ensuring regular and timely
+      communication with the general practitioner about the diagnosis, … • diagnosis including stage,
+      prognostic or severity score • tumour characteristics
+    accessed: '2026-10-15'
+    locator: Step 3.6.5 (S. 33); Step 5.1 Transitioning from active treatment (S. 43)
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-073, DE-008; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Das Diagnosedatum steht in definition_de, lässt sich mit datatype CodeableConcept aber nicht abbilden;
+  ein eigenes Datumselement fehlt im Katalog. Entweder ein Teilelement anlegen (date, z. B. Feststellungs-/Erstdiagnosedatum;
+  möglicher Element-Code LOINC 21854-5 ‚Date first Dx Cancer‘) oder im Mapping ausdrücklich das Feststellungsdatum
+  festlegen (MII KDS Modul Diagnose: Condition.extension:Feststellungsdatum, ‚Datum, an dem die Diagnose
+  erstmals festgestellt wurde‘; im MII-Onkologie-Profil Diagnose Primärtumor Pflichtangabe 1..1). Condition.onset[x]
+  (Krankheitsbeginn) und Condition.recordedDate (Aufzeichnungsdatum) sind nicht bedeutungsgleich mit dem
+  Diagnosedatum.'
+related_elements:
+- relation: hasPart
+  target: mihub.lung.primarycare.tumorLocalisation.v0.1
+- relation: hasPart
+  target: mihub.lung.primarycare.tumorHistology.v0.1
+- relation: hasPart
+  target: mihub.lung.primarycare.tnmStage.v0.1

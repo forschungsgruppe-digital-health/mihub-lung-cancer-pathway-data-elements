@@ -15,7 +15,7 @@ ohne YAML**. Sie ist eine von **drei gleichwertigen Beitrags-Spuren**; siehe
 2. Blatt **»Anleitung«** lesen. Jedes Blatt enthält oben eine **grau-kursive Beispielzeile**
    (lokale ID = `BEISPIEL`) — sie zeigt eine vollständige Erfassung und **wird beim Import
    ignoriert** (gerne überschreiben oder löschen).
-3. Blatt **»Datenelemente«** ausfüllen (eine Zeile je Element; Pflichtspalten sind rosa hinterlegt
+3. Blatt **»Datenelemente«** ausfüllen (eine Zeile je Element; optional die Spalte **»Kategorie«** — Befund, Bildgebung, Assessment, … — als Sortierhilfe; Pflichtspalten sind rosa hinterlegt
    und mit `*` markiert; Dropdown-Felder aus der Liste wählen; Spalten-Erklärung per Kommentar in
    der Kopfzeile). Je Zeile eine kurze **»lokale ID«** (z. B. `DE-001`) vergeben.
 4. Optional Blatt **»Datennutzung«** (WO/System · WER/Rolle · WIE/Nutzung) und Blatt **»Codes«**
@@ -45,6 +45,8 @@ python scripts/import-elicitation-workbook.py ausgefuellt.xlsx --validate
 # Dubletten gegen den Bestand prüfen, BEVOR Entwürfe übernommen werden:
 python scripts/check-duplicates.py --candidates elements/_incoming/
 ```
+
+Der Import ordnet die Spalten **über die Kopfzeile** zu — eingefügte, entfernte oder umsortierte Spalten (z. B. eine nachträglich ergänzte »Kategorie (optional)«) sind unkritisch; fehlt die klinische Definition, entsteht ein Entwurf mit Platzhalter und einem Hinweis unter `issues`.
 
 Die importierten YAMLs sind **Entwürfe** (`publication_status: AuthorDraft`): Codes,
 Standard-Mappings und die finale Definition ergänzt das MI-Team, bevor die Datei nach

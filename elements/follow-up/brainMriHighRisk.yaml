@@ -2,13 +2,16 @@ id: mihub.lung.followup.brainMriHighRisk.v0.1
 uuid: 371370d3-c946-5219-a108-5e5867b9ec94
 name: brainMriHighRisk
 label_de: Schädel-MRT bei Hochrisiko
-definition_de: 'MRT des Schädels zur ZNS-Metastasen-Detektion bei Patient:innen mit erhöhtem Risiko (NSCLC:
-  EGFR+, ALK+, ROS1+, Adenokarzinom Stadium III, großzellige/undifferenzierte/seltene Histologie; SCLC
-  LD ohne PCI).'
+definition_de: 'MRT des Schädels zur ZNS-Metastasen-Detektion in der Nachsorge nach kurativer Therapie
+  bei Patient:innen mit erhöhtem Risiko: NSCLC mit molekularem/Stadien-Risiko (S3 Empf. 16.8: z. B. EGFR+,
+  ALK+, ROS1+, Adenokarzinom Stadium III) oder histologischem Risiko (Onkopedia NSCLC Kap. 8.1: z. B.
+  großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder Mischtumoren, seltene
+  Lungentumorhistologien); SCLC LD ohne PCI (Onkopedia SCLC Tab. 9).'
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: bildgebung
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -20,37 +23,71 @@ value_set:
     display: MR Brain
   - system: snomed-ct
     code: '241601008'
-    display: MRI of brain (procedure)
+    display: MRI of head
+  - system: ops
+    code: 3-800
+    display: Native Magnetresonanztomographie des Schädels
   - system: ops
     code: 3-820
-    display: MRT Schädel
+    display: Magnetresonanztomographie des Schädels mit Kontrastmittel
   - system: kdl
     code: DG020107
     display: MRT-Befund
 care_process:
-  trigger: Bei Hochrisiko-Subgruppen; SCLC LD ohne PCI standardmäßig in Nachsorge.
-  frequency_pattern: Q3M-Y1 (SCLC LD ohne PCI); Q6-9M-Y1-Y3 (NSCLC Hochrisiko)
+  trigger: 'NSCLC — individuell hohes Risiko einer ZNS-Metastasierung (Steuerbedingung: brainMetastasisRiskProfile):
+    (a) molekular/Stadium nach S3 Empf. 16.8 (EK, „sollte“): z. B. EGFR+, ALK+, ROS1+, Adenokarzinom Stadium
+    III — regelmäßig nach Maßgabe des interdisziplinären Behandlungsteams; Intervall und Dauer in der
+    S3 nicht festgelegt; (b) histologisch nach Onkopedia NSCLC Kap. 8.1 (ungraduiert: „sollte man durchaus
+    erwägen“): z. B. großzellige Karzinome, undifferenzierte Adenokarzinome, kleinzellige Karzinome oder
+    Mischtumoren, seltene Lungentumorhistologien — in Abständen von 6–9 Monaten, nur in den ersten drei
+    Jahren nach Lokaltherapie. SCLC LD ohne PCI: standardmäßig gemäß Onkopedia SCLC Tab. 9 (Steuerbedingung:
+    prophylacticCranialIrradiationStatus ≠ performed). ED-SCLC mit active surveillance statt PCI („Watch
+    and Wait“, S3 Kap. 16.3.4; S3 Empf. 9.26: MRT 3-monatlich im 1. Jahr, danach 6-monatlich) → brainMriUnderTherapy
+    (Surveillance).'
+  frequency_pattern: 'NSCLC: Q6-9M-Y1-Y3 (Onkopedia; S3 nennt kein Intervall) · SCLC LD ohne PCI: Q3M-Y1;Q6M-Y2;Q12M-Y3
+    (Mo 3–36 obligat, Mo 48/60 fakultativ; Onkopedia SCLC Tab. 9)'
   responsible_role: Radiologie / Onkologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.8 (B, geprüft 2025)
-    recommendation_grade: B
+    section: 'Empf. 16.8 (EK, Starker Konsens, geprüft 2026) — regelmäßiges Schädel-MRT bei Hochrisikopatient:innen
+      (z. B. EGFR+, ALK+, ROS1+, Adenokarzinome Stadium III) nach Maßgabe des interdisziplinären Behandlungsteams,
+      Intervall nicht festgelegt; Kap. 16.3.4 (Hintergrund: Screening auf Hirnmetastasen ohne Risikoindikation
+      nicht empfohlen; abweichend in Risikosituationen beim LD-SCLC und ED-SCLC [ED-SCLC → brainMriUnderTherapy];
+      Risikokollektive EGFR/ALK/ROS1 im Stadium IVA/IVB mit steigendem kumulativem Risiko); Tab. 44 (MRT:
+      Hirn- und Knochenmetastasen)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: IVA und IVB NSCLC Risikokollektive, bei denen eine hohe kumulative Entwicklung von Hirnmetastasen
+      … Bei Hochrisikopatienten (z.B. EGF-R+, ALK+, ROS-1+, Adenokarzinome mit Stadium … III) sollte,
+      nach Maßgabe des interdisziplinären Behandlungsteams, regelmäßig ein Schädel-MRT durchgeführt werden.
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3.4 (S. 496); Empf. 16.8 (EK, Starker Konsens, geprüft 2026), S. 498
   - source: Onkopedia SCLC
-    version: Stand 09/2025
+    version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
-    section: Tab. 9 (MRT Schädel bei LD ohne PCI)
+    section: 'Kap. 10.2, Tab. 9 (MRT Schädel bei LD ohne PCI: X Mo 3/6/9/12/18/24/36, (X) Mo 48/60)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 9: Strukturierte Nachsorge nach kurativer Therapie … MRT Schädel bei LD ohne PCI X
+      X X X X X X (X) (X)'
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 10.2, Tab. 9
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Kap. 8.1 (Hochrisiko EGFR/ALK/ROS1)
+    section: 'Kap. 8.1 (Text nach Tab. 12: MRT-Schädel alle 6–9 Monate, nur in den ersten drei Jahren
+      nach Lokaltherapie, bei individuell hohem Risiko — histologische Kriterien; „sollte man durchaus
+      erwägen“)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Bei Pat. mit einem individuell hohen Risiko der Entwicklung einer cerebralen Metastasierung
+      … sollte man durchaus erwägen, in realistischen Abständen (6-9 Monaten), allerdings nur in den ersten
+      drei Jahren nach Lokaltherapie, MRT-Schädel Untersuchungen mit in das Nachsorgekonzept einzuplanen.
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 8.1 (Text nach Tab. 12)
 iso13972_metadata:
   type: procedure
   keywords:
@@ -59,7 +96,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -71,3 +108,54 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.prophylacticCranialIrradiationStatus.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.brainMetastasisRiskProfile.v0.1

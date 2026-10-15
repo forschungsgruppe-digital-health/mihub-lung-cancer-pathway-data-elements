@@ -1,0 +1,178 @@
+id: mihub.lung.primarycare.treatmentIntent.v0.1
+uuid: 9e2fb3ec-c481-5551-82ab-2172659dc04b
+name: treatmentIntent
+label_de: Therapieintention
+definition_de: Intention der tumorspezifischen Therapie (kurativ / palliativ) als Entscheidungsgrundlage
+  für Nachsorge, Verlaufsplanung und hausärztliche Begleitung.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: versorgungsplanung
+datatype: code
+cardinality: 1..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '373808002'
+    display: Curative - procedure intent
+  - system: snomed-ct
+    code: '363676003'
+    display: Palliative intent
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie (jeweils Intention)
+  path: 'OP/Intention (13.1: K, P, D, R, S, X); ST/Intention (14.1: K, P, O, S, X); SYST/Intention (16.1:
+    K, P, S, X)'
+  notes: Die Wertebereiche unterscheiden sich je Abschnitt (oBDS_v3.0.5.xsd); die SNOMED-Codes des Elements
+    sind nicht direkt meldbar (Abbildung 373808002 → K, 363676003 → P).
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-procedure-intent
+  resource: Extension (Kontext u. a. Procedure, MedicationRequest, MedicationAdministration, ServiceRequest)
+  path: 'Procedure.extension(url = http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-procedure-intent).valueCodeableConcept
+    (extensible mcode-procedure-intent-vs: 373808002, 363676003, 399707004, 261004008, 129428001, 429892002,
+    360156006, 447295008)'
+  notes: mCODE STU4 (4.0.0). Die Element-Codes 373808002 und 363676003 sind im Value Set enthalten.
+care_process:
+  trigger: Therapieentscheidung (Tumorboard); Änderung bei Therapiezieländerung
+  frequency_pattern: per-line
+  responsible_role: Tumorboard / Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-004 Therapiebarkeit
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-004
+    quote: Therapiebarkeit … ob und wie gut der Tumor behandelt werden kann
+    accessed: '2026-10-15'
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 4.1 Treatment intent (curative / anti-cancer therapy without expectation of cure /
+      symptom palliation; im MDT festlegen, dokumentieren, kommunizieren); Step 4.5.4 (GP-Kommunikation:
+      treatment plan including intent)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: • curative • anti-cancer therapy to improve quality of life and/or longevity without expectation
+      of cure • symptom palliation. The treatment intent should be established in a multidisciplinary
+      setting, documented in the patient’s medical record and conveyed to the patient and carer as appropriate.
+    accessed: '2026-10-15'
+    locator: Step 4.1 Treatment intent, S. 34
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.1.6 (Stadium IV: Therapieanspruch meist nicht kurativ, oligometastatisch potenziell
+      kurativ); Kap. 8.1 Kurative Therapie / 8.2 Nicht-kurativ intendierte Therapie (Nachsorge nach Intention)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei der Mehrzahl dieser Pat. ist der Therapieanspruch nicht kurativ [44, 83, 149]. Ausnahme
+      sind Pat. im neu definierten, sog. oligometastatischen Stadium M1b, z. B. mit solitären Nebennieren-,
+      ZNS- oder Lungenmetastasen, bei denen ein potenziell kurativer Therapieansatz in Frage kommt.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.6 Stadium IV
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1 Erstlinientherapie (kurativer Anspruch bei VLD/LD, ED palliativ; Abb. 5 „kurative
+      Intention, palliative Intention“); Kap. 10.2 (strukturierte Nachsorge nach kurativer Therapie)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei VLD ist die wirksamste Behandlungsform eine Operation mit Chemotherapie mit kurativem Anspruch.
+      … besteht auch bei LD ein kurativer Anspruch unter Radiochemotherapie mit nachfolgender Immuntherapie,
+      bei ED wird neben der palliativen Symptomverbesserung
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1 Erstlinientherapie, Abb. 5
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-004; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Die Intention wird je Ziel unterschiedlich kodiert: oBDS mit Buchstabencodes je Abschnitt (OP K/P/D/R/S/X,
+  ST K/P/O/S/X, SYST K/P/S/X), MII Onko über Procedure.extension:Intention (REQUIRED, dieselben oBDS-Codes;
+  ConceptMap mii-cm-onko-intention-sct: K = 373808002, P = 363676003, O „lokal kurativ bei Oligometastasierung“
+  nur als „wider“ auf 373808002), mCODE über SNOMED (extensible). Zu entscheiden: die Abbildung der Element-Codes
+  373808002 und 363676003 auf die oBDS-Codes je Therapieabschnitt festschreiben (insbesondere K oder O
+  bei der Strahlentherapie) und klären, ob die MII-Onko-Intention-Extensions (mii-ex-onko-operation-intention,
+  -strahlentherapie-intention, -systemische-therapie-intention) als nationales FHIR-Ziel ergänzt werden.'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.advanceCarePlanning.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tnmStage.v0.1

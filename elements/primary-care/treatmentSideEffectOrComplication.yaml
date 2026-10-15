@@ -1,0 +1,168 @@
+id: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
+uuid: 6d7496bd-764d-5750-af0b-b3174340c7b9
+name: treatmentSideEffectOrComplication
+label_de: Nebenwirkung / Komplikation der Tumortherapie (als Diagnose)
+definition_de: Unerwünschte Beschwerden, Reaktionen oder Komplikationen nach einer Tumorbehandlung, als
+  Diagnose in der Hausarztakte notiert (z. B. Übelkeit nach Chemotherapie, Pneumonitis).
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: diagnose
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '62014003'
+    display: Adverse reaction to drug
+  - system: snomed-ct
+    code: '281647001'
+    display: Adverse reaction
+  - system: icd-10-gm
+    code: T66
+    display: Nicht näher bezeichnete Schäden durch Strahlung
+  - system: snomed-ct
+    code: '373865001'
+    display: Cancer treatment related morbidity
+  - system: snomed-ct
+    code: '18846006'
+    display: Chemotherapy-induced nausea and vomiting
+  - system: icd-10-gm
+    code: T88.7
+    display: Nicht näher bezeichnete unerwünschte Nebenwirkung eines Arzneimittels oder einer Droge
+  - system: icd-10-gm
+    code: J70.0
+    display: Akute Lungenbeteiligung bei Strahleneinwirkung
+  - system: icd-10-gm
+    code: J70.4
+    display: Arzneimittelinduzierte interstitielle Lungenkrankheit, nicht näher bezeichnet
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+care_process:
+  trigger: bei Auftreten / Mitteilung
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in / Onkolog:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-018 Komplikationen / DE-028 Nebenwirkungen
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-018 (weitere Zeilen: DE-028)'
+    quote: Komplikationen … als Diagnose notiert (zb. Überkeit nach Chemotherapie) … Nebenwirkungen …
+      unerwünschte Beschwerden oder Reaktionen nach einer Behandlung
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie, keine Empfehlungsgrade) –
+      Empfehlungsliste Abb. 2 (S. 95) bzw. Anhang 2: Dos – Relevante Informationen – Anamnese, Abschlussstatus
+      und Epikrise: „Komplikationen und bestehende Langzeitfolgen“; Ergebnisse (Synthese – Empfehlungsliste,
+      S. 95): Komplikationen während der Therapie bzw. (Langzeit-)Folgen sind zu listen, um eine gezielte
+      Therapieeinleitung zu ermöglichen und Doppeluntersuchungen zu vermeiden'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Anamnese, Abschlussstatus und Epikrise … Komplikationen und bestehende Langzeitfolgen
+    accessed: '2026-10-15'
+    locator: 'Anhang 2 (= Abb. 2, S. 95): Dos › Relevante Informationen › Anamnese, Abschlussstatus und
+      Epikrise'
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 4.5.4 Communication with the general practitioner (GP hilft beim Management von Nebenwirkungen;
+      Kommunikation über potential side effects); Step 5.1 treatment summary (current toxicities; potential
+      long-term and late effects)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: The general practitioner plays an important role in coordinating care for patients, including
+      helping to manage side effects and other comorbidities … • current toxicities (severity, management
+      and expected outcomes) … • potential long-term and late effects of treatment
+    accessed: '2026-10-15'
+    locator: Step 4.5.4, S. 41; Step 5.1, S. 43
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-018, DE-028;
+      Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Laut Erhebung (DE-018, DE-028) ist die Onkolog:in verantwortlich, in den data_flows ist sie aber nur
+  lesend (kis/read) eingetragen. Klären und ggf. ergänzen: Erfassung durch die Onkolog:in (KIS, Übermittlung
+  per Arztbrief) und Übernahme als ICD-kodierte Diagnose im PVS durch die Hausärzt:in.'
+related_elements:
+- relation: generalizes
+  target: mihub.lung.followup.postTherapyComplication.v0.1
+- relation: generalizes
+  target: mihub.lung.surveillance.adverseEventCtcae.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.cancerTreatmentHistory.v0.1

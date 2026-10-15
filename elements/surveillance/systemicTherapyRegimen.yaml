@@ -3,33 +3,35 @@ uuid: 948cb11a-1e41-550d-bc52-0b2fd3c348b0
 name: systemicTherapyRegimen
 label_de: Aktuelles Systemtherapie-Regime
 definition_de: Codiertes aktuelles tumorspezifisches Systemtherapie-Regime (Chemotherapie, zielgerichtete
-  Therapie, Checkpoint-Inhibitor, Kombination).
+  Therapie, Immuntherapie inkl. Checkpoint-Inhibitoren und bispezifischer T-Zell-Engager wie Tarlatamab,
+  Kombinationen) einschließlich Erhaltungs- und Konsolidierungstherapie.
 phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: medikation
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: atc
-    code: L01XC18
+    code: L01FF02
     display: Pembrolizumab
   - system: atc
-    code: L01XC32
+    code: L01FF05
     display: Atezolizumab
   - system: atc
-    code: L01XC44
+    code: L01FF03
     display: Durvalumab
   - system: atc
-    code: L01XE13
+    code: L01EB03
     display: Afatinib
   - system: atc
-    code: L01XE35
+    code: L01EB04
     display: Osimertinib
   - system: atc
-    code: L01XE36
+    code: L01ED03
     display: Alectinib
   - system: atc
     code: L01CD01
@@ -37,10 +39,42 @@ value_set:
   - system: atc
     code: L01XA02
     display: Carboplatin
+  - system: atc
+    code: L01CB01
+    display: Etoposid
+  - system: atc
+    code: L01FX33
+    display: Tarlatamab
+  standard_binding_status: mapped
+  notes: Die gelisteten ATC-Codes (BfArM ATC) sind Beispiele; vorgesehen sind Wirkstoffe der ATC-Gruppe
+    L01 „Antineoplastische Mittel“. Ein Kombinationsregime wird als mehrere Werte dieses Elements abgebildet
+    (Kardinalität 0..*; je Wirkstoff ein CodeableConcept mit einem ATC-Coding bzw. eine MedicationStatement),
+    nicht als mehrere Codings innerhalb eines CodeableConcept (diese gelten in FHIR als alternative Codierungen
+    desselben Konzepts). Der Protokollname kann ergänzend als Text erfasst werden.
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
   resource: MedicationStatement
+  path: MedicationStatement.medicationCodeableConcept
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie_Medikation, abgeleitet von https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement).
+    Je Substanz ein MedicationStatement; ATC in medicationCodeableConcept.coding:atcClassDe (http://fhir.de/CodeSystem/bfarm/atc,
+    REQUIRED mii-vs-medikation-atc) bzw. :atcClassEn (http://www.whocc.no/atc). MedicationStatement.partOf
+    (1..*, Slice systemischeTherapie) verweist auf das Regime als Procedure mii-pr-onko-systemische-therapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: 'Procedure (Regime als Ganzes); Procedure.usedCode (Protokoll); Kontext: Procedure.extension:Intention
+    (1..1), Procedure.performedPeriod.start (1..1), Procedure.code.coding:systemische_therapie_art (MS)'
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie, abgeleitet von MII Prozedur).
+    Das Regime als Ganzes ist eine Procedure. Procedure.usedCode (0..*, MS) ist extensible an mii-vs-onko-systemische-therapie-protokolle
+    gebunden (z. B. PE, CarboTax, Gem-Cis) und entspricht dem Regime-/Protokollnamen, den das Element
+    bisher nur als Freitext vorsieht. Pflichtangaben des Profils, die das Element nicht trägt (siehe Issue):
+    Procedure.extension:Intention (1..1, REQUIRED mii-vs-onko-systemische-therapie-intention: K/P/S/X)
+    und performedPeriod.start (1..1). Die Therapieart steht in Procedure.code.coding:systemische_therapie_art
+    (0..1, MS, REQUIRED mii-vs-onko-systemische-therapie-art, u. a. CH Chemotherapie, IM Immun-/Antikörpertherapie,
+    ZS zielgerichtete Substanzen, CI Chemo- + Immun-/Antikörpertherapie, CZ, CIZ, IZ). Die Substanzen
+    (ATC) hängen als MedicationStatement (mii-pr-onko-systemische-therapie-medikation) über partOf an
+    dieser Procedure.'
 care_process:
   trigger: Therapieinitiierung / Linienwechsel
   frequency_pattern: per-line
@@ -48,17 +82,61 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Kap. 16.4 / Empf. 16.9
     recommendation_grade: EK
     evidence_level: n/a
+    quote: So ist die Standardtherapie für diese Patienten mittlerweile die primäre Induktionschemotherapie
+      mit Chemoimmuntherapie für 4-5 Chemotherapiekurse und danach die Erhaltungstherapie mit entweder
+      Chemoimmunerhaltung (Non-squamous NSCLC) oder alleiniger Immunerhaltungstherapie (Sqamous NSCLC,
+      SCLC).
+    accessed: '2026-10-15'
+    locator: Kap. 16.4 Verlaufsuntersuchungen/Follow-up unter laufender Systemtherapie, S. 498
   - source: Onkopedia NSCLC
-    version: Stand 03/2026
+    version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
     section: Kap. 6 Therapie
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Die aktuellen Empfehlungen basieren auf prädiktiven histologischen, immunhistochemischen und
+      genetischen Markern.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.6.2 Stadium IVB mit multiplen Metastasen (innerhalb Kap. 6 Therapie)
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.6 (Immun-Erhaltung ≥ 2 Jahre oder bis Progress); Kap. 6.1.1.2.1 (Durvalumab-Konsolidierung
+      LD, 2 Jahre)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Nach kombinierter Chemo-Immuntherapie sollte die Immuntherapie als Erhaltung gemäß Zulassung
+      für mindestens 2 Jahre oder bis zum Progress weitergeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1.4.1.6 Erhaltungstherapie
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 9.6.1 Empf. 9.19 (SCLC Stadium IV: Chemo-Immuntherapie Platin/Etoposid + PD-L1-/PD-1-Antikörper;
+      modifiziert 2026)'
+    recommendation_grade: A
+    evidence_level: ⊕⊕⊕⊕
+    quote: Patienten mit fernmetastasiertem kleinzelligen Lungenkarzinom soll, sofern keine … Kontraindikationen
+      bestehen, primär eine Chemo-Immuntherapie mit Platin/Etoposid und einem PD-L1-Antikörper (Atezolizumab
+      oder Durvalumab) oder PD-1 Antikörper (Serplulimab oder Tislelizumab) angeboten werden.
+    accessed: '2026-10-15'
+    locator: Kap. 9.6.1 Empf. 9.19 (Empfehlungsgrad A, Evidenzlevel ⊕⊕⊕⊕, Starker Konsens, modifiziert
+      2026), S. 430
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 9.6.2 Empf. 9.23 (Tarlatamab als systemische Zweitlinientherapie des SCLC; neu 2026)
+    recommendation_grade: B
+    evidence_level: ⊕⊕⊕⊕
+    quote: Als systemische Zweitlinientherapie des SCLC sollte die Gabe von Tarlatamab angeboten werden.
+    accessed: '2026-10-15'
+    locator: Kap. 9.6.2 Rezidivtherapie, Empf. 9.23 (Empfehlungsgrad B, Evidenzlevel ⊕⊕⊕⊕, Konsens, neu
+      2026), S. 437
 iso13972_metadata:
   type: medication
   keywords:
@@ -67,7 +145,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -79,3 +157,60 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 10 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Repräsentation Regime: Im MII-Onko-Modell ist das Regime eine Procedure (mii-pr-onko-systemische-therapie)
+  mit Therapieart (code.coding:systemische_therapie_art, MS, REQUIRED mii-vs-onko-systemische-therapie-art,
+  z. B. CH, IM, ZS, CI, CZ, CIZ, IZ), Pflicht-Intention (extension:Intention 1..1, K/P/S/X), Beginn (performedPeriod.start
+  1..1) und optional kodiertem Protokoll (usedCode, extensible mii-vs-onko-systemische-therapie-protokolle).
+  Die Substanzen sind einzelne MedicationStatements (mii-pr-onko-systemische-therapie-medikation), die
+  über partOf (1..*) auf diese Procedure verweisen. Das Element enthält nur ATC-Substanzcodes; den Protokollnamen
+  sieht es nur als Freitext vor (value_set.notes). oBDS trennt ebenso Therapieart (16.3), Protokoll (16.4,
+  Freitext) und Substanz (16.6, ATC oder Bezeichnung). Zu entscheiden: ob Therapieart und Protokoll als
+  eigene Kodierung im Element (oder in eigenen Elementen) geführt bzw. aus den ATC-Codes abgeleitet werden,
+  und ob die Intention über das Element treatmentIntent (Phase primarycare) verknüpft wird.'

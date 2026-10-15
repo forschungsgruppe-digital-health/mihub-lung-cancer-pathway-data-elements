@@ -1,4 +1,4 @@
-id: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.1
+id: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.2
 uuid: 0da2cffb-e8ad-5cd6-b6ed-bea3a1adea4a
 name: adverseEventCtcaeGrade
 label_de: CTCAE-Grad
@@ -9,7 +9,8 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
-datatype: integer
+category: assessment
+datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: required
@@ -17,22 +18,59 @@ value_set:
   codings:
   - system: snomed-ct
     code: '255604002'
-    display: Mild (severity modifier)
+    display: Mild
   - system: snomed-ct
     code: '6736007'
-    display: Moderate (severity modifier)
+    display: Moderate severity
   - system: snomed-ct
     code: '24484000'
-    display: Severe (severity modifier)
+    display: Severe
   - system: snomed-ct
     code: '442452003'
     display: Life threatening severity
+  - system: snomed-ct
+    code: '399166001'
+    display: Fatal
   uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+  notes: 'Nationale Referenzkodierung (oBDS 2021, 15.1; MII KDS Onkologie 2027.0.0-ballot.1, AdverseEvent.seriousness,
+    required): ValueSet https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/ValueSet/mii-vs-onko-nebenwirkung-ctcae-grad
+    (CodeSystem mii-cs-onko-nebenwirkung-ctcae-grad: 1 mild, 2 moderat, 3 schwerwiegend, 4 lebensbedrohlich,
+    5 tödlich, U unbekannt, K keine; MII TermServ v2025.1.0, geprüft 2026-10-14). Die SNOMED-CT-Schweregrade
+    (255604002, 6736007, 24484000, 442452003, 399166001) dienen als Zweitkodierung in Anlehnung an die
+    MII-ConceptMap mii-cm-onko-nebenwirkung-sct (laut eigener Beschreibung weder offiziell endorsed noch
+    final qualitätsgesichert; erstellt gegen SNOMED CT 20240401). Abweichend davon ist für Grad 2 bewusst
+    6736007 ''Moderate severity'' (Parent 272141005 Severities, wie die übrigen Grade) statt 1255665007
+    ''Moderate'' (Parent 35105006 Increased) gewählt.'
 standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 15 Nebenwirkungen von Strahlentherapie oder systemischer Therapie (Meldung SYST bzw. ST)
+  path: '15.1 Nebenwirkungen nach CTCAE-Grad: SYST/Nebenwirkungen/Menge_Nebenwirkung/Nebenwirkung/Grad
+    (3, 4, 5) mit Art (15.2: MedDRA_Code oder Bezeichnung) und Version (15.3); Grad ≤ 2 nur aggregiert
+    über SYST/Nebenwirkungen/Grad_maximal2_oder_unbekannt (K, 1, 2, U)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 15.1: https://basisdatensatz.de/feld/205/nebenwirkungen-nach-ctcae-grad
+    (Link aus der Feldliste). XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd, Nebenwirkung_Typ):
+    Einzelereignisse werden nur ab Grad 3 gemeldet, Grad 1–2 nur als Maximalgrad je Therapie; zulässige
+    CTCAE-Versionen 4, 4.03, 5.0 und ''Sonstige'' (CTCAE v6.0 → ''Sonstige''). Transformation: SNOMED-Schweregrad
+    des Elements → oBDS-Grad (255604002→1, 6736007→2, 24484000→3, 442452003→4, 399166001→5). Für Strahlentherapie
+    analog ST/Nebenwirkungen.'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
-  resource: Observation
-constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod).
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-nebenwirkung-adverse-event
+  resource: AdverseEvent
+  path: AdverseEvent.seriousness
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Nebenwirkung_Adverse_Event); MII bildet Nebenwirkungen
+    als AdverseEvent ab, nicht als Observation. AdverseEvent.seriousness (1..1, MS) ist REQUIRED an mii-vs-onko-nebenwirkung-ctcae-grad
+    gebunden (CodeSystem https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/CodeSystem/mii-cs-onko-nebenwirkung-ctcae-grad:
+    1 mild, 2 moderat, 3 schwerwiegend, 4 lebensbedrohlich, 5 tödlich, U unbekannt, K keine). Transformation:
+    SNOMED-Schweregrad des Elements → MII-Code (255604002→1, 6736007→2, 24484000→3, 442452003→4, 399166001→5).
+    Der MII-Code ist Pflicht; der SNOMED-Code kann als zusätzliches Coding mitgeführt werden (seriousness.coding
+    ist nicht gesliced). Die MII-ConceptMap mii-cm-onko-nebenwirkung-sct führt für Grad 2 den Code 1255665007,
+    das Element bewusst 6736007 (siehe value_set.notes). Art des Ereignisses (MedDRA, AdverseEvent.event.coding:meddra)
+    = Element adverseEventCtcae; AdverseEvent.suspectEntity (1..*) verweist auf die auslösende Therapie
+    (Procedure bzw. MedicationStatement).'
+constraints_de: Wertebereich 1..5 (1=mild, 2=moderat, 3=schwer, 4=lebensbedrohlich, 5=Tod); zulässige
+  Grade sind termspezifisch gemäß CTCAE (z. B. Pruritus max. Grad 3; Confusion ohne Grad 5 in v5.0/v6.0).
+  oBDS/MII sehen zusätzlich U (unbekannt) und K (keine) vor.
 care_process:
   trigger: bei jedem Auftreten eines unerwünschten Ereignisses
   frequency_pattern: per-event
@@ -40,11 +78,15 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.9 (EK, Toxizitäten)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Unter einer Systemtherapie im Stadium IVA/B sollten Ansprechen, … Beschwerdebild einen Monat
+      nach Abschluss der Behandlung durch das den Patienten betreuende Team evaluiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.4, Empf. 16.9 (EK, geprüft 2026, Starker Konsens), S. 499
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -54,7 +96,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -66,8 +108,70 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): datatype integer → CodeableConcept.
+      Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 1/1 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'value_set.uri prüfen: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm leitet
+  per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
+  UNSICHER); ggf. auf die aktuelle CTCAE-Seite des NCI umstellen.'
+- 'Repräsentation CTCAE-Grad: Das Element kodiert den Grad als CodeableConcept mit fünf SNOMED-Schweregraden
+  (255604002, 6736007, 24484000, 442452003, 399166001). Die nationale Referenzkodierung (MII-CodeSystem
+  mii-cs-onko-nebenwirkung-ctcae-grad: 1–5, U, K) steht nur in value_set.notes. MII Onkologie 2026.0.3
+  verlangt in AdverseEvent.seriousness (1..1, REQUIRED) einen Code dieses CodeSystems; SNOMED ist dort
+  nur als zusätzliches Coding möglich. oBDS 3.0.5 meldet Grad 3–5 je Ereignis (Menge_Nebenwirkung/Nebenwirkung/Grad)
+  und Grad ≤ 2 nur aggregiert als Maximalgrad je Therapie (Grad_maximal2_oder_unbekannt: K/1/2/U). Zu
+  entscheiden: (a) ob die MII-Codes 1–5 als zusätzliche Codings ins Element aufgenommen werden oder die
+  Abbildung SNOMED → MII-Code nur als Transformation im Mapping dokumentiert bleibt; (b) wie U (unbekannt)
+  und K (keine) abgebildet werden – in constraints_de erwähnt, aber ohne Coding (MII-ConceptMap: U→261665006,
+  K→260413007); (c) wie für oBDS der Maximalgrad ≤ 2 je Therapie aus den Einzelereignissen gebildet wird.
+  Die Grad-2-Abweichung (6736007 statt ConceptMap-Ziel 1255665007) ist in value_set.notes bereits begründet.'
 related_elements:
-- relation: specializes
+- relation: isPartOf
   target: mihub.lung.surveillance.adverseEventCtcae.v0.1
-- relation: specializes
+- relation: isPartOf
   target: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1

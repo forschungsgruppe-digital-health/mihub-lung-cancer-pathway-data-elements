@@ -1,21 +1,29 @@
-id: mihub.lung.palliative.spiritualNeedsAssessment.v0.1
+id: mihub.lung.palliative.spiritualNeedsAssessment.v0.2
 uuid: 3f0afa4e-1e47-557e-b464-a408b0ec665a
 name: spiritualNeedsAssessment
 label_de: Spiritueller Bedarf erfasst
-definition_de: Wahrnehmung und Erfassung spiritueller Bedürfnisse (spiritual needs) der Patient:in / Angehörigen.
-  Dokumentation inkl. Spiritual-Care-Interventionen.
+definition_de: Angabe (ja/nein), ob die spirituellen Bedürfnisse (spiritual needs) der Patient:in – ggf.
+  auch der Angehörigen – initial und im Verlauf wahrgenommen bzw. erfasst wurden, z. B. per offenem Screening
+  im (Aufnahme-)Gespräch (2Q-SAM) oder mit einem validierten Instrument (z. B. SpNQ-10). Inhalte der Bedürfnisse
+  und erfolgte Spiritual-Care-Interventionen werden mit Einverständnis der Patient:in gesondert dokumentiert
+  und sind nicht Teil dieses Elements.
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: boolean
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '248058001'
-    display: Spiritual concern
+    code: '105408001'
+    display: Spiritual assessment
+constraints_de: Dokumentation dieses Ja/Nein-Merkmals sowie spiritueller/existentieller Bedürfnisse und
+  erfolgter Interventionen nur mit Einverständnis der Patient:in. Umfang und Personenkreis der Weitergabe
+  bzw. Einsichtnahme außerhalb des Betreuungsteams (z. B. in elektronischen Systemen) vorab mit der Patient:in
+  abstimmen (S3-LL Palliativmedizin 3.0, Kap. 19.5, Empf. 19.8).
 care_process:
   trigger: Aufnahme + bei Phasenwechsel
   frequency_pattern: per-encounter
@@ -23,20 +31,51 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 19.3 Wahrnehmung/Erfassung; 19.5 Dokumentation
+    section: Kap. 19.3 Wahrnehmung, Erfassung und Erkennung spiritueller Bedürfnisse (spiritual needs),
+      Empf. 19.3 (spirituelle Bedürfnisse initial und im Verlauf wahrnehmen)
     recommendation_grade: B
+    evidence_level: '3'
+    quote: Die an der Behandlung und Begleitung von Patient:innen mit einer nicht-heilbaren … Krebserkrankung
+      Beteiligten sollten deren spirituellen Bedürfnisse initial und im Verlauf wahrnehmen, und entsprechend
+      den Wünschen der Betroffenen darauf eingehen.
+    accessed: '2026-10-15'
+    locator: Kap. 19.3, Empf. 19.3 (S. 491)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 19.5 Dokumentation spiritueller Bedürfnisse und Interventionen, Empf. 19.8 (mit Einverständnis
+      dokumentieren und ins Team kommunizieren)
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Spirituelle und existentielle Bedürfnisse sowie ggf. hierzu erfolgte Gespräche oder … andere
+      Interventionen bei Patient:innen mit einer nicht-heilbaren Krebserkrankung sollen mit deren Einverständnis
+      dokumentiert und ins Team kommuniziert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 19.5, Empf. 19.8 (S. 499)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 8.2 Konzept der frühzeitigen Integration palliativmedizinischer Versorgung, Empf. 8.4
+      (Versorgung und Dokumentation in allen Dimensionen inkl. spiritueller Bedürfnisse) und Empf. 8.5
+      (regelmäßiges Einschätzen u. a. spiritueller Belastungen)
+    recommendation_grade: B
+    evidence_level: '3'
+    quote: Die palliative Versorgung sollte durch palliativmedizinische qualifizierte Fach … soziale und
+      spirituelle Bedürfnisse) erfolgen und dokumentiert werden. … regelmäßiges Einschätzen physischer,
+      psychosozialer und spiritueller Belastungen
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Empf. 8.4 und 8.5 (S. 203)
 iso13972_metadata:
-  type: observation
+  type: procedure
   keywords:
   - Lungenkarzinom
   - palliative
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -48,3 +87,51 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.palliative.spiritualNeedsAssessment.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Code vom Befund „spirituelles
+      Anliegen“ zur Prozedur „Erfassung“; „nein“ bedeutet jetzt „nicht erfasst“. Zudem Leitlinien-Resync,
+      Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8

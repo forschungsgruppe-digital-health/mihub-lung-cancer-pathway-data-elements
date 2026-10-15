@@ -1,0 +1,185 @@
+id: mihub.lung.primarycare.tnmStage.v0.1
+uuid: 4d044a25-2ac3-5647-b2fd-3bcc5f3d8132
+name: tnmStage
+label_de: TNM-Stadium / UICC-Stadiengruppe
+definition_de: 'Ausmaß und Ausbreitung des Tumors (Staging): klinische bzw. pathologische TNM-Klassifikation
+  inkl. UICC-Stadiengruppe und TNM-Version.'
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '399537006'
+    display: Clinical TNM stage grouping
+  - system: snomed-ct
+    code: '399588009'
+    display: Pathologic TNM stage grouping
+  - system: snomed-ct
+    code: '399390009'
+    display: TNM stage grouping
+  - system: loinc
+    code: 21908-9
+    display: Stage group.clinical Cancer
+  - system: loinc
+    code: 21902-2
+    display: Stage group.pathology Cancer
+  - system: loinc
+    code: 21917-0
+    display: Version used [Identifier] TNM classification
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 8 TNM-Klassifikation (in 5 Diagnose und in Pathologie als cTNM bzw. pTNM, ferner in OP und
+    Verlauf als TNM)
+  path: 'TNM_Typ: Datum (8.1), Version (8.2), c_p_u_Praefix_T/_N/_M (8.6–8.8), T (8.9), N (8.11), M (8.12),
+    UICC_Stadium (8.17)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-tnm-stage-group
+  resource: Observation (Profil TNMStageGroup)
+  path: 'Observation.code (preferred mcode-tnm-stage-group-staging-type-vs: 399390009, 399537006, 399588009);
+    Observation.valueCodeableConcept (Stadiengruppe); Observation.method (1..1, z. B. NCI C188404 UICC);
+    Observation.focus → Primary Cancer Condition'
+  notes: mCODE STU4 (4.0.0). Die Stadienwerte folgen AJCC; im deutschen Kontext gilt UICC (oBDS 8.17).
+    Die Element-Codes 399390009, 399537006 und 399588009 liegen im Staging-Typ-VS.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tnm-klassifikation
+  resource: Observation
+  path: 'Observation.code (REQUIRED mii-vs-onko-tnm-klassifikation-typ: 399390009, 399537006 klinisch,
+    399588009 pathologisch); Observation.valueCodeableConcept (REQUIRED UICC-Stadium, mii-vs-onko-tnm-uicc-stadium);
+    Observation.method (REQUIRED TNM-Version, mii-vs-onko-tnm-version); Observation.hasMember → T-, N-,
+    M-Kategorie (mii-pr-onko-tnm-t-kategorie usw.)'
+  notes: Modul Onkologie 2026.0.3, Namensraum …/fhir/ext/modul-onko/. Die Element-Codes 399390009, 399537006
+    und 399588009 liegen im REQUIRED-ValueSet für Observation.code; die LOINC-Codes 21908-9 und 21902-2
+    sind als alleiniger Observation.code nicht zulässig, allenfalls als Zusatz-Coding neben 399537006
+    bzw. 399588009; die TNM-Version (LOINC 21917-0) gehört in Observation.method (mii-cs-onko-tnm-version).
+care_process:
+  trigger: Staging bei Erstdiagnose (cTNM) bzw. nach Resektion (pTNM); nach neoadjuvanter Therapie (yTNM);
+    Re-Staging bei Rezidiv (rTNM); Übernahme in die Hausarztakte
+  frequency_pattern: once je Staging-Ereignis (cTNM vor Therapiebeginn, pTNM nach Resektion, ycTNM/ypTNM
+    nach neoadjuvanter Therapie, rTNM bei Rezidiv); eine festgesetzte Klassifikation bleibt unverändert
+    – Folgeereignisse als eigene Klassifikation mit Präfix erfassen, nicht überschreiben
+  responsible_role: Radiolog:in / Patholog:in / Onkolog:in / Tumorboard
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-012 Staging
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-012
+    quote: Staging … Ausmaß und der Ausbreitung des Tumors im Körper
+    accessed: '2026-10-15'
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 6.5/6.5.1 Stadieneinteilung, Empf. 6.45 (TNM-Klassifikation 9. Ausgabe, gültig ab 01/2025;
+      Grundregeln cTNM/pTNM/yTNM/rTNM; Tab. 26 Stadien); Kap. 6.6.6 Empf. 6.52 (pathologisches Staging)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Die Klassifikation ist gültig ab dem Januar 2025. … Die Diagnose Lungenkarzinom soll immer
+      mit einer exakten TNM-Klassifikation … begleitet werden. … Das pathologisch-anatomische Staging
+      soll nach den Definitionen der jeweils gültigen TNM-Klassifikation vorgenommen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5.1, S. 147–148; Empf. 6.45, S. 148; Kap. 6.6.6, Empf. 6.52, S. 170
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 3.2 Staging; Step 5.1 Transitioning from active treatment – treatment summary (diagnosis
+      including stage)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Staging is a critical element in treatment planning and should be clearly documented in the
+      patient’s medical record. … • diagnosis including stage, prognostic or severity score
+    accessed: '2026-10-15'
+    locator: Step 3.2 Staging, S. 28; Step 5.1, S. 43
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-012; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Das Element bündelt T/N/M-Kategorien (Präfixe c/p/y/r), UICC-Stadiengruppe und TNM-Auflage in einem
+  CodeableConcept. Die Codings sind nur Element-Codes; LOINC 21917-0 (TNM-Auflage) ist eine andere Frage.
+  Ein Wertebereich (UICC-Stadien 0–IVB nach TNM 9, S3 Tab. 26) fehlt. Empfehlung: Teilelemente (Stadiengruppe,
+  T, N, M, TNM-Auflage) oder ein Wertebereich plus TNM-Auflage als eigene Angabe. Das ist relevant, weil
+  Befunde vor 01/2025 nach TNM 8 klassifiziert sind.'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1

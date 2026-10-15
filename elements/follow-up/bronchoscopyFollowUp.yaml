@@ -1,0 +1,159 @@
+id: mihub.lung.followup.bronchoscopyFollowUp.v0.1
+uuid: c6fbe35a-6861-5fa1-bdf8-279786068bbe
+name: bronchoscopyFollowUp
+label_de: Bronchoskopie in der Nachsorge
+definition_de: Datum einer (diagnostischen) Bronchoskopie in der Nachsorge; indiziert nur bei hohem Lokalrezidivrisiko
+  (z. B. nach Manschettenresektion) oder zur histologischen Sicherung bei Rezidivverdacht — keine Routine
+  (nicht Bestandteil des Routine-Nachsorgeschemas nach S3 Empf. 16.7; ein Überlebensvorteil intensiver
+  Nachsorge mit regelmäßiger Bronchoskopie ist bei widersprüchlicher Studienlage nicht gesichert, S3 Kap.
+  16.3.4).
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: prozedur
+datatype: dateTime
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '10847001'
+    display: Bronchoscopy
+  - system: ops
+    code: 1-620
+    display: Diagnostische Tracheobronchoskopie
+  - system: kdl
+    code: DG020105
+    display: Endoskopiebefund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.performedDateTime
+care_process:
+  trigger: hohes Lokalrezidivrisiko (z. B. Manschettenresektion) oder V. a. lokalisiertes/lokal behandelbares
+    Rezidiv (histologische Sicherung)
+  frequency_pattern: ad-hoc
+  responsible_role: Pneumolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Tab. 44 (Bronchoskopie: Hohes Lokalrezidivrisiko, z. B. Manschettenresektion [im Original
+      „Maschettenresektion“]); Empf. 16.7 (EK, geprüft 2026: Routine-Nachsorge = Anamnese, körperliche
+      Untersuchung, Röntgen Thorax/Sonografie Abdomen oder CT — ohne Bronchoskopie); Kap. 16.3.4 (intensive
+      Nachsorge inkl. Bronchoskopie: Virgo et al. kein Überlebensvorteil [2b] vs. Westeel et al. Überlebensverlängerung,
+      Lead-time-Bias offen [2b])'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Darüber hinaus erhielten die Patienten jährlich eine Bronchoskopie mit Sputum-Zytologie sowie
+      eine Thorax-CT. … Die intensiven Nachsorgestrategien waren teurer, erbrachten aber keinen Überlebensvorteil
+      … Bronchoskopie … Hohes Lokalrezidivrisiko (z.B. Maschettenresektion)
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3.4 (S. 495); Tab. 44 (S. 499)
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2 Nachsorge, Absatz nach Tab. 9 (bei V. a. lokalisiertes Rezidiv oder lokal behandelbare
+      Rezidivsituation Ergänzung der Diagnostik durch weitere Bildgebung ggf. einschließlich PET-CT und/oder
+      „Methoden zur histologischen Sicherung“); Bronchoskopie selbst nur in Kap. 5.2.1 Tab. 2 genannt
+      (Erstdiagnostik bei Lungentumorverdacht, Stufe 2 „Histologische oder zytologische Sicherung“: „Bronchoskopie
+      mit Biopsie … bei bildgebendem Verdacht“)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bronchoskopie mit Biopsie3 bei bildgebendem Verdacht … der V.a. ein lokalisiertes Rezidiv oder
+      eine evtl. lokal behandelbare Rezidivsituation, ist die Diagnostik durch weitere Bildgebung ggf.
+      einschließlich PET-CT und/oder Methoden zur histologischen Sicherung zu ergänzen.
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 5.2.1, Tab. 2 (Stufe 2); Kap. 10.2 (Absatz nach Tab. 9)
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: 'DE-023 Bronchoskopie (Onkologische Nachsorge; Trigger lt. Erhebung: hohes Lokalrezidivrisiko,
+      Tab. 44)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-023
+    quote: Bronchoskopie … Hohes Lokalrezidivrisiko (z.B. Maschettenresektion) … S3-LL Lungenkarzinom
+      … Apr 2026 Tab 44
+    accessed: '2026-10-15'
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-023; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1

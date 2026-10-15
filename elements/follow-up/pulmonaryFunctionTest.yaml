@@ -2,12 +2,14 @@ id: mihub.lung.followup.pulmonaryFunctionTest.v0.1
 uuid: f409fdca-e879-5257-aad6-987ce95bd6e6
 name: pulmonaryFunctionTest
 label_de: Lungenfunktionsprüfung in der Nachsorge
-definition_de: Spirometrie und CO-Diffusionskapazität zur Überwachung von Lungenfunktionseinschränkung
-  und Pneumonitis nach RTx/CTx-RTx.
+definition_de: Datum der Lungenfunktionsprüfung (Spirometrie, CO-Diffusionskapazität) in der Nachsorge
+  nach kurativer Therapie zur Erfassung einer Lungenfunktionseinschränkung (z. B. nach Resektion) und
+  einer Pneumonitis (nach RTx/CTx-RTx); Messwerte in fev1PercentPredicted und dlcoPercentPredicted.
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: prozedur
 datatype: dateTime
 cardinality: 0..*
 value_set:
@@ -16,38 +18,85 @@ value_set:
   codings:
   - system: snomed-ct
     code: '23426006'
-    display: Pulmonary function test (procedure)
+    display: Measurement of respiratory function
   - system: loinc
-    code: 20143-5
-    display: Diffusing capacity.carbon monoxide
+    code: 81458-2
+    display: Pulmonary function test panel
   - system: ops
-    code: 1-712
+    code: 1-710
     display: Ganzkörperplethysmographie
   - system: kdl
     code: DG060108
     display: Dokumentationsbogen Lungenfunktionsprüfung
+  - system: ops
+    code: 1-711
+    display: Bestimmung der CO-Diffusionskapazität
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-spirometrie-messung
+  resource: Procedure
+  path: Procedure.performed[x] (performedDateTime)
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.lungenfunktion#2027.0.0-ballot.1, kein
+    stabiles Release. Basis MII Prozedur; performed[x] 1..1 MS; category.coding:sct Pattern 23426006 (Measurement
+    of respiratory function); code.coding:sct Pattern 127783003 (Spirometrie). Weitere Messarten mit eigenem
+    Profil: https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-diffusion-messung
+    (36421003, CO-Diffusion) und https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-bodyplethysmographie-messung
+    (28275007); Befundbericht https://www.medizininformatik-initiative.de/fhir/ext/modul-lungenfunktion/StructureDefinition/mii-pr-lungenfunktion-spirometrie
+    (DiagnosticReport.effective[x]).'
 - standard: fhir-r4-base
-  resource: Observation
-  path: Observation.code
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Procedure
+  resource: Procedure
+  path: 'Procedure.performedDateTime (Procedure.code: SNOMED 23426006 bzw. OPS 1-710, 1-711)'
+  notes: Das Element ist ein Untersuchungsdatum; Observation.code trägt kein Datum. SNOMED 23426006 und
+    OPS 1-710/1-711 sind Prozedurcodes. LOINC 81458-2 'Pulmonary function test panel' ist ein Panel-Code
+    (Observation bzw. DiagnosticReport) und gehört nicht in Procedure.code. Alternativ als Befunddatum
+    DiagnosticReport.effectiveDateTime. Analog zu bronchoscopyFollowUp.
+constraints_de: 'Strahlenpneumonitis (symptomatisch bei 5–15 %) mit häufigem Übergang in eine pulmonale
+  Fibrose; Onkopedia NSCLC Kap. 6.2.2.1: „Sie kann innerhalb von 6-24 Monaten nach Ende der Bestrahlung
+  auftreten“ (Bezug Pneumonitis oder Fibrose im Text nicht eindeutig). Nach alleiniger RT/RCT soll die
+  Lungenfunktionsprüfung bis zum Ende des Pneumonitis-Risikos fortgeführt werden (Kap. 8.1), einschließlich
+  Diffusionskapazität (Kap. 6.2.2.1). „(X)“ in den Onkopedia-Tabellen ist dort nicht legendiert (Lesart:
+  fakultativ).'
 care_process:
-  trigger: Nach Strahlentherapie/Radiochemotherapie; bis Ende Pneumonitis-Risiko fortführen
-  frequency_pattern: Q3M-Y1; ab Y2 individuell
+  trigger: 'Alle kurativ Behandelten Monat 3 und 6 (Onkopedia NSCLC Tab. 12; SCLC Tab. 9: Mo 3/6/9), fakultativ
+    Monat 12/18/24; nach alleiniger Strahlentherapie/Radiochemotherapie bis zum Ende des Pneumonitis-Risikos
+    fortführen (soll)'
+  frequency_pattern: 'NSCLC: M3;M6;(M12;M18;M24) · SCLC: M3;M6;M9;(M12;M18;M24) · nach RT/RCT: bis Ende
+    Pneumonitis-Risiko (6–24 Monate)'
   responsible_role: Pneumologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Tab. 42 (Lungenfunktion bei Pneumonitis-Risiko)
-    recommendation_grade: EK
-    evidence_level: n/a
-  - source: Onkopedia NSCLC
-    version: Stand 03/2026
-    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
-    section: Tab. 12
+    section: 'Tab. 44 (Lungenfunktionsprüfung, CO-Diffusionskapazität: Lungenfunktionseinschränkung, Pneumonitis)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 44: Indikationen zu diagnostischen Maßnahmen in der Nachsorge des Lungenkarzinoms
+      … Lungenfunktionsprüfung, Lungenfunktionseinschränkung, Pneumonitis CO-Diffusionskapazität'
+    accessed: '2026-10-15'
+    locator: Kap. 16.4, Tab. 44, S. 499
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1, Tab. 12 (Lungenfunktion: X Mo 3/6, (X) Mo 12/18/24); Kap. 8.1 Text (nach RT/RCT
+      Überprüfung bis Ende des Pneumonitis-Risikos fortführen — soll); Kap. 6.2.2.1'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Lungenfunktion | X | X | (X) | (X) | (X) | … Bei Pat. nach alleiniger Strahlentherapie oder
+      nach Radiochemotherapie soll die Überprüfung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos
+      fortgeführt werden [121].
+    accessed: '2026-10-15'
+    locator: Kap. 8.1, Tab. 12 und Text darunter
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2, Tab. 9 (Lungenfunktion: X Mo 3/6/9, (X) Mo 12/18/24)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Lungenfunktion X X X (X) (X) (X)
+    accessed: '2026-10-15'
+    locator: Kap. 10.2, Tab. 9
 iso13972_metadata:
   type: procedure
   keywords:
@@ -56,7 +105,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -68,3 +117,61 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Prozedurcodes von pulmonaryFunctionTest an das MII-Lungenfunktion-Ballot angleichen (ergänzt den offenen
+  Punkt zu Zielprofil und Wertpfad). Im Ballot ist SNOMED 23426006 die Procedure.category; Procedure.code
+  ist je Messart fest vorgegeben: Spirometrie 127783003, CO-Diffusion 36421003, Ganzkörperplethysmographie
+  28275007 (OPS über code.coding:ops). OPS 1-711 entspricht der Diffusionsmessung, OPS 1-710 der Ganzkörperplethysmographie;
+  für die Spirometrie führt das Element keinen eigenen Code. LOINC 81458-2 (Panel) ist kein Prozedurcode
+  und auch nicht im LOINC-ValueSet des Spirometrie-Befunds (mii-vs-lufu-lnc-procedure enthält nur 18759-1).
+  Zu entscheiden: ein Datum je Untersuchungstermin (Sammelcode 23426006) oder je Messart (eigene Procedure
+  je Messung) und die Codes entsprechend ergänzen.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1

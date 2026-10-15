@@ -2,32 +2,56 @@ id: mihub.lung.palliative.wishToDie.v0.1
 uuid: 7680930b-1dfb-51d2-a687-842ecb799a21
 name: wishToDie
 label_de: Todeswunsch
-definition_de: Erfasster Todeswunsch der Patient:in, inkl. Differenzierung (Lebensmüdigkeit, Wunsch nach
-  Sterbehilfe, Suizidalität).
+definition_de: Vorliegen eines Todeswunsches der Patient:in (Wunsch nach baldigem Sterben bzw. danach,
+  tot zu sein), festgestellt durch aktives Erfragen im Verlauf (S3-LL Palliativmedizin 3.0, Empf. 20.3)
+  oder nach spontanen Äußerungen bzw. nonverbalen Hinweisen, die im Gespräch aufgegriffen und konkretisiert
+  werden. Todeswünsche reichen von Lebenssattheit und Lebensmüdigkeit über den Wunsch nach Beschleunigung
+  des Sterbens bis zur akuten Suizidalität; Form, Ausprägung und Suizidalität bildet dieses Element nicht
+  ab (Differenzierung nach Empf. 20.5 als offener Punkt vermerkt).
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: boolean
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '224943005'
-    display: Wish to die
+    code: '225876004'
+    display: Wanting to die
 care_process:
-  trigger: Sensitiv erfragen bei psychosozialer Belastung; bei Verschlechterung
-  frequency_pattern: ad-hoc
+  trigger: Aktiv im Verlauf bei allen Patient:innen mit nicht heilbarer Krebserkrankung erfragen (Empf.
+    20.3), zusätzlich anlassbezogen bei Verschlechterung/psychosozialer Belastung; bei geäußertem Todeswunsch
+    vertiefte Exploration von Verlauf, Ausprägung, Anlässen sowie Suizidgedanken/-absichten/-plänen (Empf.
+    20.5)
+  frequency_pattern: ongoing
   responsible_role: Palliativ-Team / Psychoonkologie
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 20.3 Screening und Erfassung Todeswunsch
-    recommendation_grade: B
+    section: Kap. 20.3 Screening und Erfassung; Empf. 20.3 (Vorhandensein von Todeswünschen im Verlauf
+      aktiv erfragen)
+    recommendation_grade: A
+    evidence_level: '3'
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung soll im Verlauf das … Vorhandensein
+      von Todeswünschen aktiv erfragt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 20.3, Empf. 20.3 (S. 513)
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.5 Thematisieren von Tod und Sterben; Empf. 7.10 (Äußerung eines Sterbe-/Todeswunsches
+      mit Empathie und Gesprächsbereitschaft begegnen)
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Der Äußerung eines Sterbe-/Todeswunsches eines Patienten mit einer nicht heilbaren Krebserkrankung
+      soll mit Empathie und Gesprächsbereitschaft begegnet werden.
+    accessed: '2026-10-15'
+    locator: Kap. 7.3.5, Empf. 7.10 (S. 199)
 iso13972_metadata:
   type: observation
   keywords:
@@ -36,7 +60,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -48,5 +72,62 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - Schutzbedürftige Information — restriktive Zugriffsrechte / Consent-Behandlung erforderlich.
+- 'Differenzierung des Todeswunsches (Formen nach Abb. 18: Lebenssattheit, Lebensmüdigkeit, distanzierte/latente/akute/perakute
+  Suizidalität) und Suizidabklärung nach Empf. 20.5 (EK) sind mit dem boolean nicht abbildbar; ein eigenes
+  kodiertes Element ist zu prüfen. Verifizierte SNOMED-Kandidaten (MII TermServ 2026-10-14): 247795009
+  „Tedium vitae (finding)“ (Syn. „Tired of life“), 6471006 „Suicidal thoughts (finding)“, 304594002 „Suicidal
+  intent (finding)“, 247650009 „Planning suicide (finding)“.'
+- 'Zugriffskonzept präzisieren: Restriktive Zugriffsrechte dürfen die Dokumentation geäußerter Todeswünsche
+  für das interdisziplinäre Behandlungsteam nicht verhindern; laut S3-LL Palliativmedizin 3.0 (Kap. 20.3,
+  Hintergrund) ist diese Dokumentation für die weitere Behandlung von besonderer Bedeutung. Nach derselben
+  Stelle besteht das Ärzt:innen- bzw. Seelsorgegeheimnis auch bei Suizidalität, und es zu brechen bedarf
+  des Vorliegens einer akuten Lebensgefahr. Die rechtliche Umsetzung im Rechte- und Consent-Konzept ist
+  mit Datenschutzbeauftragten und Justiziariat zu klären.'

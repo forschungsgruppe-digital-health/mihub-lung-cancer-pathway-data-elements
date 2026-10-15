@@ -1,0 +1,226 @@
+id: mihub.lung.primarycare.socialSituation.v0.1
+uuid: 2ac96f01-41e6-50a7-8612-494937568053
+name: socialSituation
+label_de: Soziale Situation
+definition_de: Wohnsituation, aktueller Aufenthalt (zu Hause, Kurzzeitpflege, Heim, Krankenhaus), Familie
+  und soziales Umfeld, berufliche Situation, Pflege-/Unterstützungsbedarf bzw. vorhandene Unterstützung
+  („wer kümmert sich“), Vorliegen einer Patientenverfügung.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: sozialanamnese
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '160476009'
+    display: Social / personal history observable
+  - system: snomed-ct
+    code: '224130005'
+    display: Household composition
+  - system: snomed-ct
+    code: '160734000'
+    display: Lives in nursing home
+  - system: snomed-ct
+    code: '224362002'
+    display: Employment status
+  - system: snomed-ct
+    code: '301887005'
+    display: Needs assistance at home
+  - system: snomed-ct
+    code: '184156005'
+    display: Has a caregiver
+  - system: loinc
+    code: 29762-2
+    display: Social history note
+  - system: icd-10-gm
+    code: Z74.9
+    display: Problem mit Bezug auf Pflegebedürftigkeit, nicht näher bezeichnet
+  - system: icd-10-gm
+    code: Z60
+    display: Kontaktanlässe mit Bezug auf die soziale Umgebung
+  - system: icd-10-gm
+    code: Z63
+    display: Andere Kontaktanlässe mit Bezug auf den engeren Familienkreis
+  - system: icd-10-gm
+    code: Z56
+    display: Kontaktanlässe mit Bezug auf das Berufsleben
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-soziodemographie/StructureDefinition/mii-pr-sdd-betreuungssituation
+  resource: Observation
+  path: 'Observation.code = SNOMED 305060004 (Pattern); Observation.valueCodeableConcept (REQUIRED mii-vs-sdd-betreuungssituation:
+    keine Betreuung, auf Anfrage, zeitweise, dauerhaft z. B. Pflegeheim); Observation.category social-history
+    und survey'
+  notes: nur Ballot de.medizininformatikinitiative.kerndatensatz.soziodemographie#2027.0.0-ballot, kein
+    stabiles Release (Status draft). Deckt Pflege-/Unterstützungsbedarf und Heimaufenthalt ab.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-soziodemographie/StructureDefinition/mii-pr-sdd-beschaeftigungsstatus
+  resource: Observation
+  path: Observation.code = LOINC 67875-5 (Pattern); Observation.valueCodeableConcept (coding:minimal REQUIRED
+    mii-vs-sdd-beschaeftigungsstatus-minimal, z. B. nicht berufstätig wegen Erkrankung, Rente, Teilzeit,
+    Vollzeit; coding:lang)
+  notes: 'nur Ballot de.medizininformatikinitiative.kerndatensatz.soziodemographie#2027.0.0-ballot, kein
+    stabiles Release (Status draft). Weitere Ballot-Profile zur Lebenssituation: mii-pr-sdd-haushaltsgroesse,
+    mii-pr-sdd-partnerschaft, mii-pr-sdd-vertrauensperson.'
+- standard: fhir-r4-base
+  resource: Observation (social-history)
+care_process:
+  trigger: Anamnese; bei Änderung der Lebenssituation
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in / Sozialdienst
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-022 soziale Situation
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-022
+    quote: soziale Situation … Wohnsituation, aktueler Aufenthalt (Kurzzeitpflege, Heim, Krankenhaus,
+      ambulant/stationär, zu Hause…), Familie, soziales Umfeldd, berufl. Situation, Pflege/Unterstütungsbedarf
+      bzw. vorhandene Unterstützung, Patientenverfügung, "wer kümmert sich"
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.2 Empf. 5.1 (geprüft 2026, Starker Konsens: physische, psychische, soziale und spirituelle
+      Bedürfnisse wiederholt und bei Änderung der klinischen Situation erfassen) – Geltungsbereich: nicht
+      heilbare Krebserkrankung'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei einer nicht-heilbaren Krebserkrankung sollen die physischen, psychischen, sozialen und
+      spirituellen Bedürfnisse sowie die Belastungen und Informationsbedürfnisse der Patient:innen und
+      Angehörigen wiederholt und bei einer Änderung der klinischen Situation erfasst werden.
+    accessed: '2026-10-15'
+    locator: Kap. 5.2, Empf. 5.1, S. 52
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.1 und 16.2 (EK, geprüft 2026, Starker Konsens: strukturierter Nachsorge- bzw. Verlaufsplan
+      sollte geeignet sein, den Bedarf an Sozialberatung zu erkennen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Der strukturierte Nachsorgeplan sollte geeignet sein, … den Bedarf an Psychoonkologie und Sozialberatung
+      zu erkennen … Der strukturierte Verlaufsplan/Follow-up-Plan sollte geeignet sein, Progression/Rezidive,
+      … den Bedarf an Psychoonkologie, Palliativmedizin und Sozialberatung zu erkennen.
+    accessed: '2026-10-15'
+    locator: Kap. 16.1, Empf. 16.1 und 16.2, S. 492
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Appendix A Supportive care domains (social domain); Principle 4 Supportive care (Bedarfserhebung
+      bei Patient:innen und Familien)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: • the social domain, which includes a range of social and practical issues that will affect
+      the patient, carer and family such as the need for emotional support, maintaining social networks
+      and financial concerns
+    accessed: '2026-10-15'
+    locator: Appendix A Supportive care domains, S. 57; Principle 4, S. 13
+  - source: AG LONKO / Survivorship
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Versorgungsmodelle_AG_LONKO_bf.pdf
+    section: UAG Versorgungsmodelle Kap. 2.2 Soziale und berufliche Situation der Langzeitüberlebenden
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 2.2 Soziale und berufliche Situation der Langzeitüberlebenden Die Programme müssen auch Veränderungen
+      in der sozialen und beruflichen Situation der Betroffenen berücksichtigen.
+    accessed: '2026-10-15'
+    locator: UAG Versorgungsmodelle, Kap. 2.2, S. 8
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-022; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 11 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Value Set nach Rolle gliedern: Element-Codes (SNOMED CT 160476009, 224130005, 224362002; LOINC 29762-2)
+  vs. Antwortwerte (SNOMED-CT-Befunde 160734000, 301887005, 184156005; ICD-10-GM-Problemkodes Z56, Z60,
+  Z63, Z74.x). Umgang mit „Vorliegen einer Patientenverfügung“ (ausdrücklich Teil von DE-022 der Expert:innen-Erhebung)
+  mit der Erhebungsquelle (Kontakt AK) klären: Ja/Nein-Hinweis in diesem Element vs. Dokumentverweis über
+  advanceDirectiveDocument (Beziehung dependsOn besteht bereits; dort Phase palliative, Entitäten NSCLC/SCLC).
+  Abgrenzung von „vorhandene Unterstützung“ (informell, „wer kümmert sich“) zu ongoingSupportiveServices
+  (professionelle Dienste, z. B. Pflegedienst) festlegen.'
+- 'Die nationalen Soziodemographie-Profile (nur Ballot) binden die Werte REQUIRED an MII-eigene Codesysteme
+  (z. B. Betreuungssituation 1–5, Beschäftigungsstatus 1–7). Die SNOMED- und ICD-10-GM-Antwortwerte des
+  Elements (z. B. 160734000, 301887005, 184156005, Z74.9, Z60) sind dort als Wert nicht zulässig, und
+  das Element bündelt mehrere Teilaspekte. Zu entscheiden: das Element in Teil-Elemente (Wohn- und Betreuungssituation,
+  Beschäftigung, Bezugspersonen) aufteilen und die MII-Codes übernehmen, sobald das Modul stabil ist,
+  oder bei der generischen social-history-Observation bleiben.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.palliative.caregiverBurden.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.rehabilitationAndSocialCounselling.v0.1

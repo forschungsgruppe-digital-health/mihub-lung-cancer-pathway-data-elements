@@ -8,6 +8,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: laborbefund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -15,26 +16,61 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: loinc
-    code: 84141-0
-    display: Circulating tumor DNA panel
+    code: 107453-3
+    display: Circulating tumor DNA [Interpretation] Narrative
   - system: snomed-ct
-    code: '765168009'
-    display: Liquid biopsy
+    code: '405825005'
+    display: Molecular genetic test
   - system: kdl
     code: PT130102
     display: Molekularpathologiebefund
+instruction_de: Gewebe-Rebiopsie einer progredienten Manifestation bevorzugen (höhere Sensitivität; erfasst
+  auch eine SCLC-Transformation). Liquid Biopsy (NGS-Panel an ctDNA) ergänzend bei negativer oder klinisch
+  nicht vertretbarer Biopsie bzw. als Alternative; bei negativer Liquid Biopsy Gewebeentnahme anstreben.
+  Umfassendes Panel (Mutationen, Amplifikationen inkl. MET/HER2, Fusionen).
 care_process:
-  trigger: bei Progression unter zielgerichteter Therapie
+  trigger: bei akquirierter Resistenz/Progression unter zielgerichteter Therapie (insbesondere EGFR-,
+    ALK-, ROS1-, RET-TKI), vor Wechsel der Systemtherapie; Zeitpunkt eher klinisch als nach RECIST
   frequency_pattern: ad-hoc
   responsible_role: Onkologe / Pathologie / Molekularpathologie
 evidence:
   guideline_references:
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 6.1 (re-biopsy / ctDNA bei Rezidiv)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 6.1.1 Recurrent disease (re-biopsy; molecular/immunological biomarker testing; ctDNA)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Re-biopsy should be considered if feasible. Perform molecular and immunological biomarker testing
+      to inform further therapies (or, if available, blood samples for circulating tumour DNA [ctDNA]
+      molecular testing).
+    accessed: '2026-10-15'
+    locator: Step 6.1.1 Recurrent disease
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 6.6.10 Empf. 6.65 und 6.66 (geprüft 2026); vgl. Tab. 36 (Kap. 8.6.4.2), Empf. 8.127
+      (ALK) und 8.136 (ROS1)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei akquirierter TKI-Resistenz und negativer Biopsie oder klinisch nicht vertretbarer Biopsie
+      in Bezug auf den Resistenzmechanismus sollte ergänzend eine Liquid Biopsy zur Bestimmung von Resistenzmechanismen
+      durchgeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.6.10, Empf. 6.66 (EK, geprüft 2026, Konsens), S. 177; ebenso Tab. 36, S. 356
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 6.1.6.2.1.3.1 (Progress unter EGFR-TKI: Gewebe-Rebiopsie bzw. Liquid Biopsy, Paneldiagnostik),
+      6.1.6.2.1.3.4 (T790M: Rebiopsie oder Liquid Biopsy; bei negativer Liquid Biopsy Gewebe), 6.1.6.2.1.1
+      (ALK)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei Progress unter TKI und Verdacht auf Resistenz sollte der Resistenzmechanismus durch eine
+      Gewebe-Rebiopsie bzw. durch eine Liquid Biopsy umfassend, z. B. mittels Paneldiagnostik, untersucht
+      werden … Bei negativer Liquid Biopsy sollte eine Gewebeentnahme erfolgen.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.6.2.1.3.1; Kap. 6.1.6.2.1.3.4 T790M Mutation (UC II)
 iso13972_metadata:
   type: procedure
   keywords:
@@ -43,7 +79,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -55,3 +91,53 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'tumor_entity SCLC prüfen: Molekulares Retesting bei Progression unter zielgerichteter Therapie betrifft
+  das NSCLC (EGFR/ALK/ROS1/RET). Die SCLC-Transformation EGFR-mutierter NSCLC wird leitliniengemäß im
+  NSCLC-Kontext behandelt (Onkopedia SCLC Kap. 2.5).'

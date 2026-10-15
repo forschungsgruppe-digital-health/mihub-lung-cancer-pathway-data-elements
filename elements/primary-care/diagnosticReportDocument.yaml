@@ -1,0 +1,231 @@
+id: mihub.lung.primarycare.diagnosticReportDocument.v0.1
+uuid: 9b1bd81c-3174-5d5c-b0fb-d31dec7cd833
+name: diagnosticReportDocument
+label_de: Befundbericht Diagnostik (Bildgebung, Endoskopie, Biopsie)
+definition_de: Befunddokumente der Diagnostik — Röntgen Thorax, CT Thorax, PET-CT, MRT, EBUS/Bronchoskopie,
+  Biopsie/Histologie — als Dokument mit Zusammenfassung; für die Hausarztpraxis sind alle Bildgebungsbefunde
+  („Zusammenfassung lesen“) relevant.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+  - system: kdl
+    code: DG020107
+    display: MRT-Befund
+  - system: kdl
+    code: DG020110
+    display: Röntgenbefund
+  - system: kdl
+    code: DG020109
+    display: PET-Befund
+  - system: kdl
+    code: DG020105
+    display: Endoskopiebefund
+  - system: kdl
+    code: PT080102
+    display: Histologiebefund
+  - system: kdl
+    code: DG020111
+    display: Sonographiebefund
+  - system: kdl
+    code: PT260102
+    display: Zytologiebefund
+standard_mappings:
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/ValueSets/IHEXDStypeCode
+  resource: 'XDS DocumentEntry (FHIR-Pendant: DocumentReference über MHD)'
+  path: DocumentEntry.classCode = BEF (Befundbericht; http://ihe-d.de/ValueSets/IHEXDSclassCode); DocumentEntry.typeCode
+    = BILD (Ergebnisse bildgebender Diagnostik; nach IHE-D-Definition inkl. Röntgen, CT, MRT, PET, Sonographie,
+    Endoskopie- und Bronchoskopiebefund) bzw. PATH (Pathologiebefundberichte inkl. Histologie und Zytopathologie);
+    BEFU nur als Auffangcode; KDL-Code (z. B. DG020103) in DocumentEntry.eventCodeList (http://ihe-d.de/ValueSets/IHEXDSeventCodeList)
+  notes: classCode und typeCode stammen aus den IHE-D-Value-Sets (de.ihe-d.terminology 3.0.1), nicht aus
+    der KDL; die KDL ist über die eventCodeList eingebunden (IHEXDSeventCodeList inkludiert http://dvmd.de/fhir/ValueSet/kdl).
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference (ePA MHD)
+  path: DocumentReference.category (1..1; coding REQUIRED epa-xds-class-code-vs, z. B. BEF); DocumentReference.type
+    (1..1; coding REQUIRED epa-xds-type-code-vs, z. B. BILD inkl. Sonographie, Endoskopie und Bronchoskopie,
+    PATH inkl. Histologie und Zytologie; BEFU nur als Auffangcode); KDL-Code in DocumentReference.context.event.coding
+    (epa-xds-event-code-vs inkludiert die KDL)
+  notes: de.gematik.epa.mhd 1.1.3. Der ePA MHD Service definiert für DocumentReference nur Suche und Abruf
+    (search-type, read). type und category nehmen IHE-D-Codes an (Codesysteme urn:oid:1.3.6.1.4.1.19376.3.276.1.5.9
+    bzw. …5.8), keine KDL-Codes.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (z. B. DG020103, DG020107, PT080102); DocumentReference.type.coding:XDS
+    (IHE-D typeCode); DocumentReference.category.coding:XDS (IHE-D classCode); DocumentReference.content.attachment;
+    DocumentReference.description
+  notes: Modul Dokument 2026.0.1. Das Dokumentprofil deckt alle Befundarten des Elements ab (Bildgebung,
+    Endoskopie, Histologie, Zytologie); das MII-ImagingStudy-Profil (mii-pr-bildgebung-bildgebungsstudie)
+    beschreibt Bildstudien, keine Befunddokumente.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.conclusion bzw. DiagnosticReport.conclusionCode; DiagnosticReport.presentedForm;
+    DiagnosticReport.imagingStudy (1..*) → mii-pr-bildgebung-bildgebungsstudie
+  notes: Strukturierte Alternative nur für radiologische Befunde (Röntgen, CT, MRT, PET-CT; Sonographie
+    über die Modalität US); Modul Bildgebung 2026.0.0. Setzt eine referenzierte Bildgebungsstudie voraus.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-patho/StructureDefinition/mii-pr-patho-report
+  resource: DiagnosticReport
+  path: DiagnosticReport.code.coding:pathology-report = LOINC 60568-3 (Pattern); DiagnosticReport.result
+    (1..*); DiagnosticReport.conclusion; DiagnosticReport.presentedForm
+  notes: Strukturierte Alternative für Biopsie-, Histologie- und Zytologiebefunde (das Modul typisiert
+    Pathologiebefunde u. a. als KDL PT080102 Histologiebefund und PT260102 Zytologiebefund, ValueSet mii-vs-patho-composition-type-kdl);
+    Modul Patho 2026.0.2 (Profilversion 2026.0.0).
+care_process:
+  trigger: nach jeder diagnostischen Untersuchung; Übergabe
+  frequency_pattern: per-procedure
+  responsible_role: Radiolog:in / Patholog:in / Pneumolog:in
+  data_flows:
+  - system: ris-pacs
+    actor_role: Radiolog:in
+    usage_type: capture
+    sector: sektorenuebergreifend
+  - system: lis-patho
+    actor_role: Patholog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-001 Befund / DE-010 Bildgebung / DE-011 Diagnostik
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-001 (weitere Zeilen: DE-010, DE-011)'
+    quote: Befund … alle Bildgebungen sehr wichtig, Zusammenfassung lesen … Bildgebung … Röntgen Thorax,
+      CT Thorax, PET-CT, MRT, EBUS … Diagnostik … Biopsie, EBUS (endobronchialer Ultraschall), Bronchoskopie,  Bildgebung
+      (siehe Punkt Bildgebung)
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Empfehlungsliste (Abb. 2 / Anhang 2): Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise (aktuelle Diagnostik im Anhang); Dos › Format › Diagnostik (letzte, aktuelle Befunde
+      im Anhang)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: aktuelle Diagnostik im Anhang (bei Laborwerten inkl. Normwerten) … Diagnostik ▪ nur relevante
+      Scores/Testwerte angegeben, ggf. mit Erläuterung ▪ letzte, aktuelle Befunde im Anhang
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise; Dos › Format › Diagnostik
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 5.2.1, Tab. 2 (CT Thorax/Oberbauch oder FDG-PET-CT als Methode der ersten Wahl; MRT;
+      Bronchoskopie mit Biopsie) und Tab. 3 (EUS/EBUS mit Biopsie; MRT Schädel)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Tabelle 2: Diagnostik bei neu aufgetretenen Symptomen … CT1 Thorax / Oberbauch mit Kontrastmittel,
+      oder FDG-PET-CT2 … Methode der ersten Wahl … Bronchoskopie mit Biopsie4 … Tabelle 3: Weiterführende
+      Diagnostik … EUS / EBUS2 mit Biopsie … MRT4 Schädel'
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC (April 2025), Kap. 5.2.1 Erstdiagnose, Tabelle 2 und Tabelle 3
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 5.2.1, Tab. 2 (Stufe 1 Röntgen Thorax, CT/FDG-PET-CT; Stufe 2 histologische oder zytologische
+      Sicherung per Bronchoskopie mit Biopsie; Stufe 3/4 MRT Schädel, EUS/EBUS mit Biopsie)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Tabelle 2: Diagnostik bei Lungentumorverdacht … Röntgen Thorax Übersicht in 2 Ebenen … CT1
+      Thorax / Abdomen mit KM6 / FDG-PET-CT7 Methode der ersten Wahl … Histologische oder zytologische
+      Sicherung Bronchoskopie mit Biopsie3 … MRT Schädel … EUS / EBUS5 mit Biopsie'
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC (August 2026), Kap. 5.2.1 Erstdiagnose, Tabelle 2 (Stufen 1–4)
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-001, DE-010,
+      DE-011; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 10 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 6 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Das Element führt nur KDL-Codes (z. B. DG020103, DG020111, PT080102, PT260102). XDS und ePA verlangen
+  für classCode/typeCode IHE-D-Codes (classCode BEF; typeCode BILD für Röntgen, CT, MRT, PET, Sonographie
+  und Endoskopie/Bronchoskopie, PATH für Histologie und Zytologie, BEFU nur als Auffangcode), die KDL
+  steht dort nur in der eventCodeList bzw. in DocumentReference.context.event; MII Dokument führt KDL
+  und IHE-D parallel (type.coding:KDL und :XDS). Zu entscheiden: die IHE-D-Klassen- und Typcodes je Befundart
+  in den value_set aufnehmen oder nur als Mapping-Regel KDL → IHE-D dokumentieren.'
+related_elements:
+- relation: hasPart
+  target: mihub.lung.primarycare.tumorHistology.v0.1
+- relation: hasPart
+  target: mihub.lung.followup.ctThoraxFinding.v0.2
+- relation: hasPart
+  target: mihub.lung.followup.brainMriFinding.v0.2

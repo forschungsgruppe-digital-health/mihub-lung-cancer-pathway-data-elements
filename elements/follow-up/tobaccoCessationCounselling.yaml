@@ -10,6 +10,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: prozedur
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -20,20 +21,35 @@ value_set:
     code: '710081004'
     display: Smoking cessation therapy
   - system: snomed-ct
-    code: '171055004'
-    display: Anti-smoking education
-  - system: atc
-    code: N07BA03
-    display: Vareniclin
-  - system: atc
-    code: N07BA01
-    display: Nikotinersatz
-  - system: icd-10-gm
-    code: Z71.6
-    display: Beratung bei Tabakkonsum
+    code: '225323000'
+    display: Smoking cessation education
   - system: snomed-ct
-    code: '386516008'
-    display: Tobacco use cessation education (procedure)
+    code: '702388001'
+    display: Tobacco use cessation education
+  - system: snomed-ct
+    code: '151159008'
+    display: Nicotine replacement therapy
+  - system: snomed-ct
+    code: '719591006'
+    display: Varenicline therapy
+  - system: snomed-ct
+    code: '771155005'
+    display: Brief intervention for smoking cessation
+  - system: snomed-ct
+    code: '395700008'
+    display: Referral to smoking cessation advisor
+instruction_de: 'Strukturierte Beratung, z. B. nach ABC-Schema (Ask – Brief advice – Cessation support),
+  und Vermittlung an ein professionelles Entwöhnungsangebot (Kurs, Telefonberatung, DiGA) gemäß S3-LL
+  Lungenkarzinom 5.1 Empf. 4.3; pharmakologische Therapie (z. B. NET, Vareniclin) allen Rauchenden anbieten
+  (Empf. 4.4). DiGA-Optionen (BfArM-DiGA-Verzeichnis) können im Versorgungs-Setup konkretisiert werden.
+
+
+  Erstattung von NET/Vareniclin seit 20.08.2025 (Beschluss vom 15.05.2025, im Leitlinientext ''BGA'',
+  Link g-ba.de): Voraussetzung sind die Einschreibung in ein evidenzbasiertes Entwöhnungsprogramm (z.
+  B. Kurs oder DiGA; Anmeldung beim Rauchfrei Ticket reicht nicht), erfüllte ICD-10-Abhängigkeitskriterien
+  und eine schwere Tabakabhängigkeit (≥ 6 Punkte im Fagerström-Test) oder fortgesetzter Konsum trotz tabakassoziierter
+  chronischer Lungen- oder Herzerkrankung; Verordnung für 3 Monate, erneut frühestens nach 3 Jahren; E-Zigaretten-Abhängigkeit
+  nicht umfasst — S3-LL 5.1 Kap. 4.2.1.'
 care_process:
   trigger: bei Status 'Smoker' / 'Occasional smoker'
   frequency_pattern: per-encounter-if-indicated
@@ -41,17 +57,54 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.3 (B)
-    recommendation_grade: B
-    evidence_level: 2b
-  - source: S3-LL Tabakentwöhnung
-    version: 1.0 (03/2021, AWMF 076-006l)
-    url: https://register.awmf.org/de/leitlinien/detail/076-006
-    section: Behandlung (medikamentös + verhaltenstherapeutisch)
+    section: 'Empf. 4.3 (A, LoE 1, modifiziert 2026): strukturierte Beratung (z. B. ABC-Schema) und Vermittlung
+      an professionelle Tabakentwöhnung (Kurse, Telefonberatung, DiGA)'
     recommendation_grade: A
-    evidence_level: n/a
+    evidence_level: '1'
+    quote: Rauchende Patienten mit Lungenkarzinom sollen strukturiert (z.B. nach ABC- … Schema) beraten
+      und an ein professionelles Angebot zur Tabakentwöhnung vermittelt werden (z.B. Tabakentwöhnungskurse,
+      Telefonberatung oder DiGA).
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.3 (A, LoE 1, modifiziert 2026), S. 62
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 4.4 (A, LoE 1, modifiziert 2026): pharmakologische Therapie (Nikotinersatz, Vareniclin)
+      allen rauchenden Patienten anbieten'
+    recommendation_grade: A
+    evidence_level: '1'
+    quote: Allen rauchenden Patienten mit Lungenkarzinom soll eine pharmakologische Therapie (z.B. eine
+      Nikotinersatztherapie oder Vareniclin) angeboten werden.
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.4 (A, LoE 1, modifiziert 2026), S. 62
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.3 (B, LoE 3, geprüft 2026)
+    recommendation_grade: B
+    evidence_level: '3'
+    quote: Patienten mit Lungenkarzinom sollten nachhaltig motiviert werden, mit dem Tabakrauchen aufzuhören.
+      Zur Unterstützung sollten die Patienten wirksame Hilfen zur Raucherentwöhnung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 16.2, Empf. 16.3 (B, LoE 3, geprüft 2026), S. 493
+  - source: S3-LL Tabakentwöhnung
+    version: 3.1 (Stand 01/2021, Langversion 03/2021, AWMF 076-006; Gültigkeit bis 31.12.2025 abgelaufen,
+      Aktualisierung angemeldet 12/2024)
+    url: https://register.awmf.org/de/leitlinien/detail/076-006
+    section: 'Empf. 4.7.3.6 Tabakentwöhnung bei Lungenkarzinom (A, LoE 1a): Tabakentwöhnung mit psychosozialer
+      und medikamentöser Unterstützung anbieten; ergänzend Empf. 4.1.3.1 Kurzberatung (A, LoE 1a), 4.4.3.1
+      Nikotinersatztherapie (A, LoE 1a), 4.4.3.3.1 Vareniclin (A, LoE 1a); ABC-Methode = Hintergrundtext
+      4.1.5'
+    recommendation_grade: A
+    evidence_level: 1a
+    quote: Der Einsatz von Vareniclin soll zur Tabakentwöhnung angeboten werden. … Rauchenden Patientinnen
+      und Patienten mit Lungenkarzinom soll eine Tabakentwöhnung mit psychosozialer und medikamentöser
+      Unterstützung … angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 4.4.3.1 (S. 103), 4.4.3.3.1 (S. 105), 4.7.3.6 Tabakentwöhnung bei Lungenkarzinom (A,
+      LoE 1a), S. 161 f.
 iso13972_metadata:
   type: procedure
   keywords:
@@ -60,7 +113,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -72,6 +125,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
-instruction_de: Beratung nach ABC-Schema empfohlen (S3-LL Lungenkarzinom v5.01 Empf. 4.3). DiGA-Optionen
-  (Digitale Gesundheitsanwendungen, BfArM-DiGA-Verzeichnis) können als Vermittlungsweg in instruction_de
-  oder im Versorgungs-Setup konkretisiert werden.
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 10 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 7 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.smokingStatus.v0.2

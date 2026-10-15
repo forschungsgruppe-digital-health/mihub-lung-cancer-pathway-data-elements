@@ -1,0 +1,142 @@
+id: mihub.lung.surveillance.consultationModality.v0.1
+uuid: a431278a-a6cf-560c-833d-f5a6054f5544
+name: consultationModality
+label_de: Kontaktform der Verlaufskontrolle (Präsenz / Video / Telefon)
+definition_de: 'Form des Patientenkontakts einer Verlaufskontrolle unter bzw. nach Systemtherapie. Onkopedia:
+  Patientenzufriedenheit von Video-Sprechstunden bei fortgeschrittenem NSCLC der persönlichen Sprechstunde
+  nicht unterlegen (Greer et al., JAMA 2024).'
+phase: surveillance
+tumor_entity:
+- NSCLC
+- SCLC
+category: kontakt-visite
+datatype: code
+cardinality: 0..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '1269515004'
+    display: Face to face consultation with patient
+  - system: snomed-ct
+    code: '719410009'
+    display: Consultation via video conference
+  - system: snomed-ct
+    code: '386472008'
+    display: Telephone consultation
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.type
+  notes: MII KDS Modul Fall (seit 2026 im Paket de.medizininformatikinitiative.kerndatensatz.base, 2026.0.1);
+    derselbe Encounter wie surveillanceVisit. Die Kontaktform als zusätzliches Encounter.type-CodeableConcept
+    mit dem SNOMED-Code des Elements; das Slicing von Encounter.type ist offen, die Slices Kontaktebene
+    und KontaktArt bleiben unberührt. Encounter.class (1..1) ist REQUIRED an http://fhir.de/ValueSet/EncounterClassDE
+    gebunden (HL7 v3 ActCode, z. B. AMB) und nimmt die SNOMED-Codes nicht auf.
+- standard: fhir-r4-base
+  resource: Encounter
+  path: Encounter.class / Encounter.type
+constraints_de: 'Videosprechstunden können als digitale Kontaktform ergänzend zur Präsenz-Verlaufskontrolle
+  erwogen werden (S3-LL Lungenkarzinom 5.1, Kap. 7.2, Hintergrundtext: digitale Anwendungen „können erwogen
+  werden, um die Versorgung zu ergänzen“). Die Übermittlung schwerwiegender Diagnosen sollte grundsätzlich
+  im persönlichen Kontakt erfolgen; eine telefonische oder digitale Mitteilung ist zu vermeiden (ebd.).'
+care_process:
+  trigger: bei jedem Kontakt der Verlaufskontrolle (surveillanceVisit)
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.2 (Video-Sprechstunden bei fortgeschrittenem NSCLC; Greer JA et al., JAMA 332:1153,
+      2024)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Patientenzufriedenheit von Video-Sprechstunden bei Pat. mit fortgeschrittenem NSCLC war
+      der persönlichen Sprechstunde nicht unterlegen [46].
+    accessed: '2026-10-15'
+    locator: Kap. 8.2 Nicht-kurativ intendierte Therapie
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.2 Patientenzentrierte Kommunikation, Hintergrundtext (Videosprechstunden/DiGA ergänzend;
+      schwerwiegende Diagnosen grundsätzlich im persönlichen Kontakt)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Digitale Anwendungen (wie Videosprechstunden, digitale Gesundheitsanwendungen (DiGAs), Apps)
+      können erwogen werden … Die Übermittlung schwerwiegender Diagnosen sollte grundsätzlich im persönlichen
+      Kontakt erfolgen; eine telefonische oder digitale Mitteilung ist zu vermeiden.
+    accessed: '2026-10-15'
+    locator: Kap. 7.2 Patientenzentrierte Kommunikation, Hintergrundtext, S. 193
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - surveillance
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Evidenzkontext kennzeichnen: Greer et al. 2024 (Onkopedia NSCLC Lit. [46]) verglich laut Titel Telehealth
+  und Präsenz in der frühen palliativmedizinischen Mitbetreuung bei fortgeschrittenem Lungenkarzinom.
+  Die Übertragung auf onkologische Verlaufskontrollen unter Systemtherapie ist eine Extrapolation (Studiendetails
+  lokal nicht geprüft, UNSICHER).'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1

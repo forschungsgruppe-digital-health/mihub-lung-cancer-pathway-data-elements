@@ -2,26 +2,38 @@ id: mihub.lung.followup.survivorshipCarePlan.v0.1
 uuid: b59aa65d-a6a0-572a-845a-b71f6807cfa0
 name: survivorshipCarePlan
 label_de: Survivorship Care Plan / Onkologischer Abschlussbericht
-definition_de: Strukturierter Abschluss-/Survivorship-Care-Plan, der Diagnose, Stadium, erhaltene Therapien,
-  mögliche Lang- und Spätfolgen, Kontrollintervalle, red flags, Impfstatus und Kontaktdaten enthält und
-  an die Hausarztpraxis übergeben wird.
+definition_de: Strukturierter Abschluss-/Survivorship-Care-Plan (Behandlungszusammenfassung und Nachsorgeplan),
+  der Diagnose inkl. Stadium, erhaltene Therapien, aktuelle Medikation/Medikationsplan, Komplikationen
+  sowie mögliche Lang- und Spätfolgen (priorisiert nach Eintrittswahrscheinlichkeit), Kontrollintervalle/weiteres
+  Prozedere, red flags und das Vorgehen bei Rezidivverdacht (rasche Wiedervorstellung), Impfhinweise/Impfstatus
+  (bei Relevanz) sowie Kontaktdaten enthält und an die Hausarztpraxis übergeben wird.
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: dokument
 datatype: Reference
 cardinality: 0..1
 value_set:
   binding_strength: preferred
   standard_binding_status: mapped
   codings:
-  - system: snomed-ct
-    code: '736378000'
-    display: Cancer survivorship care plan
+  - system: loinc
+    code: 74156-1
+    display: Oncology Plan of Care and Summary Note
   - system: kdl
     code: SD150101
     display: Follow up-Bogen
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:LNC = LOINC 74156-1; DocumentReference.type.coding:KDL; DocumentReference.content.attachment
+  notes: 'MII KDS Dokument 2026.0.1 (stabil). type.coding ist nach System gesliced, alle Slices REQUIRED:
+    LNC an http://hl7.org/fhir/ValueSet/c80-doc-typecodes (enthält 74156-1), KDL an http://dvmd.de/fhir/ValueSet/kdl
+    (derzeit SD150101, siehe offener Punkt zur Dokumentklasse), optional SCT (mii-vs-dokument-sct-dokument-typ)
+    und XDS (IHE-D typeCode); category.coding:XDS optional (IHE-D classCode). content 1..*, content.attachment
+    1..1.'
 - standard: fhir-r4-base
   resource: DocumentReference
   path: DocumentReference.type
@@ -32,18 +44,50 @@ care_process:
 evidence:
   guideline_references:
   - source: AG LONKO / Survivorship
-    version: 2021/2022; Klein 2026
-    url: https://doi.org/10.1007/s00761-025-01867-1
-    section: Empfehlungsliste; Klein 2026 Ergebnisse 'Anamnese, Abschlussstatus, Epikrise, Spätfolgen,
-      weiteres Prozedere, Diagnostik, Format'
-    recommendation_grade: Statement
-    evidence_level: n/a
-  - source: OCP Lung (AU)
-    version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Step 5.1/5.2 Treatment summary & follow-up care plan
+    version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
+      Krebsplan
+    url: https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/N/Nationaler_Krebsplan/Empfehlungspapier_UAG_Daten_AG_LONKO_bf.pdf
+    section: 'UAG Daten Kap. 4 (Lost-in-Transition; Nachsorgepässe mit Nachsorgeempfehlungen, Tumordiagnose/-therapie
+      inkl. Komplikationen und Komorbiditäten); UAG Versorgungsmodelle Kap. 1 (Zielsetzung 3: Koordination
+      Spezialist:innen ↔ nachsorgende Ärzt:innen) und Kap. 2 (Survivorship ab Diagnosestellung, ohne zeitliche
+      Begrenzung)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Neben den Nachsorgeempfehlungen sollten die vorhandenen bzw. noch zu etablierenden Nachsorgepässe
+      auch die Informationen zur Tumordiagnose und -therapie (einschließlich deren Komplikationen) sowie
+      die ggf. bestehenden Komorbiditäten des/der Patienten/Patientin zusammenfassen.
+    accessed: '2026-10-15'
+    locator: AG LONKO UAG Daten (Stand 17.06.2021), Kap. 4 Grundsätzlicher Datenbedarf, S. 8
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 5.1 (Treatment summary: u. a. Diagnose inkl. Stadium, Therapien, Spätfolgen, Follow-up-Schema,
+      Kontaktdaten) / Step 5.2 (Survivorship care plan inkl. rascher Wiedervorstellung bei Rezidivverdacht)
+      / Step 5.4.4 (Kommunikation mit dem GP: follow-up care plan, late effects)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: The treatment summary should cover … • diagnosis including stage, prognostic or severity score
+      … • potential long-term and late effects of treatment … • contact information for key healthcare
+      providers. … a process for rapid re-entry to specialist medical services for suspected recurrence.
+    accessed: '2026-10-15'
+    locator: OCP Lung, Step 5.1 (S. 42) und Step 5.2 (S. 44)
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie: Interviews mit 14 Hausärzt:innen,
+      Thinking-aloud-Interview mit 1 Onkologin, Workshop mit 6 Hausärzt:innen und 1 Onkologin; keine Empfehlungsgrade)
+      – Abb. 2 (S. 95) bzw. Anhang 2, Empfehlungsliste zum Verfassen onkologischer Abschlussberichte:
+      Dos – Relevante Informationen (Anamnese, Abschlussstatus und Epikrise / Therapie(n) inkl. möglicher
+      Spätfolgen unter Berücksichtigung ihrer Eintrittswahrscheinlichkeit / Weiteres: Prozedere zur hausärztlichen
+      Versorgung inkl. zeitlicher Bewertung, Impfhinweise und Impfstatus, Kontaktdaten); Format (Generelle
+      Formathinweise / Weiteres Prozedere / Diagnostik); Don''ts'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: ▪ aktuelle Medikation/Medikationsplan ▪ erfolgte Therapie(n) mit möglichen Spätfolgen unter
+      Berücksichtigung ihrer Eintrittswahrscheinlichkeit … ▪ weiteres Prozedere zur hausärztlichen Versorgung
+      inkl. zeitl. Bewertung … Hinweise zum Impfen + Impfstatus ▪ Kontaktdaten
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Abb. 2 (S. 95) = Anhang 2, Dos – Therapie(n)/Weiteres
 iso13972_metadata:
   type: plan
   keywords:
@@ -52,7 +96,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -64,3 +108,68 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- S3-LL Lungenkarzinom 5.1 enthält keine Empfehlung zu Survivorship Care Plan / Abschlussbericht (Survivorship
+  nur als Forschungsbedarf Kap. 16.3) — Fremdquellen (AG LONKO, Klein 2026, OCP) beibehalten.
+- 'Zeitpunkt klären: OCP Lung (AU) Step 5.1 sieht Treatment summary und Survivorship care plan nach Abschluss
+  der Initialtherapie vor, mit Aktualisierung bei Änderungen (Step 5.2); Klein 2026 beschreibt den onkologischen
+  Abschlussbericht nach abgeschlossener onkologischer Nachsorge beim Übergang in die hausärztliche Versorgung.
+  AG LONKO (UAG Daten Kap. 4) begründet Nachsorgepläne und -pässe mit der „Lost in Transition“-Problematik
+  nach Abschluss der regulären Nachsorgephase; der Survivorship-Beginn ab Diagnosestellung (UAG Versorgungsmodelle
+  Kap. 2) betrifft Survivorship-Programme, nicht den Zeitpunkt des Dokuments. Trigger „Abschluss strukturierte
+  Nachsorge / Übergang Hausarzt“ und frequency „once-per-transition“ bilden nur den Zeitpunkt nach Klein
+  2026 ab. Entscheiden, ob das Element beide Dokumente umfasst (dann z. B. „bei Therapieende und bei Übergang
+  in die hausärztliche Versorgung; Aktualisierung bei Änderungen“) oder getrennt wird.'
+- 'Dokumentklasse prüfen: KDL SD150101 „Follow up-Bogen“ (Definition: Angaben im Rahmen der Nachsorge
+  zur Erfassung der Verlaufskontrolle nach Abschluss der Behandlung) beschreibt ein Verlaufsformular,
+  keinen Abschlussbericht oder Survivorship Care Plan an die Hausarztpraxis. Da das Element selbst ein
+  Dokument ist (DocumentReference.type), ist die passende Dokumentklasse maßgeblich. Kandidaten aus der
+  Unterklasse AD0101 „Arztberichte“ (alle aktiv, MII TermServ): AD010110 „Ärztlicher Verlaufsbericht“
+  (wie im übergeordneten Element dischargeOrVisitReport), AD010111 „Ambulanzbrief“ (Zusammenfassung einer
+  ambulanten Behandlung in Briefform) und AD010199 „Sonstiger Arztbericht“. LOINC 74156-1 bleibt passend.'

@@ -1,4 +1,4 @@
-id: mihub.lung.surveillance.recistResponse.v0.1
+id: mihub.lung.surveillance.recistResponse.v0.2
 uuid: d0d56712-9555-5c36-ae5f-96f45795d1d0
 name: recistResponse
 label_de: RECIST-1.1-Therapieansprechen
@@ -7,6 +7,7 @@ phase: surveillance
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: code
 cardinality: 0..*
 value_set:
@@ -14,52 +15,133 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '182840001'
-    display: Complete response (CR)
+    code: '260415000'
+    display: Not detected
   - system: snomed-ct
     code: '268910001'
-    display: Partial response (PR)
+    display: Patient's condition improved
   - system: snomed-ct
     code: '359746009'
-    display: Stable disease (SD)
+    display: Patient's condition stable
   - system: snomed-ct
-    code: '271879005'
-    display: Progressive disease (PD)
+    code: '271299001'
+    display: Patient's condition worsened
+  - system: snomed-ct
+    code: '709137006'
+    display: Patient condition undetermined
   - system: kdl
-    code: AD060106
+    code: SD150103
     display: Tumorkonferenzprotokoll
+  notes: 'RECIST-1.1-Kategorien auf das mCODE-ValueSet ConditionStatusTrendVS (SNOMED CT) abgebildet:
+    CR = 260415000 Not detected, PR = 268910001 Patient''s condition improved, SD = 359746009 Patient''s
+    condition stable, PD = 271299001 Patient''s condition worsened, NE = 709137006 Patient condition undetermined;
+    oBDS ''Gesamtbeurteilung Tumorstatus'' analog.'
 standard_mappings:
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul (oBDS 2021)
-  path: Verlauf / Beurteilung Tumorstatus
-  notes: Pflichtmeldung gem. §65c SGB V; oBDS-Codes für 'Vollremission/Teilremission/Stable Disease/Progress/Befund
-    unklar'
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf (Meldung Verlauf, XSD Verlauf_Typ)
+  path: 'Verlauf/Gesamtbeurteilung_Tumorstatus (17.2 Gesamtbeurteilung des Tumorstatus); Datum: Verlauf/Untersuchungsdatum_Verlauf
+    (17.1)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 17.2: https://basisdatensatz.de/feld/220/gesamtbeurteilung-des-tumorstatus
+    (Link aus der Feldliste). Wertebereich laut XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd):
+    V Vollremission (CR), T Teilremission (PR), K keine Änderung (NC = stable disease), P Progression,
+    D divergentes Geschehen, B klinische Besserung (Minimal Response), R Vollremission mit residualen
+    Auffälligkeiten (CRr), Y Rezidiv, U Beurteilung unmöglich, X fehlende Angaben; ''Befund unklar'' ist
+    kein oBDS-Wert. Näherungsweise Abbildung RECIST 1.1: CR→V, PR→T, SD→K, PD→P, NE→U. Teilbeurteilungen
+    in 17.3–17.5 (Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen).'
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
   resource: Observation
-  notes: MII-KDS Modul Onkologie (Verlaufs-Observation; ggf. Profil neu zu definieren)
-- standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
-  resource: CancerDiseaseStatus
   path: Observation.valueCodeableConcept
-  notes: mCODE STU4 — Cancer Disease Status mit eviganceType (clinical, imaging, pathology, lab)
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Verlauf); ein neues Profil ist nicht nötig. Observation.code
+    = SNOMED 396432002 (Pattern), Observation.focus (1..1) → Primärtumor-Condition (mii-pr-onko-diagnose-primaertumor),
+    Datum in effectiveDateTime. value[x] ist extensible an mii-vs-onko-verlauf-gesamtbeurteilung gebunden
+    (oBDS-Gesamtbeurteilung V/T/K/P/D/B/R/Y/U/X), nicht an RECIST: Transformation CR→V, PR→T, SD→K, PD→P,
+    NE→U; die SNOMED-Trendcodes des Elements nur als zusätzliche Codings. Teilbeurteilungen optional in
+    component:Tumor_Verlauf, :Lymphknoten_Verlauf und :Fernmetastasen_Verlauf.'
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
+  resource: Observation (CancerDiseaseStatus)
+  path: Observation.valueCodeableConcept
+  notes: mCODE STU4 (4.0.0). Observation.code = LOINC 97509-4 (Pattern); value[x] preferred an mcode-condition-status-trend-vs
+    (SNOMED 268910001 improved, 359746009 stable, 271299001 worsened, 709137006 undetermined); 260415000
+    'Not detected' (CR) liegt nicht in diesem VS. Evidenzart über die Erweiterung http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status-evidence-type
+    (z. B. Bildgebung, SNOMED 363679005). CancerDiseaseStatus ist eine qualitative klinische Trendeinschätzung,
+    kein formales RECIST-Ansprechen; Abbildung PR→268910001, SD→359746009, PD→271299001, NE→709137006
+    als Mapping dokumentieren.
 - standard: omop-cdm
   profile_or_url: https://ohdsi.github.io/CommonDataModel/cdm54.html
-  resource: MEASUREMENT / OBSERVATION (Onkologie-Extension)
-  notes: OHDSI Onkologie-Extension; FHIR-OMOP-Brücke via mCODE↔OMOP
+  resource: MEASUREMENT (Einzelbewertung) + EPISODE (Disease Episode) mit EPISODE_EVENT
+  path: MEASUREMENT.measurement_concept_id / value_as_concept_id / measurement_date; EPISODE.episode_concept_id
+    (Domain Episode), EPISODE.episode_object_concept_id (Condition-Domain), EPISODE.episode_start_date;
+    EPISODE_EVENT (MEASUREMENT → EPISODE)
+  notes: 'OMOP CDM v5.4: Eine bildgebungsbasierte Ansprechbewertung mit standardisiertem Ergebnis gehört
+    laut CDM in MEASUREMENT (OBSERVATION-Beschreibung: „If the generation clinical facts requires a standardized
+    testing such as lab testing or imaging and leads to a standardized result, the data item is recorded
+    in the MEASUREMENT table“), nicht in OBSERVATION. Die abgeleitete Krankheitsphase (z. B. Remission,
+    Progression) über EPISODE (episode_concept_id aus der Domain Episode für „disease phase, outcome or
+    treatment“; bei „Disease Episode“ episode_object_concept_id aus der Condition-Domain), mit der Bewertung
+    verknüpft über EPISODE_EVENT. EPISODE und EPISODE_EVENT sind Teil der CDM-v5.4-Spezifikation. Concept-IDs
+    nicht gegen Athena verifiziert.'
 care_process:
-  trigger: Restaging-CT alle 6–9 Wo unter Systemtherapie
-  frequency_pattern: Q6-9W
+  trigger: 'nach jeder Restaging-Bildgebung (restagingImagingDate): NSCLC erstmals nach 2, spätestens
+    3 Zyklen Erstlinientherapie (S3 Empf. 8.84/8.100), danach alle 6–9 Wochen unter laufender System-/Erhaltungstherapie
+    (S3 Empf. 16.9) bzw. alle 6–8 Wochen in der therapiefreien Beobachtung nach Erstlinientherapie (Onkopedia
+    NSCLC Kap. 8.2); SCLC nach frühestens 2, i. d. R. 3–4 Zyklen Chemo-Immuntherapie (Onkopedia SCLC Kap.
+    6.1.1.4.1.7), danach alle 6–9 Wochen unter laufender Immunerhaltung (S3 Empf. 16.9, Kap. 16.4)'
+  frequency_pattern: 'per-imaging-event (gekoppelt an restagingImagingDate): NSCLC-Erstlinie erstmals
+    nach 2, spätestens 3 Zyklen (6–9 W; S3 Empf. 8.84/8.100) · Q6-9W unter laufender System-/Erhaltungstherapie,
+    NSCLC und SCLC (S3 Empf. 16.9, Kap. 16.4) · Q6-8W in der therapiefreien Beobachtung nach Erstlinientherapie,
+    NSCLC (Onkopedia NSCLC Kap. 8.2) · SCLC-Induktion: nach frühestens 2, i. d. R. 3–4 Zyklen (Onkopedia
+    SCLC Kap. 6.1.1.4.1.7)'
   responsible_role: Onkologe / Radiologie
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.9 (B, modifiziert 2025)
-    recommendation_grade: B
+    section: Empf. 16.9 (EK, geprüft 2026)
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Unter einer Systemtherapie im Stadium IVA/B sollten Ansprechen, … und Beschwerdebild einen
+      Monat nach Abschluss der Behandlung durch das den Patienten betreuende Team evaluiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.4, Empf. 16.9 (EK, Starker Konsens, geprüft 2026), S. 499
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.2 (Kontrollintervall 6–8 Wochen nach Erstlinientherapie — S3-Expertenkonsens); Kap.
+      6.1.6.2.2.1.2.1 (engmaschige Kontrolle alle 6–8 Wochen als Alternative zur Erhaltungstherapie)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die S3 Leitlinie empfiehlt im Expertenkonsens die Verkürzung der dreimonatigen auf kürzere,
+      6-8wöchige Intervalle [117].
+    accessed: '2026-10-15'
+    locator: Kap. 8.2 Nicht-kurativ intendierte Therapie
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 6.1.1.4.1.7 (Ansprechen auf Chemo-Immuntherapie nach frühestens 2, in der Regel nach
+      3–4 Zyklen beurteilbar)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Das Ansprechen auf die Chemo- und Immuntherapie kann nach frühestens 2 Therapiezyklen, in der
+      Regel nach 3 bis 4 Zyklen, beurteilt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1.4.1.7 Durchführung der Therapie und Therapiedauer
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 8.6.2.1 Empf. 8.84 / Kap. 8.6.3.1 Empf. 8.100 (EK, Starker Konsens, geprüft 2026):
+      radiologische Verlaufskontrolle beim NSCLC Stadium IV nach 2 Zyklen (6 Wochen), spätestens nach
+      3 Zyklen (9 Wochen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: In aller Regel sollte bei NSCLC im Stadium IV nach 2 Zyklen Therapie (6 Wochen), … spätestens
+      aber nach 3 Zyklen (9 Wochen) eine radiologische Verlaufskontrolle erfolgen.
+    accessed: '2026-10-15'
+    locator: Kap. 8.6.2.1 Empf. 8.84 (S. 293) / Kap. 8.6.3.1 Empf. 8.100 (S. 313); EK, Starker Konsens,
+      geprüft 2026
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -68,7 +150,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -80,3 +162,75 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.surveillance.recistResponse.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''kdl|AD060106'', ''snomed-ct|182840001'', ''snomed-ct|271879005'']. Zudem
+      Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 4 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Wertebereich vs. Definition klären: recistResponse ist als RECIST-1.1-Kategorie definiert (CR/PR/SD/PD/NE),
+  required gebunden ist aber der Wertebereich des mCODE-ValueSets ConditionStatusTrend (bewusste Umstellung,
+  audit-log §13). Dessen SNOMED-Konzepte sind Patientenzustands-Befunde (268910001, 359746009, 271299001,
+  709137006; Parent 418138009 ''Patient condition finding'') bzw. ein Qualifier (260415000 ''Not detected'',
+  Parent 272519000 ''Absence findings''), keine Ansprechkategorien; RECIST-Schwellenwerte sind nicht abgebildet.
+  In mCODE STU4 (4.0.0) enthält ConditionStatusTrendVS nur die vier Zustands-Befunde (nicht 260415000)
+  und ist an CancerDiseaseStatus nur ''preferred'' gebunden. Vier der fünf SNOMED-Codes führt auch das
+  generalisierende Element currentTumorStatus; die Abgrenzung beider Elemente ist offen. KDL SD150103
+  ''Tumorkonferenzprotokoll'' ist eine Dokumentklasse und gehört nicht in das Antwortset. Die Leitlinien
+  geben für die Routine kein Bewertungsschema vor (S3-LL Lungenkarzinom 5.1, Empf. 16.9: Ansprechen wird
+  „evaluiert“; Onkopedia NSCLC/SCLC erwähnen RECIST nicht). Zu entscheiden: (a) Element als klinische
+  Ansprechens-/Tumorstatus-Beurteilung (ggf. nach RECIST 1.1) umdefinieren und den mCODE-Wertebereich
+  beibehalten oder (b) an einen Standard-Kategoriensatz binden – LOINC 88040-1 ''Response to cancer treatment''
+  mit Antwortliste LL4721-8 (LA28366-5 Complete response, LA28369-9 Partial response, LA28371-5 Stable
+  disease, LA28370-7 Progressive disease, LA9348-9 Not assessed ≈ NE, nicht deckungsgleich) oder das MII-KDS-Onkologie-CodeSystem
+  mii-cs-onko-verlauf-gesamtbeurteilung (V Vollremission/CR, T Teilremission/PR, K keine Änderung/SD,
+  P Progression, U Beurteilung unmöglich u. a.; entspricht dem oBDS-Mapping) –, mit mCODE/SNOMED (z. B.
+  399056007 Complete therapeutic response, 399204005 Partial therapeutic response, 399178002 Static therapeutic
+  response, 1371415000 Malignant neoplastic disease progression) als Abbildung; ein projekt-lokales CodeSystem
+  ist damit entbehrlich. Bindungsstärke (bisher required) und Datentyp (bisher code) mit entscheiden.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.surveillance.restagingImagingDate.v0.1

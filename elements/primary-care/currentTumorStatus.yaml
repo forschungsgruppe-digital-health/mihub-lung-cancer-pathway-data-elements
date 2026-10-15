@@ -1,0 +1,210 @@
+id: mihub.lung.primarycare.currentTumorStatus.v0.1
+uuid: 454b3792-095b-56e3-adce-a990f8fca5bd
+name: currentTumorStatus
+label_de: Aktueller Tumorstatus
+definition_de: Derzeitiger Zustand der Tumorerkrankung (rezidivfrei/kein Nachweis, stabil, Ansprechen,
+  Progress, Metastasen) als Gesamtbeurteilung für die Hausarztpraxis.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '260415000'
+    display: Not detected
+  - system: snomed-ct
+    code: '268910001'
+    display: Patient's condition improved
+  - system: snomed-ct
+    code: '359746009'
+    display: Patient's condition stable
+  - system: snomed-ct
+    code: '271299001'
+    display: Patient's condition worsened
+  - system: snomed-ct
+    code: '445150007'
+    display: Surviving free of recurrence of neoplastic disease
+  - system: snomed-ct
+    code: '1371415000'
+    display: Malignant neoplastic disease progression
+  - system: loinc
+    code: 21976-6
+    display: Cancer outcome status
+  - system: loinc
+    code: 97509-4
+    display: Cancer disease progression
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf
+  path: 'Verlauf/Gesamtbeurteilung_Tumorstatus (17.2: V, T, K, P, D, B, R, Y, U, X); ergänzend Verlauf_Lokaler_Tumorstatus
+    (17.3), Verlauf_Tumorstatus_Lymphknoten (17.4), Verlauf_Tumorstatus_Fernmetastasen (17.5), Untersuchungsdatum_Verlauf
+    (17.1)'
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
+    (Verlauf_Typ).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+  resource: Observation
+  path: 'Observation.valueCodeableConcept (Gesamtbeurteilung, extensible mii-vs-onko-verlauf-gesamtbeurteilung:
+    V, T, K, P, D, B, R, Y, U, X); Observation.component:Tumor_Verlauf, :Lymphknoten_Verlauf, :Fernmetastasen_Verlauf;
+    Observation.focus (1..1) → mii-pr-onko-diagnose-primaertumor'
+  notes: Stabil, Modul Onkologie 2026.0.3. Codes entsprechen oBDS 17.2–17.5; Observation.code Pattern
+    SNOMED 396432002. SNOMED-Zuordnung der Gesamtbeurteilung über die ConceptMap mii-cm-onko-verlauf-gesamtbeurteilung-sct.
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
+  resource: Observation (Profil CancerDiseaseStatus)
+  path: 'Observation.code = LOINC 97509-4 (Pattern); Observation.valueCodeableConcept (preferred mcode-condition-status-trend-vs:
+    268910001, 359746009, 271299001, 709137006); Evidenzart über Observation.extension:evidenceType'
+  notes: mCODE STU4 (4.0.0). Die Element-Codes 260415000, 445150007 und 1371415000 liegen nicht im Trend-VS;
+    „rezidivfrei/kein Nachweis“ hat dort keine Entsprechung.
+care_process:
+  trigger: bei jeder onkologischen Verlaufsbeurteilung; Übergabe an die Hausarztpraxis
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-030 aktueller Tumorstand
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-030
+    quote: aktueller Tumorstand … derzeitigen Zustand und die aktuelle Ausbreitung des Tumors, (Tumorgröße,
+      Progress, Metastasen, rezidivfrei)
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Anhang 2 / Abb. 2 (LoTeCaS-GP-Empfehlungen), Dos – Relevante Informationen: Anamnese, Abschlussstatus
+      und Epikrise (Status zum Abschluss der onkologischen Nachsorge)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Anamnese, Abschlussstatus und Epikrise ▪ onkologische Diagnose und assoziierte Erkrankungen;
+      weitere Diagnosen ohne Details ▪ Komplikationen und bestehende Langzeitfolgen
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 16.1 Empf. 16.1/16.2 (strukturierter Nachsorge- bzw. Verlaufsplan: Rezidive, Progression,
+      Zweitkarzinome); Kap. 16.4 Empf. 16.9 (Evaluation von Ansprechen und Progress unter Systemtherapie)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Der strukturierte Nachsorgeplan sollte geeignet sein, Rezidive, Zweitkarzinome … Der strukturierte
+      Verlaufsplan/Follow-up-Plan sollte geeignet sein, Progression/Rezidive … Unter einer Systemtherapie
+      im Stadium IVA/B sollten Ansprechen, … Beschwerdebild einen Monat nach Abschluss der Behandlung
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Kap. 16.1, Empf. 16.1/16.2 (EK, S. 492); Kap. 16.4, Empf. 16.9
+      (EK, S. 499)
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Step 5.4.4 Communication with the general practitioner (the patient’s progress)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'The lead clinician should ensure regular, timely, two-way communication with the general practitioner
+      about: • the patient’s progress'
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 5.4.4 Communication with the general practitioner, S. 47
+iso13972_metadata:
+  type: evaluation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-030; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Die Werteliste belegt Kategorien doppelt und mischt Achsen: ‚kein Nachweis/rezidivfrei‘ = 260415000
+  (Not detected, qualifier value) und 445150007 (Surviving free of recurrence of neoplastic disease, finding);
+  ‚Progress‘ = 271299001 (Patient''s condition worsened) und 1371415000 (Malignant neoplastic disease
+  progression). Das mCODE-STU4-ConditionStatusTrendVS (4.0.0) enthält nur 268910001, 359746009, 271299001
+  und 709137006; 260415000, 445150007 und 1371415000 gehören nicht dazu. Je Kategorie genau einen Code
+  festlegen und das Mapping in value_set.notes dokumentieren (wie bei recistResponse). Als Referenz für
+  die Kategorien bietet sich die im Mapping genannte oBDS-Gesamtbeurteilung des Tumorstatus an (V/T/K/P/D/B/R/Y/U/X;
+  MII KDS Onkologie: CodeSystem mii-cs-onko-verlauf-gesamtbeurteilung, SNOMED-Zuordnung in der ConceptMap
+  mii-cm-onko-verlauf-gesamtbeurteilung-sct). Die Kategorie ‚nicht beurteilbar‘ fehlt (oBDS U ‚Beurteilung
+  unmöglich‘; Kandidat 709137006 Patient condition undetermined wie in recistResponse – die MII-ConceptMap
+  bildet U allerdings auf 385432009 Not applicable ab).'
+- definition_de nennt ‚Metastasen‘ als Statuswert, die Erhebung DE-030 zusätzlich ‚Tumorgröße‘ und ‚aktuelle
+  Ausbreitung‘. Das sind keine Kategorien einer Gesamtbeurteilung, Codes dafür sind nicht hinterlegt.
+  Ausbreitung und Metastasen über recurrenceOrSecondPrimary bzw. tnmStage (rTNM) abbilden und die Definition
+  anpassen (z. B. ‚Progress/Rezidiv inkl. neu aufgetretener Metastasen‘).
+related_elements:
+- relation: generalizes
+  target: mihub.lung.surveillance.recistResponse.v0.2
+- relation: generalizes
+  target: mihub.lung.followup.recurrenceOrSecondPrimary.v0.1

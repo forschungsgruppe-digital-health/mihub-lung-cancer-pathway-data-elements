@@ -8,6 +8,7 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: diagnose
 datatype: CodeableConcept
 cardinality: 0..1
 value_set:
@@ -15,51 +16,68 @@ value_set:
   standard_binding_status: mapped
   codings:
   - system: snomed-ct
-    code: '417798001'
-    display: Recurrent neoplasm
+    code: '1259237005'
+    display: Recurrent malignant neoplasm
   - system: snomed-ct
-    code: '20003000'
-    display: Locoregional recurrence
+    code: '314954002'
+    display: Local recurrence of malignant neoplasm of lung
   - system: snomed-ct
-    code: '85756007'
-    display: Distant metastasis
+    code: '399409002'
+    display: Distant metastasis present
   - system: snomed-ct
-    code: '128462008'
-    display: Second primary malignant neoplasm
+    code: '878806005'
+    display: Second primary cancer
   - system: icd-10-gm
     code: C34.9
-    display: Bösartige Neubildung der Bronchien und der Lunge, n.n.b.
+    display: 'Bösartige Neubildung: Bronchus oder Lunge, nicht näher bezeichnet'
   - system: kdl
-    code: AD060106
+    code: SD150103
     display: Tumorkonferenzprotokoll
-  - system: icd-o-3
-    code: 8140/3
-    display: Adenokarzinom (M-Code)
-  - system: icd-o-3
-    code: 8070/3
-    display: Plattenepithelkarzinom (M-Code)
-  - system: icd-o-3
-    code: 8041/3
-    display: Kleinzelliges Karzinom (M-Code)
-  - system: icd-o-3
-    code: 8012/3
-    display: Großzelliges Karzinom (M-Code)
-  - system: icd-o-3
-    code: C34.9
-    display: Lunge, n.n.b. (T-Code, Topographie)
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-onkologie/StructureDefinition/mii-pr-onko-diagnose-primaertumor
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
   resource: Condition
+  path: Condition.code.coding:icd10-gm (Zweitkarzinom); Condition.bodySite.coding:icd-o-3; Condition.extension:Feststellungsdatum;
+    Condition.extension:occurredFollowing (frühere Tumorerkrankung)
+  notes: 'MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Diagnose_Primaertumor; baseDefinition MII Diagnose).
+    Nur für das metachrone Zweitkarzinom als neue Primärtumor-Diagnose (878806005 bzw. ICD-10-GM, z. B.
+    C34.9): code mit den Slices icd10-gm, alpha-id, sct und orphanet; extension:Feststellungsdatum 1..1,
+    recordedDate 1..1; Bezug zum Ersttumor über extension:occurredFollowing (''Frühere Tumorerkrankungen'').
+    Lokal- und Regionalrezidiv sowie Fernmetastasierung über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+    (eigener Eintrag).'
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul (oBDS 2021)
-  path: Allgemeiner Leistungszustand / Tumorstatus_Lokoregionaeres_Tumorstatus
-  notes: Pflichtmeldung gem. §65c SGB V
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: '17 Verlauf; Zweitkarzinom: eigene Meldung mit Diagnose-Teil (5 Diagnose)'
+  path: '17.3 Tumorstatus Primärtumor = R (Lokalrezidiv), 17.4 Tumorstatus Lymphknoten = R (Lymphknotenrezidiv),
+    17.5 Tumorstatus Fernmetastasen = R (neue Fernmetastase bzw. Metastasenrezidiv), 17.2 Gesamtbeurteilung
+    des Tumorstatus = Y (Rezidiv), jeweils mit 17.1 Untersuchungsdatum Verlauf (XSD: Verlauf/Verlauf_Lokaler_Tumorstatus,
+    Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen, Gesamtbeurteilung_Tumorstatus,
+    Untersuchungsdatum_Verlauf); neue Fernmetastasen zusätzlich unter 11 Fernmetastasen (Verlauf/Menge_FM)'
+  notes: Pflichtmeldung gem. § 65c SGB V. 'Allgemeiner Leistungszustand' ist ECOG bzw. Karnofsky (12.1)
+    und hier nicht einschlägig; 'Tumorstatus_Lokoregionaeres_Tumorstatus' existiert in oBDS 3.0.5 nicht.
+    Ein metachrones Zweitkarzinom wird als eigener Tumor (eigene Tumorzuordnung) mit Diagnosemeldung erfasst;
+    der Ersttumor steht dort unter 5.9 Frühere Tumorerkrankungen (Diagnose/Menge_Fruehere_Tumorerkrankung).
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
 - standard: kbv-mio
-  profile_or_url: https://mio.kbv.de/
-  resource: Patientenkurzakte
-  notes: Übergabe Onko ↔ Hausarztpraxis (ePA-Wallet)
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Condition
+  resource: Condition (MIO Patientenkurzakte, Notfalldaten, Sektion Diagnose)
+  path: 'Condition.code (code.coding max. 1: je Condition höchstens ein Coding aus den Slices ICD-10-GM,
+    alpha-id, snomed-ct oder orphanet); Condition.code.text 1..1'
+  notes: MIO Patientenkurzakte 1.0.0 (Bundle https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFDxDPE_Bundle)
+    aus Notfalldaten (NFD) und persönlichen Erklärungen (DPE); kein onkologisches Übergabeformat. Rezidiv
+    bzw. Zweitkarzinom nur als Diagnose (NFD-Composition, Sektion diagnose, LOINC 29548-5). 'ePA-Wallet'
+    ist kein offizieller Begriff; MIOs liegen in der ePA.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
+  resource: Observation
+  path: Observation.component:Tumor_Verlauf / :Lymphknoten_Verlauf / :Fernmetastasen_Verlauf.valueCodeableConcept
+    = R; Observation.valueCodeableConcept = Y (Rezidiv); Observation.focus → Primärtumor-Condition
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Verlauf). Observation.code Pattern SNOMED 396432002;
+    Gesamtbeurteilung value[x] extensible mii-vs-onko-verlauf-gesamtbeurteilung (Y = Rezidiv); Komponenten
+    REQUIRED mii-vs-onko-verlauf-primaertumor (R = Lokalrezidiv), mii-vs-onko-verlauf-lymphknoten (R =
+    neu aufgetretenes Lymphknotenrezidiv) bzw. mii-vs-onko-verlauf-fernmetastasen (R = neu aufgetretene
+    Fernmetastase(n) bzw. Metastasenrezidiv); focus 1..1 → mii-pr-onko-diagnose-primaertumor. Lokalisation
+    neuer Fernmetastasen über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fernmetastasen.
 care_process:
   trigger: Detektion in Nachsorge
   frequency_pattern: ad-hoc
@@ -67,11 +85,47 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.1 (B, geprüft 2025); Kap. 16.3.4
-    recommendation_grade: B
+    section: 'Kap. 16.1 (Hintergrund: Nachsorgeziel frühzeitige Diagnose von Rezidiv- oder Zweittumoren;
+      Rezidivrisiko in den ersten 2 Jahren am höchsten, Anteil Zweitkarzinome steigt mit Abstand zur OP);
+      Empf. 16.1 (EK, geprüft 2026); Empf. 16.2 (EK, geprüft 2026); Kap. 16.3.4 (IFCT: vermehrte Detektion
+      von Zweittumoren nach 4–5 Jahren)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: zielt die Nachsorge auf die möglichst frühzeitige Diagnose von Rezidiv- oder Zweittumoren …
+      Während die Wahrscheinlichkeit eines Rezidivtumors in den ersten beiden Jahren nach Resektion am
+      höchsten ist, nimmt der Anteil an Zweitkarzinomen mit dem Abstand zur Operation zu … Diagnose von
+      Zweittumoren.
+    accessed: '2026-10-15'
+    locator: Kap. 16.1, S. 491; Kap. 16.3.4, S. 496
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 8.1 (Nachsorgeziele: frühzeitige Diagnose eines Rezidivs und eines Zweittumors)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ziele der Nachsorge sind die frühzeitige Diagnose eines Rezidivs mit dem Ziel der Verlängerung
+      der Überlebenszeit / Erhöhung der Heilungschance … Nach kurativer Therapie ist Ziel der Nachsorge
+      auch die frühzeitige Diagnostik eines Zweittumors.
+    accessed: '2026-10-15'
+    locator: Kap. 8.1
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2 (Nachsorgeziele: Rezidiv, Zweitneoplasie; Text nach Tab. 9: bei V. a. lokalisiertes
+      oder lokal behandelbares Rezidiv weitere Bildgebung ggf. inkl. PET-CT und/oder histologische Sicherung);
+      Kap. 6.1.2.1 (intrapulmonaler Zweittumor nach Resektion: auch andere Histologie bedenken, PET-CT
+      und ggf. mediastinales Staging vor erneuter Resektion; Persistenz oder erneute lokale Progression
+      des Primärtumors nach Chemo-Strahlentherapie: PET-CT, ggf. mediastinales Staging und MRT Schädel
+      vor Resektion)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: muss an die Möglichkeit eines Zweittumors auch anderer Histologie gedacht werden. … Ziele der
+      Nachsorge sind die frühzeitige Diagnose eines Rezidivs … die frühzeitige Diagnostik einer Zweitneoplasie
+      … ggf. einschließlich PET-CT und/oder Methoden zur histologischen Sicherung zu ergänzen.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.2.1; Kap. 10.2 mit Text unter Tab. 9
 iso13972_metadata:
   type: condition
   keywords:
@@ -80,7 +134,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -92,3 +146,75 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 12 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 5 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'recurrenceOrSecondPrimary vereint zwei Sachverhalte, die MII und oBDS getrennt modellieren: Rezidiv
+  und Metastasierung als Verlaufsbeurteilung (mii-pr-onko-verlauf; oBDS 17.2 bis 17.5), das metachrone
+  Zweitkarzinom als neue Primärtumor-Diagnose (mii-pr-onko-diagnose-primaertumor; oBDS eigene Diagnosemeldung).
+  Vorschlag: 314954002 → Tumor_Verlauf bzw. 17.3 = R; 399409002 → Fernmetastasen_Verlauf bzw. 17.5 = R
+  (Lokalisation unter 11); 1259237005 → Gesamtbeurteilung bzw. 17.2 = Y (Lokalisation offen). Bei 314954002
+  und 399409002 zusätzlich Gesamtbeurteilung 17.2 = Y (im MII-Verlauf Observation.valueCodeableConcept
+  = Y): 17.2 ist Pflichtfeld der Verlaufsmeldung, und Y umfasst laut oBDS-XSD Lokalrezidiv und/oder Metastasierung
+  nach vorheriger kompletter Tumorfreiheit. 878806005 und ICD-10-GM C34.9 → neue Condition bzw. Diagnosemeldung.
+  Für ein regionäres Lymphknotenrezidiv (17.4 = R) hat das Element keinen eigenen Code. KDL SD150103 ''Tumorkonferenzprotokoll''
+  ist eine Dokumentklasse, kein Befundwert. Zu entscheiden: Element aufteilen oder Transformationsregeln
+  festschreiben; außerdem, ob das kbv-mio-Mapping (Patientenkurzakte = Notfalldaten, kein Onko-Übergabeformat)
+  beibehalten wird.'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.bronchoscopyFollowUp.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.petCtFollowUp.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.ctAbdomenFollowUp.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.ctThoraxFinding.v0.2
+- relation: dependsOn
+  target: mihub.lung.followup.brainMriFinding.v0.2
+- relation: dependsOn
+  target: mihub.lung.primarycare.tumorHistology.v0.1

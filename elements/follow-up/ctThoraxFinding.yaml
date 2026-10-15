@@ -1,14 +1,18 @@
-id: mihub.lung.followup.ctThoraxFinding.v0.1
+id: mihub.lung.followup.ctThoraxFinding.v0.2
 uuid: 74231537-e826-5758-91c5-1e9bb3fa1be7
 name: ctThoraxFinding
 label_de: CT Thorax — radiologischer Befund
-definition_de: Befund-Kategorisierung des CT Thorax in der Nachsorge. Ergebnisartefakt zum prozeduralen
-  Datenelement 'ctThoraxScan'. Erfasst, ob ein Rezidiv, Zweittumor, neue Läsion oder eine stabile Situation
-  vorliegt.
+definition_de: Befund-Kategorisierung des CT Thorax in der Nachsorge (Tumorkinetik und lokale Ausdehnung).
+  Ergebnisartefakt zum prozeduralen Datenelement 'ctThoraxScan'. Erfasst, ob kein Rezidivnachweis bzw.
+  ein unveränderter (stabiler) Befund, ein lokoregionäres Rezidiv, eine Metastasierung, ein Zweitkarzinom
+  oder ein unklarer bzw. nicht abschließend beurteilbarer Befund (z. B. neue Läsion unklarer Dignität)
+  vorliegt. Therapieassoziierte Veränderungen (Strahlenpneumonitis, Strahlenfibrose) werden im Datenelement
+  'postTherapyComplication' erfasst.
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
@@ -17,33 +21,62 @@ value_set:
   codings:
   - system: snomed-ct
     code: '359746009'
-    display: Stable disease (finding)
+    display: Patient's condition stable
   - system: snomed-ct
-    code: '417798001'
-    display: Recurrent neoplasm (finding)
+    code: '1259237005'
+    display: Recurrent malignant neoplasm
   - system: snomed-ct
     code: '128462008'
-    display: Secondary malignant neoplastic disease
+    display: Metastatic malignant neoplasm
   - system: snomed-ct
-    code: '419984006'
-    display: Inconclusive (qualifier value)
+    code: '878806005'
+    display: Second primary cancer
+  - system: snomed-ct
+    code: '709137006'
+    display: Patient condition undetermined
   - system: loinc
-    code: 59776-5
-    display: Procedure findings Narrative
+    code: 97509-4
+    display: Cancer disease progression
   - system: kdl
     code: DG020103
     display: CT-Befund
 standard_mappings:
 - standard: fhir-mii-kds
-  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-bildgebung/
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
   resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode
+  notes: MII KDS Bildgebung 2026.0.0 (MII_PR_Bildgebung_Radiologischer_Befund). conclusionCode 0..* MS
+    mit den Slices coding:sct (REQUIRED mii-vs-bildgebung-findings-sct = < 404684003 |Clinical finding|)
+    und coding:icd10-gm (REQUIRED ICD-10-GM). DiagnosticReport.imagingStudy 1..* ist Pflicht (Referenz
+    auf mii-pr-bildgebung-bildgebungsstudie der Untersuchung ctThoraxScan); DiagnosticReport.code mit
+    LOINC-Slice REQUIRED mii-vs-bildgebung-diagnostic-report-code-lnc (Dokument-LOINC der Radiologie).
+    Einzelbefunde (z. B. Größe der Zielläsion) optional als Observation https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+    (code.coding:sct ebenfalls Clinical findings, value 1..1) über DiagnosticReport.result.
 - standard: obds
-  profile_or_url: https://www.basisdatensatz.de/feldbeschreibung
-  resource: Verlaufsmodul / Tumorstatus_Lokoregionaeres
-  notes: Pflichtmeldung gem. §65c SGB V
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 17 Verlauf
+  path: '17.2 Gesamtbeurteilung des Tumorstatus, 17.3 Tumorstatus Primärtumor, 17.4 Tumorstatus Lymphknoten,
+    17.5 Tumorstatus Fernmetastasen, jeweils mit 17.1 Untersuchungsdatum Verlauf (XSD: Verlauf/Gesamtbeurteilung_Tumorstatus,
+    Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen,
+    Untersuchungsdatum_Verlauf)'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. ''Tumorstatus_Lokoregionaeres'' existiert in oBDS 3.0.5 nicht.
+    Wertebereiche: 17.2 V, T, K, P, D, B, R, Y, U, X (Y = Rezidiv, U = Beurteilung unmöglich); 17.3 bis
+    17.5 K, T, P, N, R, F, U, X (R = Lokalrezidiv, neu aufgetretenes Lymphknotenrezidiv bzw. neue Fernmetastase).
+    Ein Zweitkarzinom ist kein Verlaufsstatus, sondern eine eigene Meldung mit Diagnose-Teil (eigene Tumorzuordnung).
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
 - standard: mcode
-  profile_or_url: https://hl7.org/fhir/us/mcode/StructureDefinition-mcode-cancer-disease-status.html
-  resource: CancerDiseaseStatus
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
+  resource: Observation (Profil CancerDiseaseStatus)
+  path: Observation.valueCodeableConcept; Observation.code = LOINC 97509-4 (Pattern); Evidenzart über
+    Observation.extension:evidenceType
+  notes: mCODE STU4 (4.0.0). value[x] ist preferred an mcode-condition-status-trend-vs gebunden (268910001
+    improved, 359746009 stable, 271299001 worsened, 709137006 undetermined). maxValueSet ist mcode-condition-status-trend-max-vs
+    (zusätzlich Remissionscodes 550991000124107, 551001000124108, 103338009, 103337004 sowie 399409002
+    Distant metastasis present). Evidenzart Bildgebung über die Extension http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status-evidence-type
+    (REQUIRED, u. a. is-a 363679005 Imaging). Zweitkarzinom über http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-primary-cancer-condition.
+    Metastasen über http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-secondary-cancer-condition
+    (beide Condition) bzw. als Status 399409002. Ein Rezidiv über Condition.clinicalStatus = recurrence
+    der PrimaryCancerCondition. LOINC 97509-4 des Elements ist der Observation.code, kein Wert.
 instruction_de: Bei Mehrfachbefunden Mehrfacheintrag (Cardinality 0..*). Quantitativer Ergänzungsbefund
   (Größenmessung Zielläsion) gehört in eine separate Beobachtung; freier Befundtext gehört in das DiagnosticReport-Dokument.
 care_process:
@@ -53,11 +86,19 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: 'Tab. 42 (CT Thorax: Tumorkinetik); Empf. 16.7 (geprüft 2025)'
-    recommendation_grade: B
+    section: 'Tab. 44 (Thorax CT: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026: CT
+      als bildgebende Option am Nachsorgetermin); Kap. 16.1 (Rezidive vs. Fernmetastasen, Zweitkarzinome)
+      + Empf. 16.1 (EK, geprüft 2026: Nachsorgeplan zur Erkennung von Rezidiven und Zweitkarzinomen)'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Der strukturierte Nachsorgeplan sollte geeignet sein, Rezidive, Zweitkarzinome, Komplikationen
+      und Toxizitäten der Therapie … geeignete bildgebende Verfahren (Röntgen Thorax, Sonografie Abdomen
+      oder CT-Untersuchungen) … Thorax CT … Tumorkinetik und lokale Ausdehnung
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.1 (EK, Starker Konsens, geprüft 2026), S. 492; Empf. 16.7 (S. 498); Tab. 44 (S.
+      499)
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -67,7 +108,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -79,6 +120,74 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.followup.ctThoraxFinding.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Befundkategorien neu geschnitten
+      (lokoregionäres Rezidiv, Metastasierung, Zweitkarzinom, unklarer Befund). Zudem Leitlinien-Resync,
+      Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 5 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 4 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 7 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 1/1 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Werte für MII Bildgebung prüfen: DiagnosticReport.conclusionCode.coding:sct ist REQUIRED an Clinical
+  findings (< 404684003) gebunden (MII_VS_Bildgebung_Findings_SCT); die SNOMED-CT-Werte des Elements müssen
+  daher Clinical findings sein. DiagnosticReport.code trägt einen radiologischen Dokument-LOINC (z. B.
+  24627-2 „CT Chest“), nicht den Element-Code des Befundes.'
+- 'Befundkategorien von ctThoraxFinding auf mCODE und oBDS abbilden. (1) mCODE CancerDiseaseStatus: value[x]
+  ist preferred an das Trend-ValueSet gebunden (enthält 359746009 und 709137006); das maxValueSet erlaubt
+  zusätzlich Remissionscodes und 399409002 ''Distant metastasis present''. 1259237005 (Rezidiv), 128462008
+  (Metastase) und 878806005 (Zweitkarzinom) sind keine zulässigen Statuswerte. Rezidiv über Condition.clinicalStatus
+  = recurrence der mcode-primary-cancer-condition; Metastase über mcode-secondary-cancer-condition (bzw.
+  Status 399409002); Zweitkarzinom als neue mcode-primary-cancer-condition. (2) oBDS 17 (17.2 ist Pflichtfeld;
+  dort bedeutet K ''keine Änderung = stable disease'' und V ''Vollremission''), Vorschlag: 359746009 →
+  bei Tumorfreiheit (''kein Rezidivnachweis'') 17.2 V mit 17.3 bis 17.5 K, bei unverändertem Resttumor
+  17.2 K mit N in 17.3 bis 17.5 für die betroffene Lokalisation. 1259237005 → 17.2 Y mit 17.3 R bzw. 17.4
+  R je nach Lokalisation. 128462008 → nach vorheriger Tumorfreiheit 17.2 Y und 17.5 R, bei bereits bestehenden
+  Fernmetastasen 17.2 P und 17.5 P; neue Metastasen jeweils zusätzlich unter 11 Fernmetastasen. 709137006
+  → 17.2 U, für die betroffene Lokalisation ggf. 17.3 bis 17.5 F (fraglicher Befund). 878806005 → eigene
+  Diagnose-Meldung. (3) FHIR-seitig entspricht oBDS 17 dem stabilen Profil mii-pr-onko-verlauf (MII Onkologie
+  2026.0.3); offen ist, ob es zusätzlich als Mapping-Ziel aufgenommen wird. Zu entscheiden: Trend- und
+  Ereigniscodes trennen und die Transformationsregeln festschreiben.'
 related_elements:
 - relation: specializes
   target: mihub.lung.followup.ctThoraxScan.v0.1

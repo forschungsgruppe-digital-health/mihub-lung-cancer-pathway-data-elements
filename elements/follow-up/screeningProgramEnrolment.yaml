@@ -1,0 +1,132 @@
+id: mihub.lung.followup.screeningProgramEnrolment.v0.1
+uuid: 1067ccb1-cd9e-5b96-99db-81750cb85002
+name: screeningProgramEnrolment
+label_de: Übergang in ein Lungenkrebs-Früherkennungsprogramm
+definition_de: Dokumentation (Datum/Status), dass die Patient:in nach Abschluss des 5. Nachsorgejahres
+  in ein (LDCT-)Lungenkrebs-Früherkennungsprogramm eingeschlossen wurde. Das Intervall des Programms ist
+  nicht Teil der S3-Nachsorgeempfehlung.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: versorgungsplanung
+datatype: dateTime
+cardinality: 0..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: n/a
+standard_mappings:
+- standard: fhir-r4-base
+  resource: CarePlan / Encounter
+  path: CarePlan.period.start
+care_process:
+  trigger: Ende des 5. Nachsorgejahres
+  frequency_pattern: once
+  responsible_role: Onkolog:in / Pneumolog:in / Hausärzt:in
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026: „nach 5 Jahren in ein Screeningprogramm eingeschlossen werden“);
+      Kap. 16.3.2/16.3.3 (LDCT-Evidenz)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Nach abgeschlossener multimodaler Therapie (inklusive OP oder CTx/RTx) sollten … die Patienten
+      in den ersten 2 Jahren vierteljährlich (alle 3 Monate), ab dem 3. Jahr halbjährlich untersucht und
+      nach 5 Jahren in ein Screeningprogramm eingeschlossen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.3, Empf. 16.7 (EK, geprüft 2026), S. 498
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Statement 5.2 (evidenzbasiertes Statement, geprüft 2026, Starker Konsens: asymptomatische
+      Risikopersonen von 50–75 Jahren mit ≥ 15 Zigaretten/Tag über ≥ 25 Jahre oder ≥ 10 Zigaretten/Tag
+      über ≥ 30 Jahre und Nikotinkarenz < 10 Jahre profitieren in der Regel von jährlicher Niedrigdosis-CT-Früherkennung;
+      gesetzliche Zulässigkeit abweichend nach § 2 LuKrFrühErkV, Fußnote: Zigarettenkonsum ≥ 25 Jahre
+      und ≥ 15 Packungsjahre); Tab. 11 (gesetzliche Vorgaben der LuKrFrühErkV, § 2 Zulässigkeit)'
+    recommendation_grade: Statement
+    evidence_level: '1'
+    quote: Asymptomatische Risikopersonen für ein Lungenkarzinom … • ein Alter zwischen 50 und höchstens
+      75 Jahren • einer Raucheranamnese von ≥ 15 Zigaretten/Tag für mindestens 25 Jahre … profitieren
+      in der Regel von einem strukturierten Lungenkarzinom-Früherkennungsprogramm
+    accessed: '2026-10-15'
+    locator: Kap. 5.1, Statement 5.2 (ST, LoE 1, geprüft 2026), S. 75
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: keine Codings
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Status vs. Datentyp/Zulässigkeit: definition_de nennt „Datum/Status“, datatype ist nur dateTime. Ein
+  Einschluss in ein LDCT-Früherkennungsprogramm nach 5 Jahren (S3-LL Lungenkarzinom 5.1, Empf. 16.7) setzt
+  die gesetzliche Zulässigkeit nach § 2 LuKrFrühErkV voraus (S3 Tab. 11: Alter, Tabakrauchexposition,
+  Dauer der Nikotinkarenz und medizinisches Eignungsprofil; Tabakkriterium laut Fußnote zu Statement 5.2:
+  Zigarettenkonsum ≥ 25 Jahre und ≥ 15 Packungsjahre); die Eignungsprüfung regeln Empf. 5.4 und 5.5. Davon
+  zu unterscheiden ist die evidenzbasierte Risikodefinition in Statement 5.2 (50–75 Jahre; ≥ 15 Zigaretten/Tag
+  über ≥ 25 Jahre oder ≥ 10 Zigaretten/Tag über ≥ 30 Jahre; Nikotinkarenz < 10 Jahre). Überlebende sind
+  daher nicht automatisch zulässig. Status (eingeschlossen / nicht zulässig / abgelehnt) zusätzlich zum
+  Datum erfassen oder „Status“ aus der Definition streichen. Für die Zulässigkeitsprüfung fehlen im Katalog
+  zudem Packungsjahre, Rauchdauer und Karenzdauer (smokingStatus erfasst nur den Konsumstatus). Kontext
+  S3 Kap. 16.3.4: „Ob eine weitere Nachsorge nach 5 Jahren sinnvoll ist, ist strittig.“'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.followup.followUpInterval.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.smokingStatus.v0.2

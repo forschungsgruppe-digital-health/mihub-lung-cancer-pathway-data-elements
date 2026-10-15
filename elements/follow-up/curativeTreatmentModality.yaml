@@ -1,0 +1,255 @@
+id: mihub.lung.followup.curativeTreatmentModality.v0.1
+uuid: 4cc40010-ff86-505f-bc6d-604b70406e27
+name: curativeTreatmentModality
+label_de: Kurative Therapiemodalität (Eingangsgröße des Nachsorgeplans)
+definition_de: 'Modalität der abgeschlossenen kurativ intendierten Therapie (Operation, alleinige Strahlentherapie,
+  Radiochemotherapie, multimodal inkl. systemischer Therapie/Immuntherapie). Steuert beim NSCLC die modalitätsabhängigen
+  Zeitpunkte von CT Thorax (Onkopedia NSCLC Tab. 12: Mo 3/6/18 nur nach Strahlentherapie) und Lungenfunktion
+  (nach RT/RCT bis Ende des Pneumonitis-Risikos). Beim SCLC sind CT Thorax und Lungenfunktion in Onkopedia
+  SCLC Tab. 9 modalitätsunabhängig; modalitätsabhängig ist dort nur das Schädel-MRT (LD ohne PCI, siehe
+  prophylacticCranialIrradiationStatus).'
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: prozedur
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '119746007'
+    display: Lung excision
+  - system: snomed-ct
+    code: '1287742003'
+    display: Radiotherapy
+  - system: snomed-ct
+    code: '703423002'
+    display: Combined chemotherapy and radiation therapy
+  - system: snomed-ct
+    code: '367336001'
+    display: Chemotherapy
+  - system: snomed-ct
+    code: '870387009'
+    display: Immune checkpoint inhibitor therapy
+  - system: ops
+    code: 5-324
+    display: Einfache Lobektomie und Bilobektomie der Lunge
+  - system: icd-10-gm
+    code: Z92.4
+    display: Größerer operativer Eingriff in der Eigenanamnese, anderenorts nicht klassifiziert
+  - system: icd-10-gm
+    code: Z92.3
+    display: Bestrahlung in der Eigenanamnese
+  - system: ops
+    code: 5-323
+    display: Segmentresektion der Lunge
+  - system: ops
+    code: 5-327
+    display: Einfache (Pleuro-)Pneum(on)ektomie
+  - system: icd-10-gm
+    code: Z92.6
+    display: Zytostatische Chemotherapie wegen bösartiger Neubildung in der Eigenanamnese
+  notes: 'Codings sind Therapiekomponenten (mehrere Werte je Patient:in möglich). Steuerung beim NSCLC
+    (Onkopedia NSCLC Kap. 8.1, Tab. 12): CT Thorax Mo 3/6/18 („* nach Strahlentherapie“) bei jeder Therapie
+    mit Strahlentherapieanteil, erkennbar an 1287742003 Radiotherapy oder 703423002 Combined chemotherapy
+    and radiation therapy, jeweils einschließlich Subkonzepten (is-a, z. B. stereotaktische Strahlentherapie);
+    Fortführung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos nach alleiniger Strahlentherapie
+    oder Radiochemotherapie. Chemotherapy (367336001) und Immune checkpoint inhibitor therapy (870387009)
+    nur als Komponenten einer kurativen Therapie mit lokal ablativem Verfahren (OP, RTx, CTx/RTx; S3-LL
+    Lungenkarzinom 5.1, Empf. 16.1), nicht als alleinige kurative Modalität.'
+standard_mappings:
+- standard: obds
+  profile_or_url: https://www.basisdatensatz.de/basisdatensatz
+  resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie
+  path: 'Intention = K in 13.1 (OP/Intention), 14.1 (ST/Intention; bei lokal ablativer Bestrahlung einer
+    Oligometastasierung O ''lokal kurativ bei Oligometastasierung'') bzw. 16.1 (SYST/Intention); Modalität
+    über die Meldungsart sowie 13.3 OPS (OP/Menge_OPS/OPS/Code) bzw. 16.3 Art der systemischen oder abwartenden
+    Therapie (SYST/Therapieart, z. B. CH, IM, CI); Radiochemotherapie: ST/Menge_Bestrahlung/Bestrahlung/Applikationsart/Perkutan/Radiochemo
+    = RCJ'
+  notes: 'Pflichtmeldung § 65c SGB V. Die Intention hat je Abschnitt eigene Werte (OP: K, P, D, R, S,
+    X; ST: K, P, O, S, X; SYST: K, P, S, X). Bei einer Radiochemotherapie kennzeichnet RCJ (''mit Chemotherapie/Sensitizer'')
+    die Bestrahlung; die begleitende Chemotherapie ist eine SYST-Meldung. Feldnummern nach der oBDS-Feldliste,
+    XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-operation
+  resource: Procedure
+  path: Procedure.code.coding:ops (z. B. OPS 5-323, 5-324, 5-327) bzw. :sct (z. B. 119746007); Procedure.extension:Intention
+    = K
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Operation); baseDefinition ist das generische MII-Prozedur-Profil
+    https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure.
+    extension:Intention 1..1 REQUIRED mii-vs-onko-operation-intention (K, P, D, R, S, X); performed[x]
+    (dateTime) 1..1. Strahlentherapie und systemische Therapie siehe die beiden weiteren Einträge; eine
+    Radiochemotherapie sind zwei Procedures.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie
+  resource: Procedure
+  path: Procedure.extension:Intention = K (bei lokal ablativer Bestrahlung einer Oligometastasierung O
+    'lokal kurativ bei Oligometastasierung'); Procedure.code (z. B. SNOMED 1287742003); Zielgebiet je
+    Bestrahlung über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-strahlentherapie-bestrahlung-strahlentherapie
+    (Procedure.bodySite)
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Strahlentherapie). extension:Intention 1..1 REQUIRED
+    mii-vs-onko-strahlentherapie-intention (K, P, S, X, O); performed[x] (Period) 1..1; code 1..1 mit
+    coding:ops bzw. coding:sct. Strahlentherapie-Anteil der Modalitäten Radiotherapie und Radiochemotherapie.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie
+  resource: Procedure
+  path: Procedure.code.coding:systemische_therapie_art (z. B. CH, IM, CI); Procedure.extension:Intention
+    = K
+  notes: MII KDS Onkologie 2026.0.3 (MII_PR_Onko_Systemische_Therapie). Therapieart REQUIRED mii-vs-onko-systemische-therapie-art
+    (oBDS-Codes aus https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/CodeSystem/mii-cs-onko-therapie-typ;
+    laut MII-ConceptMap mii-cm-onko-therapie-typ-sct entspricht CH = 367336001); extension:Intention 1..1
+    REQUIRED mii-vs-onko-systemische-therapie-intention (K, P, S, X); performed[x] (Period) 1..1. Substanzen
+    über https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation
+    (MedicationStatement).
+care_process:
+  trigger: Therapieabschluss / Erstellung des Nachsorgeplans
+  frequency_pattern: once-per-treatment-completion
+  responsible_role: Lead-Clinician (Onkolog:in / Pneumolog:in / Thoraxchirurg:in / Strahlentherapeut:in)
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1, Tab. 12 Fußnote „* nach Strahlentherapie“; Kap. 8.1 Text (Lungenfunktion nach RT/RCT)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: CT Thorax | X* | X* | X | X* | X | X | X | X | Lungenfunktion | X | X | (X) | (X) | (X) | |
+      | * nach Strahlentherapie; Bei Pat. nach alleiniger Strahlentherapie oder nach Radiochemotherapie
+      soll die Überprüfung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos fortgeführt werden
+      [121].
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 8.1, Tab. 12 inkl. Fußnote und Text nach Tab. 12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.1 (strukturierter Nachsorgeplan nach multimodaler Therapie Stadium I–IIIC/OMD mit
+      lokal ablativem Verfahren OP, RTx, CTx/RTx); Empf. 16.4 (Population nach OP Stadium I–III bzw. RT/RCT
+      Stadium I–II); Empf. 16.7 (nach multimodaler Therapie inkl. OP oder CTx/RTx) — alle EK, Starker
+      Konsens, geprüft 2026
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Nach Abschluss einer multimodalen Therapie (Stadium I-IIIC, OMD), die ein lokal … ablatives
+      Verfahren (OP, RTx, CTx/RTx) beinhaltet … (Operation im Stadium I-II und III, … Strahlentherapie/
+      Strahlenchemotherapie im Stadium I und II) … (inklusive OP oder CTx/RTx)
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.1 (S. 492), Empf. 16.4 (S. 497), Empf. 16.7 (S. 498) – jeweils EK, Starker Konsens,
+      geprüft 2026
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.5 (A/B, LoE 2, Konsens, geprüft 2026) — Population NSCLC Stadium III nach RT/RCT:
+      posttherapeutische Komplikationen erfassen (sollte); erste klinische Vorstellung soll innerhalb
+      von 8 Wochen nach Abschluss der Strahlentherapie erfolgen'
+    recommendation_grade: A
+    evidence_level: '2'
+    quote: NSCLC im Stadium III nach ablativer lokaler Therapie (Strahlentherapie/Strahlenchemotherapie)
+      sollten die posttherapeutischen Komplikationen … erfasst und behandelt werden. Die erste klinische
+      Vorstellung nach Abschluss der Strahlentherapie soll innerhalb von 8 Wochen erfolgen.
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.5 (Empfehlungsgrad A/B, Evidenzlevel 2, Konsens, geprüft 2026), S. 497
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 10.2, Tab. 9 (Strukturierte Nachsorge nach kurativer Therapie; lokalisierte Stadien,
+      Orientierung an den NSCLC-Empfehlungen): CT Thorax an allen 9 Zeitpunkten ohne Modalitätsabhängigkeit;
+      Lungenfunktion X Mo 3/6/9, (X) Mo 12/18/24, ohne Einschränkung auf Bestrahlte; modalitätsabhängig
+      nur „MRT Schädel bei LD ohne PCI“'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Eine strukturierte Nachsorge kann sich an den Empfehlungen für das NSCLC orientieren, siehe
+      Tabelle 9. … CT Thorax X X X X X X X X X Lungenfunktion X X X (X) (X) (X) MRT Schädel bei LD ohne
+      PCI
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 10.2, Tab. 9
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 11 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 5 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 11 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Modalitätscodes von curativeTreatmentModality auf die Onko-Profile und oBDS abbilden. Für die durchgeführte
+  Therapie führen MII Onkologie und oBDS keinen eigenen Modalitätscode: Je Therapie wird eine Prozedur
+  (Operation, Strahlentherapie, systemische Therapie) mit Pflicht-Intention geführt (kurativ = K, bei
+  lokal ablativer Strahlentherapie einer Oligometastasierung O); die Modalität ergibt sich aus Profil
+  bzw. Meldungsart. Eine Therapieart-Codierung gibt es nur für Therapieempfehlungen (oBDS 19.1 Typ_Therapieempfehlung
+  = MII mii-cs-onko-therapie-typ: OP, ST, CH, IM, CI …) und für die Art der systemischen Therapie (16.3);
+  sie käme als Wertebereich des Elements in Frage (Radiochemotherapie = ST + CH). Vorschlag: 119746007
+  und OPS 5-323, 5-324, 5-327 → Operation; 1287742003 → Strahlentherapie; 703423002 → Strahlentherapie
+  (oBDS Radiochemo = RCJ) plus systemische Therapie; 367336001 → systemische Therapie, Therapieart CH
+  (MII-ConceptMap mii-cm-onko-therapie-typ-sct: CH = 367336001); 870387009 → systemische Therapie, Therapieart
+  IM bzw. CI (kein direkter ConceptMap-Eintrag). ICD-10-GM Z92.3, Z92.4 und Z92.6 sind Eigenanamnese-Diagnosen,
+  keine Prozedurcodes, und haben in Procedure.code keinen Platz. Zu entscheiden: Abbildungstabelle festschreiben,
+  die Rolle der Z92-Codes klären (Anamnese-Kodierung oder streichen) und entscheiden, ob mii-cs-onko-therapie-typ
+  als Wertebereich übernommen wird.'

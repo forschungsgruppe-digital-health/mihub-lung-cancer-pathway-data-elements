@@ -1,0 +1,168 @@
+id: mihub.lung.primarycare.standardizedAssessmentScore.v0.1
+uuid: 3e8f9264-1739-589d-8098-926d82b128e1
+name: standardizedAssessmentScore
+label_de: Standardisiertes Assessment (Score)
+definition_de: Ergebnis eines standardisierten Assessment-Instruments in der Hausarztpraxis (z. B. Beck-Depressions-Inventar)
+  mit Angabe des Instruments.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: assessment
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '718366000'
+    display: Beck Depression Inventory II score
+  - system: snomed-ct
+    code: '273306008'
+    display: Beck depression inventory
+  - system: loinc
+    code: 89209-1
+    display: Beck Depression Inventory II total score [BDI]
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-observation-bdi-ii
+  resource: Observation
+  path: Observation.code = LOINC 89209-1 (Pattern); Observation.valueQuantity (UCUM {score}); Observation.derivedFrom
+    → QuestionnaireResponse
+  notes: 'Stabil: MII PRO 2026.7.0 (Canonical unverändert seit 2026.3.0), Basis mii-pr-pro-score-instance.
+    Das Profil erlaubt nur valueQuantity: Score als Quantity mit system http://unitsofmeasure.org und
+    code {score} statt valueInteger.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-score-instance
+  resource: Observation
+  path: Observation.code (Score des Instruments); Observation.value[x] (Quantity, CodeableConcept oder
+    string); Observation.method; Observation.derivedFrom → QuestionnaireResponse
+  notes: Generisches PRO-Score-Profil für weitere Instrumente (MII PRO 2026.7.0); valueInteger ist nicht
+    vorgesehen.
+- standard: fhir-r4-base
+  resource: Observation
+  path: Observation.code (Instrument) / Observation.valueInteger
+care_process:
+  trigger: bei Verdacht / Screening
+  frequency_pattern: ad-hoc
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-023 Assessments (z. B. BDI)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-023
+    quote: Assessments … zb BDI (Beck-Depression-Inventar)
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 18.3.1 Empf. 18.3 (geprüft 2026, Konsens: Screeningverfahren zur Erkennung einer Depression);
+      Hintergrund: HADS, 2-Fragen-Instrument nach Whooley – BDI nicht als Screeninginstrument genannt'
+    recommendation_grade: B
+    evidence_level: 1+
+    quote: Bei Patient:innen mit einer nicht heilbaren Krebserkrankung sollte zur Erkennung … einer Depression
+      ein Screeningverfahren eingesetzt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 18.3.1 Screening, Empf. 18.3, S. 450
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 17.2 Empf. 17.2 (geprüft 2026, Konsens: validiertes und standardisiertes Screeninginstrument
+      zur Erkennung einer Angst)'
+    recommendation_grade: '0'
+    evidence_level: '3'
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung kann zur Erkennung … einer Angst
+      ein validiertes und standardisiertes Screeninginstrument eingesetzt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 17.2 Erfassung, Empf. 17.2, S. 408
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-023; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Rollen trennen: Observation.code = Score-Observable (z. B. 718366000 / LOINC 89209-1), Instrument =
+  Observation.method (falls benötigt, BDI-II-Variante 1344725001 ‚Beck Depression Inventory II (assessment
+  scale)‘ statt 273306008). Mapping-Pfad ‚Observation.code (Instrument)‘ entsprechend korrigieren und
+  273306008 aus dem Observation.code-Value-Set herausnehmen.'
+- 'Das Element hat datatype integer mit unit {score} (Mapping derzeit Observation.valueInteger). Die nationalen
+  MII-PRO-Profile (BDI-II, score-instance) lassen für numerische Scores nur valueQuantity zu (BDI-II:
+  UCUM {score}). Zu entscheiden: datatype auf Quantity umstellen (die Einheit {score} ist bereits hinterlegt)
+  oder die Transformation integer → Quantity als Mapping-Regel festhalten.'
+related_elements:
+- relation: generalizes
+  target: mihub.lung.palliative.phq9DepressionScore.v0.1
+- relation: generalizes
+  target: mihub.lung.palliative.anxietyHadsScore.v0.2
+- relation: generalizes
+  target: mihub.lung.followup.distressThermometerScore.v0.2

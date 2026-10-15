@@ -1,0 +1,191 @@
+id: mihub.lung.followup.physicalExaminationFinding.v0.1
+uuid: 6d6f9cb7-00ae-59fd-ba17-d6331d323ab5
+name: physicalExaminationFinding
+label_de: Körperliche Untersuchung — Befund
+definition_de: Befund der körperlichen Untersuchung am Nachsorgetermin (z. B. Auskultation, Lymphknotenstatus,
+  Narbenverhältnisse, Ödeme, neurologischer Status) bzw. „unauffällig“. Pathologische Befunde triggern
+  weiterführende Diagnostik.
+phase: followup
+tumor_entity:
+- NSCLC
+- SCLC
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '5880005'
+    display: Physical examination
+  - system: snomed-ct
+    code: '37931006'
+    display: Auscultation
+  - system: loinc
+    code: 29545-1
+    display: Physical findings note
+  - system: snomed-ct
+    code: '282332003'
+    display: No abnormality detected - examination result
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: 'Observation.valueCodeableConcept bzw. Observation.component (Befund, z. B. 282332003); Observation.code
+    offen (siehe offene Punkte): LOINC 29545-1 mit 5880005 bzw. 37931006 in Observation.method oder SNOMED
+    5880005 mit 37931006 als Observation.method bzw. component.code; Bezug zum Nachsorgetermin über Observation.encounter'
+  notes: 'SNOMED 5880005 ''Physical examination procedure (procedure)'' ist ein Prozedurkonzept, über
+    315306007 Examination by method aber ein Nachfahre von 386053000 Evaluation procedure. In R4 ist es
+    damit ein Beispielwert für Observation.method (example-gebunden an observation-methods: is-a 272394005,
+    129264002 oder 386053000); ob es zugleich als Observation.code dient, ist offen. Dasselbe gilt für
+    37931006 ''Auscultation (procedure)'', ebenfalls unter 315306007. LOINC 29545-1 ''Physical findings
+    note'' hat in LOINC 2.83 die Skala Doc und ist ein Dokument- bzw. Sektionscode.'
+care_process:
+  trigger: bei jedem Nachsorgetermin (followUpVisitDate); in der Surveillance bei jeder Verlaufskontroll-Visite
+    (surveillanceVisit)
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Pneumolog:in
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in / Pneumolog:in
+    usage_type: capture
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: read
+    sector: ambulant
+  - system: tumordokumentation
+    actor_role: Tumordokumentar:in
+    usage_type: store
+    sector: sektorenuebergreifend
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026): körperliche Untersuchung an jedem Nachsorgetermin; Empf.
+      16.9 (EK: unter Systemtherapie)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bei diesen Nachsorgeterminen sind eine dezidierte Anamnese, eine körperliche Untersuchung und
+      geeignete bildgebende Verfahren … durchzuführen. … Als Basis sind dabei Anamnese, körperliche Untersuchung,
+      CT-Thorax/Abdomen/Becken und je nach Beschwerdebild geeignete bildgebende Verfahren
+    accessed: '2026-10-15'
+    locator: Empf. 16.7 (EK, geprüft 2026), S. 498; Empf. 16.9 (EK, geprüft 2026), S. 499
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: Kap. 8.1, Tab. 12 (körperliche Untersuchung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Anamnese, körperliche Untersuchung | X | X | X | X | X | X | X | X
+    accessed: '2026-10-15'
+    locator: Kap. 8.1, Tab. 12
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: Kap. 10.2, Tab. 9 (körperliche Untersuchung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Anamnese, körperliche Untersuchung X X X X X X X X X
+    accessed: '2026-10-15'
+    locator: Kap. 10.2, Tab. 9
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-020 / DE-043 körperliche Untersuchung (Nachsorge + Surveillance)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#wg-de-020 (weitere Zeilen: DE-043)'
+    quote: körperliche Untersuchung … Erstvorstellung innerhalb von 8 Wochen nach Abschluss der multimodalen
+      Therapie (inklusive OP oder CTx/RTx … S3-LL Lungenkarzinom … 16.7 Apr. 2026 … körperliche Untersuchung
+      … 1 Monat nach Abschluss der Behandlung … alle 3-6 Wochen bei laufender Erhaltungstherapie oder
+      6-9 Wochen bei laufender Systemtherapie … S3-LL Lungenkarzinom … Empf. 16.9
+    accessed: '2026-10-15'
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - followup
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-020, DE-043; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'physicalExaminationFinding: (1) Rollen der Codings trennen, als katalogweite Konvention (vgl. die offenen
+  Punkte zu followUpVisitDate und followUpHistoryFinding): 5880005 = Observation.code; 37931006 nur als
+  component.code (Untersuchungsmethode); LOINC 29545-1 (Dokument-Skala) nur als Dokument- bzw. Sektionscode;
+  Antwortwerte aus Clinical findings führen (282332003 „unauffällig“ ist bereits aufgenommen). (2) Surveillance-Trigger
+  beibehalten und die Evidenz trennen: Basisevaluation einen Monat nach Abschluss der Induktion (postInductionEvaluationDate;
+  S3-LL Lungenkarzinom 5.1 Empf. 16.9 nennt die körperliche Untersuchung hier ausdrücklich) und jede Verlaufskontroll-Visite
+  (surveillanceVisit; Expert:innen-Erhebung DE-043, da Empf. 16.9 danach nur „geeignete Untersuchungsverfahren“
+  nennt). Die Trennung in der section der S3-Referenz bzw. in constraints_de kenntlich machen.'
+- 'Observation.code für physicalExaminationFinding festlegen (ergänzt den offenen Punkt zur Rollentrennung).
+  Zwei Varianten: (a) Observation.code = LOINC 29545-1 ''Physical findings note'', das Untersuchungsverfahren
+  5880005 bzw. 37931006 in Observation.method (in R4 example-gebunden an observation-methods, das Evaluationsprozeduren
+  wie 5880005 umfasst); dagegen spricht, dass 29545-1 die LOINC-Skala Doc hat und ein Dokument- bzw. Sektionscode
+  ist. (b) Observation.code = SNOMED 5880005 ''Physical examination procedure'', 37931006 als component.code
+  und 29545-1 nur als Dokument- bzw. Sektionscode, wie im offenen Punkt zur Rollentrennung vorgeschlagen.
+  Zu entscheiden ist zwischen (a) und (b). Außerdem fehlt ein ValueSet für die Befunde neben ''unauffällig''
+  (282332003), etwa Auskultationsbefund, Lymphknotenstatus, Narbenverhältnisse, Ödeme und neurologischer
+  Status.'
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.followup.followUpVisitDate.v0.1
+- relation: isPartOf
+  target: mihub.lung.surveillance.surveillanceVisit.v0.1
+- relation: isPartOf
+  target: mihub.lung.surveillance.postInductionEvaluationDate.v0.1

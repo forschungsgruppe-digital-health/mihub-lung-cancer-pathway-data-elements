@@ -170,9 +170,9 @@ def candidates_from_args(args) -> list[dict]:
         import _elicitation as _E
         wb = load_workbook(args.from_xlsx, data_only=True)
         ws = wb["Datenelemente"]
-        keys = [c[0] for c in _E.ELEMENT_COLUMNS]
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            rec = {keys[i]: row[i] for i in range(min(len(keys), len(row)))}
+        for rec in _E.rows_by_header(ws, _E.ELEMENT_COLUMNS):  # Spalten über die Kopfzeile zugeordnet
+            if _E.is_example(rec.get("local_id")):
+                continue
             if rec.get("label_de"):
                 cands.append(descriptor(
                     {"label_de": rec.get("label_de", ""), "definition_de": rec.get("definition_de", "")},

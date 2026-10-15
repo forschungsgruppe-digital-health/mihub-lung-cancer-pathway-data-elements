@@ -2,15 +2,32 @@ id: mihub.lung.followup.firstFollowUpVisitDate.v0.1
 uuid: 3948c905-5fd2-5899-85b7-d2de5114bc4c
 name: firstFollowUpVisitDate
 label_de: Datum Erstvorstellung in der Nachsorge
-definition_de: Datum der ersten klinischen Vorstellung nach Abschluss der lokal-ablativen Therapie. Soll
-  innerhalb von 8 Wochen nach Therapieende erfolgen.
+definition_de: Datum der ersten klinischen Vorstellung in der Nachsorge nach Abschluss der lokal-ablativen
+  Therapie (OP, RT/RCT). Die Erstvorstellung erfolgt in der Regel innerhalb von 8 Wochen nach Therapieende;
+  mit ihr beginnen die Nachsorgeintervalle (S3 Empf. 16.4, 16.7). Bei NSCLC Stadium III nach RT/RCT soll
+  sie innerhalb von 8 Wochen erfolgen (S3 Empf. 16.5).
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: kontakt-visite
 datatype: dateTime
 cardinality: 1..1
+value_set:
+  codings:
+  - system: snomed-ct
+    code: '390906007'
+    display: Follow-up encounter
 standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period.start
+  notes: MII KDS Fall, seit 2026 im Paket de.medizininformatikinitiative.kerndatensatz.base (2026.0.1;
+    letzte Einzelversion fall 2025.0.1). Encounter.period.start 0..1 MS; Encounter.class 1..1 REQUIRED
+    http://fhir.de/ValueSet/EncounterClassDE; der Kontakttyp (SNOMED 390906007 Follow-up encounter) passt
+    in Encounter.type (example-gebunden). Wie bei followUpVisitDate; der Wert entspricht dem frühesten
+    followUpVisitDate nach Therapieende.
 - standard: fhir-r4-base
   resource: Encounter
   path: Encounter.period.start
@@ -22,11 +39,39 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.4/16.5 (EK / B), geprüft 2025
-    recommendation_grade: B
-    evidence_level: 1a
+    section: 'Empf. 16.4 (EK, geprüft 2026): Erfassung posttherapeutischer Komplikationen typischerweise
+      bei Vorstellung innerhalb von 8 Wochen nach Abschluss der lokalen Therapie'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: sollten die posttherapeutischen Komplikationen, die nach Operation oder Strahlentherapie auftreten
+      können, erfasst und behandelt werden. Typischerweise erfolgt dies im Rahmen einer Vorstellung innerhalb
+      von 8 Wochen nach Abschluss der lokalen Therapie.
+    accessed: '2026-10-15'
+    locator: Empf. 16.4 (EK, geprüft 2026, Starker Konsens), Kap. 16.3, S. 497
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.5 (A/B, LoE 2, geprüft 2026): NSCLC Stadium III nach RT/RCT — erste klinische Vorstellung
+      soll innerhalb von 8 Wochen erfolgen'
+    recommendation_grade: A
+    evidence_level: '2'
+    quote: Die erste klinische Vorstellung nach Abschluss der Strahlentherapie soll innerhalb von 8 Wochen
+      erfolgen.
+    accessed: '2026-10-15'
+    locator: Empf. 16.5 (evidenzbasiert, geprüft 2026), Kap. 16.3, S. 497
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.7 (EK, geprüft 2026): Nachsorgeintervalle beginnen mit der Erstvorstellung innerhalb
+      von 8 Wochen'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Diese Intervalle beginnen mit der Erstvorstellung innerhalb von 8 Wochen nach Abschluss der
+      Therapie.
+    accessed: '2026-10-15'
+    locator: Empf. 16.7 (EK, geprüft 2026, Starker Konsens), Kap. 16.3, S. 498
 iso13972_metadata:
   type: observation
   keywords:
@@ -35,7 +80,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -47,3 +92,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: hasPart
+  target: mihub.lung.followup.postTherapyComplication.v0.1

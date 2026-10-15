@@ -1,4 +1,4 @@
-id: mihub.lung.followup.distressThermometerScore.v0.1
+id: mihub.lung.followup.distressThermometerScore.v0.2
 uuid: 26e70089-9670-5e8d-b91b-384495857b99
 name: distressThermometerScore
 label_de: Distress-Thermometer Gesamtscore
@@ -8,33 +8,85 @@ phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..1
 unit: '{score}'
 value_set:
   binding_strength: required
-  codings:
-  - system: loinc
-    code: 63994-4
-    display: Distress thermometer NCCN
+  codings: []
+  standard_binding_status: pending-mapping
+  notes: 'Kein LOINC- und kein SNOMED-CT-Konzept für das NCCN Distress-Thermometer auf dem MII TermServ
+    (LOINC 2.83, SNOMED CT 20260701; Stand 2026-10-14): $expand ‚distress thermometer‘ ergibt in beiden
+    Systemen 0 Treffer; ‚distress‘, ‚NCCN‘ und ‚thermometer‘ liefern nur andere Konzepte (z. B. FACIT-NCCN-Symptomindizes,
+    Kessler K6/K10, PROMIS, CORE-OM, Thermometer-Geräte), kein DT-Konzept. Der früher notierte Code LOINC
+    63994-4 ist kein gültiger LOINC-Code (Prüfziffer zu 63994 wäre 8; 63994-8 = PhenX-Item ‚fixed braces‘).
+    Mapping offen (Antrag SNOMED CT / LOINC oder lokales ValueSet).'
+constraints_de: 'Wertebereich 0..10 (ganzzahlig; Selbsteinschätzung durch die Patient:in). Cut-off ≥5
+  = auffällig (S3-LL Psychoonkologie 2.1 Tab. 8: 0–4 unauffällig, 5–10 auffällig) → vertiefende Diagnostik,
+  Information, Beratung (Kap. 7.4).'
 care_process:
-  trigger: regelmäßig in Nachsorge
+  trigger: bei jeder Nachsorgevisite (Raster Empf. 16.7); zusätzlich bei Therapieende, Rezidiv/Progress
+    oder Änderung des Erkrankungsstatus
   frequency_pattern: Q3M-Y1-Y2;Q6M-Y3-Y5
   responsible_role: Onkologe / Psychoonkologie
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Tab. 6 (Distress-Thermometer mit Problemliste)
+    section: 'Tab. 6 (Kap. 5.3, Faktor 1 ‚Probleme und Bedürfnisse d. Patient:in'': Distress-Thermometer
+      mit Problemliste [39 = Mehnert 2006, deutsche Version des NCCN-DT]); Kontext Empf. 5.2 (EK: validierte
+      multidimensionale Erfassungsinstrumente)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'sollte die Erfassung der Bedürfnisse … mit Hilfe von validierten multidimensionalen Erfassungsinstrumenten
+      erfolgen. … Tabelle 6: Beeinflussende Faktoren für die Komplexität und mögliche Messinstrumente
+      … 1. Probleme und … Distress-Thermometer mit Problemliste [39]'
+    accessed: '2026-10-15'
+    locator: S3 Palliativmedizin 3.0 Empf. 5.2 (EK, Konsens, geprüft 2026), Kap. 5.2; Tab. 6 (Kap. 5.3),
+      S. 56
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
-    url: https://www.cancer.org.au/OCP
-    section: Principle 4 Supportive care
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 4 Supportive care (Box ‚Validated screening tools'': NCCN Distress Thermometer
+      and Problem Checklist; Key review points: end of treatment, throughout survivorship, diagnosis of
+      recurrence); Step 5.4.1 (Survivorship: Verweis auf die Principle-4-Instrumente)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Validated screening tools • National Comprehensive Cancer Network Distress Thermometer and
+      Problem Checklist … • end of treatment • throughout survivorship • diagnosis of recurrence … 5.4.1
+      Supportive care See validated screening tools mentioned in Principle 4 ‘Supportive care’.
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Principle 4 Supportive care (Box „Validated screening tools“, S. 13; Key
+      review points); Step 5.4.1
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Kap. 11 (Verweis auf S3-LL Psychoonkologie — Screening; kein Instrument benannt); Empf.
+      16.1 (EK: Bedarf an Psychoonkologie erkennen)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Zur psychoonkologischen Versorgung liegt ebenfalls eine S3-Leitlinie des Leitlinienprogramms
+      Onkologie vor, die auch für Patienten mit Lungenkarzinom gültig ist … • Diagnostik o Aufgaben und
+      Besonderheiten o Screening … den Bedarf an Psychoonkologie und Sozialberatung zu erkennen
+    accessed: '2026-10-15'
+    locator: S3 Lungenkarzinom Kap. 11, S. 469; Empf. 16.1 (EK), S. 492
+  - source: andere
+    version: S3-LL Psychoonkologie 2.1 (August 2023, AWMF 032-051OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/psychoonkologie
+    section: 'Empf. 7.4 (A, LoE 1b, Konsens, modifiziert 2023: Distress-Thermometer als validiertes Screeninginstrument
+      für psychosoziale Belastung); Tab. 8 (DT 0–4 unauffällig / 5–10 auffällig, Evidenzlevel 1b); Kap.
+      7.4 (auffälliger Screeningwert → vertiefende Diagnostik, Information, Beratung und Begleitung)'
+    recommendation_grade: A
+    evidence_level: 1b
+    quote: 'Als Screeninginstrumente sollen das Distress-Thermometer (DT), … DT + + + + + + Ja Ja Nein
+      1b 1b 0-4: unauffällig 5-10: auffällig … die einen auffälligen Wert erreichen (Screening Cut-off
+      Wert: auffällig), sollten einer vertiefenden Diagnostik, Information, Beratung und Begleitung zugeführt
+      werden.'
+    accessed: '2026-10-15'
+    locator: S3 Psychoonkologie 2.1 Empf. 7.4 (A, LoE 1b, Konsens, modifiziert 2023), Kap. 7.3.1; Tab.
+      8 (S. 55); Kap. 7.4
 iso13972_metadata:
   type: observation
   keywords:
@@ -43,7 +95,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -55,3 +107,50 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.followup.distressThermometerScore.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''loinc|63994-4'']. Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: keine Codings
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8

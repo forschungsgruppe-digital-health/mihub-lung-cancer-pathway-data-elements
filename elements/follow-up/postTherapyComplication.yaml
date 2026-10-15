@@ -3,41 +3,110 @@ uuid: 7a0cabf4-6853-5562-8e6c-d42815f41d89
 name: postTherapyComplication
 label_de: Posttherapeutische Komplikation
 definition_de: 'Erfassung von Komplikationen nach lokal-ablativer Therapie: nach OP (Schmerz, Infektion,
-  Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom), nach RTx (Ösophagitis, Pneumonitis, Strahlenfibrose,
-  Hautreaktion, kardiale, myelitische Affektionen).'
+  Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom), nach RTx/CTx-RTx (Ösophagitis, Pneumonitis, Strahlenfibrose,
+  Affektionen von Haut, Herz oder Rückenmark) sowie neurokognitive Spätfolgen nach Schädelbestrahlung
+  (PCI, Ganzhirnbestrahlung).'
 phase: followup
 tumor_entity:
 - NSCLC
 - SCLC
+category: befund
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
   codings:
   - system: snomed-ct
-    code: '233604007'
-    display: Pneumonitis (disorder)
+    code: '84004001'
+    display: Radiation pneumonitis
   - system: snomed-ct
-    code: '16348002'
-    display: Radiation oesophagitis
+    code: '205237003'
+    display: Pneumonitis
+  - system: snomed-ct
+    code: '235605005'
+    display: Radiation esophagitis
+  - system: snomed-ct
+    code: '405570007'
+    display: Pulmonary fibrosis due to and following radiotherapy
+  - system: snomed-ct
+    code: '709073001'
+    display: Neurocognitive disorder
   - system: icd-10-gm
     code: T66
-    display: Strahlenschäden, nicht näher bezeichnet
+    display: Nicht näher bezeichnete Schäden durch Strahlung
   - system: icd-10-gm
     code: J70.1
-    display: Chronische pulmonale Manifestation Strahlentherapie
+    display: Chronische und sonstige Lungenbeteiligung bei Strahleneinwirkung
+  - system: icd-10-gm
+    code: J70.0
+    display: Akute Lungenbeteiligung bei Strahleneinwirkung
+  standard_binding_status: mapped
 care_process:
-  trigger: Bei Erstvorstellung 8 Wo nach Therapieende und bei jeder Folgevisite
+  trigger: Bei Erstvorstellung innerhalb von 8 Wochen nach Therapieende (nach OP Stadium I–III; nach RT/RCT
+    Stadium I–II; NSCLC Stadium III nach RT/RCT) und bei jeder Folgevisite
   frequency_pattern: per-encounter
   responsible_role: Onkologe / Pneumologe
 evidence:
   guideline_references:
   - source: S3-LL Lungenkarzinom
-    version: 5.01 (Konsultationsfassung 04/2026, AWMF 020-007OL)
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
-    section: Empf. 16.4 (EK), 16.5 (A/B, 1a); Kap. 16.3.1
-    recommendation_grade: A
-    evidence_level: 1a
+    section: Empf. 16.4 (EK, geprüft 2026); Kap. 16.3.1 (Komplikationen nach OP und RT)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Nach chirurgischer Resektion stehen Schmerzzustände, Infektionen oder aber der Verlust an Lungenfunktion
+      im Vordergrund, nach Strahlentherapie die Ösophagitis und die Pneumonitis, aber auch Affektionen
+      der Haut, des Herzens oder des Rückenmarkes … die posttherapeutischen Komplikationen … erfasst
+    accessed: '2026-10-15'
+    locator: Kap. 16.3.1, S. 493; Empf. 16.4 (EK, geprüft 2026), S. 497
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: 'Empf. 16.5 (Grad gedruckt „A/B“: Erfassung/Behandlung posttherapeutischer Komplikationen
+      „sollten“ = B; erste Vorstellung „soll … innerhalb von 8 Wochen“ = A; LoE 2, Konsens, geprüft 2026)
+      — NSCLC Stadium III nach RT/RCT'
+    recommendation_grade: B
+    evidence_level: '2'
+    quote: Bei Patienten mit NSCLC im Stadium III nach ablativer lokaler Therapie … sollten die posttherapeutischen
+      Komplikationen, die nach Strahlentherapie auftreten können, erfasst und behandelt werden.
+    accessed: '2026-10-15'
+    locator: Empf. 16.5 (evidenzbasiert, geprüft 2026, Konsens), S. 497
+  - source: Onkopedia NSCLC
+    version: Stand April 2025
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
+    section: 'Kap. 7 (Therapiefolgestörungen); Kap. 8.1 (Nachsorgeziel: Erkennung von Nebenwirkungen der
+      Therapie); Kap. 6.2.2.1 (Strahlenpneumonitis → Fibrose, 6–24 Monate nach RT); Kap. 6.1.6.1 (kognitive
+      und neurologische Langzeitnebenwirkungen nach Ganzhirnbestrahlung)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der akuten Pneumonitis folgt oft der Übergang in eine pulmonale Fibrose mit Sekundärkomplikationen.
+      Sie kann innerhalb von 6-24 Monaten nach Ende der Bestrahlung auftreten. … zu Therapiefolgestörungen
+      unterschiedlichen Schwergrades führen. … die Erkennung von Nebenwirkungen der Therapie
+    accessed: '2026-10-15'
+    locator: Kap. 6.2.2.1; Kap. 7; Kap. 8.1
+  - source: Onkopedia SCLC
+    version: Stand August 2026
+    url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
+    section: 'Kap. 6.1.1.3 (kognitive Einschränkung nach PCI); Kap. 10.2 (Nachsorgeziel: Nebenwirkungen
+      der Therapie)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die PCI kann mit Einschränkungen der kognitiven Fähigkeit verbunden sein. … die Erkennung von
+      Nebenwirkungen der Therapie und Vorsorge.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1.3; Kap. 10.2
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Empf. 16.1 (strukturierter Nachsorgeplan geeignet, Komplikationen und Toxizitäten der Therapie
+      zu erkennen; Starker Konsens, geprüft 2026)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: sollte für jeden Patienten ein strukturierter Nachsorgeplan erstellt werden. Der strukturierte
+      Nachsorgeplan sollte geeignet sein, Rezidive, Zweitkarzinome, Komplikationen und Toxizitäten der
+      Therapie und den Bedarf an Psychoonkologie und Sozialberatung zu erkennen
+    accessed: '2026-10-15'
+    locator: Empf. 16.1 (EK, geprüft 2026, Starker Konsens), S. 492
 iso13972_metadata:
   type: condition
   keywords:
@@ -46,7 +115,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -58,3 +127,64 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Der Wertebereich deckt die Definition nur teilweise ab. Für Haut-, Rückenmarks- und kardiale RT-Folgen
+  sowie die OP-Komplikationen (Schmerz, Infektion, Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom)
+  fehlen Codings. Per TermServ verifizierte, aktive Kandidaten (SNOMED CT 20260701): 402761000 Disorder
+  of skin due to radiotherapy; 1339018001 Disorder of spinal cord due to and following radiotherapy; 430401005
+  Heart disease caused by ionizing radiation (kardialer Oberbegriff); 33558009 Post-radiation pericarditis
+  (Teilaspekt kardial, kein Subtyp von 430401005); 239175003 Post-thoracotomy pain syndrome (Schmerz nach
+  Thorakotomie). Für das Post-Pneumonektomie-Syndrom fand die $expand-Textsuche kein SNOMED-Konzept (UNSICHER).
+  Zusätzlich ist die Abgrenzung zu immuneRelatedAdverseEvent zu klären: S3-LL Lungenkarzinom 5.1, Kap.
+  16.3 nennt „immun-bezogene Komplikationen“.'
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.curativeTreatmentModality.v0.1

@@ -9,18 +9,27 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: versorgungsplanung
 datatype: boolean
 cardinality: 1..1
 value_set:
   binding_strength: preferred
   codings:
   - system: snomed-ct
-    code: '713600000'
+    code: '713603004'
     display: Advance care planning
 standard_mappings:
-- standard: fhir-r4-base
-  resource: Consent
-  path: Consent.scope='advance-directive'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct = SNOMED 713603004; Procedure.status; Procedure.performed[x]
+  notes: 'ACP ist ein Prozess (SNOMED 713603004 Advance care planning (procedure)), keine Einwilligung,
+    und wird deshalb als Procedure abgebildet. MII KDS Prozedur (Basismodul 2026.0.1): code.coding:sct
+    ist REQUIRED an https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/ValueSet/procedures-sct
+    gebunden (Nachfahren von 71388002 |Procedure|); status 1..1, performed[x] 1..1. Vorschlag für das
+    Boolean-Element (Entscheidung offen, siehe Issue zur Repräsentation): true = Procedure 713603004 mit
+    status completed (laufend: in-progress), false = keine Procedure bzw. status not-done; performed[x]
+    bleibt auch bei not-done Pflicht. Die aus dem ACP resultierende Verfügung gehört zum Element advanceDirectiveDocument.'
 care_process:
   trigger: Diagnose unheilbar; bei jeder substanziellen Verschlechterung erneut
   frequency_pattern: ongoing
@@ -28,11 +37,47 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.x
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.11
     recommendation_grade: A
+    evidence_level: '2'
+    quote: Patient:innen mit einer nicht heilbaren Krebserkrankung sollen das Angebot einer … vorausschauenden
+      Versorgungsplanung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5, Empf. 6.11 (A, LoE 2, modifiziert 2026), S. 113
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.13 (frühzeitig im Verlauf sowie wiederholt
+      bei wesentlichen Veränderungen von Befinden und Prognose anbieten)
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Die Gesprächsbegleitung zur vorausschauenden Versorgungsplanung soll frühzeitig im Verlauf
+      sowie wiederholt bei wesentlichen Veränderungen von Befinden und Prognose angeboten werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5, Empf. 6.13 (EK, geprüft 2026), S. 114
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 6.5 Vorausschauende Versorgungsplanung; Empf. 6.14 (Einbezug von Angehörigen sowie ggf.
+      Vorsorgebevollmächtigten/Betreuer:innen)
+    recommendation_grade: A
+    evidence_level: '1'
+    quote: In die Gespräche zur vorausschauenden Versorgungsplanung sollen im Einvernehmen mit den Patient:innen
+      dessen Angehörige sowie gegebenenfalls Vorsorgebevollmächtigte/Betreuer:innen einbezogen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.5, Empf. 6.14 (A, LoE 1, modifiziert 2026), S. 114
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 7.3.4 Vorausschauende Versorgungsplanung (Advance Care Planning, ACP); Empf. 7.7
+    recommendation_grade: A
+    evidence_level: '2'
+    quote: Patienten mit einer nicht heilbaren Lungenkarzinomerkrankung sollen das Angebot einer vorausschauenden
+      Versorgungsplanung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 7.3.4, Empf. 7.7 (A, LoE 2, geprüft 2026), S. 197
 iso13972_metadata:
   type: plan
   keywords:
@@ -41,7 +86,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -53,3 +98,68 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'ACP-Status: Der boolean (1..1) bildet nicht ab, ob ACP nicht angeboten, angeboten und abgelehnt oder
+  durchgeführt wurde. Die Leitlinie fordert das Angebot (Empf. 6.11, A) und verlangt, eine Ablehnung zu
+  respektieren. Kodierten Status prüfen. Verifizierte Kandidaten (MII TermServ 2026-10-14): SNOMED 713603004
+  „Advance care planning (procedure)“, 713615000 „Advance care planning declined (situation)“.'
+- 'Mapping fhir-r4-base: „Consent.scope=''advance-directive''“ ist kein gültiger Code der FHIR-ConsentScope-Codes;
+  gültig ist ''adr'' (Advanced Care Directive). Zudem wäre der ACP-Prozess (SNOMED 713603004, procedure)
+  eher als Procedure abzubilden. Consent (scope=adr) bzw. DocumentReference gehört zum Ergebnisdokument
+  (advanceDirectiveDocument).'
+- 'Repräsentation von advanceCarePlanning im Mapping auf MII Prozedur klären. Das Element ist boolean
+  (ACP durchgeführt ja/nein, 1..1). Im Mapping wird ACP als Procedure mit code.coding:sct 713603004 abgebildet;
+  das Profil verlangt status 1..1 und performed[x] 1..1, auch bei status not-done. Festzulegen ist: true
+  = Procedure 713603004 mit status completed bzw. in-progress, false = keine Procedure bzw. status not-done?
+  Zusammen mit dem Issue „ACP-Status“ entscheiden: 713615000 Advance care planning declined (situation)
+  ist kein Nachfahre von 71388002 |Procedure| und im SCT-Slice von MII Prozedur nicht zulässig; eine Ablehnung
+  wäre z. B. als status not-done mit statusReason abzubilden.'
+related_elements:
+- relation: hasPart
+  target: mihub.lung.palliative.advanceDirectiveDocument.v0.1

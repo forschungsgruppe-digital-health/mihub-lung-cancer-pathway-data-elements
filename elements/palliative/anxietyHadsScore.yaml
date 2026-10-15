@@ -1,4 +1,4 @@
-id: mihub.lung.palliative.anxietyHadsScore.v0.1
+id: mihub.lung.palliative.anxietyHadsScore.v0.2
 uuid: 95b025b6-9d13-5c8b-9769-a360756c8dbb
 name: anxietyHadsScore
 label_de: HADS-A Angstscore
@@ -7,15 +7,23 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: integer
 cardinality: 0..*
 unit: '{score}'
 value_set:
   binding_strength: required
   codings:
-  - system: loinc
-    code: 62106-6
-    display: HADS Anxiety score
+  - system: snomed-ct
+    code: '401319005'
+    display: 'HAD scale: anxiety score'
+  standard_binding_status: mapped
+  notes: SNOMED CT 273524006 „Hospital anxiety and depression scale (assessment scale)“ bezeichnet das
+    Gesamtinstrument (beide Subskalen) und ist kein Element-Code; bei Bedarf als Observation.method bzw.
+    Questionnaire.code führen (vgl. MII-KDS-Modul PRO 2026.7.0, Questionnaire mii-qst-pro-hads). Element-Code
+    bleibt 401319005 (HADS-A-Score).
+constraints_de: Wertebereich 0..21 (HADS-A). In der Sterbephase sind differenzierte Erfassungsinstrumente
+  wie die HADS i. d. R. nicht mehr einsetzbar (S3-LL Palliativmedizin 3.0, Kap. 21.4.5).
 care_process:
   trigger: Aufnahme + Verlauf
   frequency_pattern: per-encounter
@@ -23,11 +31,28 @@ care_process:
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 17.2 Erfassung Angst
-    recommendation_grade: B
+    section: Kap. 17.2 Erfassung (Angst), Empf. 17.2 (validiertes und standardisiertes Screeninginstrument
+      zur Erkennung einer Angst; HADS nur im Hintergrundtext genannt)
+    recommendation_grade: '0'
+    evidence_level: '3'
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung kann zur Erkennung … einer Angst
+      ein validiertes und standardisiertes Screeninginstrument eingesetzt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 17.2 Erfassung, Empf. 17.2 (0, LoE 3, geprüft 2026), S. 408
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 17.2 Erfassung (Angst), Empf. 17.1 (Angst aktiv und regelmäßig prüfen; Anamnese psychischer
+      Vorerkrankungen bei Aufnahme)
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung soll das Vorliegen von … Angst
+      aktiv und regelmäßig geprüft werden. Eine Anamnese möglicher psychischen Vorerkrankungen soll bei
+      Aufnahme erhoben werden.
+    accessed: '2026-10-15'
+    locator: Kap. 17.2 Erfassung, Empf. 17.1 (EK, modifiziert 2026), S. 408
 iso13972_metadata:
   type: observation
   keywords:
@@ -36,7 +61,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -48,3 +73,61 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.palliative.anxietyHadsScore.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''loinc|62106-6'']. Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Instrumentenwahl prüfen: Zum Erfassungsinstrument für Angst gibt die S3-LL Palliativmedizin 3.0 nur
+  eine Kann-Empfehlung für ein validiertes und standardisiertes Screeninginstrument ohne Instrumentnennung
+  (Kap. 17.2, Empf. 17.2, Grad 0, LoE 3); formal erfüllt die HADS das. Im Hintergrundtext (keine graduierte
+  Empfehlung) gilt die HADS als im Vergleich aufwändiger und im palliativmedizinisch-klinischen Kontext
+  wenig eingesetzt; für die klinische Praxis in Deutschland nennt er GAD-2 und MIDOS, den GAD-2 aufgrund
+  seiner Kürze als besonders geeignet (Verlauf stationär mindestens wöchentlich, ambulant alle 6–8 Wochen
+  und/oder nach Verhaltensveränderung), zudem IPOS. MIDOS2 und IPOS sind über symptomAssessmentInstrument
+  abgedeckt. Ergänzung eines GAD-2-Elements erwägen (SNOMED CT 1365837005 „Generalized Anxiety Disorder
+  2 item score“, observable entity, aktiv – MII TermServ 2026-10-14) bzw. anxietyHadsScore als eines von
+  mehreren zulässigen Angst-Screenings führen.'

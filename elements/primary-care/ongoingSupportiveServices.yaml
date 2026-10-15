@@ -1,0 +1,180 @@
+id: mihub.lung.primarycare.ongoingSupportiveServices.v0.1
+uuid: 8c91a0c0-2215-5111-9fcf-540ba64bc10c
+name: ongoingSupportiveServices
+label_de: Laufende Therapien und Anbindungen (Physio, Ergo, Pflegedienst, SAPV …)
+definition_de: Aktuell laufende nicht-tumorspezifische Therapien und Versorgungsanbindungen (Physiotherapie,
+  Ergotherapie, weitere Fachärzt:innen, Krankenhaus, Pflegedienst, SAPV) — die Unterscheidung ist Patient:innen
+  nicht immer bewusst, die Information ist für die Hausarztpraxis relevant.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: mitbetreuung
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '91251008'
+    display: Physical therapy procedure
+  - system: snomed-ct
+    code: '84478008'
+    display: Occupational therapy
+  - system: snomed-ct
+    code: '1148679005'
+    display: Specialist palliative care service
+  - system: snomed-ct
+    code: '90817005'
+    display: Home care by visiting nurse
+standard_mappings:
+- standard: fhir-r4-base
+  resource: 'ServiceRequest / Procedure (Versorgungsanbindung: EpisodeOfCare / HealthcareService)'
+  path: ServiceRequest.code bzw. Procedure.code (z. B. Physiotherapie, Ergotherapie); laufende Anbindung
+    (SAPV, Pflegedienst) über EpisodeOfCare.type bzw. HealthcareService.type
+  notes: CareTeam.participant.role beschreibt die Rolle eines Teilnehmers, nicht die Leistung; CareTeam
+    nur für die beteiligten Personen und Einrichtungen.
+care_process:
+  trigger: Anamnese; bei jeder Änderung der Versorgungssituation
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-020 aktuelle Therapien + Anbindungen
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-020
+    quote: aktuelle Therapien + Anbindungen … Physio, Ergo, weitere FÄ, Krankenhaus, Pflegedienst, SAPV
+      (Unterscheidung ist Pat. nicht immer bewusst, Info relevant
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 5.4.1 Empf. 5.5 (EK, neu 2026, Starker Konsens: palliativmedizinische Basisversorgung
+      durch Primärbehandelnde bei nicht heilbarer Krebserkrankung und niedriger Komplexität inkl. Koordination
+      der palliativmedizinischen Versorgung und Einbeziehung von APV und/oder SPV, wenn indiziert)'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: 'mit einer nicht-heilbaren Krebserkrankung und niedriger Komplexität soll folgende Aufgabenfelder
+      beinhalten: … Koordination der palliativmedizinischen Versorgung … Einbeziehung von APV und/oder
+      SPV, wenn indiziert'
+    accessed: '2026-10-15'
+    locator: S3-LL Palliativmedizin 3.0, Kap. 5.4.1, Empf. 5.5 (EK, neu 2026, Starker Konsens), S. 58
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: Principle 4 Supportive care (ongoing referral to supportive care services, u. a. hausärztlich
+      geführt); Step 5.1 Treatment summary (interventions from other health providers; supportive care
+      services provided); Step 5.4.4 Communication with the general practitioner (supportive and palliative
+      care requirements)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: The team also needs to decide whether the patient requires ongoing referral to supportive care
+      services. … interventions and treatment plans from other health providers … supportive care services
+      provided … supportive and palliative care requirements
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Principle 4 Supportive care (S. 13/14); Step 5.1 Treatment summary (S.
+      43); Step 5.4.4 (S. 47)
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. 2026, Projekt LoTeCaS-GP (qualitative Studie, keine Empfehlungsgrade) –
+      Ergebnisse, Relevante Informationen ‚Weiteres‘ (S. 96): Hinweise zu bereits bestehenden oder angebahnten
+      Versorgungsanbindungen sowie ggf. empfohlenen Kontaktdaten im onkologischen Abschlussbericht an
+      Hausarztpraxen (Kontext: Langzeitüberlebende)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Hinweise zu bereits bestehenden … oder angebahnten Versorgungsanbindun … gen sowie ggf. empfohlenen
+      Kontaktda
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Ergebnisse, Relevante Informationen – Weiteres, S. 96
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-020; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Code-Achsen im Value Set trennen und an die Mapping-Zuordnung angleichen: laufende Therapien (Physiotherapie
+  91251008, Ergotherapie 84478008, häusliche Pflege durch Pflegedienst 90817005, ggf. SPV-Behandlung 395669003;
+  jeweils regime/therapy) → ServiceRequest.code bzw. Procedure.code. Versorgungsanbindungen an Dienste
+  (SPV/SAPV: 1148679005 Specialist palliative care service bzw. 395086005 Community specialist palliative
+  care; Pflegedienst als Dienst: 1234796008 Community nursing service; jeweils qualifier value unter 224930009
+  Services) → EpisodeOfCare.type bzw. HealthcareService.type. CareTeam nur für beteiligte Personen und
+  Einrichtungen, nicht CareTeam.participant.role für Leistungscodes. Abgrenzung zu coTreatingProviderContact
+  klären („weitere Fachärzt:innen, Krankenhaus“: Kontaktdaten und Mitbehandlung dort, hier nur laufende
+  Leistung bzw. Anbindung).'
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.surveillance.earlyPalliativeReferral.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.palliativeCareTier.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.rehabilitationMeasure.v0.1

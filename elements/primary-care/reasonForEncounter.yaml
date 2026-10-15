@@ -1,0 +1,144 @@
+id: mihub.lung.primarycare.reasonForEncounter.v0.1
+uuid: bf587030-2a6e-5fdb-a4d1-aebdd5e30e87
+name: reasonForEncounter
+label_de: Beratungsanlass / Symptome
+definition_de: Anlass der hausärztlichen Konsultation und aktuelle Symptome — mit Prüfung, ob ein Zusammenhang
+  mit der zurückliegenden Tumorerkrankung oder Behandlung besteht.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: befund
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '1269489004'
+    display: Chief complaint
+  - system: loinc
+    code: 29298-7
+    display: Reason for visit
+  - system: loinc
+    code: 46239-0
+    display: Chief complaint+Reason for visit Narrative
+  notes: 'Die Codings sind Element-/Fragecodes (SNOMED CT 1269489004 |Chief complaint| [observable entity];
+    LOINC 29298-7 [Nom], 46239-0 [Nar]) und keine Antwortwerte. Antwortwerte in Encounter.reasonCode (FHIR-R4-ValueSet
+    encounter-reason, Binding preferred, im MII-Profil KontaktGesundheitseinrichtung unverändert übernommen):
+    primär Symptome/Befunde aus SNOMED CT << 404684003 |Clinical finding| (administrative Anlässe z. B.
+    185351004 |Administrative reason for encounter|), daneben im ValueSet enthalten << 71388002 |Procedure|,
+    << 243796009 |Situation with explicit context| und << 272379006 |Event|; alternativ ICD-10-GM (v.
+    a. Kapitel XVIII „Symptome und abnorme klinische und Laborbefunde, die anderenorts nicht klassifiziert
+    sind“); Freitext über CodeableConcept.text.'
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.reasonCode
+instruction_de: Bei jedem Symptom prüfen und dokumentieren, ob es mit der Tumorerkrankung bzw. deren Therapie
+  (Spätfolgen, Nebenwirkungen) zusammenhängen kann.
+care_process:
+  trigger: bei jeder Konsultation
+  frequency_pattern: per-encounter
+  responsible_role: Hausärzt:in
+  data_flows:
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: capture
+    sector: ambulant
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-019 Symptome, Beratungsanlass
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-019
+    quote: Symptome, Beratungsanlass … prüfen, ob mit zurückliegender Erkrankung/Behandlung im Zusammenhang
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein et al. 2026 (LoTeCaS-GP, qualitative Studie ohne Empfehlungsgrade; Population: Langzeitüberlebende
+      nach abgeschlossener onkologischer Nachsorge): Hintergrund S. 91 (Sekundärzitat Lit. [18]: Hausarztkontakte
+      nach Krebserkrankung meist wegen akuter Beschwerden wie Infektionen oder anderer Symptome); Ergebnisse
+      „Anamnese, Abschlussstatus und Epikrise“ S. 95 (Komplikationen bzw. (Langzeit-)Folgen listen, damit
+      Symptome und Befinden der Patient:innen besser eingeordnet werden können)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Meist geschieht … dies aufgrund akuter Beschwerden wie … Infektionen oder anderer Symptome
+      [18].
+    accessed: '2026-10-15'
+    locator: Hintergrund, S. 91 (Lit. [18])
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-019; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.cancerTreatmentHistory.v0.1

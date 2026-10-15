@@ -7,6 +7,7 @@ phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: medikation
 datatype: Quantity
 cardinality: 0..*
 unit: mg/d
@@ -15,26 +16,66 @@ value_set:
   codings:
   - system: atc
     code: N02A
-    display: Opioide
-  - system: snomed-ct
-    code: '412130007'
-    display: Oral morphine equivalent (substance)
+    display: OPIOIDE
+  notes: Für das orale Morphinäquivalent (oMME) existiert auf dem MII TermServ kein SNOMED-CT-/LOINC-Konzept
+    (Stand 2026-10-13); Einheit UCUM mg/d, Umrechnung projektseitig.
 standard_mappings:
 - standard: fhir-r4-base
-  resource: MedicationStatement
-  path: MedicationStatement.dosage.doseAndRate
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.code; Observation.valueQuantity (UCUM mg/d); Observation.extension:workflow-supportingInfo
+    -> MedicationStatement/MedicationAdministration
+  notes: 'Die oMME ist ein über alle Opioide berechneter Wert, nicht die Dosis eines einzelnen Arzneimittels
+    (MedicationStatement.dosage.doseAndRate). Sie wird daher als eigene Observation geführt: valueQuantity
+    mit system http://unitsofmeasure.org und code mg/d. Observation.code ist 1..1; ein LOINC- oder SNOMED-CT-Konzept
+    fehlt (siehe value_set.notes), daher projekt-lokaler Code oder nur code.text (siehe Issue). Der Bezug
+    auf die zugrunde liegenden MedicationStatements bzw. MedicationAdministrations läuft über die R4-Core-Extension
+    http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo (Kontext Observation, Reference(Any)).
+    Nicht über derivedFrom (Zieltypen in R4 nur DocumentReference, ImagingStudy, Media, QuestionnaireResponse,
+    Observation, MolecularSequence) und nicht über partOf (größeres Ereignis, dessen Bestandteil die Observation
+    ist). Alternative: focus (Reference(Any)).'
+constraints_de: 'Umrechnung in orales Morphin-Äquivalent (mg/d) nach den relativen analgetischen Verhältnissen
+  der S3-LL Palliativmedizin 3.0, Tab. 16: orales Morphin zu oralem Oxycodon 1,5:1, zu oralem Hydromorphon
+  5:1, zu Buprenorphin TTS 75:1, zu Fentanyl TTS 100:1. Die TTS-Faktoren beziehen sich auf die abgegebene
+  Tagesmenge in mg/24 h (z. B. Fentanyl TTS 25 µg/h = 0,6 mg/24 h ≙ 60 mg orales Morphin). Für s.c./i.v.
+  Morphin gilt Empf. 10.17 (oral zu parenteral 3:1 bis 2:1); den gewählten Faktor projektseitig festlegen
+  und dokumentieren. Die Verhältnisse sind nur ungefähre Richtwerte. Für Methadon/Levomethadon enthält
+  die Leitlinie keine Äquivalenzfaktoren; diese sowie alle weiteren nicht durch Tab. 16 oder Empf. 10.17
+  abgedeckten Opioide bzw. Applikationswege nicht einrechnen bzw. gesondert kennzeichnen.'
 care_process:
-  trigger: Titration + Dauerregime
+  trigger: Titration und Dauerregime sowie jede Umstellung auf ein anderes Opioid bzw. eine andere Applikationsform
+    (Umrechnung)
   frequency_pattern: per-encounter
   responsible_role: Palliativ-Team
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 10.4 Opioid-Titration; 10.6 Opioid-Wechsel
-    recommendation_grade: A
-    evidence_level: n/a
+    section: 'Kap. 10.6.1 Äquianalgetische Opioid-Dosierung: Empf. 10.21 (modifiziert 2026, Starker Konsens;
+      Umstellung auf anderes Opioid/andere Applikationsform anhand von Umrechnungsfaktoren) und Empf.
+      10.22 (B, LoE 1-; Anfangsdosis unter Äquipotenztabelle, dann titrieren); Tab. 16 Relatives analgetisches
+      Verhältnis (Bezug orales Morphin)'
+    recommendation_grade: B
+    evidence_level: 1-
+    quote: sollte die Umstellung anhand von Umrechnungsfaktoren erfolgen. … sollte die Anfangsdosierung
+      niedriger sein als die nach publizierten Äquipotenztabellen berechnete. Die Dosis ist anhand des
+      klinischen Ansprechens dann zu titrieren. … Orales Morphin zu oralem Oxycodon
+    accessed: '2026-10-15'
+    locator: Kap. 10.6.1, Empf. 10.21 (S. 202) und Empf. 10.22 (S. 203); Tab. 16 (S. 204)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: 'Kap. 10.4 Opioid-Titration, Empf. 10.9 (geprüft 2026, Starker Konsens) — Titrationszeitpläne
+      durch orale schnell freisetzende Opioide als Bedarfsmedikation ergänzen (Empf. 10.8 zur Dosistitration:
+      Grad 0, LoE 1-)'
+    recommendation_grade: B
+    evidence_level: 1-
+    quote: Bei Patient:innen mit Tumorschmerzen sollten die Titrationszeitpläne für schnell … und langsam
+      freisetzende Darreichungsformen durch die orale* Verabreichung von schnell freisetzenden Opioiden
+      als Bedarfsmedikation ergänzt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 10.4, Empf. 10.9 (S. 194)
 iso13972_metadata:
   type: medication
   keywords:
@@ -43,7 +84,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -55,3 +96,59 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Typ und Kategorie prüfen: Die oMME ist im Mapping als eigene, abgeleitete Observation abgebildet (valueQuantity
+  mg/d; Bezug zu den zugrunde liegenden MedicationStatement/MedicationAdministration über die R4-Core-Extension
+  workflow-supportingInfo, da Observation.derivedFrom in FHIR R4 keine Medikationsressourcen erlaubt).
+  Zu prüfen ist, ob iso13972_metadata.type (medication) und category (medikation) zu dieser Modellierung
+  passen. Zum Observation.code siehe den folgenden offenen Punkt.'
+- 'Observation.code für opioidDailyOmme festlegen: Für die oMME gibt es kein LOINC- oder SNOMED-CT-Konzept
+  (siehe value_set.notes). Einen lokalen Code mit eigener CodeSystem-URL festlegen oder nur code.text
+  verwenden? Außerdem klären, ob ATC N02A aus value_set in der Observation mitgeführt wird: N02A bezeichnet
+  die Wirkstoffgruppe der Opioide, nicht die Messgröße oMME, und gehört eher zu den referenzierten MedicationStatements.'

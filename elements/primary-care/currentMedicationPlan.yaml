@@ -1,0 +1,181 @@
+id: mihub.lung.primarycare.currentMedicationPlan.v0.1
+uuid: d84c9b8c-a909-5518-8f51-f62084eb075e
+name: currentMedicationPlan
+label_de: Aktuelle Medikation / Medikationsplan (BMP/eMP)
+definition_de: Aktuelle Gesamtmedikation inkl. Änderungen — als bundeseinheitlicher Medikationsplan (BMP,
+  § 31a SGB V) bzw. elektronischer Medikationsplan (eMP) — zur Abstimmung zwischen Onkologie und Hausarztpraxis.
+phase: primarycare
+tumor_entity:
+- lung_cancer_any
+category: medikation
+datatype: Reference
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  codings:
+  - system: snomed-ct
+    code: '721912009'
+    display: Medication summary document
+  - system: snomed-ct
+    code: '430193006'
+    display: Medication reconciliation
+  - system: loinc
+    code: 56445-0
+    display: Medication summary Document
+  - system: loinc
+    code: 10160-0
+    display: History of Medication use Narrative
+  - system: kdl
+    code: TH130107
+    display: Medikationsplan
+  - system: kdl
+    code: ED110103
+    display: Medikationsplan elektronisch (eMP)
+  notes: 'Rollen der Codings: Dokumenttyp des referenzierten Plans = LOINC 56445-0, SNOMED CT 721912009,
+    KDL TH130107 (Medikationsplan) bzw. ED110103 (eMP); Abschnittscode im Bericht = LOINC 10160-0; SNOMED
+    CT 430193006 (Medication reconciliation, procedure) kennzeichnet nur den Abstimmungsprozess (Kontext),
+    nicht den Plan selbst.'
+standard_mappings:
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-medication/StructureDefinition/emp-medication-request
+  resource: MedicationRequest (eMP-Eintrag im ePA Medication Service)
+  path: Abruf des gesamten eMP über die Operation $medication-plan (https://gematik.de/fhir/epa-medication/OperationDefinition/get-medication-plan-op,
+    Rückgabe Bundle); Einträge = emp-medication-request; Medikationsliste (eML) über $medication-list
+    (get-medication-list-op)
+  notes: de.gematik.epa.medication 1.3.5 (Profilversion 1.3.2).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste
+  resource: List (Medikationsliste)
+  path: List.code.coding:medCode = medications (list-example-use-codes); List.code.coding:contextCode
+    (REQUIRED IHE-D FallkontextBeiDokumentenerstellung); List.entry.item → MedicationStatement (https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement)
+  notes: Das Element ist ein Plan bzw. eine Gesamtliste (Reference 1..1); ein einzelnes MedicationStatement
+    bildet das nicht ab. Modul Medikation 2026.0.1.
+care_process:
+  trigger: bei jeder Medikationsänderung; Übergabe
+  frequency_pattern: per-encounter
+  responsible_role: Onkolog:in / Hausärzt:in / Apotheke
+  data_flows:
+  - system: kis
+    actor_role: Onkolog:in
+    usage_type: update
+    sector: stationaer
+  - system: pvs
+    actor_role: Hausärzt:in
+    usage_type: update
+    sector: ambulant
+  - system: epa
+    actor_role: Patient:in
+    usage_type: read
+    sector: sektorenuebergreifend
+    notes: eMP in der ePA für alle
+evidence:
+  guideline_references:
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-077 Aktuelle Medikation / Medikationsplan (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-077
+    quote: Aktuelle Medikation / Medikationsplan
+    accessed: '2026-10-15'
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
+      (1)-Amed.xlsx)
+    section: DE-029 Medikation inkl. Änderungen der Medikation (z. B. standardisierter BMP)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-029
+    quote: Medikation inkl. Änderungen der Medikation … zb Medikationsplan (ggf. stand. BMP)
+    accessed: '2026-10-15'
+  - source: andere
+    version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
+    url: https://doi.org/10.1007/s00761-025-01867-1
+    section: 'Klein A-A et al. (LoTeCaS-GP): Empfehlungsliste Anhang 2 = Abb. 2, Dos › Relevante Informationen
+      › Therapie(n): ''aktuelle Medikation/Medikationsplan''; Ergebnisse S. 95'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Therapie(n) ▪ aktuelle Medikation/Medikationsplan
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Therapie(n); Ergebnisse
+      S. 95
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Step 4.5.4 Communication with the general practitioner (S. 41: regelmäßige Zwei-Wege-Kommunikation
+      zwischen Lead clinician und Hausärzt:in u. a. über „changes in treatment or medications“); ergänzend
+      Step 2.3 Initial referral (S. 24: „medications and allergies“ als essential information der Überweisung)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'how to ensure regular and timely two-way communication about: … changes in treatment or medications
+      … family history, current symptoms, medications and allergies'
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 4.5.4 Communication with the general practitioner (S. 41); Step 2.3
+      Initial referral (S. 24)
+iso13972_metadata:
+  type: medication
+  keywords:
+  - Lungenkarzinom
+  - primarycare
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-077, DE-029; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.surveillance.systemicTherapyRegimen.v0.1
+- relation: dependsOn
+  target: mihub.lung.palliative.opioidDailyOmme.v0.1

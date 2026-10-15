@@ -1,0 +1,218 @@
+id: mihub.lung.palliative.qualityOfLifeScore.v0.1
+uuid: 5187a52f-e2ad-5123-9ce2-04c518ecfe57
+name: qualityOfLifeScore
+label_de: Lebensqualität (Selbsteinschätzung) in der Palliativversorgung
+definition_de: Patientenberichtete gesundheitsbezogene Lebensqualität in der Palliativversorgung, erhoben
+  mit einem validierten Instrument (z. B. EORTC QLQ-C15-PAL als palliative Kurzform des QLQ-C30); Gesamtwert
+  bzw. globale Skala.
+phase: palliative
+tumor_entity:
+- NSCLC
+- SCLC
+category: prom
+datatype: integer
+cardinality: 0..*
+unit: '{score}'
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'EORTC QLQ-C15-PAL und QLQ-C30 sind in LOINC 2.83 nicht enthalten (MII TermServ, Suche „QLQ“:
+    0 Treffer, Stand 2026-10-14). SNOMED CT 709503007 „Assessment of quality of life“ (Prozedur, Elternkonzept
+    386053000 „Evaluation procedure“) ist der instrumentenoffene Element-Code. 273446001 „European Organisation
+    for Research and Treatment of Cancer - Quality of Life questionnaire“ (Elternkonzept 273249006 „Assessment
+    scales“) bezeichnet das Instrument, nicht den Score; es ist nur zusammen mit einem score-spezifischen
+    Code bzw. als Instrumentenangabe zu verwenden, nicht als gleichwertiger Element-Code. Der Score-Katalog
+    des MII-KDS-Moduls PROs (2026.7.0) enthält eortc-qlq-c30-ql (globaler Gesundheitsstatus/Lebensqualität),
+    aber keinen Code für den QLQ-C15-PAL.'
+  codings:
+  - system: snomed-ct
+    code: '709503007'
+    display: Assessment of quality of life
+  - system: snomed-ct
+    code: '273446001'
+    display: European Organisation for Research and Treatment of Cancer - Quality of Life questionnaire
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-score-instance
+  resource: Observation
+  path: Observation.valueQuantity ({score}); Observation.code; Observation.derivedFrom -> QuestionnaireResponse
+  notes: 'MII KDS PRO 2026.7.0 (stabil), generische Score-Instanz. value[x] erlaubt nur Quantity, CodeableConcept
+    oder string, kein integer. Der Wert kommt daher als valueQuantity mit UCUM {score}. Der Code folgt
+    dem MII-Muster aus https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/CodeSystem/mii-cs-pro-score-catalogue.
+    Für EORTC enthält der Katalog nur QLQ-C30-Scores, für die Lebensqualität eortc-qlq-c30-ql „EORTC QLQ-C30
+    Global Health Status / Quality of Life Score“ (ObservationDefinition mii-obsdef-pro-eortc-qlq-c30-ql:
+    Einheit {score}, 2 Nachkommastellen); für den QLQ-C15-PAL fehlt ein Code (siehe Issue). Die Antworten
+    werden als QuestionnaireResponse nach https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+    geführt und über derivedFrom verknüpft; category survey (MII-Beispiel).'
+- standard: fhir-r4-base
+  resource: Observation / QuestionnaireResponse
+  path: Observation.valueInteger
+care_process:
+  trigger: Aufnahme in die Palliativversorgung und im Verlauf (bei Phasenwechsel)
+  frequency_pattern: per-encounter / Q1M in SPV
+  responsible_role: Palliativ-Team / Patient:in (Selbsteinschätzung)
+  data_flows:
+  - system: patientenportal
+    actor_role: Patient:in
+    usage_type: patient-entered
+    sector: haeuslich
+  - system: kis
+    actor_role: Palliativ-Team
+    usage_type: read
+    sector: stationaer
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 14.4 Betreuung im Terminalstadium, Empf. 14.8 (geprüft 2026, Starker Konsens) — Maßnahmen
+      in der Sterbephase an den Bedürfnissen ausrichten, alle Dimensionen von Lebensqualität berücksichtigen
+      (ohne Vorgabe zu Erhebungsinstrument/-zeitpunkt) — Wortlaut verifiziert 2026-10-14
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Alle Maßnahmen in der Sterbephase eines Patienten mit Lungenkarzinom sollen in … ihrer Häufigkeit
+      und Ausprägung den Bedürfnissen des Sterbenden angepasst werden. Dabei sollen alle Dimensionen von
+      Lebensqualität (physisch, psychisch, sozial, spirituell) … berücksichtigt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 14.4, Empf. 14.8 (S. 483)
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 9.2, Tab. 9 Dimensionen und Outcomes von Atemnot — EORTC-QLQ-C15-Pal als multidimensionales
+      Instrument „für Lebensqualität“ in der Dimension „Beeinträchtigung durch die Atemnot“
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Tabelle 9: Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente … (z.B. CRQ,
+      EORTC-QLQ-C15-Pal … für Lebensqualität)'
+    accessed: '2026-10-15'
+    locator: Kap. 9.2, Tab. 9 (S. 161)
+  - source: Expert:innen-Erhebung MiHUB
+    version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
+    section: DE-065 Lebensqualität (Palliativversorgung, Kategorie PROM)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-065
+    quote: Lebensqualität … S3-LL Lungenkrebs Apr. 2026 Empf. 14.8
+    accessed: '2026-10-15'
+  - source: S3-LL Palliativmedizin
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
+    section: Kap. 3 Glossar „Lebensqualität“ — gesundheitsbezogene Lebensqualität als subjektive Selbsteinschätzung
+      physischer, psychischer, sozialer und alltagsnaher Aspekte des Wohlbefindens und der Funktionsfähigkeit;
+      zur Erfassung existieren psychometrisch geprüfte und normierte Messinstrumente (Begriffsdefinition,
+      keine Empfehlung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Gesundheitsbezogene Lebensqualität ist die subjektive Selbsteinschätzung von Individuen oder
+      Gruppen im Hinblick auf physische, psychische, soziale und alltagsnahe Aspekte des Wohlbefindens
+      und der Funktionsfähigkeit. … existieren psychometrisch geprüfte und normierte Messinstrumente.
+    accessed: '2026-10-15'
+    locator: Kap. 3 Glossar, „Lebensqualität“ (S. 39)
+  - source: OCP Lung (AU)
+    version: 2nd ed. 2021 (Update 07/2025)
+    url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
+    section: 'Principle 2: Safe and quality care — Patient-reported experience and outcome measures (PROMs
+      inkl. Lebensqualität routinemäßig erheben; online, per Smartphone oder auf Papier)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Patient-reported experience measures (PREMs) and patient-reported outcome measures (PROMs)
+      should be incorporated into routine cancer care. … PROMs measure aspects of a person’s health status
+      such as symptoms, quality of life and needs and are collected directly from patients
+    accessed: '2026-10-15'
+    locator: 'Principle 2: Safe and quality care, Abschnitt „Patient-reported experience and outcome measures“
+      (S. 12)'
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - palliative
+  authors:
+  - Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  - MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-13'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  - en
+  license: CC-BY-4.0
+provenance:
+  created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-065; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'frequency_pattern „Q1M in SPV“ ist keine Leitlinienempfehlung und durch die Leitlinienreferenzen des
+  Elements (S3-LL Lungenkarzinom 5.1, Empf. 14.8; S3-LL Palliativmedizin 3.0, Tab. 9) nicht gedeckt. Die
+  S3-LL Palliativmedizin 3.0 verlangt, Bedürfnisse und Belastungen wiederholt und bei einer Änderung der
+  klinischen Situation zu erfassen (Empf. 5.1, EK). Einen monatlichen Rhythmus nennt sie nur im Zusammenhang
+  mit der Temel-Studie (metastasiertes NSCLC) in der spezialisierten Palliativambulanz (Kap. 5.4.3.4):
+  Vorstellung mindestens monatlich mit Erfassung von Symptomen und Bedürfnissen, regelmäßige Termine „(z.
+  B. monatlich)“ plus Termine bei Bedarf; ob die parallele Palliativbehandlung regelmäßig oder nach Bedarf
+  erfolgen soll, ist laut Leitlinie bisher ungeklärt. Der GLOSSARY-Eintrag „Q1M in SPV“ (Caregiver-Burden-Verlauf,
+  Quelle S3-LL Palliativ v3.0 Kap. 7.4) ist durch Kap. 7.4.1 nicht gedeckt; dort steht für Angehörige
+  „bei Aufnahme, wöchentlich sowie bei Veränderungen“. Zu entscheiden: Q1M als Expert:innen-Festlegung
+  (DE-065) kennzeichnen, ggf. mit Verweis auf Kap. 5.4.3.4, oder auf per-encounter und Erhebung bei Änderung
+  der klinischen Situation reduzieren.'
+- 'datatype integer und Mapping Observation.valueInteger korrigieren: EORTC-Skalenwerte werden linear
+  auf 0–100 transformiert (EORTC QLQ-C30 Scoring Manual, 3rd ed. 2001; globaler Gesundheitsstatus/Lebensqualität:
+  S = (RS − 1)/range × 100 mit range 6) und sind daher meist nicht ganzzahlig (z. B. 16,67 oder 66,67).
+  Das MII-KDS-Modul PROs (2026.7.0) führt EORTC-Scores als valueQuantity mit ''{score}'' und zwei Dezimalstellen.
+  Optionen: datatype decimal mit Mapping Observation.valueQuantity ''{score}'' (FHIR R4 Observation.value[x]
+  kennt kein decimal) oder eine ausdrückliche Rundungsregel; dasselbe für qolEortcQlqC30 prüfen. Offen
+  (UNSICHER): ob der QLQ-C15-PAL einen „Gesamtwert“ vorsieht, wie definition_de nahelegt; das Scoring-Manual
+  des C15-PAL liegt nicht vor.'
+- 'Observation.code für qualityOfLifeScore im MII-PRO-Profil festlegen. Der MII-Score-Katalog (pros 2026.7.0)
+  enthält für EORTC nur QLQ-C30-Scores, darunter eortc-qlq-c30-ql (Global Health Status/QoL), aber keinen
+  Code für den QLQ-C15-PAL; auch der MII-Fragebogenkatalog kennt den QLQ-C15-PAL nicht. Zu entscheiden
+  ist: eortc-qlq-c30-ql (nur wenn die QoL-Skala des QLQ-C15-PAL als gleichwertig gilt), ein lokaler Code
+  oder 709503007 als instrumentenoffener Code (273446001 laut value_set.notes nur als Instrumentenangabe).
+  Zur Wertdarstellung (valueQuantity {score} statt integer, 2 Nachkommastellen) siehe das Issue zu datatype
+  integer.'
+related_elements:
+- relation: specializes
+  target: mihub.lung.surveillance.qolEortcQlqC30.v0.2
+- relation: dependsOn
+  target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1

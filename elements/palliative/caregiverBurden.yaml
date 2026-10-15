@@ -1,43 +1,69 @@
 id: mihub.lung.palliative.caregiverBurden.v0.1
 uuid: b6662975-5d43-57e0-9e6a-1bf2564ba684
 name: caregiverBurden
-label_de: Belastung der Angehörigen
-definition_de: Erfassung der multidimensionalen Belastung pflegender Angehöriger (Zarit Burden Interview,
-  CAREPAL, häusliche Pflegeskala HPS-DEGAM).
+label_de: Belastungserfassung Angehörige (Instrument)
+definition_de: 'Erfassung der subjektiven Belastungen und Unterstützungsbedürfnisse von Angehörigen mit
+  einem validierten Instrument; kodiert wird das verwendete Instrument: multidimensionaler CAREPAL-Fragebogen
+  (8-Item-Version für die spezialisierte, 10-Item-Version für die allgemeine Palliativversorgung, 11-Item-Version
+  für die Sterbephase), Zarit Burden Interview (deutsche Version G-ZBI; Kurzformen ZBI-1/ZBI-7) oder Häusliche
+  Pflegeskala (HPS) der DEGAM (Kurzform HPS-k). Die Kurzformen ZBI-1/ZBI-7 und HPS-k sind laut S3-LL Palliativmedizin
+  3.0 (Kap. 7.4.2) unidimensional. Der Zahlenwert wird in caregiverBurdenScore erfasst.'
 phase: palliative
 tumor_entity:
 - NSCLC
 - SCLC
+category: assessment
 datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: example
   standard_binding_status: no-standard-found
-  notes: Codes für deutschsprachige Angehörigenbelastungs-Instrumente CAREPAL und HPS-DEGAM. LOINC kennt
-    Zarit Burden Interview (62133-0, oben verwendet), nicht aber CAREPAL oder die Häusliche Pflegeskala
-    der DEGAM. Nur diese beiden Codes sind projekt-lokal.
+  notes: Kein LOINC-/SNOMED-CT-Konzept für CAREPAL, das Zarit Burden Interview (G-ZBI, ZBI-1/-7) oder
+    die Häusliche Pflegeskala (HPS/HPS-k) auf dem MII TermServ (LOINC 2.83, SNOMED CT 20260701; $expand-Suche
+    2026-10-14); alle Instrument-Codes sind projekt-lokale Platzhalter. Der frühere Code LOINC 62133-0
+    existiert in LOINC 2.83 nicht.
   codings:
-  - system: loinc
-    code: 62133-0
-    display: Zarit Burden Interview
   - system: local-no-standard-binding
     code: CAREPAL
     display: Multidimensionaler CAREPAL-Fragebogen
   - system: local-no-standard-binding
     code: HPS-DEGAM
     display: Häusliche Pflegeskala (HPS)
+  - system: local-no-standard-binding
+    code: ZBI
+    display: Zarit Burden Interview (dt. Version G-ZBI; Kurzformen ZBI-1/ZBI-7)
 care_process:
-  trigger: Aufnahme + bei Verschlechterung
-  frequency_pattern: Q1M in SPV
+  trigger: bei Aufnahme sowie proaktiv und wiederholt im Verlauf, insbesondere bei Veränderungen der Situation
+  frequency_pattern: weekly (Beispiel der S3-LL Palliativmedizin 3.0, Kap. 7.4.1; evidenzbasierte Zeitpunkte
+    fehlen)
   responsible_role: Palliativ-Team / Sozialdienst
 evidence:
   guideline_references:
   - source: S3-LL Palliativmedizin
-    version: 3.01 (Konsultationsfassung 03/2026)
+    version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
-    section: Kap. 7.4 Bedarfserfassung bei Angehörigen; Tab. 6
-    recommendation_grade: A
+    section: 'Kap. 7.4.2 Standardisierte Instrumente der Bedarfserfassung, Empf. 7.6 (Belastungen/Bedürfnisse
+      proaktiv und wiederholt ermitteln) und Empf. 7.7 (validierte multidimensionale Erfassungsinstrumente);
+      Instrumente: Tab. 6 (Kap. 5.3), Zeile 2 „Belastungen der Angehörigen“'
+    recommendation_grade: EK
     evidence_level: n/a
+    quote: Multidimensionaler CAREPAL-Fragebogen [40], … Zarit Burden Interviews (G-ZBI) [41], Häusliche
+      Pflegeskala (HPS) der DEGAM … Die subjektiven Belastungen und Unterstützungsbedürfnisse von Angehörigen
+      … sollten mit Hilfe von validierten multidimensionalen Erfassungsinstrumenten erfasst werden
+    accessed: '2026-10-15'
+    locator: Kap. 7.4.2, Empf. 7.7 (EK, neu 2026), S. 125; Tab. 6 Zeile 2, S. 56
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+    section: Kap. 8.2 Konzept der frühzeitigen Integration palliativmedizinischer Versorgung, Empf. 8.5
+      (u. a. Wahrnehmung von Belastungen in der Familie und bei Freunden mit Angebot der Unterstützung)
+    recommendation_grade: B
+    evidence_level: '3'
+    quote: 'Im Rahmen der Palliativberatung und -versorgung von Patienten mit nicht-heilbarer Lungenkarzinomerkrankung
+      sollten folgende Aufgaben bewältigt werden: … • Wahrnehmung von Belastungen in der Familie und bei
+      Freunden mit Angebot der Unterstützung'
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Empf. 8.5 (B, LoE 3, geprüft 2026), S. 203
 iso13972_metadata:
   type: observation
   keywords:
@@ -46,7 +72,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -58,3 +84,53 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 LOCAL
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
+issues:
+- 'Wertemenge unvollständig: Die S3-LL Palliativmedizin 3.0 nennt für das Angehörigen-Screening vier Instrumente,
+  darunter das Distress-Thermometer (Kap. 7.4.2); es fehlt hier (vgl. Element distressThermometerScore).
+  Das kategoriale CAREPAL-Ergebnis (4 Risikogruppen) ist im Katalog nicht abbildbar, siehe Issue bei caregiverBurdenScore.'
