@@ -1,0 +1,185 @@
+id: mihub.lung.screening.secondReadingRequest.v0.1
+uuid: 28a4c62a-3bd1-5067-a1ff-363b25da1729
+name: secondReadingRequest
+label_de: Veranlassung der Zweitbefundung (Konsiliarauftrag, Datenübermittlung)
+definition_de: Konsiliarauftrag des Erstbefunders an eine:n Zweitbefunder:in mit Datum, Empfänger und
+  sicherer Übermittlung der Bilder.
+phase: screening
+category: mitbetreuung
+datatype: Reference
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code (ServiceRequest.code) ist SNOMED CT 28191001 |Consultation and report by radiologist|
+    (procedure) als Näherung: Er bezeichnet eine Konsiliarbefundung mit Bericht; eine präkoordinierte
+    Zweitbefundung (Doppelbefundung) gibt es in SNOMED CT und LOINC nicht. KDL AD060101 ''Konsilanforderung''
+    ist nur die Dokumentklasse (DocumentReference.type) des Auftrags, nicht der ServiceRequest.code. Der
+    Rückbericht (KDL AD060110 ''Konsilbericht'') gehört zum Element der Zweitbefundung (screeningReadingEvent).
+    EBM-GOP 01878 ist nur Abrechnungsbezug außerhalb des Wertebereichs (umfasst auch die gemeinsame Beurteilung).
+    Editionen: SNOMED CT INT 20260701, KDL 2025 (MII TermServ); Stand 2026-10-15. Rollen der Codes: snomed-ct|28191001
+    = element; kdl|AD060101 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '28191001'
+    display: Consultation and report by radiologist
+  - system: kdl
+    code: AD060101
+    display: Konsilanforderung
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung
+  resource: ServiceRequest
+  path: ServiceRequest.code.coding:loinc / :sct; ServiceRequest.category.coding:sct; ServiceRequest.requester;
+    ServiceRequest.performer; ServiceRequest.supportingInfo; ServiceRequest.reasonReference
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Faktisch das einzige
+    profilkonforme Ziel, weil DiagnosticReport.basedOn im MII-Befund nur dieses Profil oder CarePlan zulässt;
+    inhaltlich beschreibt es die Anforderung einer Bildgebung, nicht die Befundung vorhandener Bilder.
+    code 1..1 MS mit den optionalen Slices loinc (REQUIRED loinc-rsna-radiology-playbook) und sct (REQUIRED
+    http://hl7.org/fhir/ValueSet/procedure-code; 28191001 als Prozedur dort zulässig) – sonst lokale Coding
+    im offenen Slicing. category.coding:sct pattern 363679005 Imaging. requester MS = Erstbefunder, performer
+    0..* (nicht MS) = Zweitbefunder, reasonReference MS → Erstbefund, supportingInfo MS nur DiagnosticReport/ImagingStudy.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/ServiceRequest
+  resource: ServiceRequest
+  path: ServiceRequest.requester; ServiceRequest.performer; ServiceRequest.authoredOn; ServiceRequest.code;
+    ServiceRequest.reasonReference; ServiceRequest.supportingInfo
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil; gleiches Ziel wie das Elternelement referralOrder. requester
+    = Erstbefunder, performer = Zweitbefunder, authoredOn = Datum, reasonReference → readerAssessmentCategory
+    bzw. Erstbefund, supportingInfo → ImagingStudy und cadAnalysisReport. Ausführung optional als Task
+    (focus/basedOn → ServiceRequest, owner = Zweitbefunder). Einschränkung: Im MII-Befundbaum ist ein
+    reiner R4-ServiceRequest über DiagnosticReport.basedOn nicht referenzierbar; dort mii-pr-bildgebung-anforderung-bildgebung
+    verwenden. Analogmuster: MII MTB mii-pr-mtb-histologie-evaluation-auftrag (Auftrag zur erneuten Evaluation).'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ServiceRequestOrderEuImaging
+  resource: ServiceRequest
+  path: ServiceRequest.code; ServiceRequest.category:imaging; ServiceRequest.identifier:accessionNumber;
+    ServiceRequest.supportingInfo
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/draft. Auftrag ('Requested Procedure') mit Accession
+    Number; category:imaging 1..1 (SNOMED 363679005); code 0..1 nur EXAMPLE an im-procedure-type gebunden.
+    Ausgerichtet auf neue Bildgebung, nicht auf Zweitbefundung.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-INSTRUCTION.service_request.v1
+  resource: INSTRUCTION
+  path: at0121 Service name; at0062 Reason for request; at0141 Requester; at0142 Receiver; at0149 Supporting
+    information
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), nicht-FHIR; Lifecycle laut Mirror in_development
+    (CKM-Status kann abweichen). Generischer Auftrag mit Auftraggeber, Empfänger und Begleitinformation.
+care_process:
+  trigger: kontroll- oder abklärungsbedürftiger Erstbefund (Pflichtfall); bei Bedarf auch sonst (S3 Empf.
+    5.8)
+  responsible_role: Erstbefunder (Auftrag) an Zweitbefunder
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: sollen elektronische Kommunikations- und Informationstechnologien eingesetzt werden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.8 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Darüber hinaus sollte bei Bedarf der Erstbefunder auch eine Zweitbefundung anfordern.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: andere
+    version: 'EBA 87. Sitzung (11.03.2026) — EBM-Beschlüsse: Erweiterter Bewertungsausschuss 87. Sitzung
+      (GOP 01871–01881) und Bewertungsausschuss 854. Sitzung'
+    url: https://www.gkv-spitzenverband.de/media/dokumente/krankenversicherung_1/aerztliche_versorgung/verguetung_und_leistungen/beschluesse_ba_eba_de_eg/87_sitzung_eba/EBA_87_Lungenkrebsfrueherkennung.pdf
+    section: GOP 01878 (obligater Leistungsinhalt)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Veranlassung der Zweitbefundung und abschließende gemeinsame Beurteilung nach § 42 Krebsfrüherkennungs-Richtlinie
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q06
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 38 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: R:secondReadingOrder, B:secondReadRequest, P:=; BPMN-Schritt:
+      G9 Befundung | Erstbefunder: Zweitbefundung anordnen (Activity_1rsqdi6)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 38); Quellen: Q02, Q12, Q06'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.65); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 38)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 2 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. Zweitbefundung Pflicht bei kontroll- oder abklärungsbedürftigem
+  Erstbefund (LuKrFrühErkV § 5 Abs. 2; KFE-RL § 42 Abs. 1 S. 2); Datenübermittlung „soll“ elektronisch
+  (S. 4–5); Überweisung nach BMV-Ä § 24 Abs. 4 Nr. 4. Den Auftrag selbst müssen weder KFE-RL § 44 noch
+  QS-Vereinbarung § 13f dokumentiert sehen.'
+- 'Umsetzung: Spezialisierung von referralOrder (primarycare). specializes mihub.lung.primarycare.referralOrder.v0.1;
+  FHIR ServiceRequest mit requester = Erstbefunder, performer = Zweitbefunder, authoredOn, supportingInfo
+  auf ImagingStudy bzw. cadAnalysisReport. EBM 01878 nicht als Kerncode (umfasst auch die gemeinsame Beurteilung),
+  nur als Abrechnungsbezug; ServiceRequest.code lokal bzw. pending-mapping. mandatory_by_law als „bedingt“
+  kennzeichnen. Die Zweitbefundung (screeningReadingEvent) verweist per basedOn auf den Auftrag; die sichere
+  Übermittlung (KFE-RL § 42 Abs. 1 S. 5) als Attribut.'
+- Es gibt keinen SNOMED-CT- oder LOINC-Code für 'Zweitbefundung (Doppelbefundung) einer Screening-LDCT';
+  28191001 ist nur eine Näherung.
+- EBM-GOP 01878 ist auf dem MII TermServ nicht als CodeSystem verfügbar und umfasst auch die gemeinsame
+  Beurteilung; sie bleibt reiner Abrechnungsbezug.
+- Kein deutsches Profil bildet einen Konsiliarauftrag zur Zweitbefundung ab (ISiK 6.0.0 und KBV Basis
+  1.9.0 ohne ServiceRequest-Profil); ob eine KBV-/gematik-eÜberweisung passt, ist offen.
+- Die sichere elektronische Bildübermittlung (KFE-RL § 42 Abs. 1 S. 5) ist als Attribut zu modellieren;
+  die Abbildung über IHE XDS-I.b bzw. DICOMweb ist offen.
+- Die Kennzeichnung als bedingte Pflicht (Pflicht nur bei kontroll- oder abklärungsbedürftigem Erstbefund)
+  ist im Element festzuhalten.
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.referralOrder.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.readerAssessmentCategory.v0.1

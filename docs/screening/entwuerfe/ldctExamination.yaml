@@ -1,0 +1,216 @@
+id: mihub.lung.screening.ldctExamination.v0.1
+uuid: 4b3b7a32-3528-5a00-887c-3ba13abeec74
+name: ldctExamination
+label_de: Niedrigdosis-CT des Thorax zur Früherkennung (Durchführung)
+definition_de: Durchgeführte LDCT nach § 4 und Anlage mit Zeitpunkt, Art, Einrichtung und Verweis auf
+  die DICOM-Studie; Bezug für Fristen und Intervalle.
+phase: screening
+category: bildgebung
+datatype: string
+cardinality: 1..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code (Procedure.code): SNOMED 713548006 Low dose computed tomography of thorax (Spezialisierung
+    von 169069000 CT of chest, dem Element-Code von ctThoraxScan), präziser 16334891000119106 ohne Kontrastmittel
+    (Anlage zu § 4 LuKrFrühErkV sieht kein KM vor); beide liegen unter 363679005 Imaging und 71388002
+    Procedure. LOINC 79086-5 als Auftrags- bzw. Studiencode (ServiceRequest.code, ImagingStudy.procedureCode).
+    OPS 3-202 nur als Mapping: es gibt keinen LDCT-spezifischen OPS-Kode, die Früherkennung wird vertragsärztlich
+    über EBM abgerechnet. Methode/Kontext: SNOMED 275981009 Screening for malignant neoplasm of lung (z.
+    B. ServiceRequest oder EpisodeOfCare), nicht Code der Durchführung. Dokumentklasse KDL DG020103 CT-Befund
+    nur für den zugehörigen Befundbericht. EBM 01871 (Niedrigdosis-CT zur Früherkennung, Erst- und Regel-LDCT)
+    und 01872 (Kontroll-LDCT) nur als Abrechnungsbezug. Binding preferred, weil je nach System (Procedure
+    oder ImagingStudy) unterschiedliche Codes geführt werden. Editionen: MII TermServ, SNOMED CT 20260701,
+    LOINC 2.83, OPS 2026, KDL 2025; Stand 2026-10-15. Rollen der Codes: snomed-ct|713548006 = element;
+    snomed-ct|16334891000119106 = element; loinc|79086-5 = element; ops|3-202 = element; snomed-ct|275981009
+    = methode; kdl|DG020103 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '713548006'
+    display: Low dose computed tomography of thorax
+  - system: snomed-ct
+    code: '16334891000119106'
+    display: Low dose computed tomography of chest without contrast
+  - system: loinc
+    code: 79086-5
+    display: CT Chest for screening WO contrast
+  - system: ops
+    code: 3-202
+    display: Native Computertomographie des Thorax
+  - system: snomed-ct
+    code: '275981009'
+    display: Screening for malignant neoplasm of lung
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Hauptziel: eine Procedure
+    je LDCT (Erst-, Regel- oder Kontroll-LDCT), Durchführungszeitpunkt in performed[x] 1..1 MS. code.coding:sct
+    required an mii-vs-bildgebung-imaging-procedure-code-sct (< 363679005; 713548006 enthalten), code.coding:ops
+    für 3-202, code.coding:loinc required an das LOINC/RSNA-Radiology-Playbook-ValueSet (Zugehörigkeit
+    von 79086-5 offen). basedOn 1..* MS auf mii-pr-bildgebung-anforderung-bildgebung: die Screening-Anforderung
+    muss als ServiceRequest vorliegen. Extension durchfuehrungsabsicht (required, procedures-intend) mit
+    SNOMED 129428001 Preventive intent. Die Untersuchungsart ist im Profil nicht vorgesehen (siehe screeningExaminationType).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot. Für dieses
+    Element im Wesentlichen wie 2026.0.0; die Slices performedDateTime und performedPeriod sind MS, basedOn
+    1..* MS. Bei Wechsel auf das Release 2027 nur die Paketversion nachziehen.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
+  resource: ImagingStudy
+  path: ImagingStudy.started
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. DICOM-Studienverweis
+    der LDCT: started 0..1 MS, procedureReference 0..1 MS auf die Bildgebungsprozedur, series.modality
+    1..1 MS (required, DICOM CID 33, CT); CT-Technik je Serie über series.extension:modalitaetCT (siehe
+    ctdiVol, ldctAcquisitionParameters). Wie beim Bestandselement ctThoraxScan.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'de.gematik.isik#6.0.0, stabil. Nachrangig, nur wenn ein Krankenhaus die LDCT durchführt und
+    an ein ISiK-konformes KIS meldet: performed[x] 1.. MS, code.coding:SNOMED-CT required an ProzedurenCodesSCT
+    (descendent-of 71388002; 713548006 liegt darunter), code.coding:OPS MS. Kein Screening-Kontext und
+    keine DICOM-Verknüpfung.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.performed[x]:performedDateTime
+  notes: 'kbv.basis#1.9.0, stabil (KBV-Basisprofil, kein MIO). Grundlage bei Übermittlung aus einer Vertragsarztpraxis
+    (PVS): code.coding:snomed required an KBV_VS_Base_Procedure_SNOMED_CT (is-a 71388002, SNOMED CT German
+    Edition 20260515), SNOMED-Version und Display Pflicht, beim OPS das Display. Es gibt kein KBV-MIO
+    für Bildgebung oder Screening.'
+- standard: other
+  profile_or_url: http://fhir.de/StructureDefinition/chargeitem-de-ebm
+  resource: ChargeItem
+  path: ChargeItem.code.coding:ebm
+  notes: 'de.basisprofil.r4#1.6.0, stabil. Nur Abrechnungsbezug, kein Konzeptcode: EBM 01871 „Niedrigdosis-CT
+    zur Früherkennung von Lungenkrebs“ (Erst- und Regel-LDCT), 01872 Kontroll-LDCT (setzt die Angabe des
+    Kontrollintervalls in Monaten voraus). code.coding:ebm 1..1 (System https://fhir.kbv.de/NamingSystem/KBV_NS_Base_EBM),
+    ChargeItem.service verweist auf die Procedure.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Procedure-uv-ips
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'hl7.fhir.uv.ips#2.0.1, stabil. Internationales Referenzmuster für die Patientenkurzakte: performed[x]
+    1..1 MS, code 1..1 MS (preferred, procedures-uv-ips). Kein Screening- oder DICOM-Bezug; national nachrangig.'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ProcedureEuImaging
+  resource: Procedure
+  path: Procedure.performer:imaging-device
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot (SD-Status draft). EHDS-Bezug; trennt das Gerät (function
+    SNOMED 314789007, actor DeviceEuImaging) von der durchführenden Person (223366009). Nur als Ausblick.
+care_process:
+  trigger: je Runde (Regel-LDCT) bzw. Kontroll-LDCT
+  responsible_role: Erstbefunder (Strahlenschutzverantwortliche:r; Durchführung durch MTR)
+evidence:
+  guideline_references:
+  - source: andere
+    version: StrlSchG — Strahlenschutzgesetz §§ 5, 83–85 und Strahlenschutzverordnung §§ 119, 124, 127
+    url: https://www.gesetze-im-internet.de/strlschg/__85.html
+    section: § 85 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: den Zeitpunkt und die Art der Anwendung
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q09
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 44 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Erstbefunder dokumentiert in der Patientenakte die Durchführung der Niedrigdosis-Computertomographie
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 26 der Quellenrecherche zur Screening-Episode (Gruppe G8 LDCT; M1 Inkrement
+      1 (Screening)); zusammengeführt aus: R/P:=, B/S:ldctScreeningExamination, B:ldctImagingStudy; BPMN-Schritt:
+      G8 LDCT | Erstbefunder: Niedrigdosis-CT durchführen (Activity_12qrin2); PACS'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 26); Quellen: Q09, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 26)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Dokumentation der Durchführung (KFE-RL § 44 S. 1); Aufzeichnung
+  von Zeitpunkt und Art der Anwendung (StrlSchG § 85 Abs. 1 S. 2 Nr. 2); Anforderungen nach LuKrFrühErkV
+  § 4 Abs. 1 mit Anlage.'
+- 'Umsetzung: Spezialisierung von ctThoraxScan (followup). specializes mihub.lung.followup.ctThoraxScan.v0.1.
+  Datentyp Reference (Procedure/ImagingStudy) oder Definition auf den Durchführungszeitpunkt beschränken;
+  Kardinalität 0..* (eine je Runde). EBM-GOP nicht als Konzeptcode (01871 Regel-LDCT, 01872 Kontroll-LDCT
+  nur als Abrechnungsbezug). Mapping MII KDS Bildgebung 2026.0.0: …/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  bzw. -bildgebungsstudie (ImagingStudy.started). „Art“ als Anwendungsart nach § 85 StrlSchG präzisieren;
+  die Untersuchungsart gehört zu screeningExaminationType. Einrichtung und DICOM-Studienverweis sind nicht
+  gesetzlich gefordert. Für die 12-Monats-Prüfung zählt jede befundungsgeeignete Lungen-CT (lastQualifyingChestCtDate).'
+- Der Datentyp ist auf Reference(Procedure/ImagingStudy) umzustellen oder die Definition auf den Durchführungszeitpunkt
+  zu beschränken; Kardinalität 0..* (eine LDCT je Runde) statt 1..1.
+- Ob LOINC 79086-5 im LOINC/RSNA-Radiology-Playbook-ValueSet des MII-Profils liegt, ist offen; das ValueSet
+  steht auf dem MII TermServ nicht zur Verfügung.
+- Die „Art der Anwendung“ nach § 85 StrlSchG ist zu präzisieren und von der Untersuchungsart (screeningExaminationType)
+  abzugrenzen; ein Standardcode dafür fehlt.
+- Es gibt keinen OPS-Kode für die Niedrigdosis-CT zur Früherkennung (OPS 2026 kennt „Niedrigdosis“ nur
+  bei PET/CT bzw. SPECT/CT).
+- Kein Profil bildet Screening-Runde, Konformität mit § 4 und Anlage LuKrFrühErkV oder die 12-Monats-Regel
+  (lastQualifyingChestCtDate) ab.
+- Das MII-Profil verlangt basedOn auf eine Bildgebungsanforderung; die Screening-Anforderung ist als ServiceRequest
+  zu modellieren.
+- Kardinalität laut Quelle 0..* (1 je Runde).
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.ctThoraxScan.v0.1

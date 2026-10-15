@@ -1,0 +1,216 @@
+id: mihub.lung.screening.priorScreeningImagesAvailability.v0.1
+uuid: 7362dc22-a241-567a-a5e4-860e63f5696a
+name: priorScreeningImagesAvailability
+label_de: Vorliegen von Voraufnahmen und Vorbefunden (§ 4 Abs. 2)
+definition_de: Status der Voraufnahmen und Vorbefunde der letzten (zwei) Früherkennungsuntersuchungen
+  (vorliegend, keine, angefordert, Verzicht mit Grund) mit Verweis.
+phase: screening
+category: bildgebung
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Lokales ValueSet für den Status der Voraufnahmen und Vorbefunde nach LuKrFrühErkV § 4 Abs. 2
+    mit fünf getrennten Antwortwerten (vorliegend | nicht-zutreffend | angefordert | verzicht-nicht-moeglich
+    | verzicht-unverhaeltnismaessig); ein Elementcode existiert nicht. Für ''nicht zutreffend (Erstuntersuchung)''
+    und ''angefordert'' werden die generischen SNOMED-CT-Qualifier 385432009 Not applicable und 385644000
+    Requested zusätzlich mitgeführt; ''angefordert'' ist ein Prozesswert ohne Normbezug. EBM 01871 ist
+    kein Statuskonzept, sondern die Abrechnungsziffer der LDCT (gehört zu ldctExamination). Der Verweis
+    auf die Vorstudie wird getrennt als Reference (ImagingStudy/DiagnosticReport) geführt; für diesen
+    Teil passen LOINC 18834-2 Radiology Comparison study (narrative) und 18779-9 Radiology Comparison
+    study - date and time. MII TermServ, SNOMED CT International 20260701 und LOINC 2.83, Stand 2026-10-15.
+    Rollen der Codes: local-no-standard-binding|vorliegend = wert; local-no-standard-binding|nicht-zutreffend
+    = wert; snomed-ct|385432009 = wert; local-no-standard-binding|angefordert = wert; snomed-ct|385644000
+    = wert; local-no-standard-binding|verzicht-nicht-moeglich = wert; local-no-standard-binding|verzicht-unverhaeltnismaessig
+    = wert.'
+  codings:
+  - system: local-no-standard-binding
+    code: vorliegend
+    display: Voraufnahmen und Vorbefunde liegen vor
+  - system: local-no-standard-binding
+    code: nicht-zutreffend
+    display: Nicht zutreffend (Erstuntersuchung)
+  - system: snomed-ct
+    code: '385432009'
+    display: Not applicable
+  - system: local-no-standard-binding
+    code: angefordert
+    display: Angefordert
+  - system: snomed-ct
+    code: '385644000'
+    display: Requested
+  - system: local-no-standard-binding
+    code: verzicht-nicht-moeglich
+    display: 'Verzicht: Beschaffung nicht möglich'
+  - system: local-no-standard-binding
+    code: verzicht-unverhaeltnismaessig
+    display: 'Verzicht: unverhältnismäßiger Aufwand'
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
+  resource: ImagingStudy
+  path: ImagingStudy (Referenzziel der Voraufnahme); ImagingStudy.started
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Nur Referenzziel des
+    getrennt geführten Verweises auf die Vorstudie (started 0..1 MS), kein Mapping des Statuswerts.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport (Referenzziel des Vorbefunds); DiagnosticReport.imagingStudy
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Nur Referenzziel für
+    die Vorbefunde der letzten (zwei) Früherkennungsuntersuchungen (LuKrFrühErkV § 4 Abs. 2 S. 1); imagingStudy
+    1..* MS. Ein Element für den Vergleich mit Voraufnahmen oder den Status hat das Profil nicht.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/CompositionEuImaging
+  resource: Composition
+  path: Composition.section:comparison (code LOINC 18834-2); Composition.section:comparison.entry:comparedstudy
+    → ImagingStudyEuImaging/ImagingSelectionEuImaging; Composition.section:comparison.emptyReason; Composition.section:comparison.text
+  notes: 'hl7.fhir.eu.imaging#1.0.0-ballot (status draft), Ballot. Einziges gefundenes FHIR-Profil mit
+    einer eigenen Vergleichssektion (0..1), die auf die Vorstudie verweist. section:comparison.emptyReason
+    ist PREFERRED an SectionEmptyReasonEuImaging gebunden (CodeSystem list-empty-reason plus LOINC LA4720-4
+    Not applicable): ''nicht zutreffend (Erstuntersuchung)'' = LA4720-4, ''Verzicht: nicht möglich'' annähernd
+    = list-empty-reason#unavailable. ''angefordert'' und ''Verzicht: unverhältnismäßiger Aufwand'' bleiben
+    lokal (section.text).'
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_7001.html
+  resource: DICOM SR TID 2000 Basic Diagnostic Imaging Report, Überschriften aus CID 7001
+  path: CONTAINER (LN 55114-3 'Prior Procedure Descriptions'); CONTAINER (LN 18834-2 'Previous Findings')
+  notes: DICOM PS3.16 (current, abgerufen 2026-10-15), nicht-FHIR, breites Mapping. Voruntersuchung und
+    Vorbefund lassen sich im strukturierten Befund als eigene Abschnitte führen (18834-2 ist derselbe
+    Code wie in der EU-Imaging-Sektion comparison); ein Statuscode für Vorliegen oder Verzicht fehlt.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1494
+  resource: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  path: at0093 'Comparison study details'; at0056 'Comparison findings'; at0067 'Comparison series details'
+  notes: 'openEHR CKM 1013.1.1494, published, nicht-FHIR, breites Mapping. at0093: ''Details about images
+    from a prior study used for comparison to the reported study''. Betrifft Verweis und Vergleichsaussage,
+    nicht Status oder Verzicht.'
+- standard: other
+  profile_or_url: https://www.acr.org/-/media/ACR/Files/RADS/Lung-RADS/Lung-RADS-2022.pdf
+  resource: ACR Lung-RADS v2022, Kategorie 0 / Note 9
+  path: 'Category 0: ''Prior chest CT examination being located for comparison''; Note 9'
+  notes: 'ACR Lung-RADS v2022 (PDF, abgerufen 2026-10-15), nicht-FHIR, nur Querbezug. Der Wert ''angefordert''
+    entspricht der temporären Lung-RADS-Kategorie 0 (''the Lung-RADS 0 category is temporary until the
+    comparison study is available''); die Kategorie selbst gehört zur Befundung. Übersichtsseite: https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Reporting-and-Data-Systems/Lung-RADS
+    (die frühere URL …/Reporting-and-Data-Systems/Lung-Rads liefert HTTP 404).'
+care_process:
+  trigger: vor jeder Folge-LDCT (nach mindestens einer früheren Früherkennungsuntersuchung)
+  responsible_role: Erstbefunder (Strahlenschutzverantwortliche:r sorgt für das Vorliegen)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 4 Abs. 2 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: kann im Einzelfall auf das Vorliegen der Unterlagen verzichtet werden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 9
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: If waiting on prior exams (either a prior screening or diagnostic CT), the Lung-RADS 0 category
+      is temporary until the comparison study is available
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 41, S. 18 (Verzichtsgründe)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: eine fehlende Schweigepflichtsentbindung
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 22 der Quellenrecherche zur Screening-Episode (Gruppe G7 Radiologie vor
+      LDCT; M1 Inkrement 1 (Screening)); zusammengeführt aus: R:priorScreeningExamsAvailability, B:priorExaminationAvailability,
+      B:comparisonPriorExamination, S:priorScreeningStudiesAvailability, P:=; BPMN-Schritt: G7 Radiologie
+      | Erstbefunder: Activity_0l9ecr6 (Annotation §4 Abs.2); PACS'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 22); Quellen: Q01, Q20, Q03'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.75)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 22)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. Sicherstellung der Aufnahmen und Befunde der letzten beiden
+  Untersuchungen bzw. der einen Voruntersuchung (LuKrFrühErkV § 4 Abs. 2 S. 1; KFE-RL § 41 Abs. 1 S. 2–3);
+  Verzicht im Einzelfall (§ 4 Abs. 2 S. 2). Eine Dokumentation von Status oder Verzicht ist nicht ausdrücklich
+  normiert.'
+- 'Umsetzung: eigenständig (lokales ValueSet). EBM 01871 entfernen (Leistung, kein Statuskonzept; gehört
+  als Abrechnungsbezug zu ldctExamination). Lokales Value Set: vorliegend | nicht zutreffend (Erstuntersuchung)
+  | angefordert | Verzicht: nicht möglich | Verzicht: unverhältnismäßiger Aufwand; standard_binding_status
+  no-standard-found. Den Verweis auf die Vorstudie getrennt führen (Reference ImagingStudy/DiagnosticReport).
+  Verzichtsgründe nach TrG S. 18 (u. a. fehlende Schweigepflichtsentbindung) als Werteliste. Quellen ergänzen:
+  § 4 Abs. 2 S. 1 und 2, KFE-RL § 41 Abs. 1 S. 2–3, TrG S. 18, obligater Leistungsinhalt von EBM 01871/01872.
+  Den Wert „angefordert“ als Prozesswert ohne Quellenbezug kennzeichnen.'
+- Für den Status 'Verfügbarkeit von Voraufnahmen' samt Werten gibt es in SNOMED CT, LOINC, MII KDS, ISiK,
+  KBV, ePA, IPS, mCODE und DICOM kein Konzept und kein ValueSet; ein lokales CodeSystem ist anzulegen
+  und später als MII- oder DE-ValueSet vorzuschlagen.
+- Die Verzichtsgründe nach den Tragenden Gründen (u. a. fehlende Schweigepflichtentbindung) sind noch
+  als feinere Werteliste festzulegen.
+- Der Verweis auf die Vorstudie bzw. den Vorbefund (Reference ImagingStudy/DiagnosticReport, ggf. mit
+  LOINC 18834-2/18779-9) ist als eigenes Teil- oder Relationselement zu modellieren, getrennt vom Statuswert.
+- Zu entscheiden ist, ob der Prozesswert 'angefordert' ohne Normbezug im ValueSet bleibt.
+- Das litauische IG lt.hl7.fhir.lung (CI-Build 0.0.1, nicht in den Registries) enthält nur ein Beispiel-Item
+  zu Vor-CTs; es betrifft eher lastQualifyingChestCtDate und ist kein Profil.
+- Kardinalität laut Quelle 1..1 (Wert „nicht zutreffend“ bei Erstrunde).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.lastQualifyingChestCtDate.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.resultTransmissionConsentReferrer.v0.1

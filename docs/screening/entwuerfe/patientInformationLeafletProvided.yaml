@@ -1,0 +1,233 @@
+id: mihub.lung.screening.patientInformationLeafletProvided.v0.1
+uuid: a765ce60-8d94-5047-a425-d02282cc9b11
+name: patientInformationLeafletProvided
+label_de: Aushändigung der G-BA-Versicherteninformation (Fassung, Format)
+definition_de: Aushändigung der Versicherteninformation nach Anlage I KFE-RL mit Datum, Fassung und Format
+  (Druck, elektronisch, Leichte Sprache).
+phase: screening
+category: dokument
+datatype: string
+cardinality: 1..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'SNOMED CT INT 20260701, KDL 2025 (MII TermServ), Stand 2026-10-15. Element-Code: 699117005 Provision
+    of leaflet (Procedure.code der Aushändigung), Fallback 699823003 Provision of written information;
+    beide unter 71388002 und damit in den Prozedur-ValueSets von MII, ISiK und KBV. Dokumentklasse der
+    ausgehändigten G-BA-Versicherteninformation (Anlage I KFE-RL): KDL AM160202 Informationsblatt (DocumentReference.type;
+    ConceptMap zu IHE typeCode PATI und classCode ADM, equivalence wider), Ausweichklasse AM160299. Antwortwerte
+    für das Format als lokale Werteliste: Druck | barrierefreies PDF | Leichte Sprache. Fassung und Fassungsdatum
+    sind Attribute der DocumentReference (content.attachment.creation, title bzw. relatesTo), kein Code.
+    Nicht verwenden: 413318004 (Befund statt Prozedur), KDL AM010302 (Aufklärungsbogen). Rollen der Codes:
+    snomed-ct|699117005 = element; snomed-ct|699823003 = element; local-no-standard-binding|print = wert;
+    local-no-standard-binding|accessible-pdf = wert; local-no-standard-binding|easy-language = wert; kdl|AM160202
+    = dokumentklasse; kdl|AM160299 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '699117005'
+    display: Provision of leaflet
+  - system: snomed-ct
+    code: '699823003'
+    display: Provision of written information
+  - system: local-no-standard-binding
+    code: print
+    display: Druck
+  - system: local-no-standard-binding
+    code: accessible-pdf
+    display: barrierefreies PDF
+  - system: local-no-standard-binding
+    code: easy-language
+    display: Leichte Sprache
+  - system: kdl
+    code: AM160202
+    display: Informationsblatt
+  - system: kdl
+    code: AM160299
+    display: Sonstiges Patienteninformationsblatt
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL
+  notes: 'de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1 (stabil; gleiche URL in 2027.0.0-ballot.2).
+    Beschreibt die ausgehändigte Fassung: type.coding:KDL 0..1 MS REQUIRED an http://dvmd.de/fhir/ValueSet/kdl
+    (AM160202); type.coding:XDS REQUIRED an IHEXDStypeCode (PATI; ConceptMap kdl-ihe-typecode, equivalence
+    wider). content.attachment 1..1 MS (url, title des G-BA-PDF); das Fassungsdatum gehört in content.attachment.creation,
+    die Fassung in title bzw. relatesTo (0..* MS) – DocumentReference.date ist nur der Anlagezeitpunkt
+    der DocumentReference. content.format ist preferred an mii-vs-dokument-format-code gebunden und beschreibt
+    das technische Format; die sprachliche Fassung (Leichte Sprache) braucht einen lokalen Qualifier.
+    context.related verweist auf Prozedur bzw. Kontakt.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDokumentenMetadaten
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL
+  notes: 'de.gematik.isik#6.0.0 (stabil). Strenger als MII: type.coding:KDL 1..1 MS REQUIRED (AM160202);
+    category.coding:XDS 1..1 REQUIRED an IHEXDSclassCode (ADM); content.attachment.contentType, language,
+    title und creation min 1; content.format min 1 REQUIRED an IHEXDSformatCodeDE (passender Formatcode
+    für ein PDF-Informationsblatt noch festzulegen).'
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_DocumentReference
+  resource: DocumentReference
+  path: DocumentReference.type.coding:xds
+  notes: 'kbv.basis#1.9.0 (stabil; KBV-Basisprofil, kein MIO – im Bestand erste Verwendung unter kbv-mio).
+    Für das PVS: type.coding:xds REQUIRED an IHEXDStypeCode (PATI), type.coding:kbv REQUIRED an KBV_VS_Base_Document_Type_KBV
+    (passender Code noch offen), category.coding:xds REQUIRED an IHEXDSclassCode (ADM).'
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference
+  path: DocumentReference.type.coding
+  notes: 'de.gematik.epa.mhd#1.1.3 (stabil). Nur relevant, wenn Versicherteninformation bzw. Aushändigungsnachweis
+    in die ePA eingestellt werden: type.coding REQUIRED an epa-xds-type-code-vs (schließt IHE-D typeCode,
+    urn:oid:1.3.6.1.4.1.19376.3.276.1.5.9 v4.0.0, ein – PATI); category.coding REQUIRED an epa-xds-class-code-vs
+    (ADM); content.format 1..1 und attachment.title 1..1 Pflicht. In der ePA ist das System die OID-URN,
+    nicht die http-URL von IHE-D.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct; Procedure.report
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (stabil). Alternative: Aushändigung
+    als Procedure mit code.coding:sct 699117005 bzw. 699823003 (REQUIRED procedures-sct, beide enthalten).
+    Den Verweis auf das Dokument über report (0..*, Reference DocumentReference) führen – usedReference
+    erlaubt in R4 nur Device, Medication und Substance. partOf (Procedure | Observation | MedicationAdministration)
+    verweist auf die Prozedur screeningInformationConsultation.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Communication
+  resource: Communication
+  path: Communication.payload.content[x]; Communication.sent; Communication.medium
+  notes: 'hl7.fhir.r4.core#4.0.1 (Ressource mit SD-Status draft). Fachlich naheliegend für die Aushändigung
+    an die versicherte Person, auch über das Portal: payload.content[x] 1..1 (Attachment oder Reference(DocumentReference)),
+    sent = Aushändigungsdatum, medium (example, http://terminology.hl7.org/CodeSystem/v3-ParticipationMode)
+    für Druck vs. elektronisch, recipient = Patient, partOf bzw. encounter auf das Informationsgespräch.
+    Kein deutsches Profil.'
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/CodeSystems/IHEXDStypeCode
+  resource: XDS DocumentEntry.typeCode / classCode
+  path: typeCode PATI 'Patienteninformationen'; classCode ADM 'Administratives Dokument'
+  notes: de.ihe-d.terminology#3.0.1 (stabil). Metadaten für den Dokumentenaustausch (XDS bzw. MHD). PATI
+    passt genau ('Reine Informationsblätter für den Patienten', nicht unterschrieben); nicht EINW, das
+    unterschriebene Dokumente meint.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.4513
+  resource: openEHR-EHR-CLUSTER.information_resource.v1
+  path: /items[at0002] (Resource name); /items[at0015] (Version); /items[at0014] (Published); /items[at0016]
+    (Type of media)
+  notes: openEHR CKM information_resource.v1, Revision 1.0.1 (published; nicht-FHIR). Bildet Dokument,
+    Fassung, Veröffentlichungsdatum und Medienart direkt ab; Einbettung in ACTION.health_education.v1
+    über den Slot Additional details (at0033); Material details (at0025) nimmt nur CLUSTER.multimedia
+    auf.
+care_process:
+  trigger: im Informationsgespräch (Erstberatung); erneut bei neuer Fassung
+  responsible_role: berichterstellende Ärzt:in; Bereitstellung auch über das Portal
+evidence:
+  guideline_references:
+  - source: andere
+    version: 'EBA-Beschluss 87. Sitzung — EBM-Beschlüsse: Erweiterter Bewertungsausschuss 87. Sitzung
+      (GOP 01871–01881) und Bewertungsausschuss 854. Sitzung'
+    url: https://www.gkv-spitzenverband.de/media/dokumente/krankenversicherung_1/aerztliche_versorgung/verguetung_und_leistungen/beschluesse_ba_eba_de_eg/87_sitzung_eba/EBA_87_Lungenkrebsfrueherkennung.pdf
+    section: GOP 01876
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ausgabe der Versicherteninformation gemäß § 40 der Krebsfrüherkennungs-Richtlinie
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q06
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: In den Informationen in Textform ist darüber hinaus auf das Strahlenrisiko hinzuweisen.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 40 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: in einem mündlichen Gespräch und durch Aushändigung von Informationen in Textform nach Anlage
+      I zu informieren
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 15 der Quellenrecherche zur Screening-Episode (Gruppe G5 Information/Entscheidung/Entwöhnung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:patientInformationLeafletHandedOut, P:=; BPMN-Schritt:
+      G5 Information | Praxis: Activity_0e82ewp'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 15); Quellen: Q06, Q01, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.9); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 15)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 4 und S. 2 (Strahlenrisiko
+  in Textform); KFE-RL § 40 S. 1 mit Anlage I; obligater Leistungsinhalt von EBM 01876.'
+- 'Umsetzung: Teil von screeningInformationConsultation. Als hasPart von screeningInformationConsultation
+  modellieren. Datentyp Reference(DocumentReference) mit G-BA-Dokument, Fassungsdatum und Format (Druck
+  | barrierefreies PDF | Leichte Sprache) oder Procedure (code 699823003, usedReference). Quellen ergänzen:
+  LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 4 und S. 2, KFE-RL § 40 S. 1 mit Anlage I; EBA 87 als Abrechnungsbeleg.
+  Prüfpunkt: Die Fassung in Leichter Sprache (25.06.2026) ist nicht Anlage I; ob ihre alleinige Aushändigung
+  § 40 erfüllt, ist offen.'
+- Für das Format bzw. die Fassung der Versicherteninformation (Anlage I | Leichte Sprache | barrierefreies
+  PDF) gibt es keine standardisierte Werteliste; content.format codiert nur das technische Format. Die
+  lokalen Format-Codes sind vorläufige Platzhalter.
+- Ein spezifisches Konzept 'Provision of written information about lung cancer screening' fehlt in SNOMED
+  CT.
+- Rechtlich offen ist, ob die alleinige Aushändigung der Fassung in Leichter Sprache (25.06.2026, nicht
+  Anlage I) § 40 KFE-RL erfüllt.
+- Kein Profil koppelt die Aushändigung an den Pflichthinweis auf das Strahlenrisiko (LuKrFrühErkV § 2
+  Abs. 1 S. 2).
+- Zu entscheiden ist der Datentyp (Reference auf DocumentReference vs. Procedure) sowie der passende KBV-Dokumenttyp-Code
+  und der IHE-D-Formatcode für ein PDF-Informationsblatt.
+- Kardinalität laut Quelle 1..1 je Erstberatung (0..* bei neuen Fassungen).
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.screeningInformationConsultation.v0.1

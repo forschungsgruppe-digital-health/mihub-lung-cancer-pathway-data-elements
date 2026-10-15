@@ -1,0 +1,166 @@
+id: mihub.lung.screening.cigaretteConsumptionPeriod.v0.1
+uuid: 51b95edf-a63b-5a49-97b3-de941082641b
+name: cigaretteConsumptionPeriod
+label_de: Konsumabschnitt Zigarettenrauchen
+definition_de: Zeitraum (Beginn, Ende, mind. Jahr) mit annähernd gleichem Zigarettenkonsum; Abschnitte
+  bilden die Raucheranamnese, erster Beginn = Rauchbeginn.
+phase: screening
+category: sozialanamnese
+datatype: Period
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: pending-mapping
+  notes: 'MII TermServ, SNOMED CT 20260701; Stand 2026-10-15. Kein Standardkonzept beschreibt eine Konsumepisode
+    bzw. einen Abschnitt gleichbleibenden Zigarettenkonsums. 230056004 ''Cigarette consumption'' (Observable)
+    dient nur als gemeinsamer Trägercode (Observation.code) einer Observation je Abschnitt zusammen mit
+    cigarettesPerDayInPeriod: der Abschnitt steckt in effectivePeriod, die Menge in valueQuantity. 228488005
+    ''Age at starting smoking'' und 266929003 ''Smoking started'' entfallen, weil der Rauchbeginn aus
+    dem Start des ersten Abschnitts abgeleitet wird. Das openEHR-Episodenmodell wird als Mapping, nicht
+    als Coding geführt. Rollen der Codes: snomed-ct|230056004 = element.'
+  codings:
+  - system: snomed-ct
+    code: '230056004'
+    display: Cigarette consumption
+standard_mappings:
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.effectivePeriod
+  notes: de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis für ein eigenes Profil, kein fertiges Ziel
+    (in 6.0.0 abstract=true, in de.gematik.isik-basismodul#4.0.3 nicht abstrakt). Eine Observation je
+    Abschnitt mit effectivePeriod (effective[x] 1..1, dateTime|Period) und valueQuantity Zigaretten pro
+    Tag (value[x] 1..1, also Pflicht). code.coding:loinc ist Pflicht (min 1); SNOMED 230056004 allein
+    ist nicht konform, und LOINC 63640-7 ist als Nominalskala mit Fagerström-Antwortliste LL1447-3 dafür
+    ungeeignet. Abschnitte werden über hasMember oder derivedFrom mit der Packungsjahr-Observation verknüpft.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.effectivePeriod
+  notes: hl7.fhir.r4.core#4.0.1, stabil; generischer Fallback ohne LOINC-Pflicht. effectivePeriod = Abschnitt,
+    valueQuantity = Zigaretten pro Tag, code = 230056004; eine Observation je Abschnitt.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0029]/items[at0064] (Per episode; Beginn /items[at0013] Episode start date,
+    Ende /items[at0082] Episode end date)
+  notes: 'openEHR CKM, Revision 2.0.1, published, nicht-FHIR. Bestes Strukturvorbild: Per episode 0..*
+    innerhalb von Per type (Type at0054 Cigarettes) mit Start- und Enddatum und typischem Konsum (at0023).
+    Regular smoking commenced (at0015) und Daily smoking commenced (at0080) gelten global, nicht je Typ
+    Cigarettes. Selbstgedrehte Zigaretten haben einen eigenen Typ (at0055).'
+care_process:
+  trigger: Erstprüfung; Aktualisierung vor jeder Runde
+  responsible_role: berichterstellende Ärzt:in; Selbstauskunft der Versicherten (Portal)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: für jedes Jahr des Zigarettenkonsums die im Jahresdurchschnitt pro Tag gerauchte Anzahl der
+      Zigaretten durch 20 zu …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zur Ermittlung des Zigarettenkonsums in Packungsjahren ist für jedes Jahr des Zigarettenkonsums
+      die im Jahresdurchschnitt pro Tag gerauchte Anzahl der Zigaretten durch 20 zu teilen.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 39 Nr. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Erhebung der relevanten anamnestischen Daten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 3 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R:=, L:smokingHistoryPeriod, S:=, S:smokingStartAge, P:smokingPeriod;
+      BPMN-Schritt: G2 Raucheranamnese | Praxis: Activity_0ya2ob0; Selbstauskunft vorab (Portal)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 3); Quellen: Q01, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 3)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. Rechengrundlage nach LuKrFrühErkV § 1 Abs. 2 S. 2–4 und
+  § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. aa (Dauer); Erhebungspflicht KFE-RL § 39 Nr. 1. Die Abschnittsstruktur
+  ist eine Modellentscheidung; ohne vollständige Unterbrechung genügt ein Abschnitt.'
+- 'Umsetzung: eigenständig (Kopf-Element der Raucheranamnese Q3). Kopf-Element „Konsumabschnitt“ (Period
+  1..*, Beginn und Ende mindestens jahrgenau) mit hasPart cigarettesPerDayInPeriod; als eine FHIR Observation
+  abbilden (code 230056004, effectivePeriod = Abschnitt, valueQuantity = Zigaretten pro Tag). openEHR
+  tobacco_smoking_summary.v2 als standard_mapping (Pfad /data[at0001]/items[at0029]/items[at0064]), nicht
+  als Coding. 228488005 streichen (Rauchbeginn ableitbar). constraints_de: nur Zigaretten (TrG zu § 39
+  Nr. 1), Abschnitte überlappungsfrei. Quellen ergänzen: § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst.
+  aa und KFE-RL § 39 Nr. 1.'
+- Weder SNOMED CT 20260701 noch LOINC 2.83 haben ein Konzept für einen Konsumabschnitt; LOINC bietet nur
+  Gesamt- oder Aktuellwerte.
+- Kein FHIR-Profil (MII, ISiK, IPS, US Core, KBV, gematik ePA) bildet wiederholte Konsumabschnitte mit
+  Zeitraum und Intensität ab; ein eigenes Profil, z. B. abgeleitet von ISiKLebensZustand, ist nötig.
+- Für ein von ISiKLebensZustand abgeleitetes Profil fehlt ein passender LOINC-Pflichtcode für einen Abschnitt
+  mit Mengenangabe.
+- Das MII-Kardiologie-Ballot (mii-pr-kardio-observation-rauchen) ist ungeeignet, weil jede Abschnitts-Observation
+  einen Pflicht-Raucherstatus tragen müsste und seine Komponenten keinen eigenen Zeitraum haben.
+- Ob Konsumabschnitte oder ein Lebenszeit-Jahresdurchschnitt erfasst werden (Entscheidung E1), ist offen.
+- Ob selbstgedrehte Zigaretten als Zigaretten im Sinne der LuKrFrühErkV zählen, ist offen.
+related_elements:
+- relation: hasPart
+  target: mihub.lung.screening.cigarettesPerDayInPeriod.v0.1

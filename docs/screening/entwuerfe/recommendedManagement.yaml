@@ -1,0 +1,226 @@
+id: mihub.lung.screening.recommendedManagement.v0.1
+uuid: 10deefb8-07e2-5da4-a6cd-4ecc7753d572
+name: recommendedManagement
+label_de: Empfehlung für das weitere Vorgehen
+definition_de: 'Empfohlenes weiteres Vorgehen: reguläre LDCT nach ≥ 12 Monaten, vorgezogene LDCT, Kurzintervall,
+  bei 4A Kontrolle oder PET/CT, Abklärung.'
+phase: screening
+category: versorgungsplanung
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Editionen: SNOMED CT INT 20260701 und LOINC 2.83, alle Codes auf dem MII TermServ aktiv (Stand
+    2026-10-15). Element-Code ist die Prozedur 420227002 ''Recommendation to'' (gewählt statt des Kindkonzepts
+    427272008 ''Recommendation to physician'' aus recommendationsForPrimaryCare, weil sich die Empfehlung
+    an die versicherte Person und an Ärzt:innen richtet); 424900004 (Qualifier) nur als generisches Tag.
+    LOINC 18783-1 ist der Abschnitts- bzw. Freitextcode für die Empfehlung im Befundbericht, nicht für
+    den kodierten Wert. Antwortwerte (Art des nächsten Schritts): reguläre Screening-LDCT nach ≥ 12 Monaten
+    = 275981009, Kontroll-LDCT = 16334891000119106 (kontrastmittelfrei; allgemeiner 713548006), PET/CT
+    bei Lung-RADS 4A = 1373815000 (FDG; Fallback 450436003), Abklärung in spezialisierter Einrichtung
+    = 103696004. Für ''Vergleich mit Voraufnahmen bzw. ergänzende Bildgebung bei Lung-RADS 0'' gibt es
+    kein Konzept; das extensible-Binding erlaubt dafür einen lokalen Code. Zeitangaben gehören ausschließlich
+    in recommendedControlInterval. Rollen der Codes: snomed-ct|420227002 = element; loinc|18783-1 = element;
+    snomed-ct|275981009 = wert; snomed-ct|16334891000119106 = wert; snomed-ct|1373815000 = wert; snomed-ct|103696004
+    = wert.'
+  codings:
+  - system: snomed-ct
+    code: '420227002'
+    display: Recommendation to
+  - system: loinc
+    code: 18783-1
+    display: Radiology Study recommendation (narrative)
+  - system: snomed-ct
+    code: '275981009'
+    display: Screening for malignant neoplasm of lung
+  - system: snomed-ct
+    code: '16334891000119106'
+    display: Low dose computed tomography of chest without contrast
+  - system: snomed-ct
+    code: '1373815000'
+    display: PET-CT using fluorodeoxyglucose (18-F)
+  - system: snomed-ct
+    code: '103696004'
+    display: Patient referral to specialist
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung
+  resource: CarePlan
+  path: CarePlan.activity.detail.code (Example-Binding procedure-code); CarePlan.activity.detail.description;
+    CarePlan.activity.reference; CarePlan.supportingInfo (→ mii-pr-bildgebung-radiologischer-befund);
+    CarePlan.intent; CarePlan.status
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil (laut Diff inhaltsgleich
+    in 2027.0.0-ballot.1). Bestes Ziel: radiologische Behandlungsempfehlung, über supportingInfo mit dem
+    Befund verknüpft. Art des Schritts in activity.detail.code. Invariante cpl-3: je activity entweder
+    detail (code, description, status) ODER reference → ServiceRequest (z. B. anforderung-bildgebung),
+    ggf. in getrennten activity-Einträgen. intent und status 1..1. Kein Zeitpunkt hier (→ recommendedControlInterval);
+    424900004 höchstens als CarePlan.category-Tag.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung
+  resource: ServiceRequest
+  path: ServiceRequest.code.coding:loinc (REQUIRED http://loinc.org/vs/loinc-rsna-radiology-playbook);
+    ServiceRequest.category.coding:sct (Pattern 363679005 Imaging); ServiceRequest.reasonReference; ServiceRequest.occurrence[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Nur für bildgebende
+    Folgeschritte (Kontroll-LDCT, PET/CT), Äquivalenz narrower. Kontroll-LDCT z. B. LOINC 79086-5 (CLASS
+    RAD, laut tx.fhir.org im RSNA-Playbook; das ValueSet liegt nicht auf dem MII TermServ). reasonReference
+    → screeningResultCategory. Abklärung in der Sprechstunde gehört nicht hierher (→ clarificationReferral).
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/CarePlan
+  resource: CarePlan
+  path: CarePlan.activity.detail.code; CarePlan.activity.detail.description
+  notes: hl7.fhir.r4.core#4.0.1, stabil. Entspricht dem Mapping von recommendationsForPrimaryCare (specializes);
+    Invariante cpl-3 beachten (detail und reference nicht in derselben activity).
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/HL7IDRRecommendation
+  resource: Extension auf DiagnosticReportEuImaging (extension:recommendation)
+  path: Extension.value[x] = Reference(CarePlan | ServiceRequest)
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/Draft. Verknüpft den Bildbefundbericht strukturiert
+    mit dem empfohlenen Vorgehen.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  resource: Observation
+  path: Observation.component.code = (DCM 121075 "Recommendation"); Observation.component.value[x]
+  notes: 'hl7.fhir.uv.ips#2.0.1, stabil, international. Äquivalenz related: Empfehlung nur als Text-Komponente
+    der Radiologie-Beobachtung, nicht strukturiert.'
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_DiagnosticImagingReportTemplates.html
+  resource: TID 2000 Basic Diagnostic Imaging Report
+  path: Überschrift aus CID 7001 = (18783-1, LN, "Recommendations") bzw. DCM 121074; Inhalt TID 2002 Report
+    Narrative
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Äquivalenz related (Narrativ). Ob CID 6028/6029 strukturierte
+    Folgeempfehlungen nur für Mammographie enthalten, ist ungeprüft.
+- standard: other
+  profile_or_url: https://edge.sitecorecloud.io/americancoldf5f-acrorgf92a-productioncb02-3650/media/ACR/Files/RADS/Lung-RADS/Lung-RADS-2022.pdf
+  resource: ACR Lung-RADS v2022, Spalte „Management“
+  path: '12-month screening LDCT (1/2); 6-month LDCT (3); 3-month LDCT, PET/CT may be considered (4A);
+    4B: diagnostic chest CT with or without contrast, PET/CT, tissue sampling and/or referral for further
+    clinical evaluation (Note 13); S-Modifier (Note 15)'
+  notes: 'ACR Lung-RADS v2022, nicht-FHIR, kein Codesystem. Äquivalenz related: Textreferenz für das lokale
+    Mapping der Werteliste auf das Lung-RADS-Management (neben S3 Empf. 5.9 und Supplement Tab. S1 Anm.
+    3).'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-EVALUATION.recommendation.v2
+  resource: EVALUATION
+  path: /data[at0001]/items[at0002] (Recommendation); items[at0003] (Rationale)
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle published, nicht-FHIR. Alternativ
+    imaging_exam_result.v1 at0059 Recommendation (DV_TEXT) im Bildbefund.
+care_process:
+  trigger: mit dem abschließenden Ergebnis
+  responsible_role: Erst- und Zweitbefunder (gemeinsam); bei unauffälligem Erstbefund der Erstbefunder
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 44
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: sowie das Ergebnis der gemeinsamen Beurteilung der Lungenkrebsfrüherkennungsuntersuchung mit
+      der Empfehlung für …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: KBV PraxisInfoSpezial (Oktober 2026) — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: Befundung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Beide Befunder müssen dann in einer gemeinsamen Beurteilung zu einem einheitlichen Ergebnis
+      kommen und eine Empfehlung über weiterführende Maßnahmen zur Kontrolle oder Abklärung abgeben.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.9 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: reguläre Niedrigdosis-CT-Verlaufskontrolle nach mindestens 12 Monaten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 43 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: B:=, B:lungRads4aManagementPath; BPMN-Schritt:
+      G10 Ergebnis | Empfehlung abgeben (Activity_07i9gmj) bzw. Abklärung (Activity_0es6xoa)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 43); Quellen: Q02, Q05, Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 43)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. KFE-RL § 44 („mit der Empfehlung für das weitere Vorgehen“)
+  und LuKrFrühErkV § 5 Abs. 3 bei gemeinsamer Beurteilung, also bei kontroll- oder abklärungsbedürftigem
+  Erstbefund; sonst S3 Empf. 5.9 (Leitlinie).'
+- 'Umsetzung: eigenständig (Spezialisierung von recommendationsForPrimaryCare). Werteliste nur für die
+  Art des nächsten Schritts: reguläre Screening-LDCT nach 12 Monaten | Kontroll-LDCT | ergänzende Bildgebung/Vergleich
+  bei Lung-RADS 0 | PET/CT | Abklärung in spezialisierter Einrichtung (lokal, mit Mapping auf das Lung-RADS-Management;
+  Belege S3 Empf. 5.9 und Supplement Tab. S1 Anm. 3). Den Zeitpunkt nur in recommendedControlInterval
+  führen. Konsistenzregeln: unauffällig → regulär; kontrollbedürftig → Kontroll-LDCT plus Intervall; abklärungsbedürftig
+  → Abklärung plus abnormalResultDiscussion und clarificationReferral. specializes recommendationsForPrimaryCare
+  (Abgrenzung in definition_de); 424900004 nur als generisches Tag bzw. Mapping, nicht als Observation-Code.'
+- Für 'Vergleich mit Voraufnahmen bzw. ergänzende Bildgebung bei Lung-RADS 0' fehlt ein Standardkonzept;
+  ein lokaler Code muss festgelegt werden.
+- Kontroll-LDCT und reguläre Screening-LDCT unterscheiden sich in SNOMED CT nicht durch ein eigenes Konzept
+  'Kontroll-LDCT'; die Unterscheidung trägt nur die Kombination mit screeningResultCategory.
+- Die Mapping-Tabelle der Werteliste auf das Lung-RADS-Management (einschließlich 4B) ist noch zu erstellen.
+- Zu bestätigen ist, ob der Element-Code 420227002 oder – konsistent zum Elternelement recommendationsForPrimaryCare
+  – 427272008 geführt wird.
+- Die Konsistenzregeln (unauffällig → regulär; kontrollbedürftig → Kontroll-LDCT plus Intervall; abklärungsbedürftig
+  → Abklärung plus abnormalResultDiscussion und clarificationReferral) sind als Invarianten zu formulieren.
+- Ob LOINC 79086-5 im RSNA-Playbook-ValueSet liegt, ist nur über tx.fhir.org belegt; auf dem MII TermServ
+  ist das ValueSet nicht verfügbar.
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.recommendationsForPrimaryCare.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.screeningResultCategory.v0.1

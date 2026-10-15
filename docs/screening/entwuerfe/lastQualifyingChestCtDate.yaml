@@ -1,0 +1,291 @@
+id: mihub.lung.screening.lastQualifyingChestCtDate.v0.1
+uuid: 787b39e5-0e5a-5254-90fd-1d1389f5e414
+name: lastQualifyingChestCtDate
+label_de: Datum der letzten befundungsgeeigneten Thorax-CT
+definition_de: Datum der letzten befundungsgeeigneten Lungen-CT (Screening oder anderer Anlass) mit Anlass;
+  reguläre LDCT frühestens zwölf Monate danach.
+phase: screening
+category: bildgebung
+datatype: string
+cardinality: 0..1
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'SNOMED CT INT 20260701, LOINC 2.83, OPS 2026, KDL 2025 (MII TermServ), Stand 2026-10-15. Element-Code
+    ist SNOMED 169069000 CT of chest (Procedure.code, jeder Anlass, liegt unter 363679005 Imaging und
+    damit im MII-Bildgebungs-ValueSet) bzw. LOINC 24627-2; LOINC 87279-6 nur zusätzlich bei Anlass Screening,
+    nie statt 24627-2. Methoden-Codes (Untertypen bzw. Leistung): LDCT 713548006, native LDCT 16334891000119106,
+    LOINC 29252-4 sowie OPS 3-202/3-222; die OPS-Codes belegen nur die erbrachte Leistung, nicht die Befundungseignung.
+    Antwortwerte für das Attribut Anlass: 275981009 (Procedure-Konzept, als Procedure.category bzw. reasonCode
+    für Screening) sowie die lokalen Werte ''andere Indikation'' und ''extern/anamnestisch''. 439272007
+    Date of procedure nur, wenn das Datum als eigene Observation geführt wird; im Regelfall steht es in
+    Procedure.performed[x] bzw. ImagingStudy.started. KDL DG020103 ist die Dokumentklasse des Voraufnahme-Befunds.
+    Kodierung konsistent mit ctThoraxScan (specializes). Die 12-Monats-Regel ist ein Constraint in eligibilityCheckResult,
+    kein Code. Rollen der Codes: snomed-ct|169069000 = element; loinc|24627-2 = element; loinc|87279-6
+    = element; snomed-ct|713548006 = methode; snomed-ct|16334891000119106 = methode; loinc|29252-4 = methode;
+    ops|3-202 = methode; ops|3-222 = methode; snomed-ct|275981009 = wert; local-no-standard-binding|other-indication
+    = wert; local-no-standard-binding|external-reported = wert; snomed-ct|439272007 = element; kdl|DG020103
+    = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '169069000'
+    display: CT of chest
+  - system: loinc
+    code: 24627-2
+    display: CT Chest
+  - system: loinc
+    code: 87279-6
+    display: CT Chest for screening
+  - system: snomed-ct
+    code: '713548006'
+    display: Low dose computed tomography of thorax
+  - system: snomed-ct
+    code: '16334891000119106'
+    display: Low dose computed tomography of chest without contrast
+  - system: loinc
+    code: 29252-4
+    display: CT Chest WO contrast
+  - system: ops
+    code: 3-202
+    display: Native Computertomographie des Thorax
+  - system: ops
+    code: 3-222
+    display: Computertomographie des Thorax mit Kontrastmittel
+  - system: snomed-ct
+    code: '275981009'
+    display: Screening for malignant neoplasm of lung
+  - system: local-no-standard-binding
+    code: other-indication
+    display: andere Indikation
+  - system: local-no-standard-binding
+    code: external-reported
+    display: extern/anamnestisch
+  - system: snomed-ct
+    code: '439272007'
+    display: Date of procedure
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0 (stabil). Hauptziel für das
+    Datum der letzten befundungsgeeigneten Lungen-CT, auch aus anderem Anlass. performed[x] 1..1 MS (dateTime|Period;
+    Teilpräzision über dateTime). code.coding:sct REQUIRED an mii-vs-bildgebung-imaging-procedure-code-sct
+    (Nachfahren von 363679005 Imaging; 169069000 ist enthalten), coding:ops REQUIRED an mii-vs-prozedur-ops
+    (3-202/3-222), coding:loinc REQUIRED an loinc-rsna-radiology-playbook (24627-2). Anlass über Procedure.reasonCode
+    (Bindung example) mit lokaler Werteliste. Für den Qualifier 'befundungsgeeignet für Lungenkarzinom'
+    gibt es kein Element (Extension oder eigene Observation nötig). 'Letzte' ist eine Abfrage (max performed).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1 (Ballot). Gleiche
+    Canonical-URL; performed[x] 1..1 MS, Slices sct/ops/loinc REQUIRED an dieselben ValueSets wie 2026.0.0.
+    Unterschiede: Die Slices performedDateTime und performedPeriod sind MS; extension:Seitenlokalisation
+    am OPS-Slice gibt es bereits in 2026.0.0 und ist im Ballot-Snapshot nur ausmodelliert. Für die Versionsführung
+    als Ballot-Stand vermerken.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
+  resource: ImagingStudy
+  path: ImagingStudy.started
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0 (stabil). Nur, wenn die Voraufnahme
+    als DICOM-Studie vorliegt (z. B. Prüfung durch den Erstbefunder). started 0..1 MS entspricht DICOM
+    Study Date/Time; modality REQUIRED an DICOM CID 33 (CT); reasonCode nur example. Kein Qualitäts- bzw.
+    Eignungsqualifier. Bei anamnestischer Angabe ohne Studie das Prozedur-Profil verwenden.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.effective[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0 (stabil). Ergänzendes Ziel für
+    dependsOn diagnosticReportDocument und die Ausnahme nach kontrollbedürftigem Befund (LuKrFrühErkV
+    § 2 Abs. 2). effective[x] 0..1 MS; imagingStudy 1..* MS setzt eine Bildgebungsstudie voraus; Befundkategorie
+    nur über conclusionCode (example). Das Datum der Voraufnahme selbst gehört in Prozedur bzw. Studie.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.gematik.isik#6.0.0 (stabil). Für KIS-seitig dokumentierte CT-Untersuchungen. performed[x]
+    min 1 MS; code.coding:SNOMED-CT REQUIRED an ProzedurenCodesSCT (descendent-of 71388002), daneben Slice
+    OPS; subject.reference 1.., encounter.reference 1.. sofern encounter angegeben. Anlass und Befundungseignung
+    nicht abbildbar.
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'kbv.basis#1.9.0 (stabil); KBV-Basisprofil, kein MIO – im Bestand die erste Verwendung eines
+    kbv.basis-Profils unter dem Schlüssel kbv-mio. Geeignet für die anamnestische Angabe im PVS: Slices
+    performedDateTime, performedPeriod, performedAge, performedRange (mit Lebensphase) und performedString
+    erlauben ungefähre Angaben. code.coding:snomed REQUIRED an KBV_VS_Base_Procedure_SNOMED_CT (is-a 71388002,
+    SCT-DE 20260515; system, version, code, display je 1..1), daneben coding:ops.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/ImagingStudy-uv-ips
+  resource: ImagingStudy
+  path: ImagingStudy.started
+  notes: 'hl7.fhir.uv.ips#2.0.1 (stabil; HL7 IPS, international). started 0..1 MS; modality extensible
+    an DICOM CID 29 (MII: required CID 33). Alternative Procedure-uv-ips mit performed[x] 1..1 MS (dateTime|Period|string|Age|Range),
+    code preferred an procedures-uv-ips.'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ProcedureEuImaging
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot (Ballot, status draft; HL7 Europe Imaging). performed[x] 1..1;
+    code 1..1 extensible an im-procedure-type. Daneben ImagingStudyEuImaging (http://hl7.eu/fhir/imaging/StructureDefinition/ImagingStudyEuImaging)
+    mit started 0..1 (nicht MS), modality extensible, reasonCode example. Nur als europäische Alternative;
+    kein Eignungsqualifier.
+- standard: other
+  profile_or_url: https://hl7.lt/fhir/lung/Questionnaire/questionnaire-pre-ldct-lt-lung
+  resource: Questionnaire
+  path: item 'prior-chest-ct' (Previous chest (lung) CT in the last 3 years); item 'prior-chest-ct-date'
+    (Date of previous chest CT examination (if known))
+  notes: 'HL7 Litauen, Lung-IG 0.0.1 (CI-Build https://build.fhir.org/ig/HL7LT/ig-lt-lung/, kein publiziertes
+    Paket). Fachlich nächstes Screening-Gegenstück: Frage nach Voraufnahme und deren Datum; die ConceptMap
+    des IG bildet das Datum auf Procedure.performedDateTime (ProcedureLt, ig-lt-base) ab. Abweichend gilt
+    dort ein 3-Jahres-Horizont statt der 12-Monats-Regel; kein Eignungsqualifier.'
+- standard: other
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html
+  resource: DICOM-Attribut
+  path: (0008,0020) Study Date (DA); (0008,0030) Study Time (TM)
+  notes: DICOM PS3.6 (nicht-FHIR). Quelle des Datums, wenn die Voraufnahme als DICOM-Studie vorliegt;
+    ImagingStudy.started wird daraus befüllt, Modalität in (0008,0060). Kein DICOM-Attribut für die Eignung
+    zur Lungenkarzinom-Befundung. Schlüssel other, weil dicom-sr nur Structured Reports meint.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1494
+  resource: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  path: /data[at0001]/events[at0002]/data[at0003]/items[at0070] (Study date); items[at0063] (Imaging quality)
+  notes: 'openEHR CKM imaging_exam_result.v1, Revision 1.1.3 (published; nicht-FHIR). Einziges Gegenstück
+    für den Qualifier ''befundungsgeeignet'': Imaging quality at0063 (DV_TEXT 0..1, empfohlene Werte adequate/suboptimal/inadequate
+    bzw. non-diagnostic). Study date at0070 DV_DATE_TIME 0..1; Anlass über Clinical indication at0061
+    und Examination request details at0027; Voraufnahme über Comparison study details (CLUSTER at0093).'
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: Item 139 (Indication for Exam; Antwort 'Non-screening Chest CT assigned a Lung-RADS score and
+    used in lieu of an annual screen to avoid repeat scanning')
+  notes: ACR LCSR & IPN Data Dictionary 2026-05-28 (nicht-FHIR, Register USA), S. 26. Nur konzeptionelle
+    Entsprechung zu KFE-RL § 38 Abs. 2 (Voraufnahme aus anderem Anlass ersetzt die Regel-LDCT); erfasst
+    die Untersuchungsart, kein Datum der letzten CT.
+care_process:
+  trigger: jede Anspruchsprüfung und jede Indikationsstellung
+  responsible_role: Praxis (Anamnese); Erstbefunder (Prüfung der Voraufnahme)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 Nr. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: bei denen die letzte Untersuchung der Lunge mittels Computertomographie, die qualitativ zur
+      Befundung im Hinblick …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 38 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Erfolgte innerhalb der letzten 12 Monate … bereits aus anderen Gründen eine Untersuchung der
+      Lunge mittels Computertomographie und ist diese Voraufnahme qualitativ zur Befundung im Hinblick
+      auf ein Lungenkarzinom geeignet
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 38 Abs. 2, S. 16
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: mindestens die gesamte Lunge in der erforderlichen Bildqualität
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 9 der Quellenrecherche zur Screening-Episode (Gruppe G3 Zulässigkeit/Eignung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:lastLungCtExamination, L:lastChestCtDate, S:=,
+      E:priorChestCtDate, P:lastQualifyingChestCt; BPMN-Schritt: G3 Zulässigkeit | Praxis: Activity_0ya2ob0;
+      Radiologie: Activity_0l9ecr6'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 9); Quellen: Q01, Q02, Q03'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 9)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 13 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 12 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Zulässig nur, wenn die letzte befundungsgeeignete Lungen-CT
+  mindestens zwölf Monate zurückliegt: LuKrFrühErkV § 2 Abs. 1 Nr. 2; KFE-RL § 38 Abs. 2; Ausnahme nach
+  kontrollbedürftigem Befund (§ 2 Abs. 2). Die Vorlagen führen das Kriterium nur als Ja/Nein.'
+- 'Umsetzung: Erweiterung von ctThoraxScan (Thorax-CT-Vorgeschichte). Als Erweiterung von ctThoraxScan
+  modellieren (phasenübergreifende Thorax-CT-Vorgeschichte oder Screening-Spezialisierung mit specializes):
+  Datum (Teilpräzision zulässig), Anlass/Herkunft (Screening | andere Indikation | extern/anamnestisch),
+  Qualifier „befundungsgeeignet für Lungenkarzinom“ (boolean), Verweis auf diagnosticReportDocument bzw.
+  ImagingStudy mit Befundkategorie (für § 2 Abs. 2). „Letzte“ als Abfrage, die 12-Monats-Regel als Constraint
+  in eligibilityCheckResult. Label „befundungsgeeignete Lungen-CT“. KFE-RL § 38 Abs. 2 und TrG zu § 38
+  Abs. 2 ergänzen.'
+- Für den Qualifier 'qualitativ zur Befundung im Hinblick auf ein Lungenkarzinom geeignet' (LuKrFrühErkV
+  § 2 Abs. 1 Nr. 2; KFE-RL § 38 Abs. 2) gibt es weder einen SNOMED-/LOINC-Code noch ein FHIR-Element;
+  zu entscheiden ist zwischen einer lokalen Extension am Prozedur-Profil und einer eigenen Observation.
+- Die Anlass-Werte 'andere Indikation' und 'extern/anamnestisch' haben keinen Standardcode und bleiben
+  lokal; eine standardisierte Werteliste für Procedure.reasonCode fehlt.
+- Die Ableitung 'letzte CT' und die 12-Monats-Frist sind in keinem Standard vorgesehen und müssen als
+  Abfrage bzw. Constraint in eligibilityCheckResult umgesetzt werden.
+- Die Umsetzung als specializes von ctThoraxScan (phasenübergreifende Thorax-CT-Vorgeschichte) ist noch
+  zu bestätigen.
+- Ob KBV-Basisprofile (kbv.basis) künftig unter dem Schlüssel kbv-mio geführt werden, ist als Katalog-Konvention
+  festzulegen (bisher nur MIO- und eAU-Profile).
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.ctThoraxScan.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.diagnosticReportDocument.v0.1

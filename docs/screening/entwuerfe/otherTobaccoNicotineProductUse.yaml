@@ -1,0 +1,228 @@
+id: mihub.lung.screening.otherTobaccoNicotineProductUse.v0.1
+uuid: 7b12da5f-970e-5d1e-9012-4abf35d6da4f
+name: otherTobaccoNicotineProductUse
+label_de: Weitere Tabak- und Nikotinprodukte (nicht anrechenbar)
+definition_de: Konsum anderer Produkte als Zigaretten (Zigarre, Pfeife, Shisha, E-Zigarette, Tabakerhitzer,
+  rauchloser Tabak, Nikotinbeutel); nicht anrechenbar.
+phase: screening
+category: sozialanamnese
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83; Stand 2026-10-15. Elementcodes (Observation.code):
+    647981000005104 ''Use of nicotine'' für tabakfreie Nikotinprodukte (E-Zigarette, Nikotinbeutel) und
+    53661000146106 ''Type of tobacco used'' für Tabakprodukte; 647981000005104 allein deckt Zigarre, Pfeife,
+    Shisha und rauchlosen Tabak nur näherungsweise ab. LOINC 81228-9 (Antwortliste LL3975-1) und 105045-9
+    (Antwortliste LL6587-1) sind Fragecode-Mappings. Antwortwerte (je Produkt ein Code, 0..*): SNOMED
+    59978006 Zigarre, 82302008 Pfeife, 698289004 Shisha, 722499006 E-Zigarette (schließt nikotinfreie
+    und Cannabis-E-Zigaretten ein), präziser 785889008 nikotinhaltige E-Zigarette, 1388653002 Tabakerhitzer
+    (INT seit 2026-03), 713914004 rauchloser Tabak, 722494001 als generischer Ausweichwert für andere
+    Nikotinprodukte; Nikotinbeutel lokal, weil SNOMED kein Konzept für aktuelle Nutzer:innen hat. LOINC-Antworten
+    LA15333-0, LA26091-1, LA26092-9, LA34350-1 und LA34143-0 nur als Mapping; LA15332-2 ''Cigarettes''
+    ist ausgeschlossen, Zigaretten stehen in smokingStatusScreening. Binding extensible, damit der lokale
+    Nikotinbeutel-Code zulässig bleibt. Rollen der Codes: snomed-ct|647981000005104 = element; snomed-ct|53661000146106
+    = element; loinc|81228-9 = element; loinc|105045-9 = element; snomed-ct|59978006 = wert; snomed-ct|82302008
+    = wert; snomed-ct|698289004 = wert; snomed-ct|722499006 = wert; snomed-ct|785889008 = wert; snomed-ct|1388653002
+    = wert; snomed-ct|713914004 = wert; snomed-ct|722494001 = wert; local-no-standard-binding|nikotinbeutel
+    = wert; loinc|LA15333-0 = wert; loinc|LA26091-1 = wert; loinc|LA26092-9 = wert; loinc|LA34350-1 =
+    wert; loinc|LA34143-0 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '647981000005104'
+    display: Use of nicotine
+  - system: snomed-ct
+    code: '53661000146106'
+    display: Type of tobacco used
+  - system: loinc
+    code: 81228-9
+    display: Tobacco product
+  - system: loinc
+    code: 105045-9
+    display: Electronic cigarette status
+  - system: snomed-ct
+    code: '59978006'
+    display: Cigar smoker
+  - system: snomed-ct
+    code: '82302008'
+    display: Pipe smoker
+  - system: snomed-ct
+    code: '698289004'
+    display: Hookah pipe smoker
+  - system: snomed-ct
+    code: '722499006'
+    display: Electronic cigarette user
+  - system: snomed-ct
+    code: '785889008'
+    display: Nicotine-filled electronic cigarette user
+  - system: snomed-ct
+    code: '1388653002'
+    display: Uses heated tobacco product
+  - system: snomed-ct
+    code: '713914004'
+    display: User of smokeless tobacco
+  - system: snomed-ct
+    code: '722494001'
+    display: Nicotine user
+  - system: local-no-standard-binding
+    code: nikotinbeutel
+    display: Konsum tabakfreier Nikotinbeutel
+  - system: loinc
+    code: LA15333-0
+    display: Cigars
+  - system: loinc
+    code: LA26091-1
+    display: Pipe tobacco
+  - system: loinc
+    code: LA26092-9
+    display: Smokeless tobacco
+  - system: loinc
+    code: LA34350-1
+    display: Electronic cigarette user
+  - system: loinc
+    code: LA34143-0
+    display: Nicotine-filled electronic cigarette user
+standard_mappings:
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: 'de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis (in 6.0.0 abstrakt, LOINC-Coding Pflicht,
+    value[x] offen gesliced, min 1). Eine Observation je Produkt: code.coding:loinc 81228-9 (bzw. 105045-9
+    für E-Zigaretten), valueCodeableConcept mit den SNOMED-Werten des Elements und dem lokalen Nikotinbeutel-Code.
+    LL3975-1 ist als Antwortliste zu eng. ISiKRaucherStatus ist ungeeignet, weil sein required-ValueSet
+    nur den Raucherstatus enthält.'
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0029]/items[at0095] (Type)
+  notes: 'openEHR CKM, Revision 2.0.1, published, nicht-FHIR. Typliste für Rauchprodukte: at0056 Cigars,
+    at0066 Cigarillos, at0057 Pipe, at0062 Waterpipe, at0078 Bidis, at0088 Kreteks (at0054/at0055 Zigaretten
+    gehören zu smokingStatusScreening). Laut misuse-Abschnitt nicht für rauchlosen Tabak und ausdrücklich
+    nicht für ''e-cigarettes, nicotine patches or nicotine chewing gum''; E-Zigarette und Tabakerhitzer
+    gehören nicht hierher.'
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.smokeless_tobacco_summary.v1.adl
+  resource: openEHR-EHR-EVALUATION.smokeless_tobacco_summary.v1
+  path: /data[at0001]/items[at0029]/items[at0098] (Type)
+  notes: openEHR CKM, Revision 1.1.1, published, nicht-FHIR. Für rauchlosen Tabak (Kautabak, Schnupftabak,
+    Snus) mit Status, Episoden und Overall years of use (at0099). Type at0098 ist DV_TEXT (frei, optional
+    codierbar), keine Werteliste. Tabakfreie Nikotinbeutel liegen laut Scope-Text ('use of bags and additives
+    has been left outside of scope') außerhalb des Archetyps.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/observation/openEHR-EHR-OBSERVATION.substance_use_screening.v1.adl
+  resource: openEHR-EHR-OBSERVATION.substance_use_screening.v1
+  path: /data[at0022]/events[at0023]/data[at0001]/items[at0026]/items[at0021] (Substance name)
+  notes: 'openEHR CKM, Revision 1.0.3, published, nicht-FHIR. Generischer Screening-Fragebogen mit ''Used?''
+    (at0024) und ''Last used'' (at0003) je Substanz; schließt laut Beschreibung Nikotin und Vaping-Liquids
+    ein. Substance name ist DV_TEXT (frei); SNOMED-Werte sind nur optional als Codierung möglich. Damit
+    abbildbar: E-Zigarette, Tabakerhitzer, Nikotinbeutel.'
+care_process:
+  trigger: Anspruchsprüfung und Folgekontakte
+  responsible_role: berichterstellende Ärzt:in; Selbstauskunft (Portal)
+evidence:
+  guideline_references:
+  - source: andere
+    version: 'G-BA Tragende Gründe KFE-RL — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung mittels
+      Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 39 Nr. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Von dem Begriff „Zigarettenkonsum“ wird nur der Konsum von Zigaretten, nicht aber von anderen
+      Tabakprodukten, wie …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: S3-LL Tabakentwöhnung
+    version: 3.1 (Stand 01/2021, Langversion 03/2021, AWMF 076-006; Gültigkeit bis 31.12.2025 abgelaufen,
+      Aktualisierung angemeldet 12/2024)
+    url: https://register.awmf.org/assets/guidelines/076-006l_S3_Rauchen-_Tabakabhaengigkeit-Screening-Diagnostik-Behandlung_2021-03.pdf
+    section: Empf. 3.3.3.1, S. 47
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Konsum von Tabak und verwandten Produkten soll in der Patientendokumentation erfasst werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q13
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 6 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R:otherTobaccoOrNicotineProductUse, L:=, S:tobaccoProductType,
+      P:otherTobaccoNicotineProducts; BPMN-Schritt: G2 Raucheranamnese | Praxis: Activity_0ya2ob0'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 6); Quellen: Q03, Q13'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.55); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 6)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 18 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. Nicht anrechenbar (Begründung zur LuKrFrühErkV, zitiert
+  in den TrG, S. 17). Erfassungsempfehlung: S3-LL Rauchen und Tabakabhängigkeit Empf. 3.3.3.1 (A; Teil
+  „verwandte Produkte“ als Konsenspunkt; Gültigkeit abgelaufen, in Überarbeitung). S3-LL Lungenkarzinom
+  Empf. 4.2 gilt nur für Erkrankte.'
+- 'Umsetzung: eigenständig (Raucheranamnese Q3). Als 0..*-Produktelement behalten. LOINC 81228-9 nur als
+  Fragecode, Werte über SNOMED CT (722499006, 1388653002; Nikotinbeutel lokal). Produktliste mit der Quelle
+  abgleichen (Nikotinpflaster bewusst ein- oder ausschließen). E-Zigarette und Passivrauch aus dem Status
+  nehmen (smokingStatusScreening, perspektivisch smokingStatus) und den smokingStatus-Issue „verwandte
+  Produkte“ über related_elements hierauf auflösen. Fundstelle präzisieren: TrG „Zu § 39 Nr. 1 Satz 1
+  2. Halbsatz – Begriffserläuterung Zigarettenkonsum“, S. 17.'
+- Zu entscheiden ist, ob ein einziger Elementcode (647981000005104, Näherung) oder zwei Kopfcodes je Produktklasse
+  (53661000146106 für Tabak, 647981000005104 für tabakfreie Nikotinprodukte) verwendet werden.
+- SNOMED CT 20260701 hat kein Konzept für aktuelle Nutzer:innen von Nikotinbeuteln (nur 584021000052104
+  'Ex-user of nicotine pouches' und das Observable 584011000052107); der lokale Code oder 722494001 ist
+  nötig.
+- Ob Nikotinersatzpräparate (z. B. Pflaster, Kaugummi) bewusst ein- oder ausgeschlossen werden, ist fachlich
+  offen und mit der Produktliste der Quelle abzugleichen.
+- Ob selbstgedrehte Zigaretten als Zigaretten im Sinne der LuKrFrühErkV zählen oder hierher gehören, ist
+  offen.
+- Kein FHIR-Profil (MII, ISiK, IPS, US Core, KBV, gematik ePA) bildet E-Zigarette, Tabakerhitzer oder
+  Nikotinbeutel ab; ein eigenes, von ISiKLebensZustand abgeleitetes Profil ist nötig.
+- E-Zigarette und Passivrauch sind aus dem Rauchstatus zu entfernen und über related_elements auf dieses
+  Element bzw. ein Expositionselement zu verweisen.

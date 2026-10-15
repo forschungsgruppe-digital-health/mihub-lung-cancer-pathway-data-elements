@@ -1,0 +1,258 @@
+id: mihub.lung.screening.invasiveWorkupProcedure.v0.1
+uuid: f9c74256-4d06-57bc-81d3-c3547bf9862b
+name: invasiveWorkupProcedure
+label_de: Folge- und Abklärungsmaßnahme nach Screeningbefund (inkl. Komplikation)
+definition_de: Maßnahme nach Screeningbefund (CT, PET/CT, Bronchoskopie, Biopsie, Resektion) mit Datum,
+  Dignität und Komplikationen.
+phase: screening
+category: prozedur
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, OPS 2026 (BfArM); Stand 2026-10-15. Element-Code 78603008
+    ''Biopsy of lung'' als Oberbegriff; das Werte-Set ist als Aufzählung zu definieren, nicht als is-a
+    78603008, weil die thorakoskopischen Keilresektionen keine Kinder von 78603008 sind. Antwortwerte
+    Eingriffsart (Procedure.code), begrenzt auf invasive Verfahren nach S3 Empf. 5.12/5.13: 243685008
+    (Bronchoskopie mit transbronchialer Biopsie), 429932001 (CT-gesteuerte Biopsie), 444188003 bzw. präziser
+    1366310008 (thorakoskopische bzw. videoassistierte Keilresektion); nicht-invasive Bildgebung (CT,
+    PET/CT) gehört nicht hierher. OPS-Parallelkodierung 1-430.2, 1-432.0, 5-322.g, 5-322.h; diese OPS-Codes
+    sind nicht endständig, im Einzelfall ist der endständige Subcode zu kodieren (z. B. 1-430.20, 1-432.00,
+    5-322.g1). Eigene, optionale Komplikationsachse (Procedure.complication, nicht Teil der Eingriffsart-Werte):
+    116224001 (Oberbegriff), 871586006 (Pneumothorax), 12202101000119100 (Nachblutung), 130091000119103
+    (Fieber). Die Dignität gehört zu workupOutcome. Rollen der Codes: snomed-ct|78603008 = element; snomed-ct|243685008
+    = wert; snomed-ct|429932001 = wert; snomed-ct|444188003 = wert; snomed-ct|1366310008 = wert; ops|1-430.2
+    = wert; ops|1-432.0 = wert; ops|5-322.g = wert; ops|5-322.h = wert; snomed-ct|116224001 = wert; snomed-ct|871586006
+    = wert; snomed-ct|12202101000119100 = wert; snomed-ct|130091000119103 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '78603008'
+    display: Biopsy of lung
+  - system: snomed-ct
+    code: '243685008'
+    display: Bronchoscopy with transbronchial lung biopsy
+  - system: snomed-ct
+    code: '429932001'
+    display: CT guided biopsy of lung
+  - system: snomed-ct
+    code: '444188003'
+    display: Thoracoscopic wedge resection of lung
+  - system: snomed-ct
+    code: '1366310008'
+    display: Thoracoscopic wedge resection of lung using video assistance
+  - system: ops
+    code: 1-430.2
+    display: 'Endoskopische Biopsie an respiratorischen Organen: Lunge'
+  - system: ops
+    code: 1-432.0
+    display: 'Perkutane Biopsie an respiratorischen Organen mit Steuerung durch bildgebende Verfahren:
+      Lunge'
+  - system: ops
+    code: 5-322.g
+    display: 'Atypische Lungenresektion: Keilresektion, einfach, thorakoskopisch'
+  - system: ops
+    code: 5-322.h
+    display: 'Atypische Lungenresektion: Keilresektion, mehrfach, thorakoskopisch'
+  - system: snomed-ct
+    code: '116224001'
+    display: Complication of procedure
+  - system: snomed-ct
+    code: '871586006'
+    display: Pneumothorax due to and following procedure
+  - system: snomed-ct
+    code: '12202101000119100'
+    display: Hemorrhage of respiratory system following procedure on respiratory system
+  - system: snomed-ct
+    code: '130091000119103'
+    display: Postprocedural fever
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct (0..1, MS, REQUIRED procedures-sct = descendent-of 71388002) | Procedure.code.coding:ops
+    (0..1, REQUIRED mii-vs-prozedur-ops) | Procedure.performed[x] (1..1, dateTime|Period) | Procedure.category.coding:sct
+    (preferred; 165197003 bzw. 387713003) | Procedure.complication (0..*, example) | Procedure.basedOn
+    (CarePlan|ServiceRequest) | Procedure.reasonReference (Condition|Observation|Procedure|DiagnosticReport)
+    | Procedure.report
+  notes: de.medizininformatikinitiative.kerndatensatz.base#2026.0.1, stabil (Profil auch im Ballot 2027.0.0
+    des base-Pakets). Primärziel. Eingriffsart über SNOMED 243685008, 429932001, 444188003 bzw. 1366310008
+    (alle unter 71388002), bei Abrechnung zusätzlich OPS. Komplikationen in Procedure.complication (example-Bindung;
+    SNOMED-Befunde bzw. ICD-10-GM). basedOn verweist auf den CarePlan der screeningCaseConference, reasonReference
+    auf den abklärungsbedürftigen Screeningbefund. Die Dignität gehört zu workupOutcome.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-operation
+  resource: Procedure
+  path: Procedure.extension:Intention (1..1, MS, REQUIRED mii-vs-onko-operation-intention; D = diagnostisch)
+    | Procedure.code.coding:ops / :sct (REQUIRED) | Procedure.performed[x] (1..1, nur dateTime) | Procedure.complication:compl_obds
+    (REQUIRED mii-vs-onko-operation-komplikation; PNT, NAB, RNB, PLE, PEY, PMN, BSI, N, U) | Procedure.complication:compl_icd10
+    | Procedure.reasonReference (mii-pr-onko-diagnose-primaertumor oder Condition) | Procedure.outcome
+    (0..1, REQUIRED Residualstatus)
+  notes: de.medizininformatikinitiative.kerndatensatz.onkologie#2026.0.3, stabil. Nur für die chirurgische
+    Diagnosesicherung (thorakoskopische Keilresektion), wenn der Fall in die oBDS-Dokumentation übergeht;
+    Intention D. Der oBDS-Komplikationskatalog bietet strukturierte, für die Lunge einschlägige Werte.
+    reasonReference akzeptiert auch eine generische Condition; die Grenze ist der oBDS-Meldekontext (Tumoroperation),
+    nicht ein fehlender Primärtumor-Bezug. performed[x] erlaubt hier nur dateTime, kein Period. Für Bronchoskopie
+    und perkutane Biopsie das Basis-Prozedurprofil verwenden.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.code (1.., MS) .coding:SNOMED-CT (REQUIRED ProzedurenCodesSCT = descendent-of 71388002)
+    / .coding:OPS | Procedure.performed[x] (1.., dateTime|Period) | Procedure.category.coding:SNOMED-CT
+    (preferred ProzedurenKategorieSCT) | Procedure.note (MS) | Procedure.encounter.reference (1.. falls
+    encounter)
+  notes: de.gematik.isik#6.0.0 (auch isik-basismodul#4.0.3), stabil; nur Differential (kein Snapshot im
+    Paket). Für die stationäre Abklärung im Krankenhaus über die ISiK-Schnittstelle. Procedure.complication
+    ist nicht profiliert, existiert aber als Basiselement.
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.code.coding:ops | Procedure.code.coding:snomed (REQUIRED KBV_VS_Base_Procedure_SNOMED_CT;
+    system, version, code, display 1..) | Procedure.performed[x] (Slices DateTime, Period, Age)
+  notes: kbv.basis#1.9.0, stabil; ambulantes KBV-Basisprofil (kein MIO, daher unter other). Nur Differential
+    im Paket. Bei SNOMED sind version und display Pflicht. KBV_VS_Base_Procedure_SNOMED_CT liegt im Paket
+    (compose is-a 71388002, SNOMED CT DE-Edition 20260515); die Eingriffscodes sind damit enthalten. Das
+    MIO-Profil KBV_PR_MIO_NFD_Procedure (kbv.mio.patientenkurzakte#1.0.0) ist ungeeignet, weil es complication
+    verbietet (0..0).
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-related-surgical-procedure
+  resource: Procedure
+  path: Procedure.code (1..1, MS, extensible mcode-cancer-related-surgical-procedure-vs = SNOMED descendent-of
+    387713003 | CPT | ICD-10-PCS) | Procedure.performed[x] (0..1, MS) | Procedure.reasonReference (us-core-condition-problems-health-concerns)
+    | Procedure.complication
+  notes: hl7.fhir.us.mcode#4.0.0, stabil; nur internationales Referenzmuster für die chirurgische Resektion,
+    die US-Core-Abhängigkeit ist für Deutschland nicht nutzbar. 444188003 und 243685008 liegen unter 387713003
+    (Subsumption auf tx.fhir.org geprüft).
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Procedure-uv-ips
+  resource: Procedure
+  path: Procedure.code (1..1, MS, preferred procedures-uv-ips) | Procedure.performed[x] (1..1, MS) | Procedure.complication
+    (0..*, example)
+  notes: hl7.fhir.uv.ips#2.0.1, stabil; internationales Referenzmuster (IPS), z. B. für die Zusammenfassung
+    in einer Patientenkurzakte.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: 'ACR LCSR & IPN Data Dictionary (28.05.2026), Exam Form: Follow-Up (Section 5B)'
+  path: '#160 Date of follow-up | #161 Follow-up diagnostic (low dose chest CT | routine chest CT | PET/CT
+    | Bronchoscopy | Non-surgical biopsy | Surgical resection | Other) | #162 Other, specify | #164 Tissue/cytology
+    diagnosis method (Percutaneous | Bronchoscopic | Surgical | Unknown) | #120 Invasive procedure within
+    30 days prior to death'
+  notes: 'ACR LCSR & IPN Data Dictionary, Fassung 28.05.2026 (PDF-Anhang https://nrdrsupport.acr.org/helpdesk/attachments/11143178430);
+    nicht-FHIR, US-Registermuster. Ein Follow-up-Datensatz je Prozedur, auch bei mehreren Eingriffen am
+    selben Tag (bestätigt 0..*). #160 bis #162 auf S. 33, #164 auf S. 36, #120 auf S. 18. Das LCSR erfasst
+    auch Bildgebung (CT, PET/CT), die MiHUB hier bewusst ausschließt; ein Komplikationsfeld enthält das
+    Wörterbuch nicht.'
+care_process:
+  trigger: je invasiver Abklärungsmaßnahme nach abklärungsbedürftigem Befund
+  responsible_role: spezialisierte Einrichtung
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.13 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Anteil der Patienten mit einem malignen Befund an allen endoskopisch oder CT-gesteuert bioptierten
+      Patienten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.12 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Bronchoskopie mit transbronchialer Biopsie, CT-gesteuerte transthorakale Biopsie oder minimal-invasive
+      chirurgische Resektion
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: S. 9
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei einer Biopsie sind verschiedene Komplikationen wie Nachblutungen oder Fieber möglich.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 52 der Quellenrecherche zur Screening-Episode (Gruppe G12 Abklärung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B:screeningFollowUpProcedure, E:=, E:workupComplication;
+      BPMN-Schritt: G12 Abklärung | spezialisierte Einrichtung nach Event_0nesy5q'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 52); Quellen: Q12, Q04'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.7); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 52)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 13 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 7 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.13 („wünschenswert“: Anteil maligner Befunde
+  an bioptierten bzw. resezierten Patienten); Verfahren nach Empf. 5.12 und TrG S. 21. Keine Quelle verlangt
+  die Erfassung von Komplikationen.'
+- 'Umsetzung: eigenständig; Grenzfall des Scopes. Dignität entfernen (gehört zu workupOutcome). Werteliste
+  auf die invasiven Verfahren nach S3 Empf. 5.12/5.13 begrenzen (243685008, 429932001, 444188003; Oberbegriff
+  78603008); nicht-invasive Bildgebung (CT, PET/CT) hier nicht aufnehmen. Datentyp Reference (Procedure:
+  code, performedDateTime, complication) oder CodeableConcept nur für die Eingriffsart. Komplikationen
+  als Procedure.complication (Schadensindikator des Screenings), nicht über postTherapyComplication; als
+  lokal und optional kennzeichnen (die Versicherteninformation S. 9 informiert nur). dependsOn screeningCaseConference.'
+- Für Komplikationen invasiver Screening-Diagnostik gibt es außerhalb von oBDS (nur Tumoroperationen)
+  keinen strukturierten Katalog und keine Schweregradkodierung; die Komplikationserfassung ist eine lokale,
+  optionale MiHUB-Festlegung, die keine Quelle verlangt.
+- Es gibt kein screening-spezifisches Profil für Abklärungsmaßnahmen.
+- Die OPS-Codes sind nur als nicht endständige Gruppierer erfasst; die Regel zur Wahl des endständigen
+  Subcodes je Fall ist festzulegen.
+- 'Zu entscheiden ist der Datentyp: Reference auf Procedure (mit Datum und Komplikation) oder CodeableConcept
+  nur für die Eingriffsart.'
+- Ein openEHR-Archetyp (z. B. Prozedur-ACTION) wurde nicht geprüft.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.screeningCaseConference.v0.1

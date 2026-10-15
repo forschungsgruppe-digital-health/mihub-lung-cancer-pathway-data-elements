@@ -154,6 +154,10 @@ def write_markdown(rows: list[dict], total: int) -> Path:
 def write_phases_overview(files: list[Path]) -> Path:
     """Schreibt die kuratierte Phasen-Übersicht (9 Spalten, Klinik-Zielgruppe)."""
     phases = [
+        ("screening", "Krebsfrüherkennung (Lungenkrebs-Früherkennung mittels Niedrigdosis-CT)",
+         "Datenelemente der Screening-Episode nach LuKrFrühErkV / G-BA Krebsfrüherkennungs-Richtlinie: Eignungsprüfung, "
+         "Raucheranamnese, Bericht, Aufklärung, Niedrigdosis-CT, Befundung und Befundkategorie, Empfehlung, Qualitätsdaten. "
+         "Episode in Vorbereitung — Elemente entstehen aus der Erhebung 2026-10 (siehe docs/screening/)."),
         ("follow-up", "Onkologische Nachsorge (kurativ behandelt)",
          "Datenelemente nach kurativ-intendierter multimodaler Therapie. "
          "Mit Ergebnis-Artefakten zu Bildgebung und Lungenfunktion."),

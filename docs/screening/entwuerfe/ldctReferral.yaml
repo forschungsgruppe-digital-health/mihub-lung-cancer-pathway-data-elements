@@ -1,0 +1,210 @@
+id: mihub.lung.screening.ldctReferral.v0.1
+uuid: 4d875822-9529-5501-9eac-8d7f7e3c3217
+name: ldctReferral
+label_de: Überweisung zur Niedrigdosis-CT an den Erstbefunder
+definition_de: Überweisung an eine Radiologie mit Genehmigung als Erstbefunder zur Screening-LDCT, zusammen
+  mit Bericht und Selbsterklärung.
+phase: screening
+category: administrativ
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Elementcodes für die angeforderte Leistung (ServiceRequest.code): LOINC 79086-5 CT Chest for
+    screening WO contrast (bestellbar, ORDER_OBS Both) und SNOMED CT 16334891000119106 Low dose computed
+    tomography of chest without contrast, das die Niedrigdosis abbildet, die im LOINC-Namen fehlt. Überweisungsart
+    (ServiceRequest.category): 306143000 Referral to computed tomography service als Spezialisierung des
+    geerbten 3457005 Patient referral. Dokumentklasse des Überweisungsscheins: KDL AU050102. 3457005 und
+    AU050102 stammen aus mihub.lung.primarycare.referralOrder.v0.1. Die Abrechnungsziffern EBM 01871/01875
+    sind keine Codings, sondern Quellen. MII TermServ, LOINC 2.83, SNOMED CT International 20260701, KDL
+    2025, Stand 2026-10-15. Rollen der Codes: loinc|79086-5 = element; snomed-ct|16334891000119106 = element;
+    snomed-ct|306143000 = methode; snomed-ct|3457005 = methode; kdl|AU050102 = dokumentklasse.'
+  codings:
+  - system: loinc
+    code: 79086-5
+    display: CT Chest for screening WO contrast
+  - system: snomed-ct
+    code: '16334891000119106'
+    display: Low dose computed tomography of chest without contrast
+  - system: snomed-ct
+    code: '306143000'
+    display: Referral to computed tomography service
+  - system: snomed-ct
+    code: '3457005'
+    display: Patient referral
+  - system: kdl
+    code: AU050102
+    display: Überweisungsschein
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung
+  resource: ServiceRequest
+  path: ServiceRequest.code.coding:loinc (79086-5); ServiceRequest.category.coding:sct (363679005 Imaging);
+    ServiceRequest.supportingInfo (→ eligibilityReport); ServiceRequest.performer; ServiceRequest.status;
+    ServiceRequest.intent
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0 (Profil 'Anforderung einer Bildgebung'),
+    stabil; gleiche Canonical in 2025.0.2 und 2027.0.0-ballot.1. code 1..1 MS; code.coding:loinc REQUIRED
+    an http://loinc.org/vs/loinc-rsna-radiology-playbook, 79086-5 ist laut tx.fhir.org (LOINC 2.82) Mitglied.
+    category 1..* mit Slice sct = 363679005. supportingInfo (MS) verweist auf eligibilityReport, performer
+    (nicht MS) auf den Erstbefunder mit KV-Genehmigung (KFE-RL § 43 Abs. 5). reasonCode.coding:sct ist
+    REQUIRED an mii-vs-bildgebung-findings-sct gebunden; der Anlass Früherkennung ist kein Befund und
+    steckt im LOINC-Code (for screening). Passt besser als die Basis-ServiceRequest des Bestands referralOrder.
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/ValueSets/IHEXDSclassCode
+  resource: XDS DocumentEntry (Überweisungsschein als Dokument)
+  path: DocumentEntry.classCode = VER; DocumentEntry.typeCode = AUFN; DocumentEntry.eventCodeList = KDL
+    AU050102
+  notes: de.ihe-d.terminology#3.0.1, nicht-FHIR (XDS-Metadaten). VER 'Verordnung' umfasst laut Definition
+    auch 'Überweisungen an andere Ärzte', AUFN 'Einweisungs- und Aufnahmedokumente' nennt ausdrücklich
+    den Überweisungsschein; die DVMD-ConceptMap kdl-ihe-typecode (dvmd.kdl.r4#2025.0.1) bildet AU050102
+    auf AUFN ab (wider). Gilt für die Dokumentablage in MII Dokument (type/category.coding:XDS), ePA MHD
+    (OID-Systeme urn:oid:1.3.6.1.4.1.19376.3.276.1.5.8/.5.9) und ISiKDokumentenMetadaten.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/ServiceRequest
+  resource: ServiceRequest
+  path: ServiceRequest.code; ServiceRequest.category; ServiceRequest.supportingInfo; ServiceRequest.performer
+  notes: hl7.fhir.r4.core#4.0.1, stabil. Das Bestandselement referralOrder (primary-care) mappt auf ServiceRequest.reasonCode;
+    für die Spezialisierung ist ServiceRequest.code (79086-5 / 16334891000119106) der Elementinhalt, zusätzlich
+    supportingInfo → eligibilityReport.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ServiceRequestOrderEuImaging
+  resource: ServiceRequest
+  path: ServiceRequest.code (example im-procedure-type); ServiceRequest.category:imaging (363679005);
+    ServiceRequest.supportingInfo; ServiceRequest.extension:reason; ServiceRequest.identifier:accessionNumber
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot (status draft), Ballot; europäisches Ziel mit niedriger Priorität,
+    kein deutsches Pflichtprofil. Laut Beschreibung 'In DICOM this is referred to as the Requested Procedure';
+    Gegenstück ist die Composition-Sektion 'order' (LOINC 55115-0) im EU-Bildgebungsbericht.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.614
+  resource: openEHR-EHR-INSTRUCTION.service_request.v1
+  path: INSTRUCTION/activities/description (Service name, Reason, Supporting information)
+  notes: 'openEHR CKM 1013.1.614, Revision 1.1.3-alpha, in_development (CKM: Reassess/Draft), nicht-FHIR;
+    nachrangiges, nicht publiziertes Ziel. Die Spezialisierung service_request-imaging_examination.v0
+    (1013.1.7240) ist erst initial.'
+- standard: other
+  profile_or_url: https://edge.sitecorecloud.io/americancoldf5f-acrorgf92a-productioncb02-3650/media/ACR/Files/Clinical/Registries/LCSR-Data-Elements-from-Ordering-Physician-Records.pdf
+  resource: ACR LCSR – Datenelemente der schriftlichen Anordnung (Written Order)
+  path: 'Spalte ''Written Order'': Geburtsdatum, Smoking status, Pack-years, Years since quit, Ordering
+    practitioner NPI, Signs or symptoms'
+  notes: ACR LCSR Data Elements from Ordering Physician Records (PDF, abgerufen 2026-10-15), nicht-FHIR,
+    breites US-Referenzmuster. In den USA verlangt die CMS-NCD eine schriftliche Anordnung mit den Raucherdaten;
+    in Deutschland stehen diese Angaben im getrennten Bericht (eligibilityReport).
+care_process:
+  trigger: je Runde, wenn die Voraussetzungen erfüllt sind
+  responsible_role: berichterstellende Ärzt:in (Praxis) an den Erstbefunder mit KV-Genehmigung
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: S. 7
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Wenn Sie alle Voraussetzungen zur Teilnahme erfüllen, erhalten Sie eine Überweisung.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+  - source: andere
+    version: BMV-Ä (Fassung 01.04.2026) — Bundesmantelvertrag-Ärzte (BMV-Ä), § 13 Abs. 4 (Überweisungsvorbehalt)
+      und § 24 Abs. 4 Nr. 4
+    url: https://www.kbv.de/documents/infothek/rechtsquellen/bundesmantelvertrag/bmv-aerzte.pdf
+    section: § 13 Abs. 4 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ärzte für … Radiologische Diagnostik bzw. Radiologie … können nur auf Überweisung in Anspruch
+      genommen werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#X01
+  - source: andere
+    version: KBV PraxisInfoSpezial (Oktober 2026) — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: S. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Sind alle Voraussetzungen erfüllt, überweisen sie den Versicherten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 20 der Quellenrecherche zur Screening-Episode (Gruppe G6 Bericht/Überweisung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:referralToFirstReader, S:ldctScreeningReferral,
+      P:=; BPMN-Schritt: G6 Überweisung | Praxis: Activity_1fi5rrl → Activity_17m122u; Radiologie: Event_11h9bwq'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 20); Quellen: Q04, X01, Q05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 20)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 5 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. In der GKV verpflichtend über den Überweisungsvorbehalt
+  der Radiologie (BMV-Ä § 13 Abs. 4 S. 1, Fassung 01.04.2026); EBM 01875 setzt die Überweisung zur Niedrigdosis-CT
+  voraus. LuKrFrühErkV und KFE-RL verlangen nur den Bericht.'
+- 'Umsetzung: Spezialisierung von referralOrder (primarycare). specializes mihub.lung.primarycare.referralOrder.v0.1.
+  ServiceRequest.code LOINC 79086-5, zusätzlich KDL AU050102. mandatory_by_law = true mit den Quellen
+  BMV-Ä § 13 Abs. 4 S. 1–2 und EBM 01875; die Notiz der Konsolidierung („nicht Pflicht“) ersetzen durch
+  „LuKrFrühErkV und KFE-RL verlangen den Bericht; die Überweisung folgt aus dem Überweisungsvorbehalt
+  der Radiologie im BMV-Ä“. supportingInfo → eligibilityReport; performer = Erstbefunder mit KV-Genehmigung
+  (KFE-RL § 43 Abs. 5). Versicherteninformation S. 7 als Ablaufbeleg behalten.'
+- LOINC hat keinen eigenen Code für eine Niedrigdosis-CT des Thorax zur Früherkennung (nur die Antwort
+  LA31758-8 'Chest Low Dose'); die Niedrigdosis ist nur über SNOMED CT 16334891000119106 abbildbar.
+- Die Mitgliedschaft von 79086-5 im ValueSet loinc-rsna-radiology-playbook ist nur über tx.fhir.org (LOINC
+  2.82) belegt; das ValueSet liegt nicht auf dem MII TermServ.
+- Für die eÜberweisung (Muster 6) wurde kein FHIR-Paket der KBV gefunden; ob die KBV bereits eine Spezifikation
+  veröffentlicht hat, ist ungeklärt. ISiK, ePA, IPS, mCODE und Basis DE enthalten kein Überweisungsprofil.
+- Der Genehmigungsstatus des Erstbefunders (KV-Genehmigung nach § 135 Abs. 2 SGB V) ist in keinem Profil
+  abgebildet und läuft lokal über performer → PractitionerRole.
+- Bericht und Selbsterklärung lassen sich nur über supportingInfo gemeinsam übermitteln; dafür gibt es
+  keine Slices.
+- Kardinalität laut Quelle 1..* (je Runde).
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.referralOrder.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.eligibilityReport.v0.1

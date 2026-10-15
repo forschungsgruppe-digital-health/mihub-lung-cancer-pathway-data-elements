@@ -1,0 +1,200 @@
+id: mihub.lung.screening.screeningCaseConference.v0.1
+uuid: 25f1dbd5-73b4-5535-953b-306adc170806
+name: screeningCaseConference
+label_de: Interdisziplinäre Fallkonferenz zum abklärungsbedürftigen Befund
+definition_de: Datum und Ergebnis der thorax-onkologischen Fallkonferenz zum abklärungsbedürftigen Befund
+  (Bildgebung, Diagnosesicherung, Kontrolle).
+phase: screening
+category: versorgungsplanung
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, KDL 2025; Stand 2026-10-15. Element-Code (Konferenz)
+    399414003 wie im Bestand tumorBoardDecision. Dokumentklassen für das Konferenzprotokoll: LOINC 85231-9
+    ''Tumor Board Note'' und KDL SD150103 ''Tumorkonferenzprotokoll'' (AD060106 ist in KDL 2025 deprecated).
+    Antwortwerte Ergebnis nach S3 Empf. 5.12: weitere Bildgebung 1373815000 ''PET-CT using fluorodeoxyglucose
+    (18-F)'' (bevorzugt; Oberbegriff 450436003 wie petCtFollowUp), Diagnosesicherung 78603008 ''Biopsy
+    of lung'' (Oberbegriff; Details in invasiveWorkupProcedure), Kontrolle 713548006 ''Low dose computed
+    tomography of thorax''. Die Ergebniswerte sind Prozeduren, keine Empfehlungskonzepte. Das Konferenzdatum
+    wird als dateTime (CarePlan.created) ohne eigenen Code geführt. Rollen der Codes: snomed-ct|399414003
+    = element; loinc|85231-9 = dokumentklasse; kdl|SD150103 = dokumentklasse; snomed-ct|1373815000 = wert;
+    snomed-ct|450436003 = wert; snomed-ct|78603008 = wert; snomed-ct|713548006 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '399414003'
+    display: Multidisciplinary care conference for cancer care planning
+  - system: loinc
+    code: 85231-9
+    display: Tumor Board Note
+  - system: kdl
+    code: SD150103
+    display: Tumorkonferenzprotokoll
+  - system: snomed-ct
+    code: '1373815000'
+    display: PET-CT using fluorodeoxyglucose (18-F)
+  - system: snomed-ct
+    code: '450436003'
+    display: Positron emission tomography with computed tomography
+  - system: snomed-ct
+    code: '78603008'
+    display: Biopsy of lung
+  - system: snomed-ct
+    code: '713548006'
+    display: Low dose computed tomography of thorax
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
+  resource: CarePlan
+  path: CarePlan.created (1..1, MS = Konferenzdatum) | CarePlan.category.coding (1..*, REQUIRED mii-vs-onko-therapieplanung-typ;
+    praeth) | CarePlan.intent (pattern plan) | CarePlan.status (1..1) | CarePlan.addresses (nur mii-pr-onko-diagnose-primaertumor)
+    | CarePlan.supportingInfo (Reference(Resource); Screeningbefund) | CarePlan.activity.reference (→
+    ServiceRequest mit SNOMED-Code in ServiceRequest.code) | CarePlan.activity:obds.detail.code (1..1,
+    REQUIRED mii-vs-onko-therapieempfehlung-typ; nur echte Therapieempfehlung) | CarePlan.description
+    / CarePlan.note
+  notes: 'de.medizininformatikinitiative.kerndatensatz.onkologie#2026.0.3, stabil (gleiche URL im Ballot
+    2027.0.0-ballot.1). Spezialisierung von tumorBoardDecision. Konferenzdatum für den QI nach S3 Empf.
+    5.13 in CarePlan.created; Konferenztyp praeth. addresses erlaubt nur eine Primärtumor-Condition, die
+    vor der Diagnosesicherung fehlt; den abklärungsbedürftigen Screeningbefund daher über supportingInfo
+    referenzieren. Das activity-Slicing hat die Discriminators exists:detail und profile:reference.resolve():
+    Jede activity mit detail fällt in den Slice obds und muss detail.code aus mii-cs-onko-therapie-typ
+    tragen. Diagnostik (FDG-PET/CT, Bronchoskopie mit TBB, CT-gesteuerte Biopsie, minimal-invasive Resektion)
+    daher nicht in activity.detail.code, sondern als activity.reference auf einen ServiceRequest mit SNOMED-Code,
+    alternativ in description bzw. note. Den obds-Slice (0..*) nur für eine echte Therapieempfehlung nutzen,
+    z. B. WS für Kontrolle. Eine Screening-Fallkonferenz vor der Diagnose ist kein oBDS-Meldeanlass.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (0..1, MS, REQUIRED http://dvmd.de/fhir/ValueSet/kdl) = SD150103
+    | DocumentReference.date (0..1, instant) | DocumentReference.content.attachment (1..1) | DocumentReference.context.related
+    (0..*)
+  notes: de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1, stabil (gleiche URL im Ballot
+    2027.0.0-ballot.2). Für das Konferenzprotokoll als Dokument, wie im Bestand tumorBoardDecision. Es
+    gilt nur KDL SD150103 'Tumorkonferenzprotokoll' (dvmd.kdl.r4#2025.0.1); AD060106 ist in KDL 2025 deprecated.
+    context.related verweist auf den CarePlan bzw. den Screeningbefund.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/CarePlan
+  resource: CarePlan
+  path: CarePlan.created | CarePlan.activity.detail.code | CarePlan.activity.reference | CarePlan.supportingInfo
+  notes: hl7.fhir.r4.core#4.0.1, stabil; Rückfallebene ohne oBDS-Pflichtbindungen, wenn die Screening-Konferenz
+    nicht als oBDS-Tumorkonferenz gelten soll (kein Primärtumor, keine Therapieempfehlung).
+care_process:
+  trigger: abklärungsbedürftiger Befund
+  responsible_role: spezialisierte Einrichtung (thorax-onkologisches Tumorboard)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.13 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Zeitintervall von Datum der Niedrigdosis-CT bis Datum der interdisziplinären Fallkonferenz
+      aller Teilnehmer mit …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.12 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: in einem Thorax-Onkologischen Tumorboard einer auf die Untersuchung und Behandlung von Lungenkrebs
+      spezialisierten Einrichtung entschieden werden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.9 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: mit initialer Fallvorstellung in einer interdisziplinären Fallkonferenz
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 51 der Quellenrecherche zur Screening-Episode (Gruppe G12 Abklärung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: L:screeningCaseConferenceDecision, B:multidisciplinaryCaseConferenceDate,
+      E:mdtCaseConferenceDate, P:caseConferenceDate; BPMN-Schritt: G12 Abklärung | nach Activity_0es6xoa,
+      spezialisierte Einrichtung (nicht modelliert)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 51); Quellen: Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 51)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.9 (soll: initiale Fallvorstellung), 5.12 (sollte:
+  Entscheidung über Diagnostik), 5.13 (QI „wünschenswert“); Tab. 15 (mindestens wöchentliche Fallkonferenz).'
+- 'Umsetzung: Spezialisierung von tumorBoardDecision (primarycare); Grenzfall des Scopes. specializes
+  tumorBoardDecision; dependsOn clarificationReferral. Konferenzdatum als QI-Rückmeldung (S3 Empf. 5.13)
+  und Ergebnis getrennt modellieren; Ergebnis per Verweis auf tumorBoardDecision oder als Werteliste nach
+  Empf. 5.12: weitere Bildgebung (z. B. FDG-PET/CT) | Diagnosesicherung (Bronchoskopie mit transbronchialer
+  Biopsie, CT-gesteuerte Biopsie, minimal-invasive Resektion) | Kontrolle. Codes aus dem Bestand übernehmen
+  (SNOMED 1268903003, LOINC 85231-9, KDL SD150103). Verbindlichkeit angeben (5.13 „wünschenswert“, 5.12
+  „sollte“, 5.9 „soll“). Der Rückkanal an die Screening-Einheit fehlt im BPMN.'
+- Es gibt kein Profil für eine diagnostische Fallkonferenz vor der Diagnosesicherung; das MII-Tumorkonferenz-Profil
+  ist auf Primärtumor und oBDS-Therapieempfehlung ausgerichtet, Werte für Diagnostik bzw. Bildgebung fehlen
+  in mii-vs-onko-therapieempfehlung-typ.
+- Zu prüfen ist, ob mii-pr-bildgebung-behandlungsempfehlung (CarePlan, de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0)
+  als MII-Alternative ohne oBDS-Zwang taugt; fachlich ist es eine radiologische Empfehlung und kein Konferenzbeschluss.
+- In SNOMED CT fehlt ein Konzept für die Empfehlung der Tumorkonferenz (z. B. 'Kontrolle empfohlen');
+  die Ergebniswerte sind Prozedurcodes, das ist als Modellierungsentscheidung zu kennzeichnen.
+- Ein LOINC-Observable für das Datum der Tumorkonferenz fehlt; das Datum läuft über CarePlan.created.
+- Der Rückkanal von der spezialisierten Einrichtung an die Screening-Einheit fehlt im BPMN-Modell.
+- Die Verbindlichkeit ist anzugeben (S3 Empf. 5.9 'soll', 5.12 'sollte', 5.13 QI 'wünschenswert'); die
+  Kardinalität 0..* statt 0..1 ist zu entscheiden.
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.tumorBoardDecision.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.clarificationReferral.v0.1

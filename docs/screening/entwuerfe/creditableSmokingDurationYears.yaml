@@ -1,0 +1,177 @@
+id: mihub.lung.screening.creditableSmokingDurationYears.v0.1
+uuid: e7ef3627-3295-5741-8848-1fdee77dac90
+name: creditableSmokingDurationYears
+label_de: Anrechenbare Dauer des Zigarettenkonsums (Jahre)
+definition_de: Rauchdauer nach Zählregel § 2 Abs. 1 Nr. 3 a aa LuKrFrühErkV (Unterbrechungen < 10 Jahre
+  zählen mit), aus Abschnitten abgeleitet; Kriterium ≥ 25 Jahre.
+phase: screening
+category: sozialanamnese
+datatype: Quantity
+cardinality: 0..1
+unit: a
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, UCUM (TermServ-Fragment); Stand 2026-10-15. Elementcode
+    ist 228487000 ''Total time smoked'' (wie component:rauchdauer im MII-Kardiologie-Ballot). LOINC-Mappings:
+    67741-9 ''Smoking tobacco use duration'' (rauchspezifisch, Status TRIAL) und 88029-4 ''Tobacco use
+    duration'' (ACTIVE, breiter, auch rauchloser Tabak; stabiler Ausweich- und ISiK-Pflichtcode). Einheit
+    a. Alle Codes sind Näherungen, weil sie die tatsächlich gerauchte Zeit meinen: Die Zählregel der Verordnung
+    (nur Zigaretten, Unterbrechungen unter 10 Jahren zählen mit, Jahre vor einer Unterbrechung ab 10 Jahren
+    entfallen) wird über den lokalen Methodencode (Observation.method) dokumentiert. Der Wert wird aus
+    Konsumabschnitten und Unterbrechungen abgeleitet. Rollen der Codes: snomed-ct|228487000 = element;
+    loinc|67741-9 = element; loinc|88029-4 = element; local-no-standard-binding|zaehlregel-lukrfrueherkv-2-1-3-a-aa
+    = methode.'
+  codings:
+  - system: snomed-ct
+    code: '228487000'
+    display: Total time smoked
+  - system: loinc
+    code: 67741-9
+    display: Smoking tobacco use duration
+  - system: loinc
+    code: 88029-4
+    display: Tobacco use duration
+  - system: local-no-standard-binding
+    code: zaehlregel-lukrfrueherkv-2-1-3-a-aa
+    display: Anrechenbare Rauchdauer nach § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. aa LuKrFrühErkV
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
+  resource: Observation
+  path: Observation.component:rauchdauer.valueQuantity
+  notes: 'de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, Ballot. Slice rauchdauer
+    0..*, code Pattern SNOMED 228487000, valueQuantity 1..1 mit Pattern UCUM a (unit ''year''). Nur ungefähres
+    Mapping (approximate): das Profil meint die tatsächlich gerauchte Zeit, nicht die anrechenbare Dauer
+    nach LuKrFrühErkV; der Rechenweg steht in instruction_de, method und derivedFrom sind nicht eigens
+    profiliert.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.valueQuantity
+  notes: de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis (in 6.0.0 abstrakt). Pflicht-LOINC 88029-4
+    (Tabak allgemein, Näherung), SNOMED 228487000 zusätzlich, valueQuantity in a. derivedFrom verweist
+    auf cigaretteConsumptionPeriod und smokingInterruptionPeriod, method auf den lokalen Methodencode
+    zur Zählregel.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0093] (Overall years of smoking)
+  notes: openEHR CKM, Revision 2.0.1, published, nicht-FHIR. DV_QUANTITY in a; 'The cumulative number
+    of years that the individual has smoked tobacco' über alle Tabakarten und ohne Unterbrechungsjahre.
+    Näherung, weil die Verordnung Unterbrechungsjahre unter 10 Jahren mitzählt; die Zählregel wäre im
+    Protokoll (at0071) zu dokumentieren.
+care_process:
+  trigger: bei der Anspruchsprüfung abgeleitet; Inhalt des Berichts
+  responsible_role: berichterstellende Ärzt:in (berechneter Wert)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 Nr. 3 a aa
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: mit einer Dauer von mindestens 25 Jahren, wobei die Jahre vor einer vollständigen Unterbrechung
+      des Rauchens und …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: KVBB-Musterbericht (PDF 12.05.2026) — KVBB-Musterbericht zur Aushändigung (Lungenkrebs-Früherkennung)
+    url: https://www.kvbb.de/fileadmin/user_upload/pdf/Genehmigungspflichtige_Leistungen/Lungenkrebs-Frueherkennung/Musterbericht_LDCT.pdf
+    section: Ankreuzfeld
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Zeitraum: Dauer von min. 25 Jahren ☐'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#X05
+  - source: andere
+    version: 'KVBW-Vorlage (Juni 2026) — KV-Berichtsvorlagen: KVBW ''Bericht Lungenkrebs-Screening'' und
+      KVBB ''Musterbericht – Hinweise'''
+    url: https://www.kvbawue.de/api-file-fetcher?fid=5382
+    section: Ja/Nein-Feld
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: mindestens 25 Jahre geraucht?
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q11
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 7 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R:cigaretteSmokingDurationYears, L/S/E:smokingDurationYears,
+      P:creditableSmokingDuration; BPMN-Schritt: G2 Raucheranamnese | Praxis: Activity_0ya2ob0 → Bericht
+      erstellen (Activity_1npn3bx)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 7); Quellen: Q01, X05, Q11'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 7)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Das Kriterium (mindestens 25 anrechenbare Jahre) muss aus
+  dem Bericht hervorgehen: LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. aa; KFE-RL § 38
+  Abs. 1, § 39 Nr. 1. Der Zahlenwert selbst ist eine Modellentscheidung.'
+- 'Umsetzung: abgeleitet (aus Konsumabschnitten und Unterbrechungen). Als abgeleiteten Wert führen (data_flows
+  usage_type derive; dependsOn cigaretteConsumptionPeriod und smokingInterruptionPeriod), Einheit UCUM
+  a. Definition vollständig fassen: Jahre vor einer Unterbrechung von 10 oder mehr Jahren entfallen, Unterbrechungsjahre
+  unter 10 Jahren zählen mit, nur Zigaretten. Der Kriteriumsnachweis (ja/nein) gehört in eligibilityCheckResult
+  bzw. eligibilityReport. Codes nur als Näherung mit Hinweis auf die Zählregel.'
+- Kein Standardcode beschreibt die anrechenbare Rauchdauer nach § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst.
+  aa LuKrFrühErkV; der lokale Methodencode muss fachlich bestätigt und als CodeSystem veröffentlicht werden.
+- Zu entscheiden ist, ob 67741-9 (passender, aber TRIAL) oder 88029-4 (ACTIVE, aber auch rauchloser Tabak)
+  als bevorzugtes LOINC-Mapping gilt.
+- Der Kriteriumsnachweis (mindestens 25 Jahre, ja/nein) hat kein Profil und gehört in eligibilityCheckResult
+  bzw. eligibilityReport.
+- IPS und ISiKRaucherStatus haben keine Dauerkomponente; national gibt es die Rauchdauer nur im MII-Kardiologie-Ballot.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.cigaretteConsumptionPeriod.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.smokingInterruptionPeriod.v0.1

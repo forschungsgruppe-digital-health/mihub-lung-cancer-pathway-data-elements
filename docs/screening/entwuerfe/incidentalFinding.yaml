@@ -1,0 +1,222 @@
+id: mihub.lung.screening.incidentalFinding.v0.1
+uuid: 2cb04ba7-3cf5-545b-ba8e-5622072e975a
+name: incidentalFinding
+label_de: Klinisch relevanter Nebenbefund mit Empfehlung
+definition_de: Relevanter Nebenbefund ohne Lungenkrebsbezug (z. B. ILA, Aortenaneurysma, Schilddrüse)
+  mit Ausprägung, neu/vorbekannt und Empfehlung.
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Element-Code ist RadLex RID50142 |incidental imaging finding| (''finding that requires non-routine
+    communication with the referring clinician'', entspricht ''klinisch relevant = abklärungsbedürftig'');
+    SNOMED CT und LOINC haben kein entsprechendes Observable. Antwortwerte: Befundcode extensible an den
+    ValueSet-Ausdruck < 404684003 |Clinical finding|; Beispielwerte 1381861002 |Interstitial lung abnormality|
+    (setzt SNOMED CT INT ab 2025-12-01 voraus), 433068007 |Aneurysm of thoracic aorta|, 237495005 |Thyroid
+    nodule|. 261087003 |Incidental| ist ein optionaler Qualifier (nicht Observation.code). RadLex RID50143
+    ist der Element-Code des Teilattributs Empfehlung. Koronarkalk und Emphysem sind eigene Routinefelder;
+    bestätigte Diagnosen bleiben in comorbidity. Editionen: SNOMED CT INT 20260701, RadLex 4.2 (MII TermServ);
+    Stand 2026-10-15. Rollen der Codes: radlex|RID50142 = element; snomed-ct|1381861002 = wert; snomed-ct|433068007
+    = wert; snomed-ct|237495005 = wert; snomed-ct|261087003 = methode; radlex|RID50143 = element.'
+  codings:
+  - system: radlex
+    code: RID50142
+    display: incidental imaging finding
+  - system: snomed-ct
+    code: '1381861002'
+    display: Interstitial lung abnormality
+  - system: snomed-ct
+    code: '433068007'
+    display: Aneurysm of thoracic aorta
+  - system: snomed-ct
+    code: '237495005'
+    display: Thyroid nodule
+  - system: snomed-ct
+    code: '261087003'
+    display: Incidental
+  - system: radlex
+    code: RID50143
+    display: recommendation for incidental finding
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]; Observation.bodySite; Observation.interpretation;
+    Observation.note
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Der Befundcode steht
+    im sct-Slice von code, der REQUIRED (nicht extensible) an < 404684003 |Clinical finding| in SNOMED
+    CT 20250701 gebunden ist. 1381861002 (ILA) ist in SNOMED CT INT 20250701 nicht enthalten und daher
+    im Release 2026.0.0 nicht konform; dort bleibt nur ein Elternkonzept (z. B. 301230006) oder ein lokaler
+    Code. Erst der Ballot 2027 (SCT 20260701) enthält ILA. value[x] 1..1: Ausprägung bzw. Status neu/vorbekannt
+    (lokale Codes); 261087003 nur über component bzw. interpretation (0..*, extensible). bodySite REQUIRED
+    < 123037004.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung
+  resource: CarePlan
+  path: CarePlan.description; CarePlan.supportingInfo; CarePlan.activity; CarePlan.addresses
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Empfehlung zum Nebenbefund:
+    description 0..1 MS als Text; supportingInfo 0..* MS zeigt nur auf mii-pr-bildgebung-radiologischer-befund,
+    nicht auf die einzelne Nebenbefund-Observation – den Bezug zum Einzelbefund über addresses (Condition)
+    bzw. lokal herstellen. Strukturierte Maßnahme ggf. in activity (nicht MS). Bezug zu clarificationReferral.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code.coding:sct; Condition.verificationStatus; Condition.bodySite
+  notes: de.medizininformatikinitiative.kerndatensatz.base#2026.0.1, stabil. Nur wenn der Nebenbefund
+    in die Problemliste übernommen wird. code.coding:sct 0..1 MS REQUIRED diagnoses-sct (is-a 404684003,
+    272379006, 243796009; SCT 20250701); verificationStatus 0..1 MS REQUIRED (z. B. provisional).
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDiagnose
+  resource: Condition
+  path: Condition.code.coding:SNOMED-CT; Condition.bodySite
+  notes: de.gematik.isik#6.0.0, stabil. Nur für die krankenhausseitige Übernahme als Diagnose; Slice SNOMED-CT
+    REQUIRED an https://gematik.de/fhir/isik/ValueSet/DiagnosesSCT (is-a 404684003, 272379006, 243796009);
+    bodySite MS.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/DiagnosticReportEuImaging
+  resource: DiagnosticReport
+  path: DiagnosticReport.extension:finding (HL7IDRFinding → ObservationFindingEuImaging); DiagnosticReport.extension:recommendation
+    (HL7IDRRecommendation → CarePlan/ServiceRequest)
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/draft (EHDS-Zielbild). Befund und Empfehlung als getrennte,
+    verknüpfte Bestandteile des Bildbefunds (beide MS); extension:composition 1..1 ist Pflicht.
+- standard: other
+  profile_or_url: http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C187663
+  resource: NCIt-Konzept 'Incidental Finding'
+  path: C187663
+  notes: NCIt 25.6.0-e (MII TermServ). Nur Mapping für den Element-Code ('An abnormality noted on diagnostic
+    testing that was not related to the reason that prompted the analysis').
+- standard: other
+  profile_or_url: https://api3.rsna.org/radelement/v1/elements/RDE1704
+  resource: RSNA/ACR RadElement RDE1704 'Significant finding' (Set RDES267)
+  path: RDE1704
+  notes: RSNA RadElement API (Stand 2026-10-15), Published (2024-05-31), nicht-FHIR. Werte absent/present/indeterminate/unknown;
+    bildet nur den S-Modifikator (Flag) ab, nicht den einzelnen Nebenbefund – Teilbezug, Hauptmapping
+    bei lungRadsCategory.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-CLUSTER.imaging_exam.v1
+  resource: CLUSTER (in OBSERVATION.imaging_exam_result.v1)
+  path: at0001 Body structure; at0004 Imaging findings; at0006 Impression; imaging_exam_result at0059
+    Recommendation
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), published, nicht-FHIR. Je Körperstruktur
+    ein Befund-Cluster; Empfehlung auf Ebene des Untersuchungsergebnisses.
+care_process:
+  trigger: klinisch relevanter Nebenbefund ohne Lungenkrebsbezug
+  responsible_role: Erstbefunder; Zweitbefunder
+evidence:
+  guideline_references:
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 15b
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Findings that are already known, and have been or are in the process of clinical evaluation
+      DO NOT require an …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 15
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: An S modifier may be added to Lung-RADS categories 0-4 for clinically significant or potentially
+      clinically significant findings unrelated to lung cancer.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 15
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Als klinisch relevant werden solche Befunde definiert, die eine weitere Abklärung erfordern.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 39 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: L:incidentalFindingLdct, B:=, B:interstitialLungAbnormality,
+      B:incidentalFindingRecommendation, S:lungRadsSModifierFindings, E:significantIncidentalFinding;
+      BPMN-Schritt: G9 Befundung | Activity_1tdikdp → Rückmeldung übermitteln (Activity_12ef5s1)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 39); Quellen: Q20, Q16'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 39)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. Lung-RADS v2022 Note 15 (S-Modifikator „may“); DRG/DGP/DGT-Supplement
+  Tab. S1 Anm. 15 (klinisch relevant = abklärungsbedürftig) i. V. m. S3 Empf. 5.9. LuKrFrühErkV und KFE-RL
+  regeln Nebenbefunde nicht.'
+- 'Umsetzung: eigenständig (Befundgruppe). Auf S-relevante Nebenbefunde begrenzen, die eine weitere Abklärung
+  erfordern; Koronarkalk und Emphysem sind eigene Routinefelder (specializes incidentalFinding). Als Befundgruppe:
+  Befundcode (Binding < 404684003 |Clinical finding|, extensible; ILA nur als Beispielwert), Ausprägung,
+  Status neu/vorbekannt (Lung-RADS Note 15b; fehlt in der deutschen V-Lung-RADS-Fassung), Empfehlung;
+  optional Qualifier 261087003 |Incidental|. Die Notiz „Mitteilung nur nach Einwilligung und Vereinbarung“
+  streichen oder belegen: einschlägig ist nur KFE-RL § 42 Abs. 2 S. 2 (Übermittlung des gesamten Befundberichts
+  an die Praxis). Bestätigte Diagnosen bleiben in comorbidity. Bezug zu lungRadsCategory (S) und clarificationReferral.
+  Beispielbefunde und Schwellen mit O’Dowd et al. 2023, Tab. 2 belegen.'
+- Für den Status neu/vorbekannt (Lung-RADS Note 15b; in der deutschen V-Lung-RADS-Fassung nicht enthalten)
+  gibt es weder einen Standardcode noch ein Profilelement.
+- 1381861002 (ILA) setzt SNOMED CT INT ab 2025-12-01 voraus und ist im MII-Bildgebungsrelease 2026.0.0
+  (SCT 20250701) nicht bindungskonform; bis zum Release 2027 ist ein Elternkonzept oder ein lokaler Code
+  nötig.
+- SNOMED CT und LOINC haben kein Observable 'incidental imaging finding'; der Element-Code stützt sich
+  auf RadLex.
+- Der Umfang ist auf S-relevante, abklärungsbedürftige Nebenbefunde zu begrenzen; Beispielbefunde und
+  Schwellen sind mit O'Dowd et al. 2023 (Tab. 2) zu belegen.
+- Die Notiz 'Mitteilung nur nach Einwilligung und Vereinbarung' ist zu streichen oder zu belegen; einschlägig
+  ist nur KFE-RL § 42 Abs. 2 S. 2 (Übermittlung des gesamten Befundberichts an die Praxis).
+- Kein Profil unterscheidet Neben- und Hauptbefund.

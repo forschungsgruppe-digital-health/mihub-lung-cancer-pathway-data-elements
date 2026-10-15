@@ -1,0 +1,180 @@
+id: mihub.lung.screening.abnormalResultDiscussion.v0.1
+uuid: b185840b-d28b-5f06-85d3-62d0b4d1d1fa
+name: abnormalResultDiscussion
+label_de: Besprechung eines abklärungsbedürftigen Befunds
+definition_de: Besprechung des abklärungsbedürftigen Befunds und der Abklärung mit der Person (persönlich,
+  Telefon, Video), möglichst vor dem schriftlichen Bericht.
+phase: screening
+category: kontakt-visite
+datatype: dateTime
+cardinality: 0..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  notes: 'Editionen: SNOMED CT INT 20260701 und HL7 v3-ParticipationMode 4.0.0, alle Codes auf dem MII
+    TermServ aktiv (Stand 2026-10-15). Element-Code ist die Prozedur 1304231001 ''Discussion about result
+    of investigation''; der Datentyp dateTime ist der Zeitpunkt der Besprechung. Antwortwerte für das
+    Attribut Kontaktform übernehmen die geschlossene Liste von consultationModality (required wie dort):
+    persönlich = 1269515004, Telefon = 386472008, Video = 719410009. Die v3-ParticipationMode-Codes FACE,
+    PHONE und VIDEOCONF sind die 1:1-Entsprechungen für Communication.medium im FHIR-Mapping und keine
+    zusätzlichen Antwortwerte. Bedingung: screeningResultCategory = abklärungsbedürftig. Abgelehnt: EBM
+    01880 (nur Abrechnungsbezug, Frist 14 Tage nach 01871/01872) und 310867007 (Mitteilung einer Diagnose,
+    unpassend). Rollen der Codes: snomed-ct|1304231001 = element; snomed-ct|1269515004 = wert; snomed-ct|386472008
+    = wert; snomed-ct|719410009 = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|FACE
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|PHONE = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|VIDEOCONF
+    = wert.'
+  codings:
+  - system: snomed-ct
+    code: '1304231001'
+    display: Discussion about result of investigation
+  - system: snomed-ct
+    code: '1269515004'
+    display: Face to face consultation with patient
+  - system: snomed-ct
+    code: '386472008'
+    display: Telephone consultation
+  - system: snomed-ct
+    code: '719410009'
+    display: Consultation via video conference
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: FACE
+    display: face-to-face
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: PHONE
+    display: telephone
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: VIDEOCONF
+    display: videoconferencing
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period.start; Encounter.class (1..1, REQUIRED http://fhir.de/ValueSet/EncounterClassDE);
+    Encounter.reasonReference; Encounter.type:KontaktArt
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1, stabil (Profil auch in MII Fall
+    2025.0.1). Nachrangige Alternative, wenn die Besprechung als eigener Arzt-Patienten-Kontakt dokumentiert
+    wird. Kontaktform nur grob: persönlich → AMB, Telefon oder Video → VR (EncounterClassDE aus basisprofil-de
+    1.6.0 kennt nur AMB, IMP, PRENC, VR, SS, HH); kontaktart-de hat keinen passenden Code. Feine Unterscheidung
+    über Communication.medium.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Communication
+  resource: Communication
+  path: Communication.sent; Communication.medium (Example-Binding v3-ParticipationMode); Communication.status;
+    Communication.recipient; Communication.reasonReference; Communication.about
+  notes: hl7.fhir.r4.core#4.0.1, stabil; führendes Ziel. sent = Zeitpunkt der Besprechung; medium = FACE
+    | PHONE | VIDEOCONF; status 1..1 (completed); recipient = Patient; reasonReference → screeningResultCategory;
+    about → strukturierter Befundbericht. Bedingung (abklärungsbedürftig) und 'möglichst vor dem schriftlichen
+    Bericht' nur als Invariante (Communication.sent < DiagnosticReport.issued).
+care_process:
+  trigger: abklärungsbedürftiges Ergebnis; zeitnah (EBM 01880 nur binnen 14 Tagen nach 01871/01872)
+  responsible_role: Erstbefunder (laut den Entscheidungserheblichen Gründen zum EBA-Beschluss und der
+    KBV); im BPMN in der Lane Zweitbefunder
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 3 Nr. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: sind dieser und die weiteren notwendigen Maßnahmen zur Abklärung mit der versicherten Person
+      zu besprechen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: S. 21
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: sollte das Gespräch … möglichst vor der Übermittlung des schriftlichen Befundberichts stattfinden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: KBV PraxisInfoSpezial (Oktober 2026) — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: Befundmitteilung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Erstbefunder bespricht zeitnah die weiteren Schritte mit der oder dem Versicherten.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 45 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:clarificationPathwayInitiated, B:abnormalFindingConsultation,
+      P:=; BPMN-Schritt: G10 Ergebnis | Klinische Abklärung anzeigen (Activity_0es6xoa, Zweitbefunder-Lane)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 45); Quellen: Q02, Q03, Q05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.9); Dublette/Scope: nicht widerlegt (Konfidenz 0.75)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 45)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 2 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. KFE-RL § 42 Abs. 3 Nr. 2: Befund und weitere Maßnahmen
+  sind mit der Person zu besprechen und die notwendigen Maßnahmen unverzüglich einzuleiten. Die 14 Tage
+  sind nur die Abrechnungsfrist der GOP 01880.'
+- 'Umsetzung: eigenständig. responsible_role = Erstbefunder; die BPMN-Lane (Zweitbefunder) korrigieren
+  lassen. Kontaktform als Attribut mit der Werteliste von consultationModality (persönlich | Telefon |
+  Video), keine neuen Codes. Bedingung: screeningResultCategory = abklärungsbedürftig. EBM 01880 als Abrechnungsbezug.
+  Den Zusatz „möglichst vor dem schriftlichen Bericht“ mit den TrG (S. 21) belegen; KFE-RL, EBA und KBV
+  sagen nur „unverzüglich“ bzw. „zeitnah“.'
+- Kein deutsches Profil (MII, ISiK, KBV, ePA) bildet eine Befundbesprechung mit der versicherten Person
+  ab; es ist zu entscheiden, ob Communication (empfohlen) oder Procedure mit 1304231001 die führende Ressource
+  ist.
+- Die verantwortliche Rolle ist laut EBA-Gründen und KBV der Erstbefunder; die BPMN-Lane (Zweitbefunder)
+  muss korrigiert werden.
+- Der Zusatz 'möglichst vor dem schriftlichen Bericht' (Tragende Gründe S. 21) ist nur als Invariante
+  abbildbar; KFE-RL, EBA und KBV verlangen lediglich 'unverzüglich' bzw. 'zeitnah'.
+- EBM 01880 ist kein verfügbares Codesystem und gehört als Abrechnungsbezug in die Constraints.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.screeningResultCategory.v0.1

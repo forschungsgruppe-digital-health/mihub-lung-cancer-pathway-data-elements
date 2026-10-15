@@ -1,0 +1,186 @@
+id: mihub.lung.screening.screeningExaminationType.v0.1
+uuid: 899d4ba3-224d-5a52-a9d7-b2152d73f1ee
+name: screeningExaminationType
+label_de: Art der Früherkennungsuntersuchung und Runde
+definition_de: 'Einordnung der LDCT: Erstuntersuchung, reguläre Folgeuntersuchung, vorgezogene Kontrolle
+  oder Kurzintervall (Lung-RADS 0), mit Rundennummer.'
+phase: screening
+category: versorgungskontext
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Antwortwerte (lokal, local-no-standard-binding): Erst-LDCT, Regel-LDCT (frühestens 12 Monate
+    nach der Voruntersuchung) und Kontroll-LDCT nach kontrollbedürftigem Befund (§ 2 Abs. 2 LuKrFrühErkV);
+    Unterscheidung Erst-/Folgeuntersuchung nach § 4 Abs. 2 LuKrFrühErkV und KFE-RL § 38. Kein eigener
+    Element-Code; das Element ist ein Attribut von ldctExamination. SNOMED CT 20260701, LOINC 2.83 und
+    RadLex 4.2 enthalten kein Konzept für Screening-Rundentypen; RadLex RID49571 baseline, RID50144 12-month
+    follow-up procedure und RID35965 follow-up procedure sowie RadElement RDE1703 Baseline study sind
+    nur Näherungs-Mappings (RID35965 trennt Regel- und Kontroll-LDCT nicht; RID50144 meint ein festes
+    12-Monats-Intervall). EBM 01871/01872 unterscheiden nur Kontroll- von Nicht-Kontroll-LDCT. „Kurzintervall
+    (Lung-RADS 0)“ ist bewusst kein Wert. Die Rundennummer wird aus screeningEpisode abgeleitet, nicht
+    kodiert. Binding example, solange die lokalen Codes Platzhalter sind. MII TermServ, Stand 2026-10-15.
+    Rollen der Codes: local-no-standard-binding|erst-ldct = wert; local-no-standard-binding|regel-ldct
+    = wert; local-no-standard-binding|kontroll-ldct = wert.'
+  codings:
+  - system: local-no-standard-binding
+    code: erst-ldct
+    display: Erst-LDCT (Baseline)
+  - system: local-no-standard-binding
+    code: regel-ldct
+    display: Regel-LDCT (Folgeuntersuchung frühestens 12 Monate nach der Voruntersuchung)
+  - system: local-no-standard-binding
+    code: kontroll-ldct
+    display: Kontroll-LDCT nach kontrollbedürftigem Befund (§ 2 Abs. 2 LuKrFrühErkV)
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.extension:durchfuehrungsabsicht
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil; Extension https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht
+    aus de.medizininformatikinitiative.kerndatensatz.base#2026.0.1. value Coding required an procedures-intend
+    (9 SNOMED-Codes, u. a. 129428001 Preventive intent). Deckt nur „präventiv“ ab, nicht Erst-, Regel-
+    oder Kontroll-LDCT, und ist wegen des required-Bindings nicht erweiterbar. Für die Untersuchungsart
+    ist eine eigene Extension oder ein zusätzliches Coding auf der Procedure nötig.
+- standard: other
+  profile_or_url: http://fhir.de/StructureDefinition/chargeitem-de-ebm
+  resource: ChargeItem
+  path: ChargeItem.code.coding:ebm
+  notes: 'de.basisprofil.r4#1.6.0, stabil. Indirekte Ableitung über die Abrechnung: GOP 01871 „Niedrigdosis-CT
+    zur Früherkennung von Lungenkrebs“ (Erst- oder Regel-LDCT), GOP 01872 Kontroll-LDCT, nur abrechenbar
+    mit Angabe eines Kontrollintervalls unter 12 Monaten in Monaten. Unterscheidet nur Kontroll- von Nicht-Kontroll-LDCT;
+    Erst-LDCT ist nicht erkennbar. Das Kontrollintervall hat im Profil kein eigenes Element. Nur Mapping,
+    kein Wertcode.'
+- standard: other
+  profile_or_url: http://radlex.org
+  path: RID49571 baseline (≈ Erst-LDCT); RID50144 12-month follow-up procedure (≈ Regel-LDCT); RID35965
+    follow-up procedure (Folgeuntersuchung allgemein)
+  notes: 'RadLex 4.2 (auf dem MII TermServ), Terminologie, nicht-FHIR. Nur Näherungs-Mappings: RID49571
+    ist ein Status-Deskriptor (Parent RID5683), kein Untersuchungstyp; RID50144 meint ein festes 12-Monats-Follow-up
+    und deckt sich nicht mit „frühestens nach 12 Monaten“; RID35965 ist Parent von RID50144 und trennt
+    Regel- und Kontroll-LDCT nicht. Die Unterscheidung tragen die lokalen Codes.'
+- standard: other
+  profile_or_url: https://api3.rsna.org/radelement/v1/elements/RDE1703
+  path: RDES267 Lung-RADS categorization / RDE1703 Baseline study
+  notes: RSNA RadElement RDE1703, element_version 1 (2024-05-31), Status Published, nicht-FHIR. Werte
+    RDE1703.0 yes, RDE1703.1 no, RDE1703.2 unknown. Bildet nur das Baseline-Flag (Erst-LDCT ja/nein) ab;
+    Regel- und Kontroll-LDCT nicht unterscheidbar. Nicht auf dem MII TermServ.
+care_process:
+  trigger: je LDCT
+  responsible_role: Erstbefunder
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: nach einem kontrollbedürftigen Befund eine Untersuchung zur Lungenkrebsfrüherkennung mittels
+      …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: 'EBA 87. Sitzung (11.03.2026) — EBM-Beschlüsse: Erweiterter Bewertungsausschuss 87. Sitzung
+      (GOP 01871–01881) und Bewertungsausschuss 854. Sitzung'
+    url: https://www.gkv-spitzenverband.de/media/dokumente/krankenversicherung_1/aerztliche_versorgung/verguetung_und_leistungen/beschluesse_ba_eba_de_eg/87_sitzung_eba/EBA_87_Lungenkrebsfrueherkennung.pdf
+    section: GOP 01872
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Berechnung der Gebührenordnungsposition 01872 setzt die Angabe dieses Kontrollintervalls
+      in Monaten voraus.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q06
+  - source: andere
+    version: 'NHS England QA standards v3 (03.02.2025) — NHS England Lung Cancer Screening Programme:
+      Standard protocol v3, QA standards v3, LCSDS user guidance, NHS Data Dictio'
+    url: https://www.england.nhs.uk/wp-content/uploads/2019/02/2502-B1646-standard-protocol-prepared-for-the-lung-cancer-screening-programme.pdf
+    section: Annex 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Type of scan: Baseline/ 3 month/ 12 month/ 24 month'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q26
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 27 der Quellenrecherche zur Screening-Episode (Gruppe G8 LDCT; M1 Inkrement
+      1 (Screening)); zusammengeführt aus: B:screeningExaminationOccasion, S:screeningRound, E:screeningRoundType,
+      P:=; BPMN-Schritt: G8 LDCT | Erstbefunder: Activity_0l9ecr6 / Activity_12qrin2'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 27); Quellen: Q01, Q06, Q26'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.6); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 27)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 3 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Keine Dokumentationspflicht. Abrechnung: EBM 01872 setzt
+  die Angabe des Kontrollintervalls in Monaten voraus; Rechtsgrundlage der Kontroll-LDCT ist LuKrFrühErkV
+  § 2 Abs. 2, die Unterscheidung Erst-/Folgeuntersuchung stützt § 4 Abs. 2.'
+- 'Umsetzung: Attribut von ldctExamination (Zusammenlegung prüfen). Als Attribut „Untersuchungsart“ von
+  ldctExamination führen: Erst-LDCT (Baseline) | Regel-LDCT (≥ 12 Monate) | Kontroll-LDCT (§ 2 Abs. 2
+  LuKrFrühErkV). „Kurzintervall (Lung-RADS 0)“ streichen bzw. rechtlich klären (zulässig nur über § 2
+  Abs. 2 oder bei nicht befundungsgeeigneter Voraufnahme; E12). Rundennummer aus screeningEpisode ableiten
+  statt erfassen. Mappings: RadElement RDE1703 (Baseline ja/nein) und EBM 01871/01872. Quellen ergänzen:
+  LuKrFrühErkV § 4 Abs. 2, KFE-RL § 38 Abs. 1 S. 2, EBM 01871/01872, S3 Empf. 5.9 (Lung-RADS 0).'
+- Für die Untersuchungsart (Erst-, Regel-, Kontroll-LDCT) gibt es weder Standardcode noch Profil; ein
+  lokales CodeSystem ist verbindlich festzulegen und als Extension oder zusätzliches Coding an der Bildgebungsprozedur
+  zu modellieren.
+- Ob ein „Kurzintervall (Lung-RADS 0)“ zulässig ist (nur über § 2 Abs. 2 LuKrFrühErkV oder bei nicht befundungsgeeigneter
+  Voraufnahme), ist rechtlich zu klären.
+- Die Rundennummer soll aus screeningEpisode abgeleitet statt erfasst werden.
+- Die Zusammenlegung mit ldctExamination (als Attribut „Untersuchungsart“) ist zu entscheiden.
+- Das Kontrollintervall in Monaten, Voraussetzung für EBM 01872, hat kein eigenes Element.
+- 'Quellen sind zu ergänzen: LuKrFrühErkV § 4 Abs. 2, KFE-RL § 38 Abs. 1 S. 2, EBM 01871/01872, S3 Empf.
+  5.9.'
+- Kardinalität laut Quelle 1 je LDCT.
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.ldctExamination.v0.1

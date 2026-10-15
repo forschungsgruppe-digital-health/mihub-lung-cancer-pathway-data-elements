@@ -1,0 +1,207 @@
+id: mihub.lung.screening.readerAssessmentCategory.v0.1
+uuid: 8137b9d3-2e44-56b8-8e54-25c0a9a45e07
+name: readerAssessmentCategory
+label_de: Befundkategorie je Befunder (Erst-/Zweitbefund)
+definition_de: Rechtliche Kategorie (unauffällig, kontroll-, abklärungsbedürftig) je Befunder mit Text,
+  Datum und Rolle.
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Antwortwerte sind die rechtlichen Befundkategorien der LuKrFrühErkV (kontrollbedürftig § 1 Abs.
+    4, abklärungsbedürftig § 1 Abs. 5); ''unauffällig'' ist dort nicht definiert und wird negativ als
+    ''weder kontroll- noch abklärungsbedürftig'' bestimmt. Für keine der drei Kategorien gibt es einen
+    Standardcode; das lokale CodeSystem wird gemeinsam mit screeningResultCategory genutzt. Optionales
+    Mapping ''unauffällig'' → SNOMED CT 408573005 |Imaging result normal| mit equivalence wider; 408574004
+    |Imaging result abnormal| unterscheidet nicht zwischen kontroll- und abklärungsbedürftig. Element-Code
+    optional SNOMED CT 282290005 |Imaging interpretation| (generisches Observable). Die Rolle Erst- bzw.
+    Zweitbefunder wird über performer bzw. eine Rollenkomponente abgebildet. KDL DG020103 ''CT-Befund''
+    ist nur die Dokumentklasse (DocumentReference.type) des Befundberichts, kein Kategoriewert. Editionen:
+    SNOMED CT INT 20260701, KDL 2025 (MII TermServ); Stand 2026-10-15. Rollen der Codes: snomed-ct|282290005
+    = element; local-no-standard-binding|unauffaellig = wert; local-no-standard-binding|kontrollbeduerftig
+    = wert; local-no-standard-binding|abklaerungsbeduerftig = wert; kdl|DG020103 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '282290005'
+    display: Imaging interpretation
+  - system: local-no-standard-binding
+    code: unauffaellig
+    display: unauffällig (weder kontroll- noch abklärungsbedürftig; Negativdefinition)
+  - system: local-no-standard-binding
+    code: kontrollbeduerftig
+    display: kontrollbedürftig (LuKrFrühErkV § 1 Abs. 4)
+  - system: local-no-standard-binding
+    code: abklaerungsbeduerftig
+    display: abklärungsbedürftig (LuKrFrühErkV § 1 Abs. 5)
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode (lokale Coding); DiagnosticReport.resultsInterpreter; DiagnosticReport.issued;
+    DiagnosticReport.conclusion; DiagnosticReport.extension:supportingInfo; DiagnosticReport.basedOn
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Je Befunder ein Befund
+    (Erst-/Zweitbefund) mit Kategorie als lokale Coding in conclusionCode (offen geslict; Slices sct/icd10-gm
+    optional); Befunder in resultsInterpreter (0..*, nicht MS); issued (MS) bzw. effective[x]; Text in
+    conclusion (MS). Der Zweitbefund verweist über extension:supportingInfo (Core-Extension workflow-supportingInfo)
+    auf den Erstbefund. basedOn ist auf mii-pr-bildgebung-anforderung-bildgebung oder CarePlan eingeschränkt;
+    secondReadingRequest muss deshalb diesem MII-Profil entsprechen, sonst ist der Verweis nicht profilkonform.
+    imagingStudy 1..* MS ist Pflicht.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code (lokal); Observation.valueCodeableConcept; Observation.performer; Observation.partOf
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Alternative als einzelne
+    Kategorie-Observation: value[x] 1..1 MS = lokale Kategorie; performer (0..*, nicht MS) = Befunder;
+    partOf (0..* MS) → mii-pr-bildgebung-radiologische-befundungsprozedur, d. h. screeningReadingEvent
+    als Procedure. code lokal; 282290005 als SNOMED-Code wäre wegen der Bindung an Clinical finding nicht
+    konform.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKBerichtSubSysteme
+  resource: Composition
+  path: Composition.type.coding:KDL; Composition.author; Composition.section; Composition.section.entry
+  notes: 'de.gematik.isik#6.0.0, stabil. Nur bei krankenhausinterner Übermittlung (RIS → KIS): Bericht
+    als Composition mit text, type.coding:KDL 0..1 MS (pattern http://dvmd.de/fhir/CodeSystem/kdl, z.
+    B. DG020103 ''CT-Befund'', KDL-Paket dvmd.kdl.r4#2025.0.1), author MS, section 1..* MS; die Kategorie-Observation
+    als section.entry. status ist auf final fixiert, Vorbefunde sind nicht abbildbar. Keine Kategoriebindung.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_DiagnosticReport
+  resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode; DiagnosticReport.performer; DiagnosticReport.effective[x]; DiagnosticReport.code.text
+  notes: kbv.basis#1.9.0, stabil; KBV-Basisprofil (kein MIO) für den vertragsärztlichen Kontext des Früherkennungsprogramms.
+    code.text 1..1, effective[x] 1..1; performer erlaubt KBV-Profile und Basisressourcen (Practitioner,
+    PractitionerRole, Organization, CareTeam); resultsInterpreter ist nicht profiliert. conclusionCode
+    unbeschränkt → lokale Kategorie. Keine Befund- oder Befunderrollen-Constraints.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/DiagnosticReportEuImaging
+  resource: DiagnosticReport
+  path: DiagnosticReport.resultsInterpreter:author; DiagnosticReport.extension:impression; DiagnosticReport.conclusionCode
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/draft (EHDS-Bildbefund). Befunder in resultsInterpreter:author
+    (practitioner-eu-core/practitionerRole-eu-core); extension:composition 1..1 (CompositionEuImaging)
+    ist Pflicht. extension:impression ist eine Referenz auf ObservationFindingEuImaging bzw. Condition,
+    kein Code; die Kategorie muss daher als Finding-Observation vorliegen. conclusionCode nur example.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  resource: OBSERVATION
+  path: at0021 Overall impression; at0020 Imaging diagnosis; at0059 Recommendation; at0072 Overall result
+    status
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), published, nicht-FHIR. Kategorie als kodierter
+    Text mit lokaler Terminologie; Befunderrolle über die Composer-/Participation-Attribute des Referenzmodells.
+care_process:
+  trigger: nach jeder Befundung (je Befunder)
+  responsible_role: Erstbefunder; Zweitbefunder
+evidence:
+  guideline_references:
+  - source: andere
+    version: Vereinbarung Strahlendiagnostik — Vereinbarung zur Strahlendiagnostik und -therapie (§ 135
+      Abs. 2 SGB V), §§ 13e–13g NDCT
+    url: https://www.kbv.de/documents/infothek/rechtsquellen/bundesmantelvertrag/anlage-03-qualitaetssicherung/qs-vereinbarung-strahlendiagnostik.pdf
+    section: § 13f
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: den Erst- und den Zweitbefund der NDCT und das Ergebnis der gemeinsamen Beurteilung sowie ggf.
+      Empfehlungen für …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q07
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 44 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Erstbefunder dokumentiert in der Patientenakte die Durchführung der Niedrigdosis-Computertomographie,
+      seine Befundung und im Falle einer Zweitbefundung auch diesen Befund sowie das Ergebnis der gemeinsamen
+      Beurteilung
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 37 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: R:firstReaderFinding, R:secondReaderFinding, B:firstReadResultCategory,
+      B:secondReadResultCategory, S:=, P:readingStepResult; BPMN-Schritt: G9 Befundung | Erstbefunder:
+      Gateway_0mk0bmb; Zweitbefunder: Activity_0mx6d87'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 37); Quellen: Q07, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.75)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 37)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 5 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Dokumentation von Erst- und Zweitbefund: QS-Vereinbarung
+  § 13f, KFE-RL § 44 S. 1. Kategorien legaldefiniert in LuKrFrühErkV § 1 Abs. 4/5; der Erstbefund steuert
+  die Zweitbefundung (§ 5 Abs. 2).'
+- 'Umsetzung: eigenständig (lokales CodeSystem gemeinsam mit screeningResultCategory). Ein lokales CodeSystem
+  gemeinsam mit screeningResultCategory nutzen; Begriffe an LuKrFrühErkV § 1 Abs. 4/5 binden; „unauffällig“
+  ist dort nicht definiert und als „weder kontroll- noch abklärungsbedürftig“ zu definieren; standard_binding_status
+  no-standard-found. Rolle (Erst- oder Zweitbefunder) als performer bzw. Qualifier; dependsOn screeningReadingEvent.
+  Die abschließende Kategorie nur in screeningResultCategory führen. Optional die Ableitungsregel aus
+  lungRadsCategory nach S3 Empf. 5.9 dokumentieren. Quellen ergänzen: KFE-RL § 44 S. 1; LuKrFrühErkV §
+  1 Abs. 4/5 und § 5 Abs. 1–2.'
+- Für 'kontrollbedürftiger' bzw. 'abklärungsbedürftiger Befund der Lungenkrebsfrüherkennung' gibt es weder
+  einen SNOMED-CT- noch einen LOINC- oder KBV-/G-BA-Code; ein Konzeptantrag (z. B. SNOMED-CT-DE-Extension)
+  bzw. ein publiziertes KBV-/G-BA-CodeSystem ist zu erwägen.
+- Die Definition von 'unauffällig' (Negativdefinition) ist fachlich festzulegen, da die LuKrFrühErkV sie
+  nicht enthält.
+- Zu entscheiden ist, ob 282290005 |Imaging interpretation| als generischer Element-Code ausreicht oder
+  ob das Element mit lungRadsCategory (1362105002) zusammengelegt wird.
+- Das gemeinsame lokale CodeSystem mit screeningResultCategory ist festzulegen; die abschließende Kategorie
+  wird nur in screeningResultCategory geführt.
+- Eine Ableitungsregel von lungRadsCategory auf die rechtliche Kategorie (S3 Empf. 5.9) ist optional zu
+  dokumentieren.
+- Kein Profil modelliert die Doppelbefundung (Erst-/Zweitbefunder, gemeinsame Beurteilung) explizit; KBV/gematik
+  bieten kein Radiologie-Befund-MIO.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.screeningReadingEvent.v0.1

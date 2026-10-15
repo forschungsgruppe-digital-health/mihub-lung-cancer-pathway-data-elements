@@ -1,0 +1,176 @@
+id: mihub.lung.screening.noduleVolumeDoublingTime.v0.1
+uuid: fb1c6d66-b2e7-501f-adef-0e52095cd508
+name: noduleVolumeDoublingTime
+label_de: Volumenverdopplungszeit (VDT) des Rundherds
+definition_de: Volumenverdopplungszeit in Tagen aus zwei oder mehr Volumina, mit Vergleichsuntersuchung,
+  Software und Methode.
+phase: screening
+category: messwert
+datatype: Quantity
+cardinality: 0..*
+unit: d
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code (Observation.code) ist NCIt C113268 |Volume Doubling Time| (''The number of days
+    that it takes for a nodule to double in volume''); Einheit UCUM d. SNOMED CT, LOINC und DICOM DCM
+    enthalten kein Konzept für die Volumenverdopplungszeit. Gespeichert wird nur der Rohwert in Tagen,
+    keine fassungsabhängigen Schwellen (V-Lung-RADS 600 Tage, ESTI, NELSON). Das Berechnungsverfahren
+    (Zwei-Punkt-Formel oder Regression über alle Zeitpunkte) steht in Observation.method (lokal), die
+    Segmentierungssoftware in Observation.device. Editionen: NCIt 25.6.0-e, UCUM (MII TermServ); SNOMED
+    CT INT 20260701 und LOINC 2.83 ohne passendes Konzept; Stand 2026-10-15. Rollen der Codes: ncit|C113268
+    = element.'
+  codings:
+  - system: ncit
+    code: C113268
+    display: Volume Doubling Time
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.derivedFrom; Observation.method; Observation.device
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil (Hauptziel). Element
+    als hasMember der Rundherd-Observation. code mit NCIt C113268 im offenen Slicing; ein SNOMED-Code
+    müsste Clinical finding sein. value[x] erlaubt Quantity (UCUM d). derivedFrom 0..* MS → Volumen-Observations
+    beider Zeitpunkte bzw. ImagingStudy der Vergleichsuntersuchung. method 0..1 und device 0..1 sind vorhanden,
+    aber nicht MS; beide projektseitig als Pflicht fordern (ESTI: Software und Verfahren).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-messung
+  resource: Observation
+  path: Observation.valueQuantity; Observation.method; Observation.derivedFrom; Observation.device; Observation.code
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot (Zielbild).
+    valueQuantity mit UCUM-System-Pattern ('d'); method 0..1 MS für Zwei-Punkt-Formel bzw. Regression;
+    derivedFrom 0..* MS (Observation, ImagingStudy); device 0..1, nicht MS. NCIt C113268 als Coding im
+    offenen Slicing; für einen SNOMED-code gilt der Bindungskonflikt des sct-Slices (Clinical finding,
+    defektes System-Pattern). Schwellen nicht im Profil speichern.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.valueQuantity; Observation.derivedFrom; Observation.method; Observation.device
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil; nur Fallback. Abgeleiteter Wert: derivedFrom → mindestens zwei
+    Volumen-Observations (noduleSizeMeasurement), method = Berechnungsverfahren, device = Segmentierungssoftware
+    (ESTI: dieselbe Software in der Verlaufskontrolle). Für die Einbettung in den MII-Befundbaum das MII-Profil
+    vorziehen.'
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_A.html#sect_TID_1500
+  resource: TID 1500 Measurement Report (Measurement Groups mit Tracking Identifier/UID)
+  path: Measurement Group je Rundherd und Zeitpunkt; abgeleitete Messung über Tracking UID verknüpft
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Die Struktur trägt abgeleitete Messungen ('together with any
+    derived measurements') und die Herdverknüpfung über Untersuchungen (Tracking UID). PS3.16 Annex D
+    enthält keinen Konzeptnamen für die Volumenverdopplungszeit; Kodierung nur über NCIt bzw. lokal.
+care_process:
+  trigger: Rundherd mit mindestens zwei Volumenmessungen (Vergleichsuntersuchung)
+  responsible_role: Befunder (CAD-Berechnung)
+evidence:
+  guideline_references:
+  - source: andere
+    version: 'ESTI (Prokop et al. 2026) — ESTI-Empfehlungen 2026: Snoeckx et al., Prokop et al., ESR Essentials
+      (Revel et al.)'
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12711968/
+    section: Definition of growth
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: If multiple time points are available, a logistic regression across all time points should
+      be used to more …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q18
+  - source: andere
+    version: 'ESTI (Prokop et al., Eur Radiol 2026;36:122–134) — ESTI-Empfehlungen 2026: Snoeckx et al.,
+      Prokop et al., ESR Essentials (Revel et al.)'
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12711968/
+    section: Definition of growth
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: For follow-up, the same segmentation software should be used to improve the reproducibility
+      of measurements.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q18
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Tab. 17, Kategorie 4A
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: mit <VDT 600 Tage
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 34 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B/S:=, R:cadNoduleVolumetryResult; BPMN-Schritt:
+      G9 Befundung | Activity_1mvivag'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 34); Quellen: Q18, Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 34)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.8/5.9 mit Tab. 17 (V-Lung-RADS: VDT-Schwelle
+  600 Tage); die Berechnung ist als CAD-Funktion vorgeschrieben (Anlage), ein eigenes Befundfeld nicht.'
+- 'Umsetzung: Teil von pulmonaryNoduleFinding. isPartOf pulmonaryNoduleFinding; abgeleitet aus mindestens
+  zwei Volumina (noduleSizeMeasurement), der Vergleichsuntersuchung (ImagingStudy) und der CAD-Software
+  (Device); Methode (Zwei-Punkt-Formel oder Regression) als Observation.method; Einheit UCUM d. Nur den
+  Rohwert speichern, keine fassungsabhängigen Schwellen (V-Lung-RADS 600 Tage, ESTI 250/400/500 Tage,
+  NELSON 400/600 Tage). „ncit“ fehlt in scripts/verify-terminology.py und tx.fhir.org kennt C113268 nicht:
+  SYSTEM_URL ergänzen oder standard_binding_status pending-mapping. Deutsche Primärquellen ergänzen (Anlage
+  zu § 4, S3 Empf. 5.8 und 5.9).'
+- SNOMED CT, LOINC und DICOM DCM enthalten kein Konzept für die Volumenverdopplungszeit; ein Konzeptantrag
+  (SNOMED-Observable bzw. LOINC-Term) ist zu erwägen.
+- Für das Berechnungsverfahren (Zwei-Punkt-Formel, Regression über alle Zeitpunkte) existiert kein Standardcode;
+  ein lokales CodeSystem ist festzulegen.
+- Observation.method und Observation.device sind in den MII-Profilen nicht MS und müssen projektseitig
+  als Pflicht gefordert werden.
+- Deutsche Primärquellen (Anlage zu § 4 LuKrFrühErkV, S3 Empf. 5.8 und 5.9) sind als Belege zu ergänzen.
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.pulmonaryNoduleFinding.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.noduleSizeMeasurement.v0.1

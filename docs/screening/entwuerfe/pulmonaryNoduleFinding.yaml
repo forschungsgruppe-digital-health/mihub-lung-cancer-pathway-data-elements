@@ -1,0 +1,298 @@
+id: mihub.lung.screening.pulmonaryNoduleFinding.v0.1
+uuid: eaa3dd54-05d2-5dd8-b0b6-78fb6d5d06cd
+name: pulmonaryNoduleFinding
+label_de: Lungenrundherd (Einzelbefund je Rundherd)
+definition_de: 'Befund je Rundherd: Kennung, Typ, Lage, Baseline/neu/vorbestehend, Verlauf, benigne bzw.
+  suspekte Merkmale, Bildreferenz.'
+phase: screening
+category: befund
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Klammerbefund je Rundherd. Antwortwert des Befunds ist SNOMED CT 786838002 |Nodule of lung|
+    (disorder; als Condition.code bzw. Observation.valueCodeableConcept, extensible auf << 786838002).
+    427359005 |Solitary nodule of lung| ist nur ein optionaler Unterwert; ob ein Herd solitär ist, ergibt
+    sich aus der Rundherdzählung je Untersuchung. 445249002 |Multiple nodules of lung| gehört auf Untersuchungsebene
+    (ctThoraxFinding), nicht zum Einzelherd. Antwortwerte für den Rundherdtyp: RadLex RID50151 solide,
+    RID50152 teilsolide, RID50153 nicht-solide (Milchglas); SNOMED CT hat dafür keine Konzepte. DICOM
+    DCM 112013 |Location in Chest| ist der Element-Code (Attributname) der Lage; die Lagewerte (Lappen,
+    Segment) kommen aus SNOMED-CT-Körperstrukturen (< 123037004 |Body structure|). Größe, Volumenverdopplungszeit
+    und Malignitätswahrscheinlichkeit sind eigene hasPart-Elemente. Editionen: SNOMED CT INT 20260701,
+    RadLex 4.2, DICOM DCM 2025.3 (MII TermServ); Stand 2026-10-15. Rollen der Codes: snomed-ct|786838002
+    = wert; snomed-ct|427359005 = wert; radlex|RID50151 = wert; radlex|RID50152 = wert; radlex|RID50153
+    = wert; dicom-dcm|112013 = element.'
+  codings:
+  - system: snomed-ct
+    code: '786838002'
+    display: Nodule of lung
+  - system: snomed-ct
+    code: '427359005'
+    display: Solitary nodule of lung
+  - system: radlex
+    code: RID50151
+    display: solid pulmonary nodule
+  - system: radlex
+    code: RID50152
+    display: part-solid pulmonary nodule
+  - system: radlex
+    code: RID50153
+    display: non-solid pulmonary nodule
+  - system: dicom-dcm
+    code: '112013'
+    display: Location in Chest
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]; Observation.bodySite (+ extension:bodyStructure);
+    Observation.hasMember; Observation.derivedFrom; Observation.extension:SeriesUID / :SOPInstanzUID;
+    Observation.identifier
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil (Hauptziel). Klammerbefund
+    je Rundherd als Observation. Slice code.coding:sct ist REQUIRED an mii-vs-bildgebung-findings-sct
+    (< 404684003 |Clinical finding|, SCT 20250701) gebunden; 786838002 ist dort als Observation.code konform
+    (MII-Muster: Befund im code, Ausprägung im value) – das steht im Widerspruch zur Element-Vorgabe ''Wert
+    statt Code'' und ist zu entscheiden. value[x] 1..1 MS ist Pflicht (z. B. Rundherdtyp als valueCodeableConcept
+    mit RadLex-Werten). bodySite 0..1 REQUIRED an < 123037004 |Body structure| (Lappen/Segment); DICOM
+    112013 ist ein Konzeptname und hier kein Wert. Rundherd-Identität über bodySite.extension:bodyStructure
+    → mii-pr-bildgebung-koerperstruktur (Observation.identifier ist 0..*, nicht MS). hasMember (MS) →
+    noduleSizeMeasurement, noduleVolumeDoublingTime, noduleMalignancyProbability. Bildreferenz über derivedFrom
+    (ImagingStudy) und extension:SeriesUID/SOPInstanzUID. Status baseline/neu/vorbestehend hat kein eigenes
+    Element (component mit lokalem Code). category.coding:loinc pattern 18782-3.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur
+  resource: BodyStructure
+  path: BodyStructure.identifier; BodyStructure.morphology; BodyStructure.location; BodyStructure.locationQualifier
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Träger der rundenübergreifenden
+    Rundherd-Identität (Vergleich mit Voraufnahmen, LuKrFrühErkV § 4 Abs. 2). identifier 0..*, nicht MS
+    – die Rundherd-Kennung muss projektseitig 1..* gefordert werden. morphology 0..1 MS REQUIRED http://hl7.org/fhir/ValueSet/bodystructure-code;
+    location 0..1 MS REQUIRED http://hl7.org/fhir/ValueSet/body-site; locationQualifier 0..* MS REQUIRED
+    http://hl7.eu/fhir/base/ValueSet/siteQualifier-eu (Seite). Verweis aus Observation.bodySite.extension:bodyStructure;
+    diese Core-Extension ist nicht auf das MII-Profil eingeschränkt, die Kopplung wird also nicht profilseitig
+    erzwungen. Ein Morphologie-Code für 'Lungenrundherd' ist offen.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code.coding:sct; Condition.bodySite.coding:snomed-ct; Condition.verificationStatus;
+    Condition.evidence
+  notes: de.medizininformatikinitiative.kerndatensatz.base#2026.0.1, stabil. Nur Alternative, falls der
+    Rundherd als Problem bzw. Verdachtsbefund geführt wird. code.coding:sct 0..1 MS REQUIRED an diagnoses-sct
+    (is-a 404684003, 272379006, 243796009; SCT 20250701) – 786838002 passt. bodySite.coding:snomed-ct
+    0..1 MS REQUIRED an mii-vs-diagnose-bodystructure-snomed. Kein Messwert- oder Kennungsmodell für Rundherde;
+    Verknüpfung zu den Messungen über Condition.evidence (0..*, nicht MS) bzw. Observation.focus.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]; Observation.bodySite
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot (nur Zielbild,
+    Hauptbindung bleibt 2026.0.0). ValueSets auf SCT 20260701, Filter unverändert (< 404684003 bzw. <
+    123037004). Defekt: Slice code.coding:sct hat patternCoding.system ''http://snomed.info/sct|http://snomed.info/sct/900000000000207008/version/20260701'';
+    regulär codierte SNOMED-Codings treffen den Slice nicht, die Required-Bindung greift faktisch nicht.
+    Als Ballot-Kommentar melden; derselbe Defekt betrifft in mii-pr-bildgebung-radiologische-messung auch
+    method.coding:sct.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDiagnose
+  resource: Condition
+  path: Condition.code.coding:SNOMED-CT; Condition.bodySite.coding:snomed-ct; Condition.bodySite.extension:BodyStructureReference
+  notes: de.gematik.isik#6.0.0 (gleiche Canonical in de.gematik.isik-basismodul#4.0.3), stabil. Nur für
+    die krankenhausseitige Übernahme als Diagnose. Slice SNOMED-CT 0..1 MS REQUIRED an https://gematik.de/fhir/isik/ValueSet/DiagnosesSCT
+    (is-a 404684003, 272379006, 243796009) – 786838002 passt. bodySite.extension:BodyStructureReference
+    (Core-Extension bodySite, nicht MS) erlaubt den Verweis auf eine BodyStructure. ISiK hat kein Bildgebungsmodul;
+    Messwerte und Lung-RADS sind nicht abbildbar.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ObservationFindingEuImaging
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.bodySite; Observation.derivedFrom; Observation.hasMember;
+    Observation.identifier:observationUid
+  notes: 'hl7.fhir.eu.imaging#1.0.0-ballot (HL7 Europe Imaging Report), Ballot/draft; EHDS-Zielbild. Dünnes
+    Profil: code 1..1 nur example, value[x] 0..1, bodySite example, identifier:observationUid (DICOM Observation
+    UID, Brücke zu SR). Einbindung in DiagnosticReportEuImaging über result bzw. extension:finding. Keine
+    Rundherd-spezifischen Constraints.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.hasMember; Observation.component
+  notes: hl7.fhir.uv.ips#2.0.1, stabil (international). category:radiology 1..1 (imaging); code 1..1 MS
+    PREFERRED an results-radiology-observations-uv-ips (LOINC CLASS LP29684-5); hasMember nur auf dasselbe
+    Profil; component.code PREFERRED an results-radiology-component-uv-ips (u. a. DCM 121071 Finding).
+    Nur für die zusammenfassende Weitergabe, kein Rundherdmodell.
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-tumor
+  resource: BodyStructure
+  path: BodyStructure.identifier:bodyStructureIdentifier; BodyStructure.location; BodyStructure.locationQualifier;
+    BodyStructure.morphology
+  notes: hl7.fhir.us.mcode#4.0.0, stabil; nur Referenzmuster, kein Bindungsziel. 'A single resource ...
+    used to track a tumor over time' mit identifier 1..* (Slice bodyStructureIdentifier) – das Muster
+    für eine stabile Rundherd-Kennung über Screening-Runden. location 1..1 MS EXTENSIBLE an mcode-cancer-body-location-vs,
+    morphology 0..1 MS EXTENSIBLE an mcode-tumor-morphology-code-vs, locationQualifier REQUIRED; patient
+    → mcode-cancer-patient. mCODE setzt eine Krebserkrankung voraus und passt semantisch nicht zu unklaren
+    Rundherden.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_A.html#sect_TID_1500
+  resource: TID 1500 Measurement Report > TID 1501 Measurement and Qualitative Evaluation Group / TID
+    1411 Volumetric ROI Measurements
+  path: 'Measurement Group: (112039, DCM, ''Tracking Identifier''); (112040, DCM, ''Tracking Unique Identifier'');
+    Finding; (363698007, SCT, ''Finding Site'')'
+  notes: 'DICOM PS3.16 2026d, nicht-FHIR. Quellformat der CAD-Software (Volumetrie, Segmentierung). Je
+    Rundherd eine Measurement Group mit Tracking Identifier und Tracking Unique Identifier (''Each Measurement
+    Group is identified by Tracking ID and UIDs'') – kanonischer Mechanismus für die Herdidentität über
+    Untersuchungen. FHIR-Brücke: identifier der Observation bzw. BodyStructure = Tracking UID; EU Imaging
+    identifier:observationUid.'
+- standard: other
+  profile_or_url: https://www.ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_Suppl_AIR.pdf
+  resource: IHE RAD AI Results (AIR), Anhang A.3.3 CT Chest Lung Nodule Assessment Result Set
+  path: 'A.3.3.3 Nodule 1: TID 1501 Measurement Group (Tracking Identifier ''Nodule 1'', Tracking Unique
+    Identifier, Finding (27925004, SCT, ''Nodule''), Finding Site (39607008, SCT, ''Lung''), Laterality)'
+  notes: IHE RAD Suppl. AIR Rev. 1.3, Trial Implementation (2025-08-08), nicht-FHIR. Anhang A ist ein
+    informatives Beispiel für einen KI-/CAD-Ergebnissatz je Rundherd (Lage, Lung-RADS je Herd, Segmentierung,
+    Volumen, Dichte, Rand, Form). Die SNOMED-Codes des Beispiels (27925004, 39607008) sind nicht in die
+    Elementbindung übernommen.
+- standard: other
+  profile_or_url: https://api3.rsna.org/radelement/v1/sets/RDES195
+  resource: RSNA/ACR RadElement CDE-Set 'Pulmonary Nodule'
+  path: RDE1301 Composition; RDE1304 Location; RDE1305 Morphology; RDE1306 Plurality; RDE1706 Change from
+    priors; RDE1707 Suspicious appearance; RDE1717 Presence
+  notes: RSNA RadElement API (Stand 2026-10-15), Status Proposed (2021-10-28), nicht-FHIR. Merkmalskatalog
+    je Rundherd (Zusammensetzung, Lage, Morphologie, Verlauf); nur Mapping-Ziel für die Attributliste,
+    keine Bindung.
+- standard: other
+  profile_or_url: http://radlex.org/RID/RID50149
+  resource: RadLex-Konzept 'pulmonary nodule'
+  path: RID50149 (Oberbegriff von RID50151, RID50152, RID50153)
+  notes: RadLex 4.2 (MII TermServ). Befund-Entität, kein Observable; nur als Oberbegriff der Typwerte
+    bzw. Mapping-Ziel des Klammerbefunds, nicht als primärer Observation.code.
+- standard: other
+  profile_or_url: http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C122407
+  resource: NCIt-Konzept 'Pulmonary Nodule'
+  path: C122407 Pulmonary Nodule; Untertypen C138143 Solid Pulmonary Nodule, C138144 Subsolid Pulmonary
+    Nodule, C113719 Part-Solid Ground-Glass Pulmonary Nodule, C138148 Pure Ground-Glass Pulmonary Nodule
+  notes: NCIt 25.6.0-e (MII TermServ). Nur Mapping für Klammerbefund und Rundherdtyp; primäre Kodierung
+    über SNOMED CT 786838002 und RadLex RID50151–RID50153.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-OBSERVATION.imaging_exam_result.v1 mit openEHR-EHR-CLUSTER.imaging_exam.v1
+    und openEHR-EHR-CLUSTER.exam_lesion.v0
+  resource: OBSERVATION / CLUSTER
+  path: 'imaging_exam_result: at0044 Structured imaging findings → CLUSTER.imaging_exam.v1 (at0001 Body
+    structure, at0004 Imaging findings) → CLUSTER.exam_lesion.v0 (at0012 Label, at0002 Lesion type, at0011
+    Structured body site)'
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), nicht-FHIR. imaging_exam_result.v1 und imaging_exam.v1
+    published, exam_lesion.v0 nur in_development. Kennung je Läsion über at0012 Label (keine UID). Lage
+    über CLUSTER.anatomical_location.v1 (published).
+care_process:
+  trigger: je detektiertem Rundherd (mindestens der führende Herd)
+  responsible_role: Erstbefunder; Zweitbefunder
+evidence:
+  guideline_references:
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Each exam should be coded 0-4 based on the nodule with the highest degree of suspicion.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Jede Untersuchung wird basierend auf dem Rundherd mit dem höchsten Verdachtsgrad mit 0-4 codiert.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 32 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B:=, noduleTrackingIdentifier, noduleTemporalStatus,
+      noduleType, noduleLocation, noduleVolumeChangePercent, noduleGrowthAssessment, noduleBenignFeatures,
+      noduleSuspiciousFeatures, noduleImageReference, noduleCount; S:pulmonaryNodule; BPMN-Schritt: G9
+      Befundung | Activity_1mvivag (und Zweitbefundung)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 32); Quellen: Q20, Q16'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.6); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 32)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 14 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. V-Lung-RADS (S3 Empf. 5.9, Tab. 17) und Lung-RADS Note
+  1 setzen eine Bewertung je Rundherd voraus; die Detektion ist CAD-Pflichtfunktion (Anlage). Eine Einzeldokumentation
+  je Rundherd ist nicht normiert.'
+- 'Umsetzung: eigenständig (Klammerbefund; hasPart Größe, VDT, Malignitätswahrscheinlichkeit). Klammerbefund
+  je Rundherd. 786838002 ist ein disorder-Konzept: als Condition.code oder Observation.valueCodeableConcept
+  verwenden, nicht als Observation.code. Den Verlauf nicht als freies Attribut doppeln, sondern über noduleSizeMeasurement
+  und noduleVolumeDoublingTime abbilden (hasPart, analog pulmonaryFunctionTest). Lage über SNOMED-Körperstrukturen
+  oder DICOM 112013 statt der ICD-O-3-Codes aus tumorLocalisation. Stabile Rundherd-Kennung (Identifier)
+  für den Vergleich über Runden (§ 4 Abs. 2). Erfassungsumfang (alle, nicht-benigne oder führender Herd)
+  ist zu entscheiden (E13). Quellen ergänzen: Lung-RADS-Kategorientabelle mit Notes 4–8, V-Lung-RADS (S3
+  Tab. 17; Supplement Tab. S1 Anm. 1), LuKrFrühErkV-Anlage.'
+- Zu entscheiden ist, ob 786838002 |Nodule of lung| als Observation.code (MII-Muster, im MII-Profil konform)
+  oder als Antwortwert (Condition.code bzw. Observation.value) geführt wird; im zweiten Fall fehlt ein
+  SNOMED-/LOINC-Observable für 'Rundherdbefund' als Observation.code.
+- 'Der Erfassungsumfang ist offen: alle Rundherde, nur nicht-benigne Herde oder nur der führende Herd.'
+- Kein deutsches Profil fordert eine stabile Rundherd-Kennung; sie muss projektseitig (BodyStructure.identifier
+  1..*, Brücke zur DICOM Tracking UID) festgelegt werden.
+- Für den Status baseline/neu/vorbestehend gibt es weder einen Standardcode noch ein Profilelement; ein
+  lokales CodeSystem ist nötig.
+- Ein Morphologie-Code für BodyStructure.morphology ('Lungenrundherd') ist nicht festgelegt.
+- Es gibt kein deutsches oder europäisches FHIR-Profil speziell für Lungenrundherde bzw. das Lungenkrebs-Screening.
+- Der Slice-Defekt im MII-Bildgebung-Ballot 2027.0.0-ballot.1 (Versionsangabe im patternCoding.system)
+  sollte als Ballot-Kommentar gemeldet werden.
+related_elements:
+- relation: hasPart
+  target: mihub.lung.screening.noduleSizeMeasurement.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.noduleVolumeDoublingTime.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.noduleMalignancyProbability.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.cadAnalysisReport.v0.1

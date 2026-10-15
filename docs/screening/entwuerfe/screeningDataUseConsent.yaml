@@ -1,0 +1,248 @@
+id: mihub.lung.screening.screeningDataUseConsent.v0.1
+uuid: f3041b8f-f670-5c82-8d57-488112f2b109
+name: screeningDataUseConsent
+label_de: Einwilligung in zentrale Speicherung, Registerabgleich und Forschung
+definition_de: 'Zweckbezogene Einwilligungen: zentrale Speicherung, Melde-/Krebsregisterabgleich, Forschung
+  und künftiges G-BA-Monitoring (erteilt, verweigert, widerrufen).'
+phase: screening
+category: administrativ
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'Umsetzung als eine FHIR-Consent-Instanz je Zweck nach S3 Empf. 5.13 (zentrale Speicherung; Abgleich
+    mit Einwohnermeldeämtern und Krebsregistern; Forschung zur Optimierung des Screeningprogramms). Dokumentklassen:
+    LOINC 57016-8 nur für die Forschungseinwilligung nach MII-Consent-Profil (Slice consentCategory),
+    LOINC 59284-0 für Speicherung und Registerabgleich; für das unterschriebene Formular KDL AM050101
+    (Datenschutzerklärung) oder die Auffangklasse AM050199, SF190102 nur bei Ablage als formale Studieneinwilligung.
+    Element-Codes (Consent.scope): consentscope research für den Forschungszweck, patient-privacy für
+    Speicherung und Registerabgleich. Antwortwerte: Zweck über provision.purpose mit v3-ActReason HRESCH
+    (Forschung), PUBHLTH (Krebsregisterabgleich, Näherung) bzw. HQUALIMP (Meldeamtsabgleich/Programmevaluation,
+    Näherung); im MII Broad Consent zusätzlich provision.provision.code mit MII-Policy …24.5.3.8, nur
+    wenn der Forschungszweck tatsächlich mit dem MII-Broad-Consent-Text eingeholt wurde (TermServ führt
+    das CodeSystem in Version 1.0.7; im Paket kerndatensatz.consent 2027.0.0-ballot.rc1 Version 1.1.0
+    mit Anzeige „MDAT wissenschaftlich nutzen“). Erteilt bzw. verweigert über provision.type permit/deny
+    bei status active; Widerruf über status inactive bzw. Folgeinstanz; rejected nur für einen nicht zustande
+    gekommenen Consent-Entwurf. SNOMED 736814000 bedeutet Studienteilnahme und ist nur eine gekennzeichnete
+    Näherung außerhalb der Consent-Ressource (z. B. Observation). Binding example, weil zwei der drei
+    Zwecke keinen Standardcode haben. Editionen: MII TermServ, SNOMED CT 20260701, LOINC 2.83, KDL 2025,
+    consentscope 2.0.0, v3-ActReason 3.0.0, FHIR R4 4.0.1; Stand 2026-10-15. Rollen der Codes: loinc|57016-8
+    = dokumentklasse; loinc|59284-0 = dokumentklasse; kdl|AM050101 = dokumentklasse; kdl|AM050199 = dokumentklasse;
+    kdl|SF190102 = dokumentklasse; http://terminology.hl7.org/CodeSystem/consentscope|research = element;
+    http://terminology.hl7.org/CodeSystem/consentscope|patient-privacy = element; urn:oid:2.16.840.1.113883.3.1937.777.24.5.3|2.16.840.1.113883.3.1937.777.24.5.3.8
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ActReason|HRESCH = wert; http://terminology.hl7.org/CodeSystem/v3-ActReason|PUBHLTH
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ActReason|HQUALIMP = wert; http://hl7.org/fhir/consent-provision-type|permit
+    = wert; http://hl7.org/fhir/consent-provision-type|deny = wert; http://hl7.org/fhir/consent-state-codes|active
+    = wert; http://hl7.org/fhir/consent-state-codes|rejected = wert; http://hl7.org/fhir/consent-state-codes|inactive
+    = wert; snomed-ct|736814000 = wert.'
+  codings:
+  - system: loinc
+    code: 57016-8
+    display: Privacy policy acknowledgment Document
+  - system: loinc
+    code: 59284-0
+    display: Consent Document
+  - system: kdl
+    code: AM050101
+    display: Datenschutzerklärung
+  - system: kdl
+    code: AM050199
+    display: Sonstige Einwilligung/Erklärung
+  - system: kdl
+    code: SF190102
+    display: Einwilligung Studie
+  - system: http://terminology.hl7.org/CodeSystem/consentscope
+    code: research
+    display: Research
+  - system: http://terminology.hl7.org/CodeSystem/consentscope
+    code: patient-privacy
+    display: Privacy Consent
+  - system: urn:oid:2.16.840.1.113883.3.1937.777.24.5.3
+    code: 2.16.840.1.113883.3.1937.777.24.5.3.8
+    display: MDAT wissenschaftlich nutzen EU DSGVO NIVEAU
+  - system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+    code: HRESCH
+    display: healthcare research
+  - system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+    code: PUBHLTH
+    display: public health
+  - system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+    code: HQUALIMP
+    display: health quality improvement
+  - system: http://hl7.org/fhir/consent-provision-type
+    code: permit
+    display: Opt In
+  - system: http://hl7.org/fhir/consent-provision-type
+    code: deny
+    display: Opt Out
+  - system: http://hl7.org/fhir/consent-state-codes
+    code: active
+    display: Active
+  - system: http://hl7.org/fhir/consent-state-codes
+    code: rejected
+    display: Rejected
+  - system: http://hl7.org/fhir/consent-state-codes
+    code: inactive
+    display: Inactive
+  - system: snomed-ct
+    code: '736814000'
+    display: Consent given for observational study participation
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-consent/StructureDefinition/mii-pr-consent-einwilligung
+  resource: Consent
+  path: Consent.provision.provision.code
+  notes: 'de.medizininformatikinitiative.kerndatensatz.consent#2026.0.0 (Profilversion 1.0.9), stabil.
+    Muster nur für den Forschungszweck (MII Broad Consent): category mit LOINC 57016-8 und Versionsmodul-Slice,
+    policy 1..*, scope fix research, je Teilzweck ein provision.provision mit type permit/deny, period
+    und code (required an mii-vs-consent-policy). Zentrale Speicherung sowie Melde- und Krebsregisterabgleich
+    des Screeningprogramms sind mit den Policy-Codes nicht kodierbar; projektspezifische Codes anderer
+    Einwilligungsmodule (z. B. …5.3.59 ACRIBIS, …5.3.82 SNID) nicht übernehmen. Nur nutzbar, wenn der
+    Standort den MII Broad Consent führt.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-consent/StructureDefinition/mii-pr-consent-einwilligung
+  resource: Consent
+  path: Consent.provision.provision.purpose
+  notes: de.medizininformatikinitiative.kerndatensatz.consent#2027.0.0-ballot.rc1 (Profilversion 1.1.0),
+    Ballot. Je Teilzweck ein provision.provision mit permit/deny; purpose 0..* extensible an v3-PurposeOfUse,
+    provision.provision.code 1..* MS required (MII Consent Policy CS 1.1.0, 29 Konzepte), policy 1..*
+    MS, status 1..1 MS. category-Slices consentCategory (LOINC 57016-8), mii, resultType und templateType.
+    Ein PurposeOfUse-Code eigens für Screening oder Registerabgleich ist nicht belegt.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-consent/StructureDefinition/mii-pr-consent-documentreference
+  resource: DocumentReference
+  path: DocumentReference.content.attachment
+  notes: de.medizininformatikinitiative.kerndatensatz.consent#2027.0.0-ballot.rc1 (Profilversion 1.0.8),
+    Ballot. Optionale Ablage des unterschriebenen Formulars (Scan/PDF) neben der strukturierten Consent-Instanz;
+    content.attachment und contentType 1..1 MS. Für die Prozesslogik nicht erforderlich.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Consent
+  resource: Consent
+  path: Consent.provision.purpose
+  notes: hl7.fhir.r4.core#4.0.1, stabil. Basis für ein eigenes Profil „Screening-Datennutzung“ mit einer
+    Consent je Zweck (zentrale Speicherung; Abgleich mit Einwohnermelde- und Krebsregistern; Forschung).
+    provision.purpose 0..* extensible an v3-PurposeOfUse, provision.type 0..1 required (permit/deny),
+    Widerruf über status inactive oder Folgeinstanz, Zeitpunkt über dateTime bzw. provision.period. Zweckcodes
+    lokal festlegen. In ISiK 6.0.0, ePA 1.4.0-ballot.1, Basisprofil DE 1.6.0 und IPS 2.0.1 gibt es kein
+    Consent-Profil; die KBV-Consent-Profile (Patientenverfügung, Vorsorgevollmacht, persönliche Erklärungen)
+    sind ungeeignet.
+- standard: other
+  profile_or_url: https://profiles.ihe.net/ITI/PCF/StructureDefinition/IHE.PCF.consentAdvanced
+  resource: Consent
+  path: Consent.provision
+  notes: ihe.iti.pcf#1.1.0 (IHE ITI Privacy Consent on FHIR, Profile consentBasic, consentIntermediate
+    und consentAdvanced je 1.1.0), Trial Implementation. Internationales Muster für zweckbezogene Provisions;
+    consentAdvanced als Grundlage des eigenen Profils „Screening-Datennutzung“ zu prüfen.
+care_process:
+  trigger: optional bei Information oder Aufklärung; Widerruf jederzeit
+  responsible_role: Versicherte; Einholung durch Praxis oder Erstbefunder
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.13 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Hierzu sollte eine Einwilligung der Teilnehmer für • eine zentrale Speicherung der im Rahmen
+      des …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 46 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bis spätestens zum Ablauf des Jahres 2028 wird der G-BA die regulatorischen und strukturellen
+      Voraussetzungen für ein Monitoring
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 25 der Quellenrecherche zur Screening-Episode (Gruppe G7 Radiologie vor
+      LDCT; M1 Inkrement 1 (Screening)); zusammengeführt aus: L:screeningConsentDirective, S:reportSharingConsent,
+      E:registryLinkageConsent, P:=, R:monitoringDatasetFuture; BPMN-Schritt: G7 Einwilligung | Praxis:
+      Activity_0e82ewp bzw. Erstbefunder: Activity_1uptzny'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 25); Quellen: Q12, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 25)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 17 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.13 (EK, „sollte“); derzeit ohne Empfänger:
+  Das Monitoring nach KFE-RL § 46 Abs. 2 schafft der G-BA erst bis Ende 2028.'
+- 'Umsetzung: eigenständig, optional und vorausschauend. Als optionales, vorausschauendes Element ohne
+  aktuellen Empfänger kennzeichnen. Zwecke auf S3 Empf. 5.13 beschränken (zentrale Speicherung; Abgleich
+  mit Einwohnermeldeämtern und Krebsregistern; Forschung „zur Optimierung des Lungenkrebs-Screeningprogramms“);
+  „künftiges G-BA-Monitoring“ erst nach einer G-BA-Regelung aufnehmen (ggf. als Widerspruch statt Einwilligung).
+  FHIR Consent je Zweck (provision.purpose plus status). Forschungszweck am MII-Modul Consent (Broad Consent)
+  ausrichten; 736814000 nur als Beispiel-Coding für den Forschungszweck. DPIA- und Justiziariats-Touchpoint.'
+- Für die Zwecke „zentrale Speicherung der Screeningdaten“ und „Abgleich mit Einwohnermeldeämtern und
+  Krebsregistern“ gibt es keinen Standardcode; lokale Zweck-Codes (local-no-standard-binding) oder eine
+  künftige Erweiterung der MII Consent Policy sind festzulegen.
+- Ein „künftiges G-BA-Monitoring“ wird erst nach einer G-BA-Regelung aufgenommen (KFE-RL § 46 Abs. 2,
+  bis Ende 2028), ggf. als Widerspruch statt Einwilligung.
+- Zu klären ist, ob der Standort den MII Broad Consent führt und der Screening-Forschungszweck davon abgedeckt
+  ist; andernfalls ist statt MII-Policy …24.5.3.8 ein lokaler Forschungszweck-Code nötig.
+- Ein eigenes Consent-Profil „Screening-Datennutzung“ fehlt; IHE PCF consentAdvanced ist als Grundlage
+  zu prüfen.
+- Der Datentyp ist auf Reference(Consent) je Zweck umzustellen; CodeableConcept bildet erteilt/verweigert/widerrufen
+  je Zweck nicht ab.
+- Die KDL-Ablageklasse für das Formular ist zu wählen (AM050101 Datenschutzerklärung oder AM050199 Sonstige
+  Einwilligung/Erklärung).
+- Für consentscope, consent-provision-type, consent-state-codes, v3-ActReason und die MII Consent Policy
+  fehlen Repo-Systemschlüssel; der Schlüssel hl7-v3 verweist auf v3-ActCode und ist hier nicht verwendbar.
+- Bei Umstieg auf das Consent-Release 2027 sind CodeSystem-Version (1.1.0) und Anzeige des MII-Policy-Codes
+  nachzuziehen.
+- 'DPIA- und Justiziariats-Touchpoint: Rechtsgrundlage und Zweckbindung der zentralen Speicherung und
+  des Registerabgleichs sind rechtlich zu bewerten.'

@@ -1,0 +1,279 @@
+id: mihub.lung.screening.structuredScreeningReport.v0.1
+uuid: c385e309-61fb-526a-9c01-fd881011b5b1
+name: structuredScreeningReport
+label_de: Strukturierter Befundbericht der Lungenkrebsfrüherkennung
+definition_de: Strukturierter Befundbericht mit Befunden, V-Lung-RADS, Rechtskategorie, Empfehlung und
+  verständlicher Erläuterung; an die Person, mit Einwilligung an die Praxis.
+phase: screening
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Editionen: LOINC 2.83, SNOMED CT INT 20260701 und KDL 2025, alle Codes auf dem MII TermServ
+    aktiv (Stand 2026-10-15). Element-Code (DiagnosticReport.code) ist LOINC 79086-5 (CLASS RAD, SCALE
+    Doc), passend zum MII-ValueSet für radiologische Berichtscodes. Dokumentklassen: SNOMED 4261000179100
+    (Subtyp von 371525003, für DiagnosticReport.code.coding:sct bzw. Composition/DocumentReference.type)
+    und KDL DG020103 (DocumentReference.type, XDS-eventCodeList). Methode bzw. zugrunde liegende Untersuchung:
+    16334891000119106 (ImagingStudy.procedureCode). Für die Dokumentablage gelten wie bei diagnosticReportDocument
+    IHE-D classCode BEF und typeCode BILD (in den Mappings). Abgelehnt: LOINC 18748-4 (generisch, CLASS
+    DOC.MISC; nur als Composition.type- bzw. category-Pattern der MII) und 18747-6 (deprecated). Das Element
+    spezialisiert diagnosticReportDocument; Bestandteile (lungRadsCategory, screeningResultCategory, recommendedManagement,
+    recommendedControlInterval, incidentalFinding) sind über hasPart verknüpft. Rollen der Codes: loinc|79086-5
+    = element; snomed-ct|4261000179100 = dokumentklasse; kdl|DG020103 = dokumentklasse; snomed-ct|16334891000119106
+    = methode.'
+  codings:
+  - system: loinc
+    code: 79086-5
+    display: CT Chest for screening WO contrast
+  - system: snomed-ct
+    code: '4261000179100'
+    display: Computed tomography imaging report
+  - system: kdl
+    code: DG020103
+    display: CT-Befund
+  - system: snomed-ct
+    code: '16334891000119106'
+    display: Low dose computed tomography of chest without contrast
+standard_mappings:
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference
+  path: DocumentReference.category.coding (REQUIRED epa-xds-class-code-vs); DocumentReference.type.coding
+    (REQUIRED epa-xds-type-code-vs); DocumentReference.context.event.coding (REQUIRED epa-xds-event-code-vs)
+  notes: 'de.gematik.epa.mhd#1.1.3, stabil; für die Bereitstellung des Berichts in der ePA. Die ValueSets
+    nutzen OID-Systeme (de.gematik.terminology#1.0.9): category.coding = urn:oid:1.3.6.1.4.1.19376.3.276.1.5.8#BEF,
+    type.coding = urn:oid:1.3.6.1.4.1.19376.3.276.1.5.9#BILD (jeweils Version 4.0.0), nicht http://ihe-d.de/CodeSystems/…;
+    context.event.coding = KDL DG020103. Die Bindung liegt auf coding.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.code.coding:loinc (REQUIRED mii-vs-bildgebung-diagnostic-report-code-lnc); DiagnosticReport.code.coding:sct
+    (REQUIRED < 371525003); DiagnosticReport.category.coding:sct (Pattern 4201000179104); DiagnosticReport.category.coding:loinc
+    (Pattern 18748-4); DiagnosticReport.result; DiagnosticReport.imagingStudy (1..*); DiagnosticReport.conclusion;
+    DiagnosticReport.conclusionCode; DiagnosticReport.presentedForm
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. code.coding:loinc
+    = 79086-5 (erfüllt CLASS RAD und SCALE_TYP LP32888-7 Doc); code.coding:sct = 4261000179100 ($subsumes
+    unter 371525003 auf dem MII TermServ bestätigt); 18748-4 nur im category-Pattern. result → hasPart-Beobachtungen;
+    Empfehlung über CarePlan.supportingInfo (behandlungsempfehlung); imagingStudy 1..* ist Pflicht. Ballot-Hinweis
+    2027.0.0-ballot.1: LOINC-ValueSet filtert auf CLASS = ''RAD'' (Name statt LP-Code); code.coding:sct
+    und conclusionCode.coding:sct tragen den Pattern-Defekt (System mit Versionsanhang); conclusionCode.coding:icd10-gm
+    ist an die CodeSystem-URL statt an ein ValueSet gebunden.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht
+  resource: Composition
+  path: Composition.type.coding:loinc (Pattern 18748-4); Composition.section:diagRep (1..1, code Pattern
+    LOINC 18782-3, entry 1..* → radiologischer-befund); Composition.author (1..* Practitioner); Composition.title
+    (1..1)
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil; Dokumentrahmen des
+    strukturierten Berichts (hier ist 18748-4 als Composition.type passend). section.entry ist für jede
+    section 1..*: die verständliche Erläuterung daher als zusätzliche section mit mindestens einem entry
+    (z. B. Verweis auf den DiagnosticReport) oder in DiagnosticReport.conclusion bzw. presentedForm.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (DG020103); DocumentReference.type.coding:XDS (BILD); DocumentReference.category.coding:XDS
+    (BEF); DocumentReference.content.attachment (1..1)
+  notes: de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1, stabil. Für den Bericht als Dokument
+    (PDF/CDA), wie bei diagnosticReportDocument. type.coding:KDL REQUIRED an http://dvmd.de/fhir/ValueSet/kdl,
+    type.coding:XDS REQUIRED an IHEXDStypeCode, category.coding:XDS REQUIRED an IHEXDSclassCode; DG020103
+    per KDL-ConceptMap auf BILD abgebildet (dvmd.kdl.r4#2025.0.1, de.ihe-d.terminology#3.0.1).
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDokumentenMetadaten
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (1..1, REQUIRED http://dvmd.de/fhir/ValueSet/kdl); DocumentReference.type.coding:XDS
+    (0..1); DocumentReference.category (0..1) mit coding:XDS (1..1, REQUIRED IHEXDSclassCode); DocumentReference.securityLabel
+    (1..*); DocumentReference.content.attachment (contentType, language, title 1..1)
+  notes: de.gematik.isik#6.0.0, stabil (nur Differential). KDL DG020103, XDS typeCode BILD, classCode
+    BEF; category ist 0..1, coding:XDS nur dann 1..1, wenn category vorhanden ist.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKBerichtSubSysteme
+  resource: Composition
+  path: Composition.type.coding:KDL; Composition.type.coding:XDS; Composition.category.coding:IHE (IHEXDSclassCode);
+    Composition.section (1..*, title und text 1..1); Composition.status (fixed final)
+  notes: de.gematik.isik#6.0.0, stabil (nur Differential; gleiche Canonical in de.gematik.isik-basismodul#4.0.3).
+    Narrativer Bericht aus Subsystemen (RIS → KIS); strukturierte Einträge nicht gefordert.
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/ValueSets/IHEXDStypeCode
+  resource: XDS DocumentEntry
+  path: DocumentEntry.classCode = BEF (Befundbericht); DocumentEntry.typeCode = BILD (Ergebnisse bildgebender
+    Diagnostik); DocumentEntry.eventCodeList = KDL DG020103
+  notes: de.ihe-d.terminology#3.0.1, nicht-FHIR; konsistent mit diagnosticReportDocument. Beleg für BEF
+    zusätzlich http://ihe-d.de/ValueSets/IHEXDSclassCode.
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_DiagnosticReport
+  resource: DiagnosticReport
+  path: DiagnosticReport.code.text (1..1); DiagnosticReport.effective[x] (1..1); DiagnosticReport.presentedForm.contentType
+    / .data (1..1)
+  notes: kbv.basis#1.9.0, stabil (nur Differential). Basisrahmen ohne fachliche Bindung, niedrige Priorität.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+  resource: DiagnosticReport
+  path: DiagnosticReport.code (PREFERRED report-codes); DiagnosticReport.result:observation-results (→
+    Observation-results-radiology-uv-ips); DiagnosticReport.effective[x] (1..1); DiagnosticReport.conclusion;
+    DiagnosticReport.presentedForm
+  notes: hl7.fhir.uv.ips#2.0.1, stabil, internationales Muster.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/DiagnosticReportEuImaging
+  resource: DiagnosticReport (+ CompositionEuImaging)
+  path: 'DiagnosticReport.category (2..*: imaging-report Pattern LOINC 85430-7 und imaging Pattern eehrxf-document-priority-category-cs#Medical-Imaging);
+    DiagnosticReport.code (PREFERRED ImagingReportTypesEuVSEuImaging); DiagnosticReport.extension:finding
+    / :impression / :recommendation / :composition (1..1); DiagnosticReport.result (→ ObservationFindingEuImaging)'
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/Draft (EHDS-relevant). Strukturell vollständigster Rahmen
+    für Befunde, Beurteilung und Empfehlung; CompositionEuImaging verlangt section 4..*. Ob 79086-5 im
+    ValueSet ImagingReportTypes (LOINC is-a 18726-0) liegt, ist offen; die Bindung ist nur preferred.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_DiagnosticImagingReportTemplates.html
+  resource: TID 2000 Basic Diagnostic Imaging Report
+  path: Row 1 Titel aus CID 7000; Row 8 Überschriften aus CID 7001 (59776-5 Findings, 19005-8 Impressions,
+    18783-1 Recommendations, 55110-1 Conclusions); TID 2002 Report Narrative
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Generischer SR-Befundbericht; eine Lungen-Screening-Vorlage gibt
+    es nicht.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-COMPOSITION.report.v1
+  resource: COMPOSITION (+ OBSERVATION.imaging_exam_result.v1)
+  path: 'OBSERVATION.imaging_exam_result.v1: items[at0008] Imaging findings, items[at0021] Overall impression,
+    items[at0059] Recommendation, items[at0044] Structured imaging findings'
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), beide Archetypen published, nicht-FHIR; generischer
+    Rahmen.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-diagnosticreport-note
+  resource: DiagnosticReport
+  path: DiagnosticReport.code (extensible us-core-diagnosticreport-report-and-note-codes); DiagnosticReport.category:us-core;
+    DiagnosticReport.presentedForm
+  notes: hl7.fhir.us.core#9.0.0, stabil. Nur US-Referenzmuster, niedrige Priorität.
+care_process:
+  trigger: 'Abschluss jeder Runde (Soll: binnen 14 Tagen nach Erstellung der Aufnahme)'
+  responsible_role: Erstbefunder
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: soll durch den Erstbefunder innerhalb von 14 Tagen nach Erstellung der Niedrigdosis-Computertomographieaufnahme
+      …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 2 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Das Ergebnis der Lungenkrebsfrüherkennungsuntersuchung soll durch den Erstbefunder innerhalb
+      von 14 Tagen nach Erstellung der Niedrigdosis-Computertomographieaufnahme der versicherten Person
+      als strukturierter Befundbericht übermittelt werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: S. 21
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der strukturierte Befundbericht beschreibt die relevanten Befunde und gibt Empfehlungen für
+      das weitere Vorgehen.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 47 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:structuredFindingsReport, B/S:=; BPMN-Schritt:
+      G10 Mitteilung | Rückmeldung übermitteln (Activity_12ef5s1) → Event_1w13vdp, Event_13jgib0'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 47); Quellen: Q02, Q03'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 47)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 13 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Soll-Vorschrift. KFE-RL § 42 Abs. 2 S. 1 („soll … innerhalb von
+  14 Tagen … als strukturierter Befundbericht übermittelt werden“), S. 2 (an die Praxis nur bei Einwilligung);
+  Inhalte: TrG S. 21 („sollte“ V-Lung-RADS), S3 Empf. 5.9.'
+- 'Umsetzung: Spezialisierung von diagnosticReportDocument (primarycare). specializes diagnosticReportDocument;
+  hasPart lungRadsCategory, screeningResultCategory, recommendedManagement, recommendedControlInterval,
+  incidentalFinding. Empfänger und Übermittlung aus der Definition nehmen (gehören zu resultCommunicationToPatient
+  und resultTransmissionConsentReferrer). Für das MII-Mapping LOINC 79086-5 statt 18748-4 als DiagnosticReport.code
+  (Required-Binding des MII-Profils radiologischer-befund verlangt CLASS RAD und SCALE Doc). mandatory_by_law
+  aufteilen: Übermittlung als strukturierter Befundbericht = Soll-Vorschrift; Inhaltsbestandteile = Empfehlungen.
+  Die „verständliche Erläuterung“ auf die Bedeutung von „kontrollbedürftig“ (TrG) eingrenzen oder als
+  lokal kennzeichnen. Zitat bis „… als strukturierter Befundbericht übermittelt werden“ vervollständigen.'
+- Kein Standard bietet ein Berichts-Template für die Lungenkrebsfrüherkennung (LuKrFrühErkV/Lung-RADS);
+  der Bericht wird aus generischen Bildbefund-Rahmen und referenzierten Beobachtungen zusammengesetzt.
+- Die 'verständliche Erläuterung' für die versicherte Person hat in keinem Standard einen eigenen Ort;
+  sie ist auf die Bedeutung von 'kontrollbedürftig' (Tragende Gründe) einzugrenzen oder als lokale Erweiterung
+  zu kennzeichnen.
+- Empfänger- und Übermittlungsangaben gehören zu resultCommunicationToPatient bzw. resultTransmissionConsentReferrer
+  und sind aus der Definition zu nehmen; mandatory_by_law ist aufzuteilen (Übermittlung als strukturierter
+  Befundbericht = Soll-Vorschrift, Inhaltsbestandteile = Empfehlungen), und das Zitat aus KFE-RL § 42
+  Abs. 2 ist zu vervollständigen.
+- Die MII-ValueSets für radiologische Berichtscodes sind auf dem MII TermServ nicht abrufbar; das ValueSet
+  mii-vs-bildgebung-diagnostic-report-coding 2025.0.2 enthält eine ungültige ECL-Expression und sollte
+  an die MII gemeldet werden, ebenso die Defekte im Ballot 2027.0.0-ballot.1.
+- Ob LOINC 79086-5 im EU-Imaging-ValueSet ImagingReportTypes liegt, ist ungeklärt.
+- Kardinalität laut Quelle 1..1 je Runde (1..* je Episode).
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.diagnosticReportDocument.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.lungRadsCategory.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.screeningResultCategory.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.recommendedManagement.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.recommendedControlInterval.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.incidentalFinding.v0.1

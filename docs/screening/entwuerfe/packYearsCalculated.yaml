@@ -1,0 +1,201 @@
+id: mihub.lung.screening.packYearsCalculated.v0.1
+uuid: d702f972-cee8-5565-b661-d1755387a37a
+name: packYearsCalculated
+label_de: Packungsjahre (jahrweise nach § 1 Abs. 2 LuKrFrühErkV)
+definition_de: Summe je anrechenbares Jahr aus Zigaretten/Tag ÷ 20; ohne Konsum vor Unterbrechungen ≥
+  10 Jahre; nur Zigaretten. Kriterium ≥ 15.
+phase: screening
+category: sozialanamnese
+datatype: Quantity
+cardinality: 1..*
+unit: '{PackYears}'
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, UCUM (TermServ-Fragment); Stand 2026-10-15. Elementcode
+    ist 401201003 ''Cigarette pack-years'' (nur Zigaretten, wie im MII-Kardiologie-Ballot und in US Core).
+    782516008 ''Number of calculated smoking pack years'' ist nur breiteres Mapping (gesamter Tabakkonsum).
+    LOINC 8664-5 ist nur Mapping für eine Selbstangabe (Methode ''Reported''); LOINC hat keinen eigenen
+    Packungsjahre-Code. Einheit {PackYears} (im TermServ-Fragment gültig); MII-Kardiologie-Ballot und
+    US Core nutzen {pack-years}, das nach UCUM-Grammatik ebenfalls zulässig ist. Der Rechenweg (jahrweise
+    nach § 1 Abs. 2 LuKrFrühErkV, vereinfachte Schätzung, Selbstschätzung) wird über lokale Methodencodes
+    (Observation.method) geführt. Das Kriterium mindestens 15 Packungsjahre wird in eligibilityCheckResult
+    ausgewertet. Rollen der Codes: snomed-ct|401201003 = element; snomed-ct|782516008 = element; loinc|8664-5
+    = element; local-no-standard-binding|jahrweise-lukrfrueherkv = methode; local-no-standard-binding|vereinfachte-schaetzung
+    = methode; local-no-standard-binding|selbstschaetzung = methode.'
+  codings:
+  - system: snomed-ct
+    code: '401201003'
+    display: Cigarette pack-years
+  - system: snomed-ct
+    code: '782516008'
+    display: Number of calculated smoking pack years
+  - system: loinc
+    code: 8664-5
+    display: Cigarettes smoked total (pack per year) - Reported
+  - system: local-no-standard-binding
+    code: jahrweise-lukrfrueherkv
+    display: Jahrweise Berechnung nach § 1 Abs. 2 LuKrFrühErkV
+  - system: local-no-standard-binding
+    code: vereinfachte-schaetzung
+    display: Vereinfachte Schätzung (Packungen pro Tag × Raucherjahre)
+  - system: local-no-standard-binding
+    code: selbstschaetzung
+    display: Selbstschätzung der versicherten Person
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
+  resource: Observation
+  path: Observation.component:packungsjahre.valueQuantity
+  notes: de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, Ballot. Slice packungsjahre
+    0..*, code Pattern SNOMED 401201003, valueQuantity 1..1 mit Pattern UCUM {pack-years}, mustSupport
+    value und comparator. Laut short-Text vereinfachter Rechenweg (Packungen à 20 Zigaretten × Raucherjahre),
+    nicht jahrweise nach § 1 Abs. 2 LuKrFrühErkV; Methode und Urheber sind nicht profiliert. Bei Abbildung
+    Einheit {pack-years} setzen.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.valueQuantity
+  notes: de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis (in 6.0.0 abstrakt), falls Packungsjahre eine
+    eigene Observation sind. ISiK verlangt ein LOINC-Coding; der einzige Kandidat 8664-5 ('pack per year',
+    Methode Reported) passt semantisch nur bedingt zu einer berechneten Packungsjahr-Summe. SNOMED 401201003
+    in coding:snomed-ct, method und derivedFrom für Rechenweg und Konsumabschnitte. ISiKRaucherStatus
+    selbst hat keine Packungsjahre.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0029]/items[at0017] (Pack years je Typ, Type at0054 Cigarettes); gesamt
+    /data[at0001]/items[at0074] (Overall pack years)
+  notes: openEHR CKM, Revision 2.0.1, published, nicht-FHIR. Für die Verordnung ist at0017 mit Type Cigarettes
+    der richtige Pfad, weil Overall pack years (at0074) alle Tabakarten umfasst. Die Packungsgröße von
+    20 Zigaretten (§ 1 Abs. 2 S. 2 LuKrFrühErkV) wird im Protokoll unter Pack definition (/protocol[at0021]/items[at0072])
+    dokumentiert.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus
+  resource: Observation
+  path: Observation.valueQuantity
+  notes: 'hl7.fhir.us.core#9.0.0, stabil; nur US-Referenzmuster. Packungsjahre als eigene Observation:
+    Invariante us-core-25 (warning) erwartet für code 401201003 oder 782516008 eine valueQuantity, required
+    an UCUM gebunden; Paketbeispiel mit 401201003 und {pack-years}. Das mCODE-4.0.0-Beispiel nutzt dagegen
+    UCUM ''1''.'
+care_process:
+  trigger: bei der Anspruchsprüfung; Inhalt des Berichts
+  responsible_role: berichterstellende Ärzt:in (berechnet); Selbstschätzung der Versicherten als Methode
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2; § 2 Abs. 1 Nr. 3 a bb
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die nach Satz 2 errechneten Ergebnisse der einzelnen Jahre sind zu addieren.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Packungsjahr ist die Einheit, in der der Zigarettenkonsum angegeben wird.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: KBV PraxisInfoSpezial (Oktober 2026) — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: Anspruchsberechtigung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: '(Packungsjahre: Zahl der pro Tag gerauchten Zigarettenpackungen multipliziert mit der Zahl
+      der Raucherjahre)'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 8 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R/P:=, L:packYears, S:cigarettePackYears; BPMN-Schritt:
+      G2 Raucheranamnese | Praxis: Activity_0ya2ob0 → Bericht erstellen (Activity_1npn3bx)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 8); Quellen: Q01, Q05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 8)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Kriterium (mindestens 15 Packungsjahre) im Bericht: LuKrFrühErkV
+  § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. bb i. V. m. § 1 Abs. 2 S. 1–4; KFE-RL § 39 Nr. 1. Der
+  Zahlenwert ist nicht zwingend.'
+- 'Umsetzung: eigenständig (generalisiert; nimmt packYearsSelfEstimate auf). Als generisches Element „Packungsjahre“
+  (nur Zigaretten) führen; Rechenweg als Methode (jahrweise nach § 1 Abs. 2 | vereinfachte Schätzung nach
+  KBV/KV | Selbstschätzung) und Urheber (Ärzt:in | Versicherte) statt im Namen. Primärcode SNOMED 401201003;
+  LOINC 8664-5 als Observation.code-Mapping (Methode „Reported“); 782516008 höchstens als breiteres Mapping
+  (Tabak gesamt). Einheit an den gewählten Code anpassen. Kriterium ≥ 15 in eligibilityCheckResult. Eigenes
+  Q3-Profil nötig, weil ISiK und IPS keine Packungsjahre kennen.'
+- 'Die Einheit ist mit dem MII-Kardiologie-Ballot abzustimmen: {PackYears} (im TermServ-Fragment gültig)
+  oder {pack-years} (Pattern im MII-Ballot und Beispiel in US Core).'
+- Kein Standard bildet die jahrweise Summe nach § 1 Abs. 2 LuKrFrühErkV ab (nur Zigaretten, ohne Konsum
+  vor Unterbrechungen ab 10 Jahren); die lokalen Methodencodes müssen fachlich bestätigt und als CodeSystem
+  veröffentlicht werden.
+- Die Urheberschaft des Werts (Ärzt:in oder versicherte Person) hat keinen Standardcode und ist über Observation.performer
+  oder einen lokalen Code abzubilden.
+- Ein stabiles nationales Profil für Packungsjahre fehlt; es gibt sie nur im MII-Kardiologie-Ballot, nicht
+  in ISiK oder IPS.
+- Ob LOINC 8664-5 als ISiK-Pflichtcode für einen berechneten Wert vertretbar ist oder ein Profil ohne
+  ISiKLebensZustand-Basis nötig wird, ist offen.
+- Das Datenwörterbuch des ACR Lung Cancer Screening Registry war nicht abrufbar und ist nicht zugeordnet.
+- Kardinalität laut Quelle 0..1 je Prüfung.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.cigaretteConsumptionPeriod.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.cigarettesPerDayInPeriod.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.smokingInterruptionPeriod.v0.1

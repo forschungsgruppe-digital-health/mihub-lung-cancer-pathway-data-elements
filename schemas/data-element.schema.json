@@ -20,7 +20,7 @@
     "id": {
       "type": "string",
       "description": "Stabiler, lesbarer Identifier. Konvention: mihub.lung.<phase>.<element>.v<major>.<minor>",
-      "pattern": "^mihub\\.lung\\.(followup|surveillance|palliative|primarycare)\\.[a-zA-Z][a-zA-Z0-9]*\\.v[0-9]+\\.[0-9]+$"
+      "pattern": "^mihub\\.lung\\.(screening|followup|surveillance|palliative|primarycare)\\.[a-zA-Z][a-zA-Z0-9]*\\.v[0-9]+\\.[0-9]+$"
     },
     "uuid": {
       "type": "string",
@@ -46,8 +46,8 @@
     },
     "phase": {
       "type": "string",
-      "enum": ["followup", "surveillance", "palliative", "primarycare"],
-      "description": "Versorgungsphase im Patientenpfad. Befüllt: followup = Onkologische Nachsorge nach kurativer Therapie; surveillance = Verlaufsbeobachtung unter Systemtherapie; palliative = Palliativversorgung; primarycare = Hausärztliche Versorgung / sektorenübergreifende Basisdaten (Übergabe Onkologie ↔ Hausarztpraxis, Langzeitbegleitung). Weitere Phasen können additiv ergänzt werden (z. B. screening, diagnostics, treatment, rehabilitation, transition)."
+      "enum": ["screening", "followup", "surveillance", "palliative", "primarycare"],
+      "description": "Versorgungsphase im Patientenpfad. screening = Krebsfrüherkennung (Lungenkrebs-Früherkennung mittels Niedrigdosis-CT nach LuKrFrühErkV/KFE-RL; Episode in Vorbereitung, Erhebung 2026-10). Befüllt: followup = Onkologische Nachsorge nach kurativer Therapie; surveillance = Verlaufsbeobachtung unter Systemtherapie; palliative = Palliativversorgung; primarycare = Hausärztliche Versorgung / sektorenübergreifende Basisdaten (Übergabe Onkologie ↔ Hausarztpraxis, Langzeitbegleitung). Weitere Phasen können additiv ergänzt werden (z. B. diagnostics, treatment, rehabilitation, transition)."
     },
     "tumor_entity": {
       "type": "array",
@@ -287,6 +287,7 @@
             "properties": {
               "source": {
                 "type": "string",
+                "description": "Quelle der Fundstelle. Rechtsquellen der Lungenkrebs-Früherkennung (Phase screening): LuKrFrühErkV = Lungenkrebs-Früherkennungs-Verordnung (StrlSchG § 84); G-BA KFE-RL = Krebsfrüherkennungs-Richtlinie des G-BA inkl. Anlagen (z. B. Versicherteninformation). Normen tragen keinen Empfehlungsgrad (recommendation_grade/evidence_level n/a); section in Normzitierweise (z. B. § 2 Abs. 1 Nr. 3).",
                 "enum": [
                   "S3-LL Lungenkarzinom",
                   "S3-LL Palliativmedizin",
@@ -298,6 +299,8 @@
                   "ESMO",
                   "ASCO",
                   "Expert:innen-Erhebung MiHUB",
+                  "LuKrFrühErkV",
+                  "G-BA KFE-RL",
                   "andere"
                 ]
               },

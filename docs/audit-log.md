@@ -601,7 +601,35 @@ Bisher ließ sich eine Fundstelle nur durch eigenes Suchen in der Quelle nachpr�
 
 Neu: [`docs/reviews/2026-10-13-erhebungen.md`](reviews/2026-10-13-erhebungen.md) — Auszug der beiden Klinik-Erhebungsmappen (116 Zeilen, ohne Kontaktspalte) mit Ankern je Zeile als Herkunftsnachweis der 56 Referenzen `Expert:innen-Erhebung MiHUB`. Neu: `scripts/verify-quotes.py` — prüft die Zitate gegen eigene Textfassungen der Quell-PDFs (die Quellen liegen urheberrechtlich nicht im Repo); Toleranz nur für Silbentrennung und eingeschobenen Spaltentext des PDF-Layouts.
 
-## 15 Limitationen
+## 15 Vorbereitung der Phase `screening` (Datenelement-Erhebung)
+
+**Datum:** 2026-10-14/15 · **Auslöser:** Maintainer-Auftrag „Screening-Episode für die Datenelementerhebung vorbereiten; passende Quellen suchen“ (Ausgangspunkt: Arbeitsnotiz „Vorarbeiten für das Teilmodul Früherkennung: Raucheranamnese und Eignungsprüfung“, Stand 06.10.2026) · **KI-Unterstützung:** Claude Code (Opus 5.5), Multi-Agenten-Recherche mit Gegenprüfung · **Ergebnis:** [`docs/screening/`](screening/).
+
+### 15.1 Quellenrecherche und Kandidaten
+
+Sechs Recherche-Perspektiven (Recht, Leitlinien, Befundung, Standards, Evidenz, Prozess entlang des BPMN-Modells `lung-cancer-screening-pathway`) lieferten 309 Kandidaten und rund 160 Quellenfunde; die Konsolidierung ergab 77 Kandidaten in 13 Prozessgruppen und 40 Quellen. Je Kandidat prüften ein Quellen-Skeptiker (Fundstelle, Wortlaut, Verbindlichkeit) und ein Dubletten-/Scope-Skeptiker (Abgleich mit den 112 Bestandselementen): **53 behalten, 24 verworfen** (21 Dublette/Scope, 1 Quelle, 2 beide). Verbindlichkeit der behaltenen Kandidaten nach Gegenprüfung: 16 Pflicht nach Norm, 7 bedingt, 6 mittelbar, 1 Soll-Vorschrift, 1 geteilt, 13 Leitlinie, 9 keine. Zehn Kandidaten sollen Bestandselemente spezialisieren (u. a. `smokingStatus`, `referralOrder`, `ctThoraxScan`), statt sie zu duplizieren.
+
+### 15.2 Umgesetzt (dieser Schritt)
+
+| Änderung | Detail |
+| --- | --- |
+| Phase `screening` | Schema-Enum + ID-Pattern, Ordner `elements/screening/` (noch leer), `build-catalog.py`, Excel-Dropdown, FSH `PhasesCS`, Issue-Formular, CODEOWNERS (`@mihub-ap8/lead-screening`) — Minor-Schema-Änderung |
+| Quellen-Enum | + `LuKrFrühErkV`, `G-BA KFE-RL` (Minimalvariante; erweiterte Variante = Entscheidung E23 im Dossier) |
+| `docs/screening/` | Dossier (Quellen, Prozessmatrix, 53 Einzelblätter, verworfene Kandidaten, Umsetzungsvorschlag U1–U10, Entscheidungsfragen E1–E24), vorbefüllte Erhebungsmappe (DE-S01 … DE-S53; Round-trip über den Importer für alle 53 Zeilen validiert), `quellen.json`, Einstiegsseite |
+| GLOSSARY §21 | Screening-Begriffe wörtlich aus LuKrFrühErkV §§ 1–5 (Packungsjahr, Zulässigkeit, Befundkategorien, Erst-/Zweitbefundung u. a.) |
+
+### 15.3 Codes, Profile und Herkunft der Kandidaten (2026-10-15)
+
+Je Gruppe ermittelte ein Agent die Codes am MII TermServ, ein zweiter die Profilziele über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, gematik, mCODE, DICOM SR, IHE, openEHR); je eine Skeptiker:in prüfte Codes bzw. Profile (314/317 Codes und 293/300 Ziele bestätigt, 122 Teilkorrekturen), ein dritter Schritt führte die Korrekturen zusammen. Ergebnis: 53 schema-valide Entwürfe unter `docs/screening/entwuerfe/` (nicht im Katalog). Abschließende maschinelle Prüfung: 294/294 Standard-Codes am MII TermServ gefunden und aktiv (61 lokale Platzhalter), 214/214 FHIR-Canonicals in den Paketen, 151/151 Zitate wörtlich in den beschafften Quelltexten (ein als Zitat ausgewiesener paraphrasierter Satz wurde durch den Wortlaut des Whitepaper-Supplements ersetzt). `scripts/verify-terminology.py` kennt jetzt DICOM DCM, RadLex, NCIt und vollständige System-URLs. Vorbefüllte Mappe neu aus den Entwürfen erzeugt (Round-trip 53/53). Prüfprotokoll: `docs/screening/pruefprotokoll.json`.
+
+### 15.4 Offene Punkte
+
+1. Entscheidungsfragen E1–E24 (Dossier, Abschnitt 7) mit Praxis, Radiologie, Datenschutz/Justiziariat und MI-Team klären — mindestens E1–E3 (Raucheranamnese, Packungsjahre), E12 (Lung-RADS neben den §-Kategorien), E21–E23 (Modellierung).
+2. ~~Codes gegen den MII TermServ prüfen~~ → erledigt 2026-10-15 (§15.3); offen bleiben die 61 lokalen Platzhalter (Konzeptbedarf).
+3. DPIA-Berührungspunkte (Einwilligungen, Portal-Selbstauskunft, Rückkanal aus der Abklärung) vor der Aufnahme der Gruppen G5/G11/G12 klären.
+4. Befunde am BPMN-Screeningmodell (Dossier, Abschnitt 8.4) an die Modellierer:innen des Pfad-Repositorys geben.
+
+## 16 Limitationen
 
 - Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (seit 2026-10-13: NSCLC `Stand April 2025`, SCLC `Stand August 2026`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden; die SCLC-Archivfassung 09/2025 wurde nicht gegen 08/2026 gedifft (Kap. 0 nennt keine Nachsorge-Änderung).

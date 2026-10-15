@@ -1,0 +1,198 @@
+id: mihub.lung.screening.screeningReadingEvent.v0.1
+uuid: 894cfa46-06ed-58ca-a116-8f1e529ef777
+name: screeningReadingEvent
+label_de: Befundungsvorgang (Rolle, ohne/mit CAD, Software, Person)
+definition_de: Befundungsschritt mit Rolle (Erst-/Zweitbefunder), Modus (ohne, dann mit CAD), Zeitpunkt,
+  Person und Software-Version; Zweitbefund unabhängig.
+phase: screening
+category: prozedur
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code SNOMED 28191001 (Procedure.code) und Kategorie SNOMED 363679005 Imaging (Procedure.category)
+    wie im MII-Profil radiologische-befundungsprozedur, damit die Instanzen KDS-konform bleiben; die Semantik
+    (Parent 11429006 Consultation) wird zugunsten der MII-Kompatibilität akzeptiert. Bei MII-Konformität
+    ist der Display des Profil-Patterns zu führen („Consultation and report by radiologist (procedure)“),
+    ab Bildgebung 2027 mit fixierter SNOMED-Version 20260701. DCM 110005 Interpretation als RIS/PACS-Workitem-Mapping
+    (CID 9231). Methode „mit CAD“: SNOMED 133883001 bzw. RadLex RID45702. Antwortwert SNOMED 66862007
+    Radiologist für performer.function bzw. Fachrichtung; Erst- und Zweitbefunder unterscheidet er nicht
+    (lokale Rollen-Codes nötig). Editionen: MII TermServ, SNOMED CT 20260701, DICOM 2025.3, RadLex 4.2;
+    Stand 2026-10-15. Rollen der Codes: snomed-ct|28191001 = element; snomed-ct|363679005 = element; dicom-dcm|110005
+    = element; snomed-ct|133883001 = methode; radlex|RID45702 = methode; snomed-ct|66862007 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '28191001'
+    display: Consultation and report by radiologist
+  - system: snomed-ct
+    code: '363679005'
+    display: Imaging
+  - system: dicom-dcm
+    code: '110005'
+    display: Interpretation
+  - system: snomed-ct
+    code: '133883001'
+    display: Computer assisted image analysis
+  - system: radlex
+    code: RID45702
+    display: computer-aided detection
+  - system: snomed-ct
+    code: '66862007'
+    display: Radiologist
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Eine Procedure je
+    Befundungsschritt: code.coding:sct Pattern 28191001, category.coding:sct 363679005, performed[x] 1..1
+    MS (Zeitpunkt), performer.actor (Person), performer.function für Erst- bzw. Zweitbefunder (ohne Binding,
+    lokales Coding), usedReference auf mii-pr-bildgebung-geraet (CAD-Software mit Version), partOf auf
+    die Bildgebungsprozedur der LDCT. report 1..* MS verlangt einen Befund (DiagnosticReport radiologischer-befund)
+    je Befundungsprozedur; readerAssessmentCategory hängt dort an. Der Modus „zunächst ohne, dann mit
+    CAD“ hat kein Element (Extension oder zwei Zeitstempel).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot. Pattern von
+    code.coding:sct und category.coding:sct jetzt mit Version http://snomed.info/sct/900000000000207008/version/20260701
+    und Display „Consultation and report by radiologist (procedure)“; Instanzen müssen die passende Version
+    führen. report 1..* MS; sonst wie 2026.0.0.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-geraet
+  resource: Device
+  path: Device.version.value
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. CAD-Software samt Version
+    (deviceName 0..* MS, version.value 1..1, manufacturer 0..1 MS) für S3 Empf. 5.8 (identische, qualitätsgesicherte
+    Software für Erst- und Zweitbefunder). Dieselbe Device-Instanz nutzt cadAnalysisReport, damit nichts
+    doppelt erfasst wird.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.gematik.isik#6.0.0, stabil. Generisches Krankenhausprofil (performed[x] 1.. MS, code.coding:SNOMED-CT
+    required, descendent-of 71388002), nur bei Befundung im KIS-Kontext; keine Rollen- oder CAD-Modellierung.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.performer.function
+  notes: hl7.fhir.r4.core#4.0.1, stabil. performer.function 0..1 (example, performer-role) für die Befunderrolle,
+    usedReference 0..* für das verwendete Gerät. Codes für Erst- und Zweitbefunder fehlen in den Standard-ValueSets.
+care_process:
+  trigger: je Befundungsschritt (zuerst ohne, dann mit CAD)
+  responsible_role: Erstbefunder; Zweitbefunder
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 5 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: die Computertomographieaufnahme zunächst ohne und anschließend unter Nutzung einer Software
+      zur …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.8 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Die Software zur computerassistierten Detektion, Volumetrie und Berechnung der Volumenverdopplungszeit
+      sollte qualitätsgesichert und für den Erst- und Zweitbefunder identisch sein.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 44 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: seine Befundung und im Falle einer Zweitbefundung auch diesen Befund
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 30 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: R:cadSoftwareUse, B:screeningReadEvent, B:cadSoftwareProduct,
+      S:cadAssistedReading, E:cadAssistedReadingDocumented; BPMN-Schritt: G9 Befundung | Activity_1tdikdp
+      → Activity_1mvivag; Zweitbefunder: Activity_1ww2vbt → Activity_0mx6d87'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 30); Quellen: Q01, Q12, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 30)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Verfahren LuKrFrühErkV § 5 Abs. 1–2; Dokumentation KFE-RL
+  § 44 S. 1, QS-Vereinbarung § 13f, StrlSchG § 85 Abs. 1 S. 2 Nr. 4; Mindestzahlen „befunden und dokumentieren“
+  § 6 Abs. 1 S. 2 und Abs. 2 S. 2. Software-Version und Zeitpunkt sind nicht normiert (S3 Empf. 5.8).'
+- 'Umsetzung: eigenständig (Procedure je Befundung). Rolle, Zeitpunkt und Person nur hier führen; readerAssessmentCategory
+  trägt nur die Kategorie (Verknüpfung über Procedure.report). „Erst ohne, dann mit CAD“ als Attribut
+  (Flag oder zwei Zeitstempel) statt mindestens zwei Instanzen (das Schema erlaubt kein 2..*). CAD-Software
+  als Device-Referenz, konsistent mit cadAnalysisReport. Mapping: …/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur.
+  Die gemeinsame Beurteilung (§ 5 Abs. 3) über screeningResultCategory abgrenzen. Code 28191001 semantisch
+  prüfen (Elternkonzept „Consultation“).'
+- Für die Rollen Erstbefunder und Zweitbefunder (LuKrFrühErkV § 5, KFE-RL § 44) gibt es keinen Standardcode;
+  lokale Codes für performer.function sind festzulegen.
+- Der Lesemodus „zunächst ohne, dann mit CAD“ ist als Attribut (Flag oder zwei Zeitstempel bzw. Extension)
+  zu modellieren, da das Schema kein 2..* je Phase erlaubt.
+- Die Semantik von SNOMED 28191001 (Parent Consultation) ist fachlich zu bestätigen; sie wird wegen des
+  MII-Patterns beibehalten.
+- Die gemeinsame Beurteilung nach § 5 Abs. 3 LuKrFrühErkV ist über screeningResultCategory abzugrenzen;
+  die Unabhängigkeit der Zweitbefundung und die Mindestzahlen nach § 6 bildet kein Standard ab.
+- Die Systemschlüssel dicom-dcm und radlex sind in der Terminologieprüfung des Repos zu hinterlegen.
+- Kardinalität laut Quelle 0..* je Phase (≥ 1 je LDCT).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.ldctExamination.v0.1

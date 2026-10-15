@@ -1,0 +1,233 @@
+id: mihub.lung.screening.ldctInformedConsent.v0.1
+uuid: 366a62e1-3119-5d46-a075-67e5401de1d3
+name: ldctInformedConsent
+label_de: Aufklärung durch den Erstbefunder und Einwilligung in die LDCT
+definition_de: Aufklärung vor der LDCT (§ 630e BGB, Strahlenrisiko, Beteiligte, Datenaustausch) mit Ergebnis,
+  Datum, Person und Abschriften.
+phase: screening
+category: prozedur
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Elementcode: SNOMED CT 182771004 Informed consent for procedure (Aufklärung und Einholung der
+    Einwilligung vor der LDCT; Mitglied des MII-ValueSets procedures-sct). Antwortwerte: ''erteilt'' =
+    47511000087103 Free and informed consent for procedure given (bevorzugt, trifft ''nach Aufklärung
+    erteilt''), Elternbegriff 408835000 Consent for procedure given zulässig; ''abgelehnt'' = 1296859006
+    Procedure declined (ein Konzept für die abgelehnte Einwilligung in eine diagnostische Prozedur fehlt,
+    182773001 betrifft nur chirurgische Eingriffe). Das Einwilligungsergebnis wird nur hier geführt. Dokumentklasse
+    des unterschriebenen Bogens: KDL AM010302 und LOINC 96347-0; LOINC 64293-4 nur dort, wo die R4-Liste
+    c80-doc-typecodes gilt (96347-0 ist darin nicht enthalten). 151099008 ist inaktiv. MII TermServ, SNOMED
+    CT International 20260701, LOINC 2.83, KDL 2025, Stand 2026-10-15. Rollen der Codes: snomed-ct|182771004
+    = element; snomed-ct|47511000087103 = wert; snomed-ct|408835000 = wert; snomed-ct|1296859006 = wert;
+    kdl|AM010302 = dokumentklasse; loinc|96347-0 = dokumentklasse; loinc|64293-4 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '182771004'
+    display: Informed consent for procedure
+  - system: snomed-ct
+    code: '47511000087103'
+    display: Free and informed consent for procedure given
+  - system: snomed-ct
+    code: '408835000'
+    display: Consent for procedure given
+  - system: snomed-ct
+    code: '1296859006'
+    display: Procedure declined
+  - system: kdl
+    code: AM010302
+    display: Diagnostischer Aufklärungsbogen
+  - system: loinc
+    code: 96347-0
+    display: Radiology Consent Document
+  - system: loinc
+    code: 64293-4
+    display: Procedure Consent Document
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct (182771004); Procedure.performed[x]:performedDateTime (Zeitpunkt der
+    Aufklärung); Procedure.performer.actor (aufklärende Ärzt:in); Procedure.status; Procedure.outcome
+    (erteilt | abgelehnt)
+  notes: de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (Modul Prozedur), stabil. code.coding:sct
+    REQUIRED an procedures-sct; 182771004 ist laut $validate-code auf dem MII TermServ Mitglied und erfüllt
+    die Invariante sct-ops-1. outcome ist example-gebunden und nimmt die Werte 47511000087103/408835000
+    bzw. 1296859006 auf. Verweis auf den unterschriebenen Bogen über eine DocumentReference (siehe MII
+    Dokument).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (AM010302); DocumentReference.type.coding:LNC (64293-4); DocumentReference.type.coding:XDS
+    (EINW); DocumentReference.category.coding:XDS (ADM); DocumentReference.content.attachment
+  notes: de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1, stabil; für den unterschriebenen
+    Aufklärungsbogen samt Abschriften (§ 630e Abs. 2 S. 2 BGB). type.coding:LNC ist REQUIRED an c80-doc-typecodes
+    gebunden; dort steht 64293-4, nicht 96347-0. KDL AM010302 wird laut DVMD-ConceptMap auf typeCode EINW
+    abgebildet, classCode ADM ('Aufklärung … Einwilligungen'); die Kombination ist konsistent. EINW nimmt
+    Aufklärungsbögen zu Anästhesie (ANAE) und Bestrahlung (BSTR) aus; BSTR betrifft die Radiotherapie,
+    nicht die diagnostische LDCT.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.code.coding:SNOMED-CT (182771004); Procedure.performed[x]; Procedure.subject.reference
+  notes: de.gematik.isik#6.0.0, stabil, nur Differential. coding:SNOMED-CT REQUIRED an ProzedurenCodesSCT
+    (descendent-of 71388002), 182771004 passt. Nachrangiges Ziel nur für Erstbefunder an Kliniken (Krankenhauskontext).
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference (ePA MHD)
+  path: DocumentReference.category.coding (ADM); DocumentReference.type.coding (EINW); DocumentReference.context.event.coding
+    (KDL AM010302); DocumentReference.content.attachment.url
+  notes: 'de.gematik.epa.mhd#1.1.3, stabil. Optional, falls die Abschrift des Aufklärungsbogens in die
+    ePA eingestellt wird; dafür besteht keine Normpflicht. IHE-D-Codes unter den OID-Systemen urn:oid:1.3.6.1.4.1.19376.3.276.1.5.8
+    (class) und urn:oid:1.3.6.1.4.1.19376.3.276.1.5.9 (type); KDL AM010302 ist über das eingeschlossene
+    KDL-ValueSet im Event-ValueSet zulässig. Pflicht: masterIdentifier, identifier:uniqueId, attachment.url
+    (data 0..0), context.facilityType, author.display.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.code.coding:snomed (182771004); Procedure.performed[x]; Procedure.performer.actor
+  notes: kbv.basis#1.9.0 (KBV Basisprofile, kein MIO), stabil, nur Differential. code.coding:snomed REQUIRED
+    an KBV_VS_Base_Procedure_SNOMED_CT (is-a 71388002), 182771004 ist zulässig; coding:snomed.version
+    (German Edition) und display sind Pflicht. Passt zur ambulanten Radiologie (PVS/RIS).
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Consent
+  resource: Consent
+  path: Consent.scope (http://terminology.hl7.org/CodeSystem/consentscope#treatment); Consent.category
+    (LOINC 59284-0); Consent.status; Consent.dateTime; Consent.performer; Consent.policy bzw. Consent.policyRule;
+    Consent.source[x] (sourceReference → unterschriebener Bogen); Consent.provision.type (permit | deny)
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil; kein deutsches Profil für die Einwilligung in eine Untersuchung.
+    scope 1..1 EXTENSIBLE an consent-scope (treatment). category 1..* EXTENSIBLE an consent-category:
+    LOINC 59284-0 Consent Document ist im ValueSet und muss gesetzt werden; 64293-4 Procedure Consent
+    Document höchstens als zusätzliches Coding. Invariante ppc-1 verlangt policy oder policyRule. Ergebnis:
+    erteilt = provision.type permit bzw. status active, abgelehnt = deny bzw. status rejected. Die Aufklärung
+    selbst (Datum, aufklärende Ärzt:in) liegt außerhalb von Consent und wird über die Procedure abgebildet.'
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1303
+  resource: openEHR-EHR-ACTION.informed_consent.v0
+  path: ISM-Careflow-Schritte 'Informed consent requested' / 'provided' / 'refused' / 'withdrawn' / 'not
+    obtained'; 'Consent document used'; 'Consent requester'; 'Consent provider'
+  notes: 'openEHR CKM 1013.1.1303, Revision 0.0.1-alpha, in_development (Draft), nicht-FHIR; kein publiziertes
+    Ziel. Zweck laut ADL: Aufzeichnung der Einwilligungserklärung vor der Durchführung einer Prozedur;
+    die Careflow-Schritte decken erteilt, abgelehnt und widerrufen direkt ab. Ergänzend INSTRUCTION.informed_consent_request.v0
+    (1013.1.1302, Draft).'
+care_process:
+  trigger: vor jeder LDCT (Regel- und Kontroll-LDCT)
+  responsible_role: Erstbefunder (Aufklärung); Versicherte (Einwilligung)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 41 Abs. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ein Erstbefunder hat die versicherte Person vor Anwendung der Niedrigdosis-Computertomographie
+      aufzuklären.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 41, S. 18
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: insbesondere nach § 630e BGB sowie nach § 124 Strahlenschutzverordnung aufzuklären
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: BGB — Bürgerliches Gesetzbuch §§ 630d (Einwilligung) und 630f (Dokumentation)
+    url: https://www.gesetze-im-internet.de/bgb/__630f.html
+    section: § 630f Abs. 2 S. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Einwilligungen und Aufklärungen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#X02
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 23 der Quellenrecherche zur Screening-Episode (Gruppe G7 Radiologie vor
+      LDCT; M1 Inkrement 1 (Screening)); zusammengeführt aus: R:radiologistConsentAndInformation, S/P:=;
+      BPMN-Schritt: G7 Radiologie | Erstbefunder: Aufklärung Niedrigdosis-CT (Activity_1uptzny) → Gateway_0jgpvd3'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 23); Quellen: Q02, Q03, X02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 23)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 7 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Aufklärung durch den Erstbefunder (KFE-RL § 41 Abs. 2);
+  Einwilligung, Aufklärung und Dokumentation nach BGB § 630d Abs. 1, § 630e Abs. 1–2, § 630f Abs. 2; Strahlenrisiko
+  StrlSchV § 124 Abs. 1. Das Ergebnis „erteilt/abgelehnt“ folgt aus dem BGB, nicht aus der KFE-RL.'
+- 'Umsetzung: eigenständig (Einwilligungsergebnis nur hier). Das Einwilligungsergebnis (erteilt | abgelehnt)
+  nur hier führen; participationDecision auf die Entscheidung nach der Information begrenzen. Alternativ
+  als Prozedur mit dateTime der Aufklärung, aufklärender Ärzt:in und Verweis auf den unterschriebenen
+  Bogen (Dokumenttyp KDL AM010302 bzw. LOINC 64293-4). Quellen ergänzen: TrG zu § 41 (S. 18) und zu §
+  42 (S. 19), BGB §§ 630d, 630e, 630f, StrlSchV § 124 Abs. 1. Aufklärungsinhalt „Beteiligte/Datenaustausch“
+  mit resultTransmissionConsentReferrer verknüpfen. Im BPMN fehlt ein Endereignis für die Ablehnung nach
+  der Aufklärung.'
+- Kein deutsches Profil für die Einwilligung in eine diagnostische Prozedur (BGB § 630d) in MII KDS, ISiK,
+  KBV oder ePA; MII KDS Consent ist auf den Broad Consent für Forschung festgelegt (scope research, Policy-Codes
+  REQUIRED), KBV-MIO-Consent nur auf Patientenverfügung, Vollmacht und Organspende, IHE PCF nur auf patient-privacy.
+- Zu entscheiden ist, ob das Ergebnis als Procedure (Aufklärung mit outcome), als Consent (scope treatment)
+  oder als beides geführt wird.
+- Für die abgelehnte Einwilligung in eine diagnostische Prozedur gibt es nur den generischen Wert 1296859006
+  Procedure declined; ein Widerruf ist nicht spezifisch kodierbar und bleibt bei Bedarf lokal.
+- Die Aufklärungsinhalte (Strahlenrisiko nach StrlSchV § 124, Beteiligte, Datenaustausch) haben weder
+  Codes noch ein strukturiertes Profilelement; der Inhalt 'Beteiligte/Datenaustausch' ist mit resultTransmissionConsentReferrer
+  zu verknüpfen.
+- IPS Procedure-uv-ips schließt 182771004 aus (liegt unter 14734007 Administrative procedure) und ist
+  daher kein Ziel.
+- Im BPMN fehlt ein Endereignis für die Ablehnung nach der Aufklärung.
+- Kardinalität laut Quelle 1..1 je LDCT-Runde.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.justifyingIndication.v0.1

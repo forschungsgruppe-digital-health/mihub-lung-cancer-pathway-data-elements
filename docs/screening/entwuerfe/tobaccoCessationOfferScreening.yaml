@@ -1,0 +1,241 @@
+id: mihub.lung.screening.tobaccoCessationOfferScreening.v0.1
+uuid: 5ca37924-0e9b-57ba-80fb-da28f1709ef7
+name: tobaccoCessationOfferScreening
+label_de: Information über und Angebot einer Tabakentwöhnung (Opt-out)
+definition_de: Information über und Angebot einer Tabakentwöhnung (Kurzberatung, Kurs, Telefon/Digital,
+  Medikation) mit Reaktion (angenommen, Opt-out, später).
+phase: screening
+category: prozedur
+datatype: CodeableConcept
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Einziger Elementcode: SNOMED CT 771155005 Brief intervention for smoking cessation (Angebot
+    als Kurzintervention, ABC-Ansatz). Werte auf zwei Achsen: (1) Inhalt bzw. Angebotsform als SNOMED-Prozeduren:
+    225323000 Smoking cessation education für den Informationsteil nach KFE-RL § 40 S. 2 (702388001 Tobacco
+    use cessation education als geerbte Alternative), 1290027009 Smoking cessation consultation (Beratung),
+    395700008 Referral to smoking cessation advisor (Vermittlung an Kurs/Programm), 713700008 Smoking
+    cessation drug therapy (pharmakologische Unterstützung, regime/therapy), 699033005 Provision of smoking
+    cessation leaflet (Informationsmaterial). (2) Reaktion auf das Angebot als drei lokale Codes angenommen
+    | opt-out | spaeter; für opt-out optional zusätzlich 1296859006 Procedure declined als generische
+    Annäherung. Als Spezialisierung von mihub.lung.followup.tobaccoCessationCounselling.v0.1 werden dessen
+    Codes (u. a. 710081004 Smoking cessation therapy, 151159008 Nicotine replacement therapy, 719591006
+    Varenicline therapy) geerbt. 771155005 und 225323000 sind Mitglieder des MII-ValueSets procedures-sct.
+    MII TermServ, SNOMED CT International 20260701, Stand 2026-10-15. Rollen der Codes: snomed-ct|771155005
+    = element; snomed-ct|225323000 = wert; snomed-ct|702388001 = wert; snomed-ct|1290027009 = wert; snomed-ct|395700008
+    = wert; snomed-ct|713700008 = wert; snomed-ct|699033005 = wert; local-no-standard-binding|angenommen
+    = wert; local-no-standard-binding|opt-out = wert; local-no-standard-binding|spaeter = wert; snomed-ct|1296859006
+    = wert.'
+  codings:
+  - system: snomed-ct
+    code: '771155005'
+    display: Brief intervention for smoking cessation
+  - system: snomed-ct
+    code: '225323000'
+    display: Smoking cessation education
+  - system: snomed-ct
+    code: '702388001'
+    display: Tobacco use cessation education
+  - system: snomed-ct
+    code: '1290027009'
+    display: Smoking cessation consultation
+  - system: snomed-ct
+    code: '395700008'
+    display: Referral to smoking cessation advisor
+  - system: snomed-ct
+    code: '713700008'
+    display: Smoking cessation drug therapy
+  - system: snomed-ct
+    code: '699033005'
+    display: Provision of smoking cessation leaflet
+  - system: local-no-standard-binding
+    code: angenommen
+    display: Angebot angenommen
+  - system: local-no-standard-binding
+    code: opt-out
+    display: Angebot abgelehnt (Opt-out)
+  - system: local-no-standard-binding
+    code: spaeter
+    display: Entscheidung später
+  - system: snomed-ct
+    code: '1296859006'
+    display: Procedure declined
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code.coding:sct; Procedure.status (+ Procedure.statusReason); Procedure.performed[x];
+    Procedure.category.coding:sct
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (Modul Prozedur), stabil. code.coding:sct
+    ist REQUIRED an procedures-sct gebunden (descendent-of 71388002); 771155005 und 225323000 sind laut
+    $validate-code auf dem MII TermServ Mitglieder. Invariante sct-ops-1 (SNOMED oder OPS) ist damit erfüllt.
+    category.coding:sct ist PREFERRED gebunden, passend ist nur 394841004 Other category (keine Kategorie
+    ''Beratung''). Reaktion: angenommen = status completed bzw. in-progress, Opt-out = status not-done
+    + statusReason (lokaler Code), später = lokal. performed[x] ist 1..1, daher braucht auch ein abgelehntes
+    Angebot den Angebotszeitpunkt oder eine data-absent-reason-Extension. Alternativ Angebot als ServiceRequest
+    und Durchführung als Procedure trennen.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.code.coding:SNOMED-CT; Procedure.status; Procedure.performed[x]; Procedure.category.coding:SNOMED-CT
+  notes: 'de.gematik.isik#6.0.0 (gleiche Canonical in isik-basismodul#4.0.3), stabil, nur Differential.
+    code 1..1; coding:SNOMED-CT REQUIRED an ProzedurenCodesSCT (descendent-of 71388002), 771155005 und
+    225323000 passen. category PREFERRED an ProzedurenKategorieSCT (394841004 Other category). subject.reference
+    1..; encounter optional, wenn vorhanden reference 1... Nachrangiges Ziel nur für KIS-Daten: ISiK ist
+    auf das Krankenhaus ausgerichtet, die Beratung findet ambulant in der berichterstellenden Praxis statt.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.code.coding:snomed; Procedure.status; Procedure.statusReason; Procedure.performed[x];
+    Procedure.performer.actor
+  notes: kbv.basis#1.9.0 (KBV Basisprofile, kein MIO, daher 'other'), stabil, nur Differential. code.coding:snomed
+    REQUIRED an KBV_VS_Base_Procedure_SNOMED_CT (is-a 71388002, SNOMED CT German Edition 20260515); coding:snomed.version
+    (German Edition) und coding:snomed.display sind Pflicht. category.coding:snomed EXTENSIBLE an dasselbe
+    Prozeduren-ValueSet. statusReason ist im Profil enthalten (nicht eingeschränkt) und nimmt den Opt-out
+    auf. Passt zum ambulanten PVS-Kontext der berichterstellenden Praxis.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code; Procedure.status; Procedure.statusReason; Procedure.outcome; Procedure.performed[x]
+  notes: hl7.fhir.r4.core#4.0.1, stabil. Basisziel, falls kein Profil vorgeschrieben ist. Das Bestandselement
+    tobaccoCessationCounselling (elements/follow-up) führt bisher keine Standard-Mappings; die Zuordnungen
+    zu MII Prozedur, KBV Basis und ISiK sollten dort ebenfalls übernommen werden.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Procedure-uv-ips
+  resource: Procedure
+  path: Procedure.code; Procedure.performed[x]
+  notes: hl7.fhir.uv.ips#2.0.1, stabil; internationales Referenzziel mit niedriger Priorität. code 1..1
+    PREFERRED an procedures-uv-ips (descendent-of 71388002 abzüglich u. a. 14734007 Administrative procedure);
+    771155005 und 225323000 liegen laut $subsumes (tx.fhir.org) in keiner ausgeschlossenen Hierarchie.
+    performed[x] 1..1. Die Reaktion auf das Angebot ist nicht abbildbar.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1395
+  resource: openEHR-EHR-ACTION.health_education.v1
+  path: ACTION (ISM-Careflow-Schritte) / description
+  notes: 'openEHR CKM 1013.1.1395, Revision 1.1.3, published, nicht-FHIR. Zweck laut ADL: ''Zur Darstellung
+    von Details zur Kommunikation, die zur Verbesserung der Gesundheitskompetenz und der Lebenskompetenzen
+    geführt wird.'' Deckt den Informationsteil (KFE-RL § 40 S. 2) ab; Annahme bzw. Opt-out nur über die
+    Careflow-Schritte bzw. ein INSTRUCTION-Paar. Einwilligungen gehören laut misuse zu ACTION.informed_consent.'
+care_process:
+  trigger: bei aktiv rauchenden Personen (smokingStatusScreening) im Informationsgespräch und bei Folgekontakten
+  responsible_role: berichterstellende Ärzt:in (Praxis)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 40 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Information umfasst auch die verschiedenen Möglichkeiten zur Tabakentwöhnung.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 4.5 (A, LoE 1, neu 2026)
+    recommendation_grade: A
+    evidence_level: n/a
+    quote: Rauchenden, die sich einem Lungenkarzinom-Screening unterziehen, soll eine Tabakentwöhnung
+      mit Beratung (z.B. ABC-Ansatz) und pharmakologischer Unterstützung angeboten werden (opt out Ansatz).
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: andere
+    version: ACR LCSR & IPN Data Dictionary (28.05.2026) — ACR Lung-RADS v2022 (mit Summary of Changes)
+      und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Item 127
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Did physician provide smoking cessation guidance to patient?
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 18 der Quellenrecherche zur Screening-Episode (Gruppe G5 Information/Entscheidung/Entwöhnung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:tobaccoCessationOptionsInformed, L:smokingCessationOptOutOffer,
+      S:smokingCessationAdviceScreening, E/P:smokingCessationOfferScreening, P:smokingCessationOfferResponse,
+      P:readinessToQuitSmoking, P:previousQuitAttempts; BPMN-Schritt: G5 Entwöhnung | Praxis: Auf Rauchentwöhnungsprogramm
+      hinweisen (Activity_0f2lkuk)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 18); Quellen: Q02, Q12, Q20'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 18)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 11 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht (Information) / Leitlinie (Angebot). Information über die
+  Möglichkeiten der Tabakentwöhnung ist Pflicht (KFE-RL § 40 S. 2; Bestätigung im Bericht nach S. 3).
+  Angebot im Opt-out-Ansatz mit Reaktion: S3 Empf. 4.5 und 5.7 (Grad A), keine Rechtspflicht.'
+- 'Umsetzung: Spezialisierung von tobaccoCessationCounselling (followup). specializes mihub.lung.followup.tobaccoCessationCounselling.v0.1
+  (Codes übernehmen, 771155005 ergänzen). Definition auf Angebot und Reaktion beschränken (angenommen
+  | abgelehnt/Opt-out | später; lokales ValueSet); mandatory_by_law für das Angebot auf false. Den Pflichtteil
+  (Information nach § 40 S. 2) über die Bestätigung der erfolgten Information im eligibilityReport (§
+  40 S. 3) nachweisen, da informationTopicsCovered verworfen wurde; für den Informationsteil SNOMED 225323000.
+  Trigger: aktiv rauchend laut smokingStatusScreening. S3-Empfehlungen mit Version 5.1 (Juli 2026) zitieren.'
+- Für Telefon- und Digitalangebote der Tabakentwöhnung (z. B. Rauchfrei-Telefon, DiGA) gibt es kein spezifisches
+  SNOMED-CT-Konzept.
+- Für die Reaktion auf das Angebot (angenommen, Opt-out, später) und für 'Angebot einer Tabakentwöhnung
+  erfolgt' als Situation fehlen SNOMED-CT-Konzepte; die Werte bleiben lokal, 1296859006 Procedure declined
+  ist nur eine generische Annäherung für Opt-out.
+- Kein Profil bildet Angebot plus Reaktion ab; die Reaktion läuft über Procedure.status/statusReason oder
+  ein lokales ValueSet. Die Kategorie-ValueSets von MII und ISiK enthalten keine Kategorie 'Beratung'.
+- Der Pflichtteil 'Information über die Möglichkeiten der Tabakentwöhnung erfolgt' (KFE-RL § 40 S. 2/3)
+  hat kein eigenes Profilelement und ist über die Bestätigung im eligibilityReport nachzuweisen.
+- Das Bestandselement tobaccoCessationCounselling (follow-up) braucht noch Standard-Mappings, die die
+  Spezialisierung erben kann.
+- Das ACR-LCSR-Item 127 ('Did physician provide smoking cessation guidance to patient?') ist nicht über
+  eine verifizierte offizielle URL belegbar und wird deshalb nicht zugeordnet.
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.tobaccoCessationCounselling.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.smokingStatusScreening.v0.1
