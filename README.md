@@ -108,7 +108,7 @@ Die Datenelemente werden als **YAML-Single-Source-of-Truth** geführt; abgeleite
 
 Eine aktuelle, autogenerierte Übersicht über alle befüllten Phasen und Datenelemente liefert [`docs/phases-overview.md`](./docs/phases-overview.md). Die maschinenlesbare Vollsicht steht unter [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv) bzw. als Markdown-Spiegel [`catalog/data-dictionary.md`](./catalog/data-dictionary.md) zur Verfügung.
 
-Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL — gegen den **MII TermServ** verifiziert, siehe `scripts/verify-terminology.py` und [`docs/reviews/`](./docs/reviews/)), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen (siehe Abschnitt *Vorarbeiten und Grundlagen*).
+Jedes Datenelement ist eine eigene, versionierte `.yaml`-Datei (Versionsregeln: [`docs/howto-add-element.md`](./docs/howto-add-element.md) §C) mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL — gegen den **MII TermServ** verifiziert, siehe `scripts/verify-terminology.py` und [`docs/reviews/`](./docs/reviews/)), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen — je Fundstelle mit wörtlichem Kurzzitat, damit sie ohne Suchen nachgeprüft werden kann — sowie der **Herkunft** des Elements (`provenance`: Entstehung, Versionshistorie, Prüfläufe; siehe Abschnitt *Vorarbeiten und Grundlagen*).
 
 ### Schema und Vorlagen
 
@@ -135,7 +135,8 @@ Jedes Datenelement ist eine eigene `.yaml`-Datei mit standardisiertem Header (IS
 
 | Datei                                                                                              | Funktion                                                        |
 | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [`scripts/validate.py`](./scripts/validate.py)                                                     | YAML gegen JSON-Schema validieren; katalogweite Konsistenz (IDs, Ordner, Eindeutigkeit, Verweisziele) |
+| [`scripts/validate.py`](./scripts/validate.py)                                                     | YAML gegen JSON-Schema validieren; katalogweite Konsistenz (IDs, Version ↔ ID-Suffix, Ordner, Eindeutigkeit, Verweisziele) |
+| [`scripts/verify-quotes.py`](./scripts/verify-quotes.py)                                           | Zitate der Quellenangaben gegen eigene Textfassungen der Quell-PDFs prüfen (Herkunftsnachweis) |
 | [`scripts/build-catalog.py`](./scripts/build-catalog.py)                                           | YAML → CSV + Markdown + Phasen-Übersicht aggregieren            |
 | [`scripts/build-fhir-logical-models.py`](./scripts/build-fhir-logical-models.py)                   | YAML → FHIR Logical Model (FSH, on-demand, projekt-agnostisch)  |
 | [`scripts/build-elicitation-workbook.py`](./scripts/build-elicitation-workbook.py)                 | Excel-Erhebungs-Vorlage erzeugen (schema-getrieben; benötigt `openpyxl`) |

@@ -241,7 +241,7 @@ Die offenen Punkte stehen jeweils in `issues[]` des Elements (80 aus der inhaltl
 
 Zwei strukturelle Fragen für Maintainer:innen und Review:
 
-- **Element-Versionierung:** Nach `docs/howto-add-element.md` §C wären die beiden Datentyp-Änderungen (`adverseEventCtcaeGrade`, `qolEortcQlqC30`) Major-Änderungen mit neuer ID und die Kardinalitätsänderungen mindestens Minor. Im AuthorDraft-Stadium wurde die Regel bisher nicht angewendet (alle 112 Elemente `0.1.0`, auch nach den Code-Korrekturen vom 13.10.). Vor dem Release 0.2.0-rc.1 zu entscheiden: Versionen jetzt anheben oder die Regel ab dem ersten klinischen Review anwenden.
+- **Element-Versionierung:** inzwischen erledigt (2026-10-15, `docs/audit-log.md` §14.7) — Regeln neu gefasst; 16 veröffentlichte Elemente brechend geändert (`0.2.0`, ID `v0.2`), 35 nicht brechend (`0.1.1`), 61 neue `0.1.0`.
 - **`dependsOn`-Zyklen:** Vier Zyklen bestehen weiter (vorher sieben), alle um `recurrenceOrSecondPrimary` und die Bildgebung (Rezidivverdacht löst Bildgebung aus, Bildgebung liefert den Befund). Die Bedeutung von `dependsOn` (Auslöser vs. Datengrundlage) ist festzulegen.
 
 ## 6 Grenzen

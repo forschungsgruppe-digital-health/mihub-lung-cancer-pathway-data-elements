@@ -569,8 +569,37 @@ Zentrale Prüfung aller 115 Mapping-Einträge (26 distinkte Ziele) gegen die pub
 2. 88 verworfene Vorschläge sind nicht angewendet; sie können im Review erneut aufgegriffen werden (Liste in den Arbeitsdaten der Prüfung).
 3. Modelländerung `responsiblePrimaryCarePhysician` 0..1 klinisch rückbestätigen (Erhebung Allgemeinmedizin hatte Pflichtangabe gesetzt).
 4. Nur-Ballot-Profile (MII Lungenfunktion, Soziodemographie, Kardiologie 2027-Ballot) sind als solche gekennzeichnet; bei Release der Module erneut prüfen.
-5. **Element-Versionierung:** Nach `docs/howto-add-element.md` §C wären die Datentyp-Änderungen (`adverseEventCtcaeGrade`, `qolEortcQlqC30`) Major- und die Kardinalitätsänderungen mindestens Minor-Änderungen; im AuthorDraft-Stadium wurde die Regel bisher nicht angewendet (alle Elemente `0.1.0`). Vor dem Release 0.2.0-rc.1 entscheiden.
+5. **Element-Versionierung:** Nach `docs/howto-add-element.md` §C wären die Datentyp-Änderungen (`adverseEventCtcaeGrade`, `qolEortcQlqC30`) Major- und die Kardinalitätsänderungen mindestens Minor-Änderungen; im AuthorDraft-Stadium wurde die Regel bisher nicht angewendet (alle Elemente `0.1.0`). → **erledigt 2026-10-15:** Regel neu gefasst und angewendet, siehe §14.7.
 6. **`dependsOn`-Zyklen:** vier Zyklen um `recurrenceOrSecondPrimary` und die Bildgebung; Semantik von `dependsOn` (Auslöser vs. Datengrundlage) festlegen.
+
+### 14.7 Element-Versionierung
+
+Die Regeln in `docs/howto-add-element.md` §C waren in sich widersprüchlich (ID-Suffix `v<major>.<minor>`, aber Minor-Sprung ohne neue ID; `1.0.0` schon für Entwürfe) und wurden im Entwurfsstadium nie angewendet (alle 112 Elemente `0.1.0`, auch nach den Änderungen seit `v0.1.0-rc.2`). Neu gefasst: Bezugspunkt ist die zuletzt veröffentlichte Fassung; im Entwurfsstadium (`0.x`) nicht brechend → Patch (ID gleich), brechend → Minor mit neuem ID-Suffix; ab der Erstfreigabe `1.0.0` gelten Major-Sprünge mit neuem Element. `validate.py` prüft, dass ID-Suffix und `version_number` übereinstimmen und der letzte `provenance.history`-Eintrag der aktuellen Version entspricht.
+
+Anwendung auf die 51 in `v0.1.0-rc.1/-rc.2` veröffentlichten Elemente (Vergleich gegen den Tag `v0.1.0-rc.2`):
+
+| Ergebnis | Elemente |
+| --- | --- |
+| **brechend nach fester Regel** (Datentyp; Codes aus `required`-Bindung entfernt/ersetzt) → `0.2.0`, ID `v0.2` | `adverseEventCtcaeGrade`, `anxietyHadsScore`, `distressThermometerScore`, `dyspneaIntensityNrs`, `painType`, `qolEortcQlqC30`, `recistResponse`, `smokingStatus` |
+| **brechend nach Urteil** (Definition geändert; zwei unabhängige Prüfer, Linsen klinische Bedeutung und Datenkompatibilität; einig oder bei geteiltem Urteil konkrete Umdeutung bestehender Werte) → `0.2.0`, ID `v0.2` | `brainMriFinding`, `brainMriUnderTherapy`, `caregiverBurdenScore`, `ctThoraxFinding`, `molecularResistanceFinding`, `psychoOncologyReferral`, `spiritualNeedsAssessment`, `structuredFollowUpPlan` |
+| nicht brechend → `0.1.1`, ID unverändert | 35 Elemente (u. a. 16, deren Definition die Prüfer übereinstimmend als Präzisierung einstuften) |
+| neu seit dem letzten Release → `0.1.0` (Erstveröffentlichung mit 0.2.0-rc.1) | 61 Elemente |
+
+Die früheren IDs der 16 Elemente stehen in `provenance.history[0].id`; Verweise im Katalog zeigen auf die neuen IDs.
+
+### 14.8 Herkunft und Nachprüfbarkeit je Element
+
+Bisher ließ sich eine Fundstelle nur durch eigenes Suchen in der Quelle nachprüfen; Entstehung, Versionen und Prüfläufe eines Elements standen nur im Audit-Log. Neu (optionale Schemafelder, Minor-Schema-Änderung):
+
+| Feld | Inhalt | Stand |
+| --- | --- | --- |
+| `evidence.guideline_references[].quote` | wörtliches Kurzzitat, das die Fundstelle belegt | **328/328** Referenzen; maschinell gegen die Textfassungen der Quellen (S3-LL Lungenkarzinom 5.1, S3-LL Palliativmedizin 3.0, S3-LL Tabak 3.1, Onkopedia NSCLC/SCLC, OCP, AG LONKO, Klein 2026, S3-LL Psychoonkologie 2.1, Onkopedia Impfungen, EORTC-Manual) bzw. den Mappen-Auszug geprüft — 328 gefunden |
+| `…[].locator`, `…[].accessed` | präziser Fundort (Kapitel/Empfehlung/Tabelle/Seite) bzw. Anker im Mappen-Auszug; Prüfdatum | alle Referenzen |
+| `provenance.origin` | Herkunftsart (Erstbefüllung aus Leitlinien, Leitlinien-Abgleich, Expert:innen-Erhebung mit Mappe und Zeile, Quellenrecherche), Datum, Verweis | alle 112 Elemente |
+| `provenance.history` | Versionen mit Datum, Änderung und Verweis (frühere ID bei brechenden Änderungen) | alle 112 Elemente |
+| `provenance.verification` | Prüfläufe (Terminologie 2026-10-13 und -15, Zweitprüfung, Mapping-Audit, Zitatprüfung) mit Ergebnis je Element und Bericht | alle 112 Elemente |
+
+Neu: [`docs/reviews/2026-10-13-erhebungen.md`](reviews/2026-10-13-erhebungen.md) — Auszug der beiden Klinik-Erhebungsmappen (116 Zeilen, ohne Kontaktspalte) mit Ankern je Zeile als Herkunftsnachweis der 56 Referenzen `Expert:innen-Erhebung MiHUB`. Neu: `scripts/verify-quotes.py` — prüft die Zitate gegen eigene Textfassungen der Quell-PDFs (die Quellen liegen urheberrechtlich nicht im Repo); Toleranz nur für Silbentrennung und eingeschobenen Spaltentext des PDF-Layouts.
 
 ## 15 Limitationen
 
