@@ -10,6 +10,8 @@
 | Repositorien (nur gelesen) | data-elements: Branch feat/guideline-resync-terminology-primarycare, Commit c4fb886 (112 Elemente; Stand vor bzw. während der Zweitprüfung vom 14.10.2026) · mihub-lung-cancer-pathway: Branch dev, HEAD 4e8f494, Screening-Modell zuletzt geändert in ac7e9c2 |
 | Begleitdateien | [`datenelement-erhebung-screening.xlsx`](datenelement-erhebung-screening.xlsx) (vorbefüllte Erhebungsmappe, Zeilen DE-S01 … DE-S53 = Einzelblätter Nr. 1–53) · [`quellen.json`](quellen.json) (Quellen mit Verifikation und zitierenden Kandidaten) |
 
+> **Nachtrag 2026-10-15:** Für alle 53 Kandidaten liegen jetzt YAML-Entwürfe mit MII-TermServ-geprüften Codes und Profilzielen über alle Standards vor ([`entwuerfe/`](entwuerfe/), Prüfprotokoll [`pruefprotokoll.json`](pruefprotokoll.json)). Die Code-Angaben in den Einzelblättern unten sind der Stand der Recherche (tx.fhir.org); maßgeblich sind die Entwürfe.
+
 ## Kurzfassung
 
 - **Recherche:** sechs Perspektiven (Recht 45 Kandidaten/15 Quellen · Leitlinien 30 Kandidaten/12 Quellen · Befundung 70 Kandidaten/28 Quellen · Standards 45 Kandidaten/31 Quellen · Evidenz 45 Kandidaten/33 Quellen · Prozess 74 Kandidaten/26 Quellen), zusammen 309 Kandidaten.
@@ -306,10 +308,10 @@ Legende Verbindlichkeit: **Pflicht** = Norm verlangt Angabe und Dokumentation ·
 | Pflicht nach Norm | Konsolidierung: nein → nach Gegenprüfung: **mittelbar**. Der Status allein entscheidet nicht über den Anspruch. Operative Norm: KFE-RL § 38 Abs. 1 i. V. m. LuKrFrühErkV § 2 Abs. 1 Nr. 3 Buchst. a und § 1 Abs. 2; KFE-RL § 37 Abs. 1 ist Zielbestimmung. |
 | Quellen mit Zitat | [Q02] KFE-RL, § 37 Abs. 1: „Personen mit erhöhtem Lungenkrebsrisiko aufgrund von derzeitigem oder ehemaligem starken Zigarettenkonsum“ (Konsolidierung)<br>[Q02] KFE-RL, § 37 Abs. 1 (Zielbestimmung): „Ziel der Früherkennungsuntersuchung auf Lungenkrebs ist die frühzeitige Entdeckung von Lungenkarzinomen bei Personen mit erhöhtem Lungenkrebsrisiko aufgrund von derzeitigem oder ehemaligem starken Zigarettenkonsum“<br>[Q03] G-BA Tragende Gründe 18.06.2025, Abschn. 2.1, S. 3: „wobei der Zigarettenkonsum noch andauert oder vor weniger als 10 Jahren beendet wurde“<br>[Q04] G-BA Versicherteninformation, S. 4: „Sie rauchen aktuell oder haben früher stark geraucht“ |
 | Codes (Beleg, Bewertung) | LOINC 72166-2 *Tobacco smoking status* – Beleg: tx.fhir.org $lookup, LOINC 2.82: ACTIVE, Antwortliste LL2201-3 – Bewertung: Observation.code (in ISiKRaucherStatus fixiert)<br>LOINC LA15920-4 *Former smoker* – Beleg: tx.fhir.org, LOINC 2.82; Bestandteil von LL2201-3 – Bewertung: Wert aus LL2201-3<br>SNOMED CT 8517006 *Ex-smoker* – Beleg: tx.fhir.org, SNOMED CT INT 20250201: aktiv – Bewertung: nur Mapping |
-| Bezug zum Bestand | overlaps_existing: smokingStatus (followup) – Phase screening ergänzen. Vorgeschlagene Relationen: specializes smokingStatus (mihub.lung.followup.smokingStatus.v0.1) |
+| Bezug zum Bestand | overlaps_existing: smokingStatus (followup) – Phase screening ergänzen. Vorgeschlagene Relationen: specializes smokingStatus (mihub.lung.followup.smokingStatus.v0.2) |
 | Gegenprüfung | Quelle: nicht widerlegt (Konfidenz 0,65) · Dublette/Scope/Modell: nicht widerlegt (Konfidenz 0,70); vollständige Urteile in candidates.json |
 | Hinweis der Konsolidierung | Nur mittelbar Pflicht. Profilbasis ISiKRaucherStatus (LL2201-3), IPS-kompatibel; NCIt als Mapping. |
-| Umsetzung (Synthese) | Als Phasen-Pendant mit specializes mihub.lung.followup.smokingStatus.v0.1 anlegen (Präzedenz ecogPerformanceStatusSurveillance). Werte an die LOINC-Antwortliste LL2201-3 binden (ISiKRaucherStatus: required), SNOMED CT nur als Mapping. E-Zigarette und Passivrauch nicht im Status führen, sondern in otherTobaccoNicotineProductUse bzw. einem Expositionselement. Klarstellen, dass für Anspruch und Unterbrechungsregel der Zigarettenstatus zählt (nur Zigaretten, TrG S. 17). Das nicht existierende MII-Mapping (…/modul-person/StructureDefinition/Raucher) nicht übernehmen und in smokingStatus korrigieren. |
+| Umsetzung (Synthese) | Als Phasen-Pendant mit specializes mihub.lung.followup.smokingStatus.v0.2 anlegen (Präzedenz ecogPerformanceStatusSurveillance). Werte an die LOINC-Antwortliste LL2201-3 binden (ISiKRaucherStatus: required), SNOMED CT nur als Mapping. E-Zigarette und Passivrauch nicht im Status führen, sondern in otherTobaccoNicotineProductUse bzw. einem Expositionselement. Klarstellen, dass für Anspruch und Unterbrechungsregel der Zigarettenstatus zählt (nur Zigaretten, TrG S. 17). Das nicht existierende MII-Mapping (…/modul-person/StructureDefinition/Raucher) nicht übernehmen und in smokingStatus korrigieren. |
 | Status | **behalten** – Spezialisierung von smokingStatus (followup) |
 
 ##### 3. `cigaretteConsumptionPeriod` – Konsumabschnitt Zigarettenrauchen
@@ -1318,7 +1320,7 @@ Das Schema (`schemas/data-element.schema.json`, Commit c4fb886) kennt die Phase 
 
 **U4 – smokingStatus zu Raucheranamnese-Bausteinen (Q3) erweitern.**
 
-- `smokingStatusScreening` als Phasen-Pendant mit `specializes mihub.lung.followup.smokingStatus.v0.1` anlegen (Präzedenz `ecogPerformanceStatusSurveillance → ecogPerformanceStatus`). Eine Phasenliste statt des Einzelwerts wäre eine Major-Änderung des Schemas (Entscheidung E21) und wird nicht empfohlen.
+- `smokingStatusScreening` als Phasen-Pendant mit `specializes mihub.lung.followup.smokingStatus.v0.2` anlegen (Präzedenz `ecogPerformanceStatusSurveillance → ecogPerformanceStatus`). Eine Phasenliste statt des Einzelwerts wäre eine Major-Änderung des Schemas (Entscheidung E21) und wird nicht empfohlen.
 - Bausteine: `cigaretteConsumptionPeriod` (Kopf, hasPart `cigarettesPerDayInPeriod`), `smokingInterruptionPeriod`, `otherTobaccoNicotineProductUse`; abgeleitet `creditableSmokingDurationYears` und `packYearsCalculated` (mit Methode und Urheber; nimmt die Selbstschätzung auf). Alle mit Schlüsselwort „Q3 Raucheranamnese“ in `iso13972_metadata.keywords`, damit Behandlung und Nachsorge sie später referenzieren können.
 - Korrekturen an `smokingStatus` (Bestand): Mapping-Ziel `…/modul-person/StructureDefinition/Raucher` existiert im Paket MII Person 2025.0.1 nicht → auf das Q3-Profil mit Basis ISiKRaucherStatus umstellen; Wertebindung auf LL2201-3 harmonisieren (SNOMED CT als Mapping); E-Zigarette (722499006) und Passivrauch (43381005) aus dem Status in `otherTobaccoNicotineProductUse` bzw. ein Expositionselement verlagern; den Issue „verwandte Produkte“ dort auflösen. Die S3-Referenz steht seit c4fb886 bereits auf 5.1 (die Arbeitsnotiz bezog sich auf Commit 8acb4f6). Mit der Zweitprüfung der Nachsorge-Elemente (PR #15) sind die Version der S3-LL Rauchen und Tabakabhängigkeit (3.1) korrigiert, das Mapping auf ISiKRaucherStatus (`fhir-isik`) sowie das MII-Kardio-Profil `mii-pr-kardio-observation-rauchen` (nur Ballot) umgestellt und Issues zur Achsenmischung (Status, E-Zigarette, Passivrauch) und zur Wertebindung an LL2201-3 ergänzt; offen bleiben die Umstellung der Wertecodes und die Verlagerung der Expositionen.
 - Profil: Packungsjahre kennen weder ISiK noch IPS; ein eigenes Q3-Profil (Muster US Core Smoking Status) ist nötig.
@@ -1327,7 +1329,7 @@ Das Schema (`schemas/data-element.schema.json`, Commit c4fb886) kennt die Phase 
 
 | Kandidat | specializes | Ziel-ID |
 |---|---|---|
-| `smokingStatusScreening` | smokingStatus | mihub.lung.followup.smokingStatus.v0.1 |
+| `smokingStatusScreening` | smokingStatus | mihub.lung.followup.smokingStatus.v0.2 |
 | `lastQualifyingChestCtDate` | ctThoraxScan | mihub.lung.followup.ctThoraxScan.v0.1 |
 | `tobaccoCessationOfferScreening` | tobaccoCessationCounselling | mihub.lung.followup.tobaccoCessationCounselling.v0.1 |
 | `ldctReferral` | referralOrder | mihub.lung.primarycare.referralOrder.v0.1 |

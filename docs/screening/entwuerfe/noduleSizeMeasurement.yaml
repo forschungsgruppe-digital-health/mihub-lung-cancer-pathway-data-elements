@@ -1,0 +1,229 @@
+id: mihub.lung.screening.noduleSizeMeasurement.v0.1
+uuid: 707a3ddb-5ffb-5352-9202-3065366b5a52
+name: noduleSizeMeasurement
+label_de: Rundherdgröße (Volumen, mittlerer Durchmesser, solide Komponente)
+definition_de: Rundherdvolumen (mm³, ganzzahlig) bzw. mittlerer Durchmesser (mm, eine Dezimale), bei teilsoliden
+  Herden auch solide Komponente.
+phase: screening
+category: messwert
+datatype: Quantity
+cardinality: 0..*
+unit: mm3
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code (Observation.code) ist SNOMED CT 246120007 |Nodule size| (observable entity). Das
+    Konzept ist nicht lungenspezifisch, daher ist Observation.bodySite (Lunge) verpflichtend. Die Messgröße
+    wird als Qualifier bzw. component.code angegeben: 118565006 |Volume| ist das Primärmaß (UCUM mm3,
+    ganzzahlig); 81827009 |Diameter| steht für den mittleren Durchmesser aus Lang- und Kurzachse (UCUM
+    mm, eine Dezimale) und gilt nur, wenn eine Volumetrie technisch nicht möglich ist; die Mittelwertbildung
+    wird über Observation.method gekennzeichnet. RadLex RID50154 kennzeichnet als Qualifier den gemessenen
+    Herdanteil ''solide Komponente'' teilsolider Herde. Präkoordinierte Observables für Rundherdvolumen
+    oder mittleren Rundherddurchmesser gibt es in SNOMED CT und LOINC nicht. Editionen: SNOMED CT INT
+    20260701, RadLex 4.2, UCUM (MII TermServ); Stand 2026-10-15. Rollen der Codes: snomed-ct|246120007
+    = element; snomed-ct|118565006 = methode; snomed-ct|81827009 = methode; radlex|RID50154 = methode.'
+  codings:
+  - system: snomed-ct
+    code: '246120007'
+    display: Nodule size
+  - system: snomed-ct
+    code: '118565006'
+    display: Volume
+  - system: snomed-ct
+    code: '81827009'
+    display: Diameter
+  - system: radlex
+    code: RID50154
+    display: solid component of part-solid pulmonary nodule
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code; Observation.valueQuantity; Observation.method; Observation.component; Observation.bodySite;
+    hasMember vom Rundherd
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil (einziges stabiles
+    MII-Ziel). Konflikt: Der Slice code.coding:sct ist REQUIRED an < 404684003 |Clinical finding| gebunden;
+    246120007 (observable entity) sowie 118565006 und 81827009 (qualifier values) sind dort nicht konform.
+    Profilkonform daher nur mit nicht-SNOMED-Coding (lokal) im offenen Slicing. Wert als valueQuantity
+    (UCUM mm3 bzw. mm). method (0..1, example, nicht MS) projektseitig fordern. Einbindung als hasMember
+    (MS) der Rundherd-Observation.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-messung
+  resource: Observation
+  path: Observation.code; Observation.valueQuantity; Observation.method.coding:sct; Observation.component;
+    Observation.bodySite; Observation.derivedFrom
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot (nur in diesem
+    Paket vorhanden, keine stabile Bindung). Messprofil auf Basis radiologische-beobachtung: category.coding:sct
+    pattern 122869004 Measurement procedure; value[x] nur Quantity 1..1 MS mit UCUM-System-Pattern; method
+    0..1 MS (Volumetrie vor Durchmesser; Mittelwert aus Lang- und Kurzachse); component.value[x] Quantity
+    mit UCUM-Pattern für die solide Komponente. code.coding:sct erbt die REQUIRED-Bindung an Clinical
+    finding; der Slice greift wegen des fehlerhaften System-Patterns (''http://snomed.info/sct|…/version/20260701'')
+    faktisch nicht, dasselbe gilt für method.coding:sct. Das MII-Beispiel nutzt 439984002 |Diameter of
+    structure by imaging measurement| (observable entity, in SNOMED CT INT 20260701 aktiv) als code und
+    liegt damit selbst außerhalb von findings-sct – das belegt den Bindungskonflikt. Ballot-Kommentar
+    zur Bindung von code empfohlen.'
+- standard: other
+  profile_or_url: http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C138078
+  resource: NCIt-Konzept 'Size of Persistent and Solid Component of a Sub-Solid Pulmonary Nodule'
+  path: C138078
+  notes: NCIt 25.6.0-e (MII TermServ). Nur Mapping für die Teilmessung 'solide Komponente' teilsolider
+    Herde.
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-tumor-size
+  resource: Observation
+  path: Observation.component:tumorLongestDimension (LOINC 33728-7); Observation.component:tumorOtherDimension
+    (LOINC 33729-5); Observation.method; Observation.focus
+  notes: hl7.fhir.us.mcode#4.0.0, stabil; nur Referenzmuster. code pattern LOINC 21889-1; längste Ausdehnung
+    1..1 und bis zu zwei weitere Dimensionen als Komponenten (Einheiten REQUIRED mcode-tumor-size-units-vs);
+    method 0..1 MS extensible; focus → mcode-tumor. Volumen und mittlerer Durchmesser fehlen; der Tumorbezug
+    passt nicht zu unklaren Rundherden.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_A.html#sect_TID_1411
+  resource: TID 1500 > TID 1411 Volumetric ROI Measurements and Qualitative Evaluations / TID 1501 / TID
+    1419 ROI Measurements
+  path: Measurement Group (Tracking Identifier/UID) > Measurement (TID 300) mit Derivation/Measurement
+    Method
+  notes: 'DICOM PS3.16 2026d, nicht-FHIR. Native Ausgabe der CAD-Volumetrie. Kodierung laut IHE-AIR-Beispiel:
+    (118565006, SCT, ''Volume'') in TID 1419; (81827009, SCT, ''Diameter'') mit Derivation (373098007,
+    SCT, ''Mean''); (103339001, SCT, ''Long Axis'') und (103340004, SCT, ''Short Axis''). Stützt 118565006/81827009
+    als SR-Konzeptnamen; für FHIR ist eine Transformation SR → Observation nötig.'
+- standard: other
+  profile_or_url: https://www.ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_Suppl_AIR.pdf
+  resource: IHE RAD AIR, A.3.3.3 Nodule 1 SR Content Example
+  path: 1.8.3.10 Long Axis; 1.8.3.11 Short Axis; 1.8.3.12 Diameter (Derivation Mean); 1.8.4.8 Volume (TID
+    1419)
+  notes: IHE RAD Suppl. AIR Rev. 1.3, Trial Implementation (2025-08-08), nicht-FHIR, informatives Beispiel.
+    Long/Short Axis mit Measurement Method (126081, DCM, 'RECIST 1.1'); für die Messregel nach Lung-RADS
+    bzw. DRG/DGP/DGT (mittlerer Durchmesser, eine Dezimale) ist eine eigene Methode nötig. Die solide
+    Komponente ist im Beispiel nicht gezeigt.
+- standard: other
+  profile_or_url: https://api3.rsna.org/radelement/v1/sets/RDES195
+  resource: RSNA/ACR RadElement 'Pulmonary Nodule'
+  path: RDE1302 Size; RDE1303 Solid component size; RDE1705 Volume
+  notes: RSNA RadElement API (Stand 2026-10-15), Status Proposed (2021-10-28), nicht-FHIR. Deckt Größe,
+    solide Komponente und Volumen getrennt ab und stützt die empfohlene Aufteilung; nur Mapping-Ziel.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-CLUSTER.physical_dimensions.v1
+  resource: CLUSTER
+  path: at0046 Volume; at0052 Diameter
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), published, nicht-FHIR. Generischer Dimensions-Cluster,
+    einbettbar in CLUSTER.exam_lesion bzw. imaging_exam; Messmethode, Rundungsregel und solide Komponente
+    sind nicht modelliert.
+care_process:
+  trigger: je Rundherd und Untersuchung
+  responsible_role: Befunder (CAD-Volumetrie)
+evidence:
+  guideline_references:
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Lungenrundherdmessung: Volumina werden auf die nächste ganze Zahl in mm³ gerundet.'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Nur wenn eine Volumetrie technisch nicht möglich ist, messen Sie sowohl die lange als auch
+      die kurze Achse auf eine Dezimalstelle in mm und geben Sie den mittleren Rundherddurchmesser auf
+      eine Dezimalstelle an
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Volumes, if obtained, should be reported to the nearest whole number in mm³.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 33 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B:noduleVolume, noduleMeanDiameter, noduleSolidComponentSize;
+      R:cadNoduleVolumetryResult; BPMN-Schritt: G9 Befundung | Activity_1tdikdp / Activity_1mvivag'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 33); Quellen: Q16, Q20'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 33)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. Messregeln: DRG/DGP/DGT-Supplement Tab. S1 Anm. 4, Lung-RADS
+  Note 4. Die Volumetrie ist als CAD-Funktion vorgeschrieben (Anlage), der einzelne Messwert als Befundfeld
+  nicht.'
+- 'Umsetzung: Teil von pulmonaryNoduleFinding (Aufteilung empfohlen). Aufteilen: noduleVolume (mm3, SNOMED
+  118565006) und noduleMeanDiameter (mm, eine Dezimale; SNOMED 81827009; Methode Mittel aus Lang- und
+  Kurzachse); die solide Komponente teilsolider Herde als Komponente mit Qualifier gesamt/solide. Rangfolge
+  in der Definition festhalten: Volumen ist Primärmaß, Durchmesser nur, wenn Volumetrie technisch nicht
+  möglich ist. isPartOf pulmonaryNoduleFinding; dependsOn cadAnalysisReport.'
+- Die empfohlene Aufteilung in noduleVolume (mm3) und noduleMeanDiameter (mm) ist zu entscheiden; die
+  Rangfolge (Volumen als Primärmaß, Durchmesser nur ersatzweise) gehört in die Definition.
+- SNOMED CT und LOINC haben kein präkoordiniertes Observable für Rundherdvolumen oder mittleren Rundherddurchmesser;
+  Postkoordination oder lokale Komponenten-Codes sind nötig.
+- Zu prüfen ist, ob für den Durchmesser 439984002 |Diameter of structure by imaging measurement| (observable
+  entity, im MII-Ballot-Beispiel verwendet) als Element-Code geeigneter ist als 246120007 mit Qualifier.
+- Im stabilen MII-Profil 2026.0.0 ist kein SNOMED-Observable als Observation.code zulässig (Bindung an
+  Clinical finding); ein Ballot-Kommentar an MII Bildgebung ist zu stellen.
+- Für die solide Komponente teilsolider Herde gibt es weder einen SNOMED-/LOINC-Code noch eine Profilkomponente.
+- Für die Messmethode 'Mittelwert aus Lang- und Kurzachse, eine Dezimale' existiert kein Standardcode.
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.pulmonaryNoduleFinding.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.cadAnalysisReport.v0.1

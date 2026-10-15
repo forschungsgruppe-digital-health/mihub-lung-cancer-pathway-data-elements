@@ -1,0 +1,216 @@
+id: mihub.lung.screening.cadAnalysisReport.v0.1
+uuid: b4f3c97c-75ed-575a-ab72-1dc59e445450
+name: cadAnalysisReport
+label_de: CAD-Auswertung als erweiterte Bilddokumentation
+definition_de: Gespeicherte CAD-Auswertung (Detektion, Volumetrie, VDT) als erweiterte Bilddokumentation,
+  z. B. DICOM Chest CAD SR.
+phase: screening
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'Element-Code ist der Dokumenttitel des erzeugten DICOM-SR: DCM 112000 Chest CAD Report (TID
+    4100) nur, wenn die CAD-Software ein Chest CAD SR erzeugt; sonst DCM 126000 Imaging Measurement Report
+    (TID 1500, von IHE AIR bevorzugt). DCM 111017 ist im Chest CAD SR ein CODE-Content-Item der Befundzusammenfassung
+    (TID 4101) mit Antwortwerten aus DICOM CID 6047, kein Container. Software-Identifikation über DCM
+    111001 Algorithm Name und 111003 Algorithm Version (TID 4019). Methode: SNOMED 133883001 bzw. RadLex
+    RID45702. Dokumentklasse KDL DG020199 nur bei Ablage als exportiertes Dokument. Binding example, weil
+    der SR-Typ herstellerabhängig ist. Kein LOINC- oder SNOMED-CT-Dokumentcode für einen Lungenrundherd-CAD-Bericht.
+    Editionen: MII TermServ, DICOM 2025.3, SNOMED CT 20260701, RadLex 4.2, KDL 2025; Stand 2026-10-15.
+    Rollen der Codes: dicom-dcm|112000 = element; dicom-dcm|126000 = element; dicom-dcm|111017 = element;
+    dicom-dcm|111001 = instrument; dicom-dcm|111003 = instrument; snomed-ct|133883001 = methode; radlex|RID45702
+    = methode; kdl|DG020199 = dokumentklasse.'
+  codings:
+  - system: dicom-dcm
+    code: '112000'
+    display: Chest CAD Report
+  - system: dicom-dcm
+    code: '126000'
+    display: Imaging Measurement Report
+  - system: dicom-dcm
+    code: '111017'
+    display: CAD Processing and Findings Summary
+  - system: dicom-dcm
+    code: '111001'
+    display: Algorithm Name
+  - system: dicom-dcm
+    code: '111003'
+    display: Algorithm Version
+  - system: snomed-ct
+    code: '133883001'
+    display: Computer assisted image analysis
+  - system: radlex
+    code: RID45702
+    display: computer-aided detection
+  - system: kdl
+    code: DG020199
+    display: Sonstige Dokumentation bildgebende Diagnostik
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie
+  resource: ImagingStudy
+  path: ImagingStudy.series.instance.sopClass
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Verweis auf das gespeicherte
+    CAD-SR als SR-Serie (series.modality SR, CID 33) der LDCT-Studie; instance.uid und instance.sopClass
+    1..1 MS (required, PS3.4 B.5): Chest CAD SR 1.2.840.10008.5.1.4.1.1.88.65 bzw. Comprehensive 3D SR
+    1.2.840.10008.5.1.4.1.1.88.34. Das Element bleibt eine Reference auf diese Instanz.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.result
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Bei strukturierter
+    Übernahme ins KIS bzw. PVS: Detektionen und Volumetrie als result-Observations (0..* MS), CAD-SR über
+    imagingStudy (1..* MS) bzw. extension:supportingInfo, PDF- oder Bildfassung über presentedForm.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.value[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Stabile Option für
+    aus der CAD-Auswertung übernommene Messwerte (value[x] 1..1, u. a. Quantity; derivedFrom 0..* auf
+    die Studie); betrifft vor allem noduleSizeMeasurement und noduleVolumeDoublingTime.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-messung
+  resource: Observation
+  path: Observation.value[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot (neu, in 2026.0.0
+    nicht enthalten). value[x] Quantity 1..1 MS, partOf auf radiologische-befundungsprozedur, derivedFrom
+    0..* MS, method 0..1 MS, Extensions SeriesUID und SOPInstanzUID für den Verweis auf das CAD-SR.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_A.html#sect_TID_1500
+  path: 'TID 1500 Measurement Report: Dokumenttitel aus CID 7021 (126000 Imaging Measurement Report) >
+    TID 1001 Observation Context > 121058 Procedure reported > 126010 Imaging Measurements > TID 1411
+    Volumetric ROI Measurements; TID 4019 Algorithm Identification'
+  notes: DICOM PS3.16 2026d, nicht-FHIR; SOP Class Comprehensive 3D SR Storage 1.2.840.10008.5.1.4.1.1.88.34.
+    Bevorzugte Kodierung für Detektion und Volumetrie der Rundherde; Measurement Groups mit Tracking-ID
+    verknüpfen Messungen über Runden (Grundlage der VDT), Software über TID 4019.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_ChestCADSRIODTemplates.html
+  path: TID 4100 Chest CAD Report (Root 112000) > TID 4101 Chest CAD Findings Summary (111017, CID 6047)
+    > 111064 Summary of Detections (TID 4015), 111065 Summary of Analyses (TID 4016)
+  notes: DICOM PS3.16 2026d, nicht-FHIR, nicht erweiterbares Template; SOP Class Chest CAD SR Storage
+    1.2.840.10008.5.1.4.1.1.88.65. Nur relevant, wenn die CAD-Software tatsächlich ein Chest CAD SR erzeugt;
+    laut IHE AIR hat das Chest-CAD-Profil keine Verbreitung gefunden.
+- standard: other
+  profile_or_url: https://www.ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_Suppl_AIR.pdf
+  path: 'IHE RAD AI Results (AIR): Result encoding Comprehensive 3D SR IOD mit TID 1500'
+  notes: IHE RAD Supplement AIR Rev. 1.3 (2025-08-08), Trial Implementation, nicht-FHIR. Integrationsprofil
+    für Speicherung und Anzeige von KI- und CAD-Ergebnissen im PACS; passt zur Pflicht „Speicherung der
+    Auswertung als erweiterte Bilddokumentation“ (Anlage zu § 4 LuKrFrühErkV), die selbst kein Format
+    vorschreibt.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/SrInstanceImagingSelectionEuImaging
+  resource: Basic
+  path: Basic.extension:ImagingSelection
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot (SD-Status draft). Europäisches Muster für den Verweis
+    auf eine SR-Instanz in R4 per R5-ImagingSelection-Backport (studyUid, seriesUid, instance u. a.).
+    Nur Ausblick.
+care_process:
+  trigger: je CAD-gestützter Befundung
+  responsible_role: Erstbefunder; Zweitbefunder (CAD-Software)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: Anlage zu § 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Detektion und Volumetrie von Lungenrundherden sowie Berechnung der Volumenverdopplungszeit
+      und Speicherung der …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 5 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: zunächst ohne und anschließend unter Nutzung einer Software zur computerassistierten Detektion
+      befundet (Erstbefunder)
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 31 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B:=, R:cadNoduleVolumetryResult; BPMN-Schritt: G9
+      Befundung | Befundung mit CAD (Activity_1mvivag, Activity_0mx6d87); PACS'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 31); Quellen: Q01'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.88); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 31)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 8 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Anlage zu § 4 Abs. 1 S. 1 (Zeile CAD-Software: „Speicherung
+  der Auswertung als erweiterte Bilddokumentation“) i. V. m. § 4 Abs. 1 S. 2 und § 5 Abs. 1–2 LuKrFrühErkV;
+  QS-Vereinbarung § 11 Abs. 5. Ein Speicherformat schreibt die Verordnung nicht vor.'
+- 'Umsetzung: eigenständig. Kardinalität an die Rechtslage anpassen: je LDCT mindestens eine CAD-Auswertung
+  des Erstbefunders, bei Zweitbefundung eine weitere (1..* oder Invariante je ldctExamination statt 0..*).
+  Binding extensible/example: DCM 112000 nur, wenn ein Chest CAD SR erzeugt wird; DCM 126000 (TID 1500)
+  als Alternative. „dicom-dcm“ in scripts/verify-terminology.py (SYSTEM_URL) ergänzen oder den Code unter
+  standard_mappings (dicom-sr) führen. pulmonaryNoduleFinding, noduleSizeMeasurement und noduleVolumeDoublingTime
+  hängen von cadAnalysisReport ab (dependsOn). Software und Lesemodus nicht doppelt zu screeningReadingEvent
+  erfassen.'
+- 'Die Kardinalität ist an die Rechtslage anzupassen: je LDCT mindestens eine CAD-Auswertung des Erstbefunders,
+  bei Zweitbefundung eine weitere (1..* oder Invariante je ldctExamination statt 0..*); kein Standard
+  bildet das ab.'
+- Welcher SR-Typ (Chest CAD SR mit 112000 oder TID 1500 mit 126000) von der eingesetzten CAD-Software
+  erzeugt wird, ist je Standort festzustellen.
+- Es gibt kein FHIR-Profil für eine CAD-Auswertung als Ganzes (Software, Detektionsliste, Volumetrie);
+  die MII-Messung ist erst im Ballot 2027 enthalten.
+- pulmonaryNoduleFinding, noduleSizeMeasurement und noduleVolumeDoublingTime sind per dependsOn mit cadAnalysisReport
+  zu verknüpfen; Software und Lesemodus nicht doppelt zu screeningReadingEvent erfassen.
+- Der Systemschlüssel dicom-dcm (und radlex) ist in der Terminologieprüfung des Repos zu hinterlegen.
+- Kardinalität laut Quelle 1..* je LDCT (bzw. Invariante je ldctExamination).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.ldctExamination.v0.1

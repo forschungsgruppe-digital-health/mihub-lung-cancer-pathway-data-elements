@@ -1,0 +1,253 @@
+id: mihub.lung.screening.workupOutcome.v0.1
+uuid: 9f62aa31-875c-52b0-ac3f-8f0fc1ff3172
+name: workupOutcome
+label_de: Ergebnis der Abklärung eines abklärungsbedürftigen Befunds
+definition_de: 'Endgültiges Abklärungsergebnis mit Datum: Karzinom gesichert, benigne (mit/ohne invasive
+  Abklärung), anderes Malignom, unklar, nicht erfolgt.'
+phase: screening
+category: diagnose
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701; Stand 2026-10-15. Antwortwerte (Observation.value[x]): Lungenkarzinom
+    gesichert 93880001 ''Primary malignant neoplasm of lung'' (wie cancerDiagnosis; schließt Lungenmetastasen
+    aus) | anderes Malignom 363346000 ''Malignant neoplastic disease'' (Gruppierer, umfasst formal auch
+    Lungenkrebs; Abgrenzung zu 93880001 per Regel) | benigne 110396000 ''No evidence of malignant neoplasm''
+    (kein Malignitätsnachweis, auch nicht-neoplastische Befunde wie Granulom) | unklar 442754001 ''Inconclusive
+    evaluation finding'' | nicht erfolgt 385660001 ''Not done'' (qualifier value; alternativ Observation.dataAbsentReason).
+    Ein Element-Code (Observation.code) für ''Ergebnis der Abklärung'' existiert weder in SNOMED CT noch
+    in LOINC und ist lokal festzulegen. ''Mit/ohne invasive Abklärung'' über invasiveWorkupProcedure;
+    Datum über Observation.effective[x]; Histologie und Stadium über tumorHistology bzw. tnmStage. Rollen
+    der Codes: snomed-ct|93880001 = wert; snomed-ct|363346000 = wert; snomed-ct|110396000 = wert; snomed-ct|442754001
+    = wert; snomed-ct|385660001 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '93880001'
+    display: Primary malignant neoplasm of lung
+  - system: snomed-ct
+    code: '363346000'
+    display: Malignant neoplastic disease
+  - system: snomed-ct
+    code: '110396000'
+    display: No evidence of malignant neoplasm
+  - system: snomed-ct
+    code: '442754001'
+    display: Inconclusive evaluation finding
+  - system: snomed-ct
+    code: '385660001'
+    display: Not done
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor
+  resource: Condition
+  path: Condition.code.coding:icd10-gm (REQUIRED mii-vs-diagnose-icd10gm; C34.-) / :sct (REQUIRED) | Condition.verificationStatus.coding:primaertumorDiagnosesicherung
+    (0..1, MS, REQUIRED mii-vs-onko-primaertumor-diagnosesicherung) | Condition.extension:Feststellungsdatum
+    (1..1, MS, condition-assertedDate) | Condition.recordedDate (1..1) | Condition.evidence.detail (→
+    mii-pr-onko-liste-evidenz-erstdiagnose) | Condition.extension:morphology-behavior-icdo3
+  notes: de.medizininformatikinitiative.kerndatensatz.onkologie#2026.0.3, stabil. Folgeressource für den
+    Wert 'Lungenkarzinom gesichert' (Ziel des dependsOn auf cancerDiagnosis), kein Ersatz für das Element.
+    Die Diagnosesicherung nach oBDS (7 = Histologie Primärtumor, 5 = Zytologie, 2 = klinische Diagnostik)
+    bildet 'mit/ohne invasive Abklärung' standardkonform ab. Das Feststellungsdatum liefert das Datum
+    für die PPV- bzw. Zeit-bis-Diagnose-QI (S3 Kap. 5.1.5.3). evidence.detail führt über die List auf
+    Observation bzw. DiagnosticReport der Abklärung.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.code.coding:icd10-gm (REQUIRED mii-vs-diagnose-icd10gm) | Condition.code.coding:sct
+    (REQUIRED diagnoses-sct = is-a 404684003, 272379006, 243796009) | Condition.verificationStatus (required)
+    | Condition.recordedDate (1..1) | Condition.extension:Feststellungsdatum (0..1) | Condition.evidence.detail
+  notes: de.medizininformatikinitiative.kerndatensatz.base#2026.0.1, stabil. Generisches MII-Diagnoseprofil
+    für 'anderes Malignom' (363346000 bzw. ICD-10-GM) oder einen benignen Befund mit eigener Diagnose.
+    93880001, 363346000 und 442754001 liegen unter 404684003 und sind in diagnoses-sct zulässig.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-patho/StructureDefinition/mii-pr-patho-diagnostic-conclusion-grouper
+  resource: Observation
+  path: Observation.code (pattern LOINC 22637-3) | Observation.value[x] | Observation.hasMember (Slice
+    pathology-finding) | Observation.derivedFrom | Observation.effective[x] (0..1, MS, dateTime)
+  notes: de.medizininformatikinitiative.kerndatensatz.patho#2026.0.2 (SD-Version 2026.0.0), stabil. Liefert
+    die histologische bzw. zytologische Abschlussdiagnose als Quelle; workupOutcome verweist über Observation.derivedFrom
+    darauf. Kein Ersatz für das Element.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDiagnose
+  resource: Condition
+  path: Condition.code.coding:ICD-10-GM (Extension Diagnosesicherheit, MS) | Condition.code.coding:SNOMED-CT
+    (REQUIRED DiagnosesSCT = is-a 404684003, 272379006, 243796009) | Condition.verificationStatus (MS)
+    | Condition.recordedDate (1..) | Condition.onset[x] (dateTime|Age)
+  notes: de.gematik.isik#6.0.0, stabil; nur Differential (kein Snapshot im Paket). Krankenhausseitige
+    Diagnose bei gesichertem Karzinom bzw. anderem Malignom; Diagnosesicherheit über die ICD-Extension
+    (G/V/Z/A).
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Condition_Diagnosis
+  resource: Condition
+  path: Condition.code.coding:ICD-10-GM (Extensions Diagnosesicherheit, Seitenlokalisation) | Condition.code.coding:snomed
+    (REQUIRED KBV_VS_Base_Diagnosis_SNOMED_CT) | Condition.code.coding:alphaId | Condition.verificationStatus
+  notes: kbv.basis#1.9.0, stabil; ambulantes KBV-Basisprofil (kein MIO, daher unter other), z. B. für
+    die Rückmeldung an die Praxis. Nur Differential im Paket. KBV_VS_Base_Diagnosis_SNOMED_CT liegt im
+    Paket (compose is-a 404684003, 272379006, 243796009; SNOMED CT DE-Edition 20260515); 93880001 und
+    363346000 sind damit enthalten. Das MIO-Profil KBV_PR_MIO_NFD_Condition (kbv.mio.patientenkurzakte#1.0.0)
+    ist wegen code.coding ..1 nur nachrangig.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.code (lokaler Code 'Abklärungsergebnis') | Observation.value[x] (CodeableConcept)
+    | Observation.effective[x] (Datum der abschließenden Beurteilung) | Observation.focus (abklärungsbedürftiger
+    Screeningbefund; bei gesichertem Karzinom die Condition aus cancerDiagnosis) | Observation.derivedFrom
+    (Observation mii-pr-patho-diagnostic-conclusion-grouper) | Observation.partOf (Procedure aus invasiveWorkupProcedure)
+    | Observation.dataAbsentReason (alternativ für 'nicht erfolgt')
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil; empfohlene Kernabbildung, da das Element eine Ergebniskategorie
+    je abklärungsbedürftigem Befund ist und keine Diagnose, und kein Observation-Profil für ein Screening-Abklärungsergebnis
+    existiert. Werte 93880001 | 363346000 | 110396000 | 442754001 | 385660001. Referenzziele nach R4:
+    Procedure nur über partOf; die Condition nur über focus (derivedFrom erlaubt keine Condition); das
+    Pathologie-Ergebnis über derivedFrom auf die Observation (nicht auf den DiagnosticReport). Stadium
+    und Histologie nicht wiederholen (dependsOn tnmStage, tumorHistology).'
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-primary-cancer-condition
+  resource: Condition
+  path: Condition.code (1..1, MS, extensible mcode-primary-cancer-disorder-vs) | Condition.verificationStatus
+    | Condition.extension:assertedDate | Condition.extension:histologyMorphologyBehavior | Condition.bodySite
+  notes: hl7.fhir.us.mcode#4.0.0, stabil; nur internationales Referenzmuster für 'Lungenkarzinom gesichert'
+    (Basis US Core).
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Condition-uv-ips
+  resource: Condition
+  path: Condition.code (1..1, MS, preferred problems-uv-ips) | Condition.verificationStatus (0..1, required)
+    | Condition.onset[x] (MS)
+  notes: hl7.fhir.uv.ips#2.0.1, stabil; internationales Referenzmuster (IPS) für die Diagnose in einer
+    Patientenkurzakte.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: 'ACR LCSR & IPN Data Dictionary (28.05.2026), Exam Form: Follow-Up / Lung Cancer Incidence
+    (Sections 5B, 5B4–5B11)'
+  path: '#160 Date of follow-up | #163 Tissue/cytology diagnosis (Benign | Malignant – invasive lung cancer
+    | Malignant – minimally invasive lung cancer | Malignant – non-lung cancer | Malignant – adenocarcinoma
+    in situ | Premalignancy – AAH | Non-diagnostic | Clinical – without histology | Malignant – carcinoid
+    | Other | Unknown) | #164 Tissue/cytology diagnosis method | #165 ff. Location, Histology, Stage'
+  notes: 'ACR LCSR & IPN Data Dictionary, Fassung 28.05.2026 (PDF-Anhang https://nrdrsupport.acr.org/helpdesk/attachments/11143178430),
+    S. 33–36; nicht-FHIR, US-Registermuster. Bestätigt die MiHUB-Werteliste weitgehend (Benign, Lungenkarzinom,
+    Malignant – non-lung cancer, Non-diagnostic bzw. Unknown, Clinical – without histology) und ist feiner
+    (AIS, minimal invasiv, Karzinoid, Präkanzerose). #163 ist an die einzelne Prozedur gebunden (''report
+    the most concerning''), MiHUB erfasst dagegen das endgültige Ergebnis je Befund; ''nicht erfolgt''
+    hat kein LCSR-Äquivalent.'
+care_process:
+  trigger: Abschluss der Abklärung eines abklärungsbedürftigen Befunds
+  responsible_role: spezialisierte Einrichtung (Rückmeldung an die Screening-Einheit)
+evidence:
+  guideline_references:
+  - source: andere
+    version: 'Council Recommendation 2022/C 473/01 — EU-Ebene: Council Recommendation 2022/C 473/01; EC-LuC;
+      EUCanScreen; SOLACE'
+    url: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022H1213(01)
+    section: Empfehlung 12
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: to aim to collect, manage and evaluate data on all screening tests, assessments and final diagnoses
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q27
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Kap. 5.1.5.3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zeit bis zur abschließenden Beurteilung/Operation
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: condition
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 53 der Quellenrecherche zur Screening-Episode (Gruppe G12 Abklärung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: L:screeningWorkupOutcome, B:screeningWorkupDiagnosis,
+      E:workupFinalDiagnosis, E:stageAndHistologyScreenDetected, P:screeningEpisodeOutcome; BPMN-Schritt:
+      G12 Abklärung | Rückmeldung an Qualitätsdaten (§7) (Activity_14vmlwn)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 53); Quellen: Q27, Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 53)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 5 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 9 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Ratsempfehlung 2022/C 473/01 Nr. 12 (unverbindlich); S3 Empf.
+  5.13 („wünschenswert“) und Kap. 5.1.5.3. § 7 Abs. 2 LuKrFrühErkV und § 44 KFE-RL verlangen nur Zählungen,
+  kein Abklärungsergebnis; das Monitoring nach § 46 Abs. 2 KFE-RL folgt erst bis Ende 2028.'
+- 'Umsetzung: eigenständig; Grenzfall des Scopes (Rückkanal). Prozessanker ändern in „G12 Abklärung –
+  Rückmeldung der spezialisierten Einrichtung (BPMN-Lücke)“ und den Bezug auf § 7 entfernen; Datenfluss,
+  Rechtsgrundlage bzw. Einwilligung als Issue (DPIA). Werte: Lungenkarzinom gesichert (363358000 oder
+  präziser 448993007) | anderes Malignom (363346000) | benigne (lokal) | unklar (442754001) | nicht erfolgt
+  (lokal); „mit/ohne invasive Abklärung“ über invasiveWorkupProcedure. Auslöser screeningResultCategory
+  = abklärungsbedürftig; Datum über effective[x]. dependsOn cancerDiagnosis, tumorHistology und tnmStage
+  statt Stadium und Histologie zu wiederholen. PPV1/PPV2 nach S3 Kap. 5.1.5.3 in instruction_de definieren.
+  Deutsche Quelle ergänzen (S3 Empf. 5.13, Kap. 5.1.5.3); „unklar“ und „nicht erfolgt“ als Modellierungsentscheidung
+  kennzeichnen.'
+- Es gibt weder ein LOINC- noch ein SNOMED-Observable für das Ergebnis der Abklärung eines Screeningbefunds;
+  der Element-Code (Observation.code) ist lokal festzulegen.
+- Es gibt kein Profil (MII, ISiK, KBV, ePA, IPS, mCODE) für das Abklärungsergebnis als eigene Ergebniskategorie;
+  Condition-Profile decken 'benigne', 'unklar' und 'nicht erfolgt' nicht ab, daher Observation-Basisressource.
+- Das Werte-Set mischt Befund- und Qualifier-Hierarchien (385660001 ist ein qualifier value); 'unklar'
+  und 'nicht erfolgt' sind als Modellierungsentscheidung zu kennzeichnen, alternativ 'nicht erfolgt' über
+  Observation.dataAbsentReason.
+- 363346000 umfasst formal auch Lungenkrebs; die Abgrenzung 'anderes Malignom' gegenüber 93880001 ist
+  als Regel zu dokumentieren.
+- Der Prozessanker ist zu ändern (G12 Abklärung – Rückmeldung der spezialisierten Einrichtung, BPMN-Lücke)
+  und der Bezug auf § 7 LuKrFrühErkV zu entfernen, da § 7 und § 44 KFE-RL nur Zählungen verlangen.
+- Datenfluss, Rechtsgrundlage bzw. Einwilligung für den Rückkanal von der spezialisierten Einrichtung
+  sind im Rahmen der DPIA zu klären.
+- PPV1/PPV2 nach S3 Kap. 5.1.5.3 sind in der Anleitung zu definieren und eine deutsche Quelle (S3 Empf.
+  5.13, Kap. 5.1.5.3) zu ergänzen.
+- Kardinalität laut Quelle 0..1 je abklärungsbedürftigem Befund.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tumorHistology.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.tnmStage.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.invasiveWorkupProcedure.v0.1

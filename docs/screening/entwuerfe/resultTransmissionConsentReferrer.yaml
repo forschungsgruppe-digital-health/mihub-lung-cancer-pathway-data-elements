@@ -1,0 +1,202 @@
+id: mihub.lung.screening.resultTransmissionConsentReferrer.v0.1
+uuid: 7379c26e-d418-55cd-8439-91c99a8a3a64
+name: resultTransmissionConsentReferrer
+label_de: Einwilligung in die Befundübermittlung an die berichterstellende Praxis
+definition_de: Einwilligung, dass der Befundbericht auch an die berichterstellende Praxis geht; ohne Einwilligung
+  erhält ihn nur die versicherte Person.
+phase: screening
+category: administrativ
+datatype: string
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'Elementcode bei Modellierung als Observation: SNOMED CT 413909005 Consent status for record
+    sharing. Antwortwerte: ''erteilt'' = 425691002 Consent given for electronic record sharing, ''verweigert''
+    = 414859005 No consent for electronic record sharing (beide nur Annäherungen, weil ''record sharing''
+    die Übermittlung des Befundberichts an die Praxis nur ungefähr trifft), ''widerrufen'' = lokaler Code
+    (im FHIR Consent alternativ status inactive). Dokumentklassen: LOINC 64292-6 (auch Consent.category)
+    und KDL AM050107 für die schriftliche Einwilligung. Binding example wegen der Annäherungen. Bevorzugte
+    Abbildung ist ein FHIR Consent mit Empfänger-Qualifier (berichterstellende Praxis | Zweitbefunder
+    | Einrichtung mit Voraufnahmen) und Datum; ein Boolean reicht wegen ''widerrufen'' und des Empfängers
+    nicht aus. MII TermServ, SNOMED CT International 20260701, LOINC 2.83, KDL 2025, Stand 2026-10-15.
+    Rollen der Codes: snomed-ct|413909005 = element; snomed-ct|425691002 = wert; snomed-ct|414859005 =
+    wert; local-no-standard-binding|widerrufen = wert; loinc|64292-6 = dokumentklasse; kdl|AM050107 =
+    dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '413909005'
+    display: Consent status for record sharing
+  - system: snomed-ct
+    code: '425691002'
+    display: Consent given for electronic record sharing
+  - system: snomed-ct
+    code: '414859005'
+    display: No consent for electronic record sharing
+  - system: local-no-standard-binding
+    code: widerrufen
+    display: Einwilligung widerrufen
+  - system: loinc
+    code: 64292-6
+    display: Release of Information Consent Document
+  - system: kdl
+    code: AM050107
+    display: Schweigepflichtentbindung
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (AM050107); DocumentReference.type.coding:LNC (64292-6); DocumentReference.type.coding:XDS
+    (EINW); DocumentReference.category.coding:XDS (ADM); DocumentReference.content.attachment
+  notes: de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1, stabil; für die schriftliche
+    Einwilligung bzw. Schweigepflichtentbindung als Dokument. 64292-6 steht in c80-doc-typecodes (REQUIRED
+    für type.coding:LNC). KDL AM050107 wird laut DVMD-ConceptMap auf EINW abgebildet; die IHE-D-Definition
+    von EINW nennt ausdrücklich die 'Einwilligung zur Datenweitergabe'.
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/ValueSets/IHEXDStypeCode
+  resource: XDS DocumentEntry (Einwilligungsdokument)
+  path: DocumentEntry.classCode = ADM; DocumentEntry.typeCode = EINW; DocumentEntry.eventCodeList = KDL
+    AM050107
+  notes: de.ihe-d.terminology#3.0.1, nicht-FHIR (XDS-Metadaten); konsistent mit der DVMD-ConceptMap. Gilt
+    ebenso für ePA MHD (de.gematik.epa.mhd#1.1.3; epa-xds-class-code-vs/epa-xds-type-code-vs enthalten
+    die IHE-D-Codes unter urn:oid:1.3.6.1.4.1.19376.3.276.1.5.8 bzw. .5.9) und ISiKDokumentenMetadaten.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Consent
+  resource: Consent
+  path: Consent.scope (http://terminology.hl7.org/CodeSystem/consentscope#patient-privacy); Consent.category
+    (LOINC 64292-6; optional http://terminology.hl7.org/CodeSystem/v3-ActCode#IDSCL); Consent.status;
+    Consent.provision.type; Consent.provision.actor.role / actor.reference; Consent.provision.action (http://terminology.hl7.org/CodeSystem/consentaction#disclose);
+    Consent.dateTime
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil. category ist EXTENSIBLE an consent-category gebunden; das ValueSet
+    enthält LOINC 64292-6 und über v3-ActConsentType auch v3-ActCode IDSCL ''information disclosure''
+    als zusätzliche Kategorie. provision.action disclose ist example-gebunden und nur in der Basis zulässig
+    (nicht in IHE PCF). Werte: erteilt = provision.type permit bzw. status active, verweigert = deny bzw.
+    status rejected, widerrufen = status inactive. provision.actor trägt den Empfänger (berichterstellende
+    Praxis | Zweitbefunder | Einrichtung mit Voraufnahmen).'
+- standard: other
+  profile_or_url: https://profiles.ihe.net/ITI/PCF/StructureDefinition/IHE.PCF.consentIntermediate
+  resource: Consent
+  path: Consent.scope (Pattern patient-privacy); Consent.category (z. B. LOINC 64292-6); Consent.patient;
+    Consent.performer; Consent.organization; Consent.dateTime; Consent.source[x]; Consent.policy bzw.
+    Consent.policyRule; Consent.provision.type (permit | deny); Consent.provision.actor.role (Pattern
+    http://terminology.hl7.org/CodeSystem/v3-ParticipationType#IRCP); Consent.provision.actor.reference;
+    Consent.provision.data:rData (→ Befundbericht)
+  notes: 'ihe.iti.pcf#1.1.0 (IHE ITI Privacy Consent on FHIR, Trial Implementation), internationales Profil
+    ohne deutsche Festlegung. Passt zum Empfänger-Qualifier: je Empfänger ein actor mit Rolle IRCP ''information
+    recipient'', provision.type permit/deny für erteilt/verweigert, Widerruf über status inactive bzw.
+    neue Version; provision.data (meaning related bzw. instance) begrenzt die Freigabe auf den Befundbericht.
+    Pflicht: patient, performer, organization, dateTime, source[x], provision mit type sowie actor.reference.
+    policy.uri ist nur innerhalb von policy 1..1; ppc-1 verlangt policy oder policyRule. provision.action
+    ist in PCF verboten (0..0).'
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1303
+  resource: openEHR-EHR-ACTION.informed_consent.v0
+  path: Careflow-Schritte provided / refused / withdrawn; 'Consent description'
+  notes: openEHR CKM 1013.1.1303, Revision 0.0.1-alpha, in_development (Draft), nicht-FHIR; breites, nicht
+    publiziertes Mapping. Der Zweck umfasst laut ADL auch Einwilligungen zu einer 'Aktivität im Zusammenhang
+    mit dem Gesundheitswesen'; einen Empfänger-Qualifier gibt es nicht.
+care_process:
+  trigger: Aufklärung vor der LDCT; Widerruf jederzeit
+  responsible_role: Versicherte (Einwilligung); Erstbefunder (Einholung)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 2 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Bei Einwilligung der versicherten Person übermittelt der Erstbefunder auch dem Arzt oder der
+      Ärztin gemäß § 43 …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: Ablauf
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: bei Vorliegen Ihrer Einwilligung – Ihrer behandelnden Ärztin
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 24 der Quellenrecherche zur Screening-Episode (Gruppe G7 Radiologie vor
+      LDCT; M1 Inkrement 1 (Screening)); zusammengeführt aus: R:consentToReportTransmissionToReferrer,
+      L:screeningConsentDirective, B:consentReportToReferringPhysician, S:reportSharingConsent, P:=; BPMN-Schritt:
+      G7 Radiologie | Erstbefunder: Activity_1uptzny; Bedingung für Event_13jgib0'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 24); Quellen: Q02, Q04'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.92); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 24)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. Übermittlung des strukturierten Befundberichts an die berichterstellende
+  Ärzt:in nur bei Einwilligung (KFE-RL § 42 Abs. 2 S. 2); ohne Einwilligung nur an die Person (S. 1).'
+- 'Umsetzung: eigenständig; Ausbau zum gemeinsamen Einwilligungselement (nimmt providerDataExchangeConsent
+  auf). Zum gemeinsamen Einwilligungselement für Datenweitergaben ausbauen, mit Empfänger-Qualifier: berichterstellende
+  Praxis | Zweitbefunder | Einrichtung mit Voraufnahmen. Werte erteilt | verweigert | widerrufen (lokal)
+  plus Datum, oder Reference auf FHIR Consent (category LOINC 64292-6, provision.actor = Empfänger); Dokument
+  KDL AM050107. Die Pflicht ist bedingt: An die Praxis wird nur bei „erteilt“ übermittelt. Im BPMN ist
+  die Rückmeldung an die Praxis (Event_13jgib0) unbedingt modelliert.'
+- Es fehlt ein spezifisches Konzept 'Einwilligung in die Übermittlung des Screening-Befunds an die berichterstellende
+  Ärzt:in'; die SNOMED-Werte zu 'record sharing' sind nur Annäherungen.
+- Die Empfängertypen (berichterstellende Praxis nach KFE-RL § 43, Zweitbefunder, Einrichtung mit Voraufnahmen)
+  und die Zwecke nach KFE-RL § 42 Abs. 2 sind nicht standardkodiert; v3-ParticipationType IRCP kennzeichnet
+  nur die Rolle 'Empfänger', die Typen bleiben lokal.
+- Der Datentyp boolean des Kandidaten reicht nicht aus; zu entscheiden ist zwischen CodeableConcept plus
+  Datum und einer Reference auf FHIR Consent sowie über die Zusammenführung mit providerDataExchangeConsent
+  zu einem gemeinsamen Einwilligungselement.
+- Kein deutsches Profil (MII KDS, ISiK, KBV, ePA) bildet eine Einwilligung in die Datenübermittlung an
+  eine bestimmte behandelnde Ärzt:in ab; MII KDS Consent ist auf Forschung (Broad Consent) festgelegt.
+  Den Bezug auf genau den strukturierten Befundbericht kann nur IHE PCF über provision.data herstellen.
+- Im BPMN ist die Rückmeldung an die Praxis (Event_13jgib0) unbedingt modelliert, obwohl sie nur bei erteilter
+  Einwilligung erfolgen darf.

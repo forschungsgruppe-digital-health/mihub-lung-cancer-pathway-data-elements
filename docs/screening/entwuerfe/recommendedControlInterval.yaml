@@ -1,0 +1,184 @@
+id: mihub.lung.screening.recommendedControlInterval.v0.1
+uuid: 00c850f1-c740-5844-97b8-0a4a3005d0bc
+name: recommendedControlInterval
+label_de: Empfohlenes Kontrollintervall bis zur nächsten Untersuchung (Monate)
+definition_de: Empfohlenes Kontrollintervall in Monaten ab LDCT bei kontrollbedürftigem Befund (< 12,
+  z. B. 3 oder 6); daraus Fälligkeitsdatum.
+phase: screening
+category: versorgungsplanung
+datatype: Quantity
+cardinality: 1..*
+unit: mo
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Editionen: UCUM, SNOMED CT INT 20260701 und LOINC 2.83, MII TermServ (Stand 2026-10-15). Datentyp
+    Quantity ohne Werteliste. Für das empfohlene Intervall bis zur nächsten Früherkennungsuntersuchung
+    gibt es weder in SNOMED CT noch in LOINC einen Element-Code (Suchen nach follow-up/screening/recommended
+    interval unter Observables ohne Treffer); daher lokaler Platzhalter-Element-Code. Die Einheit ist
+    fest UCUM ''mo'' (im Datenelement als ''unit: mo'', nicht als Werte-Coding; DICOM CID 6046 ''Follow-up
+    Interval Unit'' bestätigt mo als Einheit). Wert < 12; Pflicht genau dann, wenn screeningResultCategory
+    = kontrollbedürftig. Das Fälligkeitsdatum wird abgeleitet (Datum der ausgewerteten LDCT + Intervall,
+    Lung-RADS v2022 Note 2) und nicht kodiert. Abgelehnt: EBM 01872 (nur Abrechnungsbezug), LOINC 21979-0,
+    39161-5 und 57070-5 (Art der Nachsorge bzw. Datumsangaben, kein Intervall). Rollen der Codes: local-no-standard-binding|recommendedControlInterval
+    = element.'
+  codings:
+  - system: local-no-standard-binding
+    code: recommendedControlInterval
+    display: Empfohlenes Kontrollintervall bis zur nächsten LDCT (Monate)
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung
+  resource: CarePlan
+  path: CarePlan.activity.detail.scheduled[x] (Timing | Period | string)
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Äquivalenz related
+    (Transformation nötig, kein Quantity-Element). Bevorzugt: scheduledPeriod.start = Fälligkeitsdatum
+    (Datum der ausgewerteten LDCT + Intervall). Alternative scheduledTiming.repeat.period mit periodUnit
+    ''mo'' (FHIR units-of-time) und count = 1 ist missverständlich, da Timing ein Wiederholungsintervall
+    meint. Invariante cpl-3 (detail XOR reference) beachten. Das Intervall selbst (Quantity, UCUM mo)
+    nur im Datenelement bzw. Logical Model.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung
+  resource: ServiceRequest
+  path: ServiceRequest.occurrence[x] (dateTime | Period | Timing)
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Äquivalenz related:
+    nur das abgeleitete Fälligkeitsdatum der Kontroll-LDCT, nicht das Intervall.'
+- standard: other
+  profile_or_url: https://edge.sitecorecloud.io/americancoldf5f-acrorgf92a-productioncb02-3650/media/ACR/Files/RADS/Lung-RADS/Lung-RADS-2022.pdf
+  resource: ACR Lung-RADS v2022, Note 2 und Spalte „Management“
+  path: „The timing of follow-up imaging is from the date of the exam being interpreted“; Intervalle 3
+    Monate (4A), 6 Monate (3), 12 Monate (1/2)
+  notes: ACR Lung-RADS v2022, nicht-FHIR. Beleg für die Ableitungsregel des Fälligkeitsdatums und die
+    typischen Intervallwerte.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: '#224.3 „Recommended follow-up interval: Start“; #224.4 „Recommended follow-up interval: End“'
+  notes: 'ACR LCSR & IPN Data Dictionary, Stand 2026-05-28, nicht-FHIR. Nur Analogie (related): die Elemente
+    gehören zum IPN-Teil, nicht zum Screening-Teil, in dem sich das Intervall implizit aus der Lung-RADS-Kategorie
+    ergibt.'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-INSTRUCTION.service_request.v1
+  resource: INSTRUCTION
+  path: '/activities[at0001]/description[at0009]/items[at0040] (Service due: DV_DATE_TIME | DV_TEXT |
+    DV_INTERVAL)'
+  notes: 'openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle laut Mirror in_development, nicht-FHIR.
+    Äquivalenz related: Fälligkeit, nicht das Intervall als Quantity.'
+care_process:
+  trigger: kontrollbedürftiges Ergebnis
+  responsible_role: Erst- und Zweitbefunder (gemeinsam)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 5 Abs. 3 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: ist eine gemeinsame Empfehlung für den Zeitpunkt der nächsten Untersuchung zur Lungenkrebsfrüherkennung
+      abzugeben
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: The timing of follow-up imaging is from the date of the exam being interpreted.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+  - source: andere
+    version: 'EBA 87. Sitzung (11.03.2026) — EBM-Beschlüsse: Erweiterter Bewertungsausschuss 87. Sitzung
+      (GOP 01871–01881) und Bewertungsausschuss 854. Sitzung'
+    url: https://www.gkv-spitzenverband.de/media/dokumente/krankenversicherung_1/aerztliche_versorgung/verguetung_und_leistungen/beschluesse_ba_eba_de_eg/87_sitzung_eba/EBA_87_Lungenkrebsfrueherkennung.pdf
+    section: GOP 01872
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: nur berechnungsfähig, wenn in der vorausgegangenen Untersuchung gemäß der Gebührenordnungsposition
+      01871 ein Kontrollintervall von weniger als 12 Monaten festgelegt wurde
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q06
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 44 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R/S:nextScreeningRecommendation, L:nextLdctRecommendedDate,
+      B:recommendedNextExaminationTiming, P:=, P:nextScreeningEarliestDate; BPMN-Schritt: G10 Ergebnis
+      | Empfehlung für nächste Untersuchung (§5 Abs.3) (Activity_07i9gmj)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 44); Quellen: Q01, Q20, Q06'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.9); Dublette/Scope: nicht widerlegt (Konfidenz 0.75)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 44)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. LuKrFrühErkV § 5 Abs. 3 S. 2 (gemeinsame Empfehlung für
+  den Zeitpunkt der nächsten Untersuchung); KFE-RL § 42 Abs. 3 Nr. 1 (Übermittlung an die Person); EBM
+  01872 verlangt die Angabe in Monaten.'
+- 'Umsetzung: eigenständig. EBM 01872 aus value_set entfernen (Abrechnungsbezug, kein Konzept „empfohlenes
+  Intervall“); value_set n/a, unit mo (UCUM). Invariante: Pflicht genau dann, wenn screeningResultCategory
+  = kontrollbedürftig; Wert < 12. Fälligkeitsdatum = Datum der ausgewerteten LDCT + Intervall (Lung-RADS
+  Note 2) ableiten; es speist screeningInvitation und plannedFollowUpAppointment. recommendedManagement
+  ohne eigene Zeitwerte. dependsOn screeningResultCategory. Quellen ergänzen: KFE-RL § 42 Abs. 3 Nr. 1
+  und S3 Empf. 5.9 (3 bzw. 6 Monate).'
+- Für 'empfohlenes Kontrollintervall bis zur nächsten LDCT' fehlt ein Standard-Observable in SNOMED CT
+  und LOINC; ein lokaler Element-Code mit kanonischer URL ist festzulegen oder ein Konzeptantrag zu stellen.
+- Kein FHIR-Profil (MII, ISiK, KBV, IPS, EU) hat ein Quantity-Element für das Intervall; die Abbildung
+  erfolgt nur über das abgeleitete Fälligkeitsdatum, die Transformationsregel ist festzuschreiben.
+- Die Invariante (Pflicht genau bei screeningResultCategory = kontrollbedürftig, Wert < 12 Monate) ist
+  als Constraint zu formulieren.
+- Der konkrete Folgetermin (ISiKTermin, KBV_PR_AW_Termin) gehört zu plannedFollowUpAppointment bzw. screeningInvitation
+  und ist dort zuzuordnen.
+- EBM 01872 ist nur Abrechnungsbezug und sollte in den Constraints bzw. der Abrechnungsdokumentation statt
+  im Werte-Set stehen.
+- Kardinalität laut Quelle 0..1 (Pflicht genau bei „kontrollbedürftig“).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.screeningResultCategory.v0.1

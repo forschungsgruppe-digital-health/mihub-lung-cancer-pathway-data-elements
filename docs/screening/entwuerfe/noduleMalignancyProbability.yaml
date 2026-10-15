@@ -1,0 +1,165 @@
+id: mihub.lung.screening.noduleMalignancyProbability.v0.1
+uuid: 04511392-2c89-5c1b-8e16-e5de190e3295
+name: noduleMalignancyProbability
+label_de: Malignitätswahrscheinlichkeit des Rundherds
+definition_de: Malignitätswahrscheinlichkeit in % mit Modell (Brock/PanCan, Herder); Entscheidungskriterium
+  bei Lung-RADS 4A (> 10 %).
+phase: screening
+category: assessment
+datatype: Quantity
+cardinality: 0..*
+unit: '%'
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Lokaler Element-Code, da weder SNOMED CT noch LOINC, NCIt oder RadLex ein Observable für die
+    Malignitätswahrscheinlichkeit eines Lungenrundherds enthalten; Einheit UCUM %. Das Modell (Brock/PanCan
+    nach McWilliams 2013 für den Baseline-Wert; Herder erst nach PET/CT in der Abklärung) ist verpflichtend
+    als Observation.method mit lokalem Code anzugeben, da auch dafür keine Instrument-Codes existieren.
+    LOINC 101445-5/101444-8 (blutbasierte Nodify-Tests) und SNOMED 1279908003 (Metastasierungsrisiko)
+    passen fachlich nicht. Editionen: SNOMED CT INT 20260701, LOINC 2.83, NCIt 25.6.0-e, RadLex 4.2, UCUM
+    (MII TermServ); Stand 2026-10-15. Rollen der Codes: local-no-standard-binding|noduleMalignancyProbability
+    = element.'
+  codings:
+  - system: local-no-standard-binding
+    code: noduleMalignancyProbability
+    display: Malignitätswahrscheinlichkeit des Rundherds
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code; Observation.valueQuantity (UCUM %); Observation.method; Observation.derivedFrom;
+    hasMember vom Rundherd
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Ziel, wenn das Element
+    im Befundbaum (hasMember von pulmonaryNoduleFinding) bleibt. code nur lokal (offenes Slicing; ein
+    SNOMED-Code wäre an Clinical finding gebunden). value[x] als Quantity (%); method 0..1 projektseitig
+    verpflichtend (lokaler Modellcode Brock/PanCan bzw. Herder); derivedFrom (MS) → Eingangsgrößen (Größe,
+    emphysemaSeverity). Im Ballot 2027 analog über radiologische-messung (value Quantity, method MS).
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/RiskAssessment
+  resource: RiskAssessment
+  path: RiskAssessment.prediction.probability[x] (probabilityDecimal); RiskAssessment.prediction.outcome;
+    RiskAssessment.method; RiskAssessment.basis; RiskAssessment.condition
+  notes: 'hl7.fhir.r4.core#4.0.1 (Ressource im Status draft), kein deutsches Profil. Semantisch passendste
+    Ressource: probabilityDecimal als Prozent (Invariante ras-2 ''Must be <= 100''), method = Modell (verpflichtend
+    fordern), basis → Rundherd-Observation, Größe und emphysemaSeverity, condition optional → Rundherd
+    als Condition; prediction.outcome = Malignität (Code offen). Einschränkung: RiskAssessment kann nicht
+    über Observation.hasMember in den Rundherd-Befundbaum eingehängt werden (hasMember erlaubt nur Observation,
+    QuestionnaireResponse, MolecularSequence); die Verknüpfung läuft nur rückwärts über basis. Das MII-RiskAssessment-Profil
+    (Molekulargenetik, polygener Risiko-Score) dient nur als Muster.'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-EVALUATION.health_risk.v1
+  resource: EVALUATION
+  path: at0002 Health risk; at0003 Risk assessment; at0022 Absolute risk; at0025 Assessment method; at0013/at0016
+    Risk factor(s)
+  notes: openEHR CKM-Mirror (Commit e72871205f, 2026-10-15), published, nicht-FHIR. Generisches Risikomodell
+    mit Methode und Risikofaktoren; der Bezug auf einen einzelnen Rundherd muss über Link bzw. Kontext
+    hergestellt werden.
+care_process:
+  trigger: solider Rundherd der Kategorie 4A in der Baseline-LDCT; 4B-Management
+  responsible_role: Erst- und Zweitbefunder (gemeinsame Beurteilung)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Tab. 17, 4A
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: wenn die *Wahrscheinlichkeit von Malignität >10% beim Baseline LDCT ist
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 13
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Radiologen werden ermutigt, das Bewertungstool von McWilliams, et al. für CT Befunde zu verwenden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 35 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: B:=; BPMN-Schritt: G9 Befundung | Gemeinsame Beurteilung
+      (Activity_10riunt/Activity_0gyncma)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 35); Quellen: Q12, Q16'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 35)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Tab. 17, Kategorie 4A (Kann-Option PET/CT nach Fallkonferenzbeschluss
+  bei Malignitätswahrscheinlichkeit > 10 %); das Modell legt die S3 nicht fest.'
+- 'Umsetzung: Teil von pulmonaryNoduleFinding. Im Screening auf den Baseline-Wert (Brock/PanCan) aus der
+  gemeinsamen Beurteilung beschränken; den Herder-Wert nach PET/CT der Abklärung zuordnen. Modell verpflichtend
+  als Observation.method, Einheit UCUM %, lokaler Code (no-standard-found). isPartOf pulmonaryNoduleFinding,
+  dependsOn noduleSizeMeasurement; emphysemaSeverity (vorhanden/nicht vorhanden) ist Brock-Eingang. Abgrenzung
+  zum verworfenen personenbezogenen Risikoscore (lungCancerRiskModelScore). S3 Empf. 6.29, 6.30 und 6.41
+  betreffen inzidentelle Rundherde außerhalb der Früherkennung und sind kein Screening-Beleg.'
+- Es fehlt ein Standard-Observable 'Probability of malignancy of pulmonary nodule' (SNOMED CT bzw. LOINC);
+  ein Konzeptantrag, z. B. ein LOINC-Term mit Methode 'Calculated.Brock', ist zu erwägen.
+- Für das Brock-/PanCan-Modell (McWilliams 2013) und das Herder-Modell gibt es keine Instrument-Codes;
+  lokale Methodencodes sind festzulegen.
+- Zu entscheiden ist die Abbildung als Observation im Rundherd-Befundbaum (MII) oder als RiskAssessment
+  (semantisch passender, aber nicht per hasMember einhängbar).
+- Der Umfang im Screening ist auf den Baseline-Wert (Brock/PanCan) der gemeinsamen Beurteilung zu begrenzen;
+  der Herder-Wert nach PET/CT gehört zur Abklärung.
+- Kein deutsches Profil (MII, ISiK, KBV, gematik ePA) bildet eine läsionsbezogene Malignitätswahrscheinlichkeit
+  ab.
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.pulmonaryNoduleFinding.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.noduleSizeMeasurement.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.emphysemaSeverity.v0.1

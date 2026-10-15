@@ -1,0 +1,179 @@
+id: mihub.lung.screening.smokingInterruptionPeriod.v0.1
+uuid: 9e8beb82-2861-5576-86a8-2a95e9512f30
+name: smokingInterruptionPeriod
+label_de: Vollständige Rauchunterbrechung
+definition_de: Zeitraum vollständiger Rauchunterbrechung; Konsum und Jahre davor sowie Unterbrechungsjahre
+  zählen nur bei Unterbrechung unter zehn Jahren.
+phase: screening
+category: sozialanamnese
+datatype: Period
+cardinality: 0..*
+unit: a
+value_set:
+  binding_strength: example
+  standard_binding_status: pending-mapping
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, UCUM (TermServ-Fragment); Stand 2026-10-15. Kein
+    Konzept deckt einen Zeitraum vollständiger Rauchunterbrechung ab; die Codes betreffen Teilaspekte.
+    583971000052102 ''Date ceased smoking cigarettes'' (zigarettenspezifisch, INT seit 2026-02) kodiert
+    den Beginn der Unterbrechung (Period.start); bei SNOMED-Editionen vor 2026-02 ist 160625004 ''Date
+    ceased smoking'' der Rückfall. 228486009 ''Time since stopped smoking'' kodiert die Dauer einer laufenden
+    Abstinenz (offenes Period-Ende). LOINC 107339-4 ist Mapping für die Dauer einer abgeschlossenen Unterbrechung,
+    LOINC 74010-0 Mapping für das Stoppdatum (Tabak allgemein). Einheiten a (Zehn-Jahres-Regel) und mo
+    (kürzere Unterbrechungen). Rollen der Codes: snomed-ct|583971000052102 = element; snomed-ct|228486009
+    = element; loinc|107339-4 = element; loinc|74010-0 = element.'
+  codings:
+  - system: snomed-ct
+    code: '583971000052102'
+    display: Date ceased smoking cigarettes
+  - system: snomed-ct
+    code: '228486009'
+    display: Time since stopped smoking
+  - system: loinc
+    code: 107339-4
+    display: Temporary smoking cessation [Time]
+  - system: loinc
+    code: 74010-0
+    display: Date quit tobacco smoking
+standard_mappings:
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.effectivePeriod
+  notes: de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis (in 6.0.0 abstrakt). effectivePeriod = Unterbrechungszeitraum,
+    offenes Ende = laufende Abstinenz. Pflicht-LOINC wäre 107339-4, das nur die Dauer abbildet; effectivePeriod
+    und valueQuantity (a bzw. mo) stehen daher nebeneinander. Weil value[x] 1..1 gilt, muss auch bei offenem
+    Ende eine Dauer angegeben werden, oder das abgeleitete Profil lässt dataAbsentReason zu.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.effectivePeriod
+  notes: hl7.fhir.r4.core#4.0.1, stabil; Fallback. effectivePeriod mit optionalem Ende, derivedFrom auf
+    die angrenzenden Konsumabschnitte. Die Regel 'keine Überlappung mit cigaretteConsumptionPeriod' ist
+    im Standard nicht ausdrückbar und braucht eine eigene Invariante.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: Lücke zwischen /data[at0001]/items[at0029]/items[at0064]/items[at0082] (Episode end date) und
+    Folge-Episode /items[at0013]; /data[at0001]/items[at0029]/items[at0014] (Quit date); /data[at0001]/items[at0016]
+    (Overall quit date)
+  notes: openEHR CKM, Revision 2.0.1, published, nicht-FHIR; Näherung, kein explizites Unterbrechungselement.
+    Die Unterbrechung ergibt sich als Lücke zwischen zwei Episoden; eine laufende Abstinenz entspricht
+    Quit date bzw. Overall quit date. Die Zehn-Jahres-Regel wäre im Protokoll über Quit date definition
+    (/protocol[at0021]/items[at0071]) zu dokumentieren.
+care_process:
+  trigger: bei der Anspruchsprüfung, wenn der Zigarettenkonsum vollständig unterbrochen war oder beendet
+    ist
+  responsible_role: berichterstellende Ärzt:in; Selbstauskunft (Portal)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2 S. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Zigarettenkonsum vor einer vollständigen Unterbrechung des Rauchens ist nur dann mitzuzählen,
+      wenn die …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. aa
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: mit einer Dauer von mindestens 25 Jahren, wobei die Jahre vor einer vollständigen Unterbrechung
+      des Rauchens und die Jahre der vollständigen Unterbrechung selbst nur mitgezählt werden, wenn die
+      Unterbrechung weniger als zehn Jahre beträgt
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: S. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Rauchpausen innerhalb dieser Zeit dürfen nicht länger als 10 Jahre gewesen sein.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 5 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R/L/S:=, P:smokingInterruption; BPMN-Schritt: G2 Raucheranamnese
+      | Praxis: Activity_0ya2ob0'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 5); Quellen: Q01, Q04'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 5)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. LuKrFrühErkV § 1 Abs. 2 S. 4 (Packungsjahre) und § 2
+  Abs. 1 S. 1 Nr. 3 Buchst. a Doppelbuchst. aa (Dauer). Laufende Abstinenz wie Unterbrechung: G-BA-Auslegung
+  (TrG Abschn. 2.1 mit Fn. 7), kein Verordnungstext.'
+- 'Umsetzung: eigenständig (Raucheranamnese Q3). Period 0..*; eine laufende Unterbrechung ohne Ende zulassen.
+  Konsistenzregel: keine Überlappung mit cigaretteConsumptionPeriod; dependsOn cigaretteConsumptionPeriod.
+  LOINC 107339-4 nur als Mapping der Dauer verwenden (valueQuantity in a bzw. mo) oder weglassen. Notiz
+  ersetzen: „Der G-BA wendet die 10-Jahres-Regel auch auf beendeten Konsum an (TrG 18.06.2025, Abschn.
+  2.1 mit Fn. 7); das ist Auslegung, nicht Verordnungstext.“ Offen (E2): Zählt das Rauchen anderer Produkte
+  als Unterbrechung des „Rauchens“?.'
+- Kein Standardkonzept und kein FHIR-Profil (MII, ISiK, IPS, US Core) beschreibt einen Zeitraum vollständiger
+  Rauchunterbrechung; die Zehn-Jahres-Regel der LuKrFrühErkV hat in keinem Standard eine Entsprechung.
+- Zu entscheiden ist (E2), ob eine Unterbrechung als eigener Zeitraum oder als Rauchstoppdatum mit Dauer
+  modelliert wird; davon hängt das endgültige Mapping ab.
+- Offen ist, ob der Konsum anderer Tabak- oder Nikotinprodukte eine Unterbrechung des Zigarettenrauchens
+  aufhebt.
+- Der G-BA wendet die Zehn-Jahres-Regel auch auf beendeten Konsum an (Tragende Gründe vom 18.06.2025,
+  Abschn. 2.1 mit Fn. 7); das ist Auslegung, nicht Verordnungstext, und ist im Element so zu kennzeichnen.
+- Für eine laufende Abstinenz verlangt ein von ISiKLebensZustand abgeleitetes Profil trotzdem einen Wert;
+  ob dataAbsentReason oder eine stichtagsbezogene Dauer verwendet wird, ist festzulegen.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.cigaretteConsumptionPeriod.v0.1

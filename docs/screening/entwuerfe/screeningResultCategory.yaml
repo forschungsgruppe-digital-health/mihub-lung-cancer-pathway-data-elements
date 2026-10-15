@@ -1,0 +1,213 @@
+id: mihub.lung.screening.screeningResultCategory.v0.1
+uuid: ea55092b-bced-5f46-8e38-c867be5d8062
+name: screeningResultCategory
+label_de: Abschließendes Ergebnis der Früherkennungsuntersuchung
+definition_de: 'Abschließende Rechtskategorie (unauffällig, kontroll-, abklärungsbedürftig) mit Datum:
+  Erstbefund oder Ergebnis der gemeinsamen Beurteilung.'
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Editionen: SNOMED CT INT 20260701 und LOINC 2.83, MII TermServ (Stand 2026-10-15). Element-Code
+    ist das Observable 271937008 ''Screening interpretation''. Die Antwortwerte sind die drei Ergebniskategorien
+    der LuKrFrühErkV als lokales CodeSystem (Platzhalter, local-no-standard-binding): unauffällig (nicht
+    legaldefiniert; G-BA und KBV: ''unauffällig'', S3: ''negativ''), kontrollbedürftig (§ 1 Abs. 4), abklärungsbedürftig
+    (§ 1 Abs. 5); dazu Grundlage (Erstbefund allein | gemeinsame Beurteilung) und Zeitpunkt der abschließenden
+    Beurteilung als Qualifier. Kein Standard (SNOMED, LOINC, MII, ISiK, KBV) bildet diese Kategorien ab.
+    SNOMED-Codes nur als Mapping-Ziele, nicht als zulässige Antwortwerte: 171109003 für unauffällig (Relation
+    inexact/narrower, da ein unauffälliger Befund benigne Befunde enthalten kann), 712875004 als gemeinsame
+    Oberkategorie für kontroll- und abklärungsbedürftig (Relation broader). In LOINC 2.83 gibt es keinen
+    Code für ein Lungenkrebs-Screening-Ergebnis. Nach Veröffentlichung des lokalen CodeSystems ist ein
+    required-Binding auf die drei Kategorien vorgesehen. Rollen der Codes: snomed-ct|271937008 = element;
+    local-no-standard-binding|unauffaellig = wert; local-no-standard-binding|kontrollbeduerftig = wert;
+    local-no-standard-binding|abklaerungsbeduerftig = wert; snomed-ct|171109003 = wert; snomed-ct|712875004
+    = wert.'
+  codings:
+  - system: snomed-ct
+    code: '271937008'
+    display: Screening interpretation
+  - system: local-no-standard-binding
+    code: unauffaellig
+    display: unauffällig
+  - system: local-no-standard-binding
+    code: kontrollbeduerftig
+    display: kontrollbedürftig
+  - system: local-no-standard-binding
+    code: abklaerungsbeduerftig
+    display: abklärungsbedürftig
+  - system: snomed-ct
+    code: '171109003'
+    display: Screening - NAD
+  - system: snomed-ct
+    code: '712875004'
+    display: Abnormal finding on screening procedure
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding (offenes Slicing, lokales Coding); Observation.value[x]; Observation.effective[x];
+    Observation.method; Observation.hasMember; Observation.derivedFrom
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil; Notlösung, da eine
+    Rechtskategorie keine radiologische Beobachtung im engeren Sinn ist. Code und Wert aus dem lokalen
+    CodeSystem; der sct-Slice bleibt leer, weil er REQUIRED an Clinical findings gebunden ist (271937008
+    ist ein Observable und dort unzulässig). effective = Zeitpunkt der abschließenden Beurteilung; method
+    oder lokale component = Grundlage (Erstbefund allein | gemeinsame Beurteilung). Verweise auf readerAssessmentCategory
+    und lungRadsCategory nur über hasMember, denn derivedFrom ist auf DocumentReference, ImagingStudy,
+    Media und QuestionnaireResponse beschränkt (derivedFrom → ImagingStudy). Die Zuordnung zu Lung-RADS
+    gehört in eine ConceptMap.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode.coding (offenes Slicing; Slices sct und icd10-gm REQUIRED); DiagnosticReport.conclusion
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Nur ergänzende Darstellung
+    im Befundbericht: Kategorie als lokales Coding in conclusionCode außerhalb der Slices, Freitext in
+    conclusion; führender Ort bleibt die Observation.'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/HL7IDRImpression
+  resource: Extension auf DiagnosticReportEuImaging (extension:impression)
+  path: Extension.value[x] = Reference(ObservationFindingEuImaging | Condition | …)
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/Draft. Strukturort für die abschließende Beurteilung;
+    die Kategorie selbst bleibt ein lokales Coding in der referenzierten ObservationFindingEuImaging.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+  resource: DiagnosticReport
+  path: DiagnosticReport.conclusionCode (Example-Binding clinical-findings); DiagnosticReport.conclusion
+  notes: hl7.fhir.uv.ips#2.0.1, stabil, internationales Referenzmuster mit geringer Spezifität; lokales
+    Coding ohne Bindungszwang möglich.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_DiagnosticImagingReportTemplates.html
+  resource: TID 2000 Basic Diagnostic Imaging Report
+  path: Row 8 CONTAINER aus CID 7001 = (19005-8, LN, "Impressions"); Inhalt TID 2002 Report Narrative
+  notes: 'DICOM PS3.16 2026d, nicht-FHIR. Äquivalenz related: nur Überschrift bzw. Narrativ, keine Codes
+    für die deutschen Rechtskategorien.'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  resource: OBSERVATION
+  path: /data[at0001]/events[at0002]/data[at0003]/items[at0021] (Overall impression, DV_TEXT)
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle published, nicht-FHIR. Lokale Terminologie
+    als DV_CODED_TEXT binden.
+care_process:
+  trigger: Abschluss der Befundung je Runde
+  responsible_role: Erstbefunder (bei gemeinsamer Beurteilung zusammen mit dem Zweitbefunder)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 5
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ein abklärungsbedürftiger Befund ist ein Befund, der mit so hoher Wahrscheinlichkeit auf ein
+      Lungenkarzinom …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 42 Abs. 2 und 3, S. 20
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Das Ergebnis der Lungenkrebsfrüherkennungsuntersuchung ist der abschließende Befund: bei unauffälligem
+      Befund des Erstbefunders dieser Befund und bei einem abklärungsbedürftigen oder kontrollbedürftigen
+      Befund des Erstbefunders das Ergebnis der gemeinsamen Beurteilung von Erst- und Zweitbefunder.'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: ACR Lung-RADS v2022 — ACR Lung-RADS v2022 (mit Summary of Changes) und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Note 9
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: the Lung-RADS 0 category is temporary until the comparison study is available
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 42 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R/B:=, R:jointAssessmentResult, S:consensusScreeningResult,
+      E:finalAssessmentDate, P:screeningFinalResult; BPMN-Schritt: G10 Ergebnis | Befund kategorie? (Gateway_10udrva)
+      bzw. Gateway_0mk0bmb'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 42); Quellen: Q01, Q03, Q20'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 42)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Kategorien legaldefiniert (LuKrFrühErkV § 1 Abs. 4/5);
+  gemeinsame Beurteilung § 5 Abs. 3; Dokumentation KFE-RL § 44; Zählung für die QS (§ 7 Abs. 2 Nr. 2)
+  und den Quartalsbericht an die KV (KFE-RL § 44).'
+- 'Umsetzung: eigenständig (nimmt jointAssessment auf). jointAssessment hier aufgehen lassen, als Qualifier:
+  Grundlage (Erstbefund allein | gemeinsame Beurteilung), Zeitpunkt der abschließenden Beurteilung (effective),
+  optional Konsensuskonferenz bei Dissens. Lokales CodeSystem: unauffällig | kontrollbedürftig (§ 1 Abs.
+  4) | abklärungsbedürftig (§ 1 Abs. 5); standard_binding_status no-standard-found; „unauffällig“ als
+  nicht legaldefiniert kennzeichnen (TrG und KBV: „unauffällig“, S3: „negativ“). Mapping-Tabelle zu lungRadsCategory
+  mit Regeln für Kategorie 0 und 4A. dependsOn readerAssessmentCategory; steuert recommendedManagement,
+  recommendedControlInterval und abnormalResultDiscussion. Quellen ergänzen: § 1 Abs. 4 und 5, § 5 Abs.
+  2 und 3, § 7 Abs. 2 Nr. 2; KFE-RL § 42 Abs. 3 und § 44; TrG S. 20; S3 Empf. 5.9.'
+- Für die drei Ergebniskategorien der LuKrFrühErkV muss ein lokales CodeSystem mit kanonischer URL im
+  mihub-Namensraum veröffentlicht werden; danach soll das Binding auf required angehoben werden.
+- Die Kategorie 'unauffällig' ist nicht legaldefiniert; die Bezeichnung (unauffällig vs. negativ) ist
+  festzulegen und im CodeSystem zu kennzeichnen.
+- Es fehlt eine ConceptMap zu lungRadsCategory mit Regeln für Lung-RADS 0 (vorläufig) und 4A.
+- Ein SNOMED-Antrag (DE-Extension) für 'kontrollbedürftiger' und 'abklärungsbedürftiger Screeningbefund'
+  wäre zu prüfen; bisher gibt es nur die unscharfen Mapping-Ziele 171109003 (narrower) und 712875004 (broader).
+- Kein deutsches oder internationales FHIR-IG zur Lungenkrebsfrüherkennung bildet die Rechtskategorien
+  ab; die Abbildung auf das MII-Profil radiologische-beobachtung ist eine Notlösung.
+- Kardinalität laut Quelle 1..1 je Runde (vorher Status „ausstehend“).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.readerAssessmentCategory.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.lungRadsCategory.v0.1

@@ -1,0 +1,257 @@
+id: mihub.lung.screening.lungRadsCategory.v0.1
+uuid: a82fd9dc-a8ff-5586-8e98-a16fc50622e6
+name: lungRadsCategory
+label_de: Lung-RADS-Kategorie (V-Lung-RADS 2022) mit Version und S-Modifikator
+definition_de: V-Lung-RADS-2022-Kategorie 0–4X je Befundung und abschließend, mit Version, Grund bei Kategorie
+  0 und Modifikator S.
+phase: screening
+category: assessment
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: required
+  standard_binding_status: pending-mapping
+  notes: 'Element-Code (Observation.code) ist SNOMED CT 1362105002 |Lung Imaging Reporting and Data System
+    category| (observable entity; setzt SNOMED CT INT ab 2025-03-01 voraus). 1362106001 (assessment scale)
+    ist die Instrumentangabe, 1362107005 (procedure) optional die Methode (Observation.method). Antwortwerte
+    sind ein lokales CodeSystem ''V-Lung-RADS 2022'' (Kategorien 0, 1, 2, 3, 4A, 4B, 4X), required gebunden,
+    weil die S3-Leitlinie die modifizierte Lung-RADS-Klassifikation 2022 mit integrierter Volumenverdopplungszeit
+    vorgibt; SNOMED CT hat keine Kategoriewerte unter 1362105002. Der Modifikator S ist kein alternativer
+    Kategoriewert, sondern ein Zusatz (eigene Komponente bzw. zweites Coding, Bezug zu incidentalFinding).
+    Die RadLex-Werte RID50135–RID50141 und RID50710 bilden ACR Lung-RADS ab und sind nur Mapping-Ziele
+    (equivalence relatedto/wider, nicht equivalent). Editionen: SNOMED CT INT 20260701, RadLex 4.2 (MII
+    TermServ); LOINC 2.83 ohne Lung-RADS-Term; Stand 2026-10-15. Rollen der Codes: snomed-ct|1362105002
+    = element; snomed-ct|1362106001 = instrument; snomed-ct|1362107005 = methode; local-no-standard-binding|0
+    = wert; local-no-standard-binding|1 = wert; local-no-standard-binding|2 = wert; local-no-standard-binding|3
+    = wert; local-no-standard-binding|4A = wert; local-no-standard-binding|4B = wert; local-no-standard-binding|4X
+    = wert; local-no-standard-binding|S = wert.'
+  codings:
+  - system: snomed-ct
+    code: '1362105002'
+    display: Lung Imaging Reporting and Data System category
+  - system: snomed-ct
+    code: '1362106001'
+    display: Lung Imaging Reporting and Data System
+  - system: snomed-ct
+    code: '1362107005'
+    display: Assessment using Lung Imaging Reporting and Data System
+  - system: local-no-standard-binding
+    code: '0'
+    display: V-Lung-RADS 2022 Kategorie 0
+  - system: local-no-standard-binding
+    code: '1'
+    display: V-Lung-RADS 2022 Kategorie 1
+  - system: local-no-standard-binding
+    code: '2'
+    display: V-Lung-RADS 2022 Kategorie 2
+  - system: local-no-standard-binding
+    code: '3'
+    display: V-Lung-RADS 2022 Kategorie 3
+  - system: local-no-standard-binding
+    code: 4A
+    display: V-Lung-RADS 2022 Kategorie 4A
+  - system: local-no-standard-binding
+    code: 4B
+    display: V-Lung-RADS 2022 Kategorie 4B
+  - system: local-no-standard-binding
+    code: 4X
+    display: V-Lung-RADS 2022 Kategorie 4X
+  - system: local-no-standard-binding
+    code: S
+    display: V-Lung-RADS 2022 Modifikator S
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding (sct-Slice bzw. offenes Slicing); Observation.valueCodeableConcept; Observation.component
+    (Version, Grund bei Kategorie 0, Modifikator S)
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. NICHT KONFORM mit
+    1362105002 als SNOMED-Coding in Observation.code: Der sct-Slice ist REQUIRED an < 404684003 |Clinical
+    finding| gebunden. Optionen: (a) code ohne SNOMED, d. h. lokaler Code oder RadLex RID50134 ''Lung-RADS
+    assessment'' im offenen Slicing, 1362105002 erst nach einer MII-Änderung; (b) Ballot-Kommentar an
+    MII Bildgebung, Observable-Entity-Codes für Scores und Kategorien zuzulassen. value[x] 1..1 = lokales
+    CodeSystem V-Lung-RADS 2022; Version, Grund bei Kategorie 0 und Modifikator S als component mit lokalen
+    Codes.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund
+  resource: DiagnosticReport
+  path: DiagnosticReport.result; DiagnosticReport.conclusionCode; DiagnosticReport.imagingStudy
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Kategorie-Observations
+    je Befunder über result (0..* MS). Die abschließende Kategorie kann zusätzlich als nicht-SNOMED-Coding
+    in conclusionCode stehen (0..* MS, example; coding offen geslict mit den optionalen Slices sct (REQUIRED
+    Clinical finding) und icd10-gm). imagingStudy 1..* MS ist Pflicht (LDCT-Studie).
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot. Bindung unverändert
+    < 404684003 (SCT 20260701), aber das Slice-Pattern trägt die Version im System-String; 1362105002
+    würde dadurch faktisch durchrutschen, das ist nicht beabsichtigt. Nicht darauf bauen, sondern im Ballot
+    kommentieren (Zulassung von Observable-Entity-Codes für Scores).
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ObservationFindingEuImaging
+  resource: Observation
+  path: Observation.code; Observation.valueCodeableConcept
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/draft (EHDS-Zielbild). code 1..1 nur example gebunden,
+    value[x] 0..1; 1362105002 als code und lokale Werte sind zulässig. Das Gesamturteil in DiagnosticReportEuImaging.extension:impression
+    ist eine Referenz (ObservationFindingEuImaging, Condition oder Key Image); die Gesamtkategorie muss
+    dort also als Observation vorliegen, nicht als Code.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  resource: Observation
+  path: Observation.code; Observation.value[x]
+  notes: hl7.fhir.uv.ips#2.0.1, stabil (international). code PREFERRED an LOINC Radiologie (CLASS LP29684-5),
+    daher ist SNOMED 1362105002 zulässig; LOINC 2.83 enthält keinen Lung-RADS-Term. category:radiology
+    1..1 (imaging).
+- standard: other
+  profile_or_url: http://radlex.org
+  resource: RadLex Lung-RADS-Werte (ACR)
+  path: RID50134 Lung-RADS assessment; RID50135 Lung-RADS 0; RID50136 Lung-RADS 1; RID50137 Lung-RADS
+    2; RID50138 Lung-RADS 3; RID50139 Lung-RADS 4A; RID50140 Lung-RADS 4B; RID50141 Lung-RADS 4X; RID50710
+    Lung-RADS S
+  notes: RadLex 4.2 (MII TermServ). Mapping-Ziele der lokalen V-Lung-RADS-Werte (equivalence relatedto
+    bzw. wider, nicht equivalent), da die RadLex-Definitionen ACR Lung-RADS folgen und die deutsche V-Lung-RADS-Fassung
+    mit Volumenverdopplungszeit (insbesondere bei 4A/4B) abweicht. RID50710 ist ein Modifikator, keine
+    eigenständige Kategorie. RID50134 nur als Oberbegriff; primäre Instrumentangabe ist SNOMED 1362106001.
+- standard: other
+  profile_or_url: https://api3.rsna.org/radelement/v1/sets/RDES267
+  resource: RSNA/ACR RadElement 'Lung-RADS categorization'
+  path: RDE1702 Category of findings (Werte RDE1702.0 ff.); RDE1703 Baseline study; RDE1704 Significant
+    finding (S-Modifikator)
+  notes: 'RSNA RadElement API (Stand 2026-10-15), Set Published (2023-07-26), RDE1702 Published (2024-05-31),
+    nicht-FHIR. RDE1702 kodiert ACR-v2022-Unterkategorien (z. B. ''Lung-RADS 0: incomplete, locating priors''),
+    sodass sich die Gründe bei Kategorie 0 mappen lassen; RDE1704 (absent/present/indeterminate/unknown)
+    entspricht dem S-Modifikator, RDE1703 dem Baseline-Status. Nur Mapping-Ziel, da V-Lung-RADS abweicht.'
+- standard: other
+  profile_or_url: https://www.ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_Suppl_AIR.pdf
+  resource: IHE RAD AIR, A.3.3.2 Lung-RADS Result / A.3.3.3 Nodule 1
+  path: Finding (RID50139, RADLEX, 'Lung-RADS 4A') als Root Result; je Herd (RID50134, RADLEX, 'Lung-RADS
+    Assessment') = (RID50138, RADLEX, 'Lung-RADS 3')
+  notes: IHE RAD Suppl. AIR Rev. 1.3, Trial Implementation (2025-08-08), nicht-FHIR, informatives Beispiel.
+    Belegt das Muster Gesamtkategorie plus Kategorie je Rundherd; bezieht sich auf ACR Lung-RADS, nicht
+    auf V-Lung-RADS.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_A.html#sect_TID_1501
+  resource: TID 1500 > TID 1501 Measurement and Qualitative Evaluation Group
+  path: Qualitative Evaluation je Rundherd und Gesamtbefund
+  notes: DICOM PS3.16 2026d, nicht-FHIR. DICOM definiert keinen eigenen Lung-RADS-Code (PS3.16 Annex A
+    und D ohne Treffer); Kodierung im IHE-AIR-Beispiel über RadLex.
+- standard: other
+  profile_or_url: https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Reporting-and-Data-Systems/Lung-RADS
+  resource: ACR Lung-RADS v2022 (Kategorientabelle)
+  path: Kategorien 0–4X, Modifikator S
+  notes: ACR Lung-RADS v2022, nicht-FHIR; nur Referenzklassifikation. Maßgeblich in Deutschland ist die
+    modifizierte V-Lung-RADS 2022 (S3 Empf. 5.9, DRG/DGP/DGT-Positionspapier Tab. S1), abgebildet im lokalen
+    CodeSystem.
+care_process:
+  trigger: je Befundung und abschließend
+  responsible_role: Erstbefunder; Zweitbefunder
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.9 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: soll in Deutschland einheitlich die modifizierte Lung-RADS Klassifikation von 2022 mit integrierter
+      …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 42 Abs. 2 und 3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Hierfür sollte die … modifizierte Lung-RADS-Klassifikation mit Einbezug der Volumenverdopplungszeit
+      verwendet werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 36 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: R/L/B/S:=, B:lungRadsVersion, lungRadsCategory0Reason,
+      lungRadsSModifier, noduleLungRadsCategory; S:lungRadsSModifierFindings; BPMN-Schritt: G9 Befundung
+      | Activity_1mvivag, Activity_0mx6d87 → Befund kategorie? (Gateway_10udrva)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 36); Quellen: Q12, Q03'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.9); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 36)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 11 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 10 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.9 (EK, „soll“); TrG zu § 42 Abs. 2 und 3 („sollte“);
+  die KFE-RL nennt Lung-RADS nur als Fortbildungsinhalt (§ 43 Abs. 2 Nr. 4) – keine Rechtspflicht.'
+- 'Umsetzung: eigenständig. SNOMED 1362105002 als Observation.code. Werte als lokales CodeSystem „V-Lung-RADS
+  2022“ (0, 1, 2, 3, 4A, 4B, 4X, Modifikator S, Grund bei Kategorie 0) mit Mapping auf NCIt C226307–C226313
+  und RadElement RDE1702; NCIt C226306 bzw. SNOMED 1362106001 nur als Systemangabe. Die Trennung je Befunder/abschließend
+  mit readerAssessmentCategory und screeningResultCategory harmonisieren (Qualifier). S-Modifikator dependsOn
+  incidentalFinding. Mindest-SNOMED-Edition (INT ab 2025-03-01) dokumentieren; die MII-Bildgebung bindet
+  Observation.code an „< 404684003 Clinical finding“ – das Observable ist dort nicht konform (offene Frage).'
+- Für V-Lung-RADS 2022 ist kein CodeSystem publiziert; das lokale CodeSystem (Kategorien, Modifikator
+  S, Gründe bei Kategorie 0, Version) ist zu definieren und möglichst bei DRG bzw. MII einzubringen.
+- Für die Gründe bei Kategorie 0 gibt es keine Codes in SNOMED CT oder RadLex; nur RadElement RDE1702
+  (ACR) bietet Mapping-Ziele.
+- Das stabile MII-Profil 2026.0.0 lässt 1362105002 als Observation.code nicht zu; ein Ballot-Kommentar
+  an MII Bildgebung ist zu stellen und bis dahin ein nicht-SNOMED-Code zu verwenden.
+- Die Trennung je Befunder und abschließend ist mit readerAssessmentCategory und screeningResultCategory
+  zu harmonisieren.
+- Die Mindest-Edition SNOMED CT INT ab 2025-03-01 ist für alle beteiligten Systeme festzuschreiben.
+- NCIt C226306 bis C226313 (Lung-RADS-Kategorien) sind in NCIt 25.6.0-e auf dem MII TermServ nicht enthalten
+  und erst in einer neueren NCIt-Version belegt; ein Mapping darauf ist zurückgestellt.
+- 'Die Kardinalität ist offen: 0..* bzw. 1..* nur bei verbindlicher Vorgabe (S3 ''soll'', aber keine Rechtspflicht).'
+- Kardinalität laut Quelle 0..* (1..* nur bei verbindlicher Vorgabe).
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.pulmonaryNoduleFinding.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.incidentalFinding.v0.1

@@ -1,0 +1,237 @@
+id: mihub.lung.screening.symptomAndLungCancerCareStatus.v0.1
+uuid: 53f7ca34-19de-5ebd-80ed-4d74f980ce58
+name: symptomAndLungCancerCareStatus
+label_de: Asymptomatik und kein laufender Lungenkrebs-Behandlungskontext
+definition_de: Feststellung, ob die Person asymptomatisch ist und nicht wegen Lungenkrebs in (Nach-)Behandlung;
+  sonst kurative Versorgung statt Früherkennung.
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'SNOMED CT INT 20260701 (MII TermServ), Stand 2026-10-15. Das Element ist auf den Symptom- und
+    Verdachtsstatus bei der Anspruchsprüfung reduziert. Antwortwerte: 84387000 Asymptomatic (Clinical
+    finding; ''keine Krankheitssymptome'' nach StrlSchG § 5 Abs. 16) und 162573006 Malignant neoplasm
+    of lung suspected (Situation with explicit context; ''Suspected lung cancer'' ist Synonym; konkreter
+    Verdacht führt in die kurative Versorgung). Beide Hierarchien sind in den Diagnose-ValueSets von MII,
+    ISiK, KBV und IPS zulässig. Kein Element-Code: Observation.code bleibt lokal, weil es weder ein LOINC-
+    noch ein SNOMED-Observable gibt. Die Bindung ist extensible, damit ein Wert ''Symptome ohne konkreten
+    Verdacht'' ergänzt werden kann (schließt die Früherkennung ebenfalls aus). Der Behandlungs- bzw. Nachbehandlungskontext
+    wird nicht kodiert, sondern aus cancerDiagnosis, treatmentStatus und screeningProgramEnrolment abgeleitet.
+    Nicht verwenden: 139841002 (inaktiv), 264931009 Symptomatic (Qualifier, kein Befund). Rollen der Codes:
+    snomed-ct|84387000 = wert; snomed-ct|162573006 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '84387000'
+    display: Asymptomatic
+  - system: snomed-ct
+    code: '162573006'
+    display: Malignant neoplasm of lung suspected
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-symptom/StructureDefinition/finding-observation
+  resource: Observation
+  path: Observation.value[x]
+  notes: de.medizininformatikinitiative.kerndatensatz.symptom#2027.0.0-ballot (Ballot; MII_PR_Symptom_Observation,
+    noch kein stabiles Release). Hauptziel für den Symptom- und Verdachtsstatus. value[x] 0..1 MS (valueCodeableConcept
+    mit 84387000 bzw. 162573006); code 1..1 MS nur mit Bindung example (lokaler Fragecode); effective[x]
+    0..1 MS. Optionale Symptomliste über hasMember (0..* MS) bzw. extension:associatedSymptomOrCondition
+    auf einzelne Symptom-Conditions.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/modul-symptom/StructureDefinition/finding-condition
+  resource: Condition
+  path: Condition.code
+  notes: de.medizininformatikinitiative.kerndatensatz.symptom#2027.0.0-ballot (Ballot; MII_PR_Symptom_Condition).
+    Für die optionale Liste typischer Symptome (z. B. Onkopedia NSCLC 04/2025, Tab. 1), je Symptom eine
+    Condition. code 0..1 MS (example); verificationStatus 0..1 MS REQUIRED an condition-ver-status ('refuted'
+    für verneinte Symptome); onset[x] mit onsetPeriod und Lebensphase-Extensions, recordedDate 0..1 MS,
+    extension:assertedDate. Die Asymptomatik als Ganzes gehört in die Symptom-Observation.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose
+  resource: Condition
+  path: Condition.verificationStatus
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (stabil). Grundlage, um den Behandlungskontext
+    abzuleiten statt zu erfassen (dependsOn cancerDiagnosis). verificationStatus 0..1 MS REQUIRED an condition-ver-status
+    (''provisional''/''unconfirmed'' für einen konkreten Verdacht). code 1..1 MS mit Slices icd10-gm (REQUIRED
+    mii-vs-diagnose-icd10gm) und sct (REQUIRED diagnoses-sct: is-a 404684003, 272379006 und 243796009,
+    SCT INT 20250701 – 162573006 als Situation ist damit erfasst). recordedDate 1..1 MS.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDiagnose
+  resource: Condition
+  path: Condition.verificationStatus
+  notes: 'de.gematik.isik#6.0.0 (stabil). KIS-Pendant zur MII-Diagnose für Verdacht bzw. bekannte Lungenkrebsdiagnose.
+    verificationStatus MS; code min 1 MS mit Slices ICD-10-GM, Alpha-ID, SNOMED-CT (REQUIRED DiagnosesSCT:
+    is-a 404684003 | 272379006 | 243796009; 84387000 und 162573006 erfasst) und Orphanet; recordedDate
+    min 1 MS.'
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Condition_Diagnosis
+  resource: Condition
+  path: Condition.code.coding:ICD-10-GM.extension:Diagnosesicherheit; Condition.code.coding:snomed
+  notes: 'kbv.basis#1.7.0 geprüft (stabil; KBV-Basisprofil, kein MIO). Ambulantes PVS-Pendant, da die
+    Anspruchsprüfung vertragsärztlich erfolgt. code 1.. mit Slices ICD-10-GM (Extension Diagnosesicherheit,
+    z. B. ''V'' für Verdacht), alphaId, snomed (REQUIRED KBV_VS_Base_Diagnosis_SNOMED_CT: is-a 404684003
+    | 272379006 | 243796009; system, version, code, display je 1..1) und orphanet. Pfade in der aktuellen
+    Version kbv.basis#1.9.0 vor Übernahme bestätigen.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Condition-uv-ips
+  resource: Condition
+  path: Condition.code
+  notes: hl7.fhir.uv.ips#2.0.1 (stabil; HL7 IPS, internationales Referenzmuster). code 1..1 MS preferred
+    an problems-uv-ips (descendent-of 404684003, 243796009, 272379006; is-a 160245001) – beide Antwortwerte
+    erfasst; verificationStatus 0..1 REQUIRED.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-screening-assessment
+  resource: Observation
+  path: Observation.value[x]
+  notes: hl7.fhir.us.core#9.0.0 (stabil; US-Muster, kein nationales Ziel). Strukturmuster für eine Screening-Frage
+    (code = Frage, value = Antwort); category:survey 1..1 Pattern; code preferred an ein US-VSAC-ValueSet.
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.4432
+  resource: openEHR-EHR-OBSERVATION.symptom_sign_screening.v1
+  path: /data[at0001]/events[at0002]/data[at0003]/items[at0028] (Any symptoms or signs?); items[at0022]/items[at0005]
+    (Specific symptom/sign – Presence?)
+  notes: 'openEHR CKM symptom_sign_screening.v1, Revision 1.0.7 (published; nicht-FHIR). Genaueste Entsprechung:
+    at0028 ''Any symptoms or signs?'' DV_CODED_TEXT Yes/No/Unknown/Unsure (alternativ DV_BOOLEAN), Kardinalität
+    0..* (eine Instanz genügt); at0034 ''Screening purpose'' für die LDCT-Anspruchsprüfung; CLUSTER at0022
+    je Symptom mit Name at0004 und Presence at0005.'
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: 'Item 138 ''Indication for Exam: Are there are signs or symptoms of lung cancer'' (No | Yes, Required)'
+  notes: ACR LCSR & IPN Data Dictionary 2026-05-28 (nicht-FHIR, Register USA), S. 26, Abschnitt Study
+    Data – About the Exam. Gleiche Semantik als Pflichtfeld; Lungenkrebs in der Vorgeschichte über Item
+    131 (Option 'Lung Cancer') bzw. Items 158/159.
+care_process:
+  trigger: jede Anspruchsprüfung (erneut bei Indikationsstellung)
+  responsible_role: berichterstellende Ärzt:in (Praxis)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 38 Abs. 3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Versicherte, die sich aufgrund einer Lungenkrebserkrankung in ärztlicher Behandlung oder Nachbehandlung
+      befinden …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: StrlSchG — Strahlenschutzgesetz §§ 5, 83–85 und Strahlenschutzverordnung §§ 119, 124, 127
+    url: https://www.gesetze-im-internet.de/strlschg/__85.html
+    section: § 5 Abs. 16
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Personen, die keine Krankheitssymptome und keinen konkreten Krankheitsverdacht aufweisen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q09
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 38 Abs. 3 (Fortsetzung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: oder bei denen aufgrund von Vorliegen typischer Symptome ein konkreter Verdacht auf eine Lungenkrebserkrankung
+      besteht, haben Anspruch auf die notwendige ärztliche Betreuung und Behandlung innerhalb der kurativen
+      Versorgung.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: KVBB-Musterbericht (PDF 12.05.2026) — KVBB-Musterbericht zur Aushändigung (Lungenkrebs-Früherkennung)
+    url: https://www.kvbb.de/fileadmin/user_upload/pdf/Genehmigungspflichtige_Leistungen/Lungenkrebs-Frueherkennung/Musterbericht_LDCT.pdf
+    section: Feld
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ist eine Lungenkrebserkrankung bekannt Ja ☐ Nein ☐
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#X05
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 10 der Quellenrecherche zur Screening-Episode (Gruppe G3 Zulässigkeit/Eignung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:asymptomaticStatusConfirmed, L:lungCancerSymptomsPresent,
+      S:screeningExclusionSymptomsOrLungCancer, P:=; BPMN-Schritt: G3 Zulässigkeit | Praxis: Activity_0ya2ob0
+      → Voraussetzungen erfüllt? (Gateway_1whuu15)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 10); Quellen: Q02, Q09, X05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 10)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 2 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 9 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. Früherkennung nur bei Personen ohne Krankheitssymptome
+  und ohne konkreten Verdacht (StrlSchG § 5 Abs. 16); Behandlung, Nachbehandlung oder Verdacht führen
+  in die kurative Versorgung (KFE-RL § 38 Abs. 3).'
+- 'Umsetzung: eigenständig, reduziert auf Symptom- und Verdachtsstatus. Auf den Status zu Symptomen und
+  Verdacht reduzieren (z. B. Name symptomStatusAtEligibilityCheck): asymptomatisch (84387000) | typische
+  Symptome mit konkretem Verdacht (162573006), optional mit Symptomliste (z. B. Onkopedia NSCLC 04/2025,
+  Tab. 1). Den Behandlungskontext nicht erfassen, sondern als Constraint aus cancerDiagnosis, treatmentStatus
+  und screeningProgramEnrolment ableiten. Zitat um den Symptomteil vervollständigen; StrlSchG § 5 Abs.
+  16 und TrG zu § 38 Abs. 3 ergänzen. Widerspruch KFE-RL § 38 Abs. 3 („Nachbehandlung“) zu S3 Empf. 16.7
+  klären (E7).'
+- Für Observation.code ('Symptom- und Verdachtsstatus bei der Anspruchsprüfung') gibt es keinen LOINC-
+  oder SNOMED-Code; der Fragecode bleibt lokal.
+- Für den Zustand 'Krankheitssymptome ohne konkreten Verdacht' fehlt ein Befundkonzept; ob er als lokaler
+  Wert ergänzt wird, ist zu entscheiden.
+- Umbenennung in symptomStatusAtEligibilityCheck und Reduktion auf den Symptom- und Verdachtsstatus sind
+  zu bestätigen; der Behandlungskontext wird dann nur als Constraint aus cancerDiagnosis, treatmentStatus
+  und screeningProgramEnrolment abgeleitet.
+- Das MII-Modul Symptom liegt nur als Ballot 2027.0.0-ballot vor; ISiK hat kein Symptomprofil.
+- Die ICD-10-GM-Kodierung eines Lungenkrebsverdachts (z. B. Z03.1 bzw. Diagnosesicherheit 'V') ist noch
+  festzulegen und am TermServ zu prüfen.
+- Der Widerspruch zwischen KFE-RL § 38 Abs. 3 ('Nachbehandlung') und S3 Empf. 16.7 ist fachlich zu klären.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.primarycare.cancerDiagnosis.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.treatmentStatus.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.screeningProgramEnrolment.v0.1

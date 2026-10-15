@@ -1,0 +1,206 @@
+id: mihub.lung.screening.clarificationReferral.v0.1
+uuid: a330cd50-b3f2-50e7-bf8b-5e0bcbeb147b
+name: clarificationReferral
+label_de: 'Einleitung der Abklärung: Überweisung an spezialisierte Einrichtung'
+definition_de: 'Unverzüglich eingeleitete Abklärung: Überweisung zur spezialisierten Einrichtung (Sprechstunde,
+  Fallkonferenz), auch wegen Nebenbefunden.'
+phase: screening
+category: mitbetreuung
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Editionen: SNOMED CT INT 20260701, LOINC 2.83 und KDL 2025, alle Codes auf dem MII TermServ
+    aktiv (Stand 2026-10-15). Element-Codes (ServiceRequest.code): 3457005 wie in referralOrder, spezifischer
+    103696004 für die Überweisung an eine spezialisierte Einrichtung, optional 306273003 bei pneumologischem
+    Ziel. 712875004 nur als ServiceRequest.reasonCode neben dem führenden reasonReference → screeningResultCategory.
+    Dokumentklassen des Begleitschreibens (nur DocumentReference.type, nicht ServiceRequest.code): LOINC
+    57133-1 und KDL AU050102. Das Ziel ''spezialisierte Einrichtung'' (KFE-RL § 43 Abs. 4) wird über performer
+    ausgedrückt, ''unverzüglich'' über authoredOn statt über einen Dringlichkeitscode. Abgelehnt: 134403003
+    (Urgent referral; Frist ist keine klinische Dringlichkeit), 183529009 (Referral to oncologist; vor
+    der Abklärung keine Krebsdiagnose). Rollen der Codes: snomed-ct|3457005 = element; snomed-ct|103696004
+    = element; snomed-ct|306273003 = element; snomed-ct|712875004 = wert; loinc|57133-1 = dokumentklasse;
+    kdl|AU050102 = dokumentklasse.'
+  codings:
+  - system: snomed-ct
+    code: '3457005'
+    display: Patient referral
+  - system: snomed-ct
+    code: '103696004'
+    display: Patient referral to specialist
+  - system: snomed-ct
+    code: '306273003'
+    display: Referral to chest physician
+  - system: snomed-ct
+    code: '712875004'
+    display: Abnormal finding on screening procedure
+  - system: loinc
+    code: 57133-1
+    display: Referral Note
+  - system: kdl
+    code: AU050102
+    display: Überweisungsschein
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung
+  resource: ServiceRequest
+  path: ServiceRequest.code.coding:loinc (REQUIRED RSNA-Playbook); ServiceRequest.category.coding:sct
+    (Pattern 363679005 Imaging); ServiceRequest.reasonReference; ServiceRequest.performer
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Äquivalenz narrower:
+    nur wenn die Abklärung selbst Bildgebung ist (z. B. PET/CT); für die Überweisung zur interdisziplinären
+    Sprechstunde ungeeignet.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_AW_Behandlung_im_Auftrag_Ueberweisung
+  resource: ServiceRequest
+  path: ServiceRequest.status (fixed completed); ServiceRequest.intent (fixed proposal); ServiceRequest.orderDetail
+    (1..1, REQUIRED KBV_VS_AW_Leistungsart); ServiceRequest.code.text; ServiceRequest.reasonCode.text
+    (1..1); ServiceRequest.supportingInfo:befund_Medikation; ServiceRequest.performer (0..1); ServiceRequest.authoredOn
+    (1..1)
+  notes: kbv.ita.aws#1.2.0, stabil (KBV-Archiv- und Wechselschnittstelle nach § 371 SGB V, nur Differential).
+    Äquivalenz related (Archiv- bzw. Empfängersicht, keine Auftragsübermittlung). code nur als Text (code.coding
+    0..0). reasonReference erlaubt nur KBV_PR_AW_Diagnose; der Befundbezug läuft daher über supportingInfo:befund_Medikation
+    (→ KBV_PR_AW_Observation_Befund) bzw. reasonCode.text.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/ServiceRequest
+  resource: ServiceRequest
+  path: ServiceRequest.code; ServiceRequest.reasonReference; ServiceRequest.reasonCode; ServiceRequest.performer;
+    ServiceRequest.authoredOn; ServiceRequest.intent
+  notes: hl7.fhir.r4.core#4.0.1, stabil; konsistent mit referralOrder (specializes). code = 3457005 bzw.
+    103696004; reasonReference → screeningResultCategory (abklärungsbedürftig); performer → HealthcareService
+    bzw. Organization der spezialisierten Einrichtung; mehrere vorgeschlagene Einrichtungen (Tragende
+    Gründe) als mehrere performer (Alternativen); authoredOn als Nachweis für 'unverzüglich'. 57133-1
+    nur als DocumentReference.type des Begleitdokuments.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-servicerequest
+  resource: ServiceRequest
+  path: ServiceRequest.code (1..1, extensible us-core-procedure-code); ServiceRequest.category:us-core;
+    ServiceRequest.reasonCode/reasonReference
+  notes: hl7.fhir.us.core#9.0.0, stabil. Nur internationales Referenzmuster mit niedriger Priorität, kein
+    deutscher Einsatz.
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-INSTRUCTION.service_request.v1
+  resource: INSTRUCTION
+  path: /activities[at0001]/description[at0009]/items[at0121] (Service name), items[at0062] (Reason for
+    request), items[at0040] (Service due)
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle laut Mirror in_development, nicht-FHIR.
+care_process:
+  trigger: abklärungsbedürftiges Ergebnis (§ 1 Abs. 5 LuKrFrühErkV)
+  responsible_role: Erstbefunder (im BPMN Lane Zweitbefunder) an die spezialisierte Einrichtung
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 42 Abs. 3 Nr. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: die notwendigen Maßnahmen unverzüglich einzuleiten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: S. 21
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Als eine der notwendigen Maßnahmen zur Abklärung soll der versicherten Person eine Vorstellung
+      in einer interdisziplinären Sprechstunde in einer spezialisierten Einrichtung gemäß § 43 Absatz
+      4 empfohlen werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.11 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: soll zeitnah in einer auf die Untersuchung und Behandlung von Lungenkrebs spezialisierten Einrichtung
+      (gemäß der Anforderungskriterien in (Tabelle 15) erfolgen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 46 der Quellenrecherche zur Screening-Episode (Gruppe G10 Ergebnis/Mitteilung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:clarificationPathwayInitiated, B:clinicalWorkupReferral,
+      S/P:=, E:onwardReferralFromScreening; BPMN-Schritt: G10 Ergebnis | Activity_0es6xoa → Versicherte:
+      Event_0nesy5q'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 46); Quellen: Q02, Q03, Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.7); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 46)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: bedingt. KFE-RL § 42 Abs. 3 Nr. 2 („die notwendigen Maßnahmen unverzüglich
+  einzuleiten“). Das Ziel „spezialisierte Einrichtung“ ist Empfehlung (TrG S. 21; S3 Empf. 5.9 und 5.11);
+  die Wahl der Einrichtung ist frei.'
+- 'Umsetzung: Spezialisierung von referralOrder (primarycare). specializes mihub.lung.primarycare.referralOrder.v0.1.
+  Auf abklärungsbedürftige Befunde nach § 1 Abs. 5 beschränken; „auch wegen Nebenbefunden“ streichen (dafür
+  normale referralOrder mit reasonReference → incidentalFinding). „Fallkonferenz“ aus der Definition streichen
+  (gehört zu screeningCaseConference). ServiceRequest: reasonReference → screeningResultCategory, performer
+  = spezialisierte Einrichtung (KFE-RL § 43 Abs. 4), authoredOn als Nachweis für „unverzüglich“. Die TrG
+  verlangen, verschiedene Einrichtungen vorzuschlagen. Optional LOINC 57133-1 wie in referralOrder.'
+- Für die elektronische Überweisung zur Auftragsübermittlung gibt es kein deutsches FHIR-Profil (MII,
+  ISiK, ePA ohne Überweisungsprofil; KBV nur Archivsicht); ob ein gematik- oder KBV-eÜberweisungspaket
+  in Arbeit ist, ist offen.
+- Für die 'spezialisierte Einrichtung' nach KFE-RL § 43 Abs. 4 fehlt ein Organisationstyp-Code.
+- Es fehlt ein Konzept 'Überweisung zur Abklärung eines abklärungsbedürftigen Früherkennungsbefunds';
+  die Abbildung erfolgt als Kombination aus 103696004, reasonReference und performer.
+- SNOMED 712941000000102 'Referral for multidisciplinary review' meint eher eine MDT-Fallbesprechung und
+  ist bei screeningCaseConference zu prüfen.
+- 'Die Definition ist zu bereinigen: ''auch wegen Nebenbefunden'' (→ referralOrder mit reasonReference
+  → incidentalFinding) und ''Fallkonferenz'' (→ screeningCaseConference) streichen.'
+related_elements:
+- relation: specializes
+  target: mihub.lung.primarycare.referralOrder.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.screeningResultCategory.v0.1

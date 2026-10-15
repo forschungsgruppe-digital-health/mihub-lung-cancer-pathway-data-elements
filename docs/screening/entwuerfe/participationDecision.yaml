@@ -1,0 +1,175 @@
+id: mihub.lung.screening.participationDecision.v0.1
+uuid: 40e40d71-dd53-572a-a2c9-642bb5e9d68b
+name: participationDecision
+label_de: Teilnahmeentscheidung der versicherten Person
+definition_de: Entscheidung mit Datum nach Information, vor der LDCT (nach Aufklärung) und zur Fortsetzung
+  nach dem Ergebnis; bei Ablehnung optional Grund.
+phase: screening
+category: versorgungsplanung
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'Elementcode (Observation.code): SNOMED CT 420107008 Patient decision status (observable entity).
+    Antwortwerte: ''abgelehnt'' = SNOMED CT 13015001000119105 Lung cancer screening declined (situation);
+    ''angenommen'' und ''unentschieden'' sind lokale Codes, weil SNOMED CT dafür kein aktives Konzept
+    enthält. 406011002 Screening status unknown wurde als Ersatz für ''unentschieden'' verworfen (unbekannt
+    ist nicht unentschieden); die generischen Konzepte 31021000119100 Screening declined und 171103002
+    Screening not wanted werden zugunsten des spezifischeren Werts nicht geführt. 724167008 Lung cancer
+    screening ist inaktiv; als Bezug auf das Screening (Observation.focus) dient bei Bedarf 275981009
+    Screening for malignant neoplasm of lung. Extensible, damit die lokalen Werte zulässig bleiben. MII
+    TermServ, SNOMED CT International 20260701, Stand 2026-10-15. Rollen der Codes: snomed-ct|420107008
+    = element; snomed-ct|13015001000119105 = wert; local-no-standard-binding|angenommen = wert; local-no-standard-binding|unentschieden
+    = wert.'
+  codings:
+  - system: snomed-ct
+    code: '420107008'
+    display: Patient decision status
+  - system: snomed-ct
+    code: '13015001000119105'
+    display: Lung cancer screening declined
+  - system: local-no-standard-binding
+    code: angenommen
+    display: Teilnahme angenommen
+  - system: local-no-standard-binding
+    code: unentschieden
+    display: Noch unentschieden
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.code (420107008); Observation.value[x]:valueCodeableConcept (angenommen | abgelehnt
+    | unentschieden); Observation.effective[x]:effectiveDateTime (Entscheidungszeitpunkt); Observation.component
+    (Ablehnungsgrund mit lokalem Code); Observation.focus (optional 275981009)
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil. Basisressource, weil weder ein deutsches noch ein internationales
+    Profil eine Teilnahmeentscheidung zur Früherkennung abbildet. Observation.code ist nur example-gebunden,
+    das Profil schränkt die Werte nicht ein. Den optionalen Ablehnungsgrund als component mit lokalem
+    Code führen (nicht als note), damit er auswertbar bleibt. Alternative für ''abgelehnt'': 13015001000119105
+    als Observation.code mit valueBoolean true, was der SNOMED-Situationssemantik besser entspricht als
+    ein Situationskonzept in value[x].'
+- standard: other
+  profile_or_url: https://edge.sitecorecloud.io/americancoldf5f-acrorgf92a-productioncb02-3650/media/ACR/Files/Clinical/Registries/LCSR-Data-Elements-from-Ordering-Physician-Records.pdf
+  resource: ACR Lung Cancer Screening Registry (LCSR), Datenelement 'Is there documentation of shared
+    decision making?'
+  path: Spalten 'Shared Decision Making Visit' und 'Written Order'
+  notes: 'ACR LCSR Data Elements from Ordering Physician Records (PDF, 4 Seiten, undatiert, abgerufen
+    2026-10-15), nicht-FHIR, US-Registermuster (CMS-NCD), nur Referenzmuster und kein Mapping-Ziel. Äquivalenz
+    related-to: Das Registerelement erfasst nur, ob eine gemeinsame Entscheidungsfindung dokumentiert
+    ist (ja/nein), nicht deren Ergebnis; fachlich liegt es näher am Informationsschritt (G5) als an der
+    Entscheidung. Bei ''Written Order'' mit dem Zusatz ''not required on NCD but recommended by ACR''.'
+care_process:
+  trigger: nach der Information (G5); bei Ablehnung optional mit Grund
+  responsible_role: Versicherte (dokumentiert durch die Praxis oder im Portal)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ob Sie das Angebot annehmen oder nicht, entscheiden Sie selbst.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: Abschn. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: sollen die Anspruchsberechtigten dabei unterstützt werden, eine informierte Entscheidung für
+      oder gegen die Teilnahme an der Früherkennungsuntersuchung treffen zu können
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+  - source: andere
+    version: KVBB-Musterbericht (PDF 12.05.2026) — KVBB-Musterbericht zur Aushändigung (Lungenkrebs-Früherkennung)
+    url: https://www.kvbb.de/fileadmin/user_upload/pdf/Genehmigungspflichtige_Leistungen/Lungenkrebs-Frueherkennung/Musterbericht_LDCT.pdf
+    section: Feld
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: eine Überweisung zum Lungenkrebsscreening gewünscht
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#X05
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 17 der Quellenrecherche zur Screening-Episode (Gruppe G5 Information/Entscheidung/Entwöhnung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: L/S:screeningParticipationDecision, E/P:=, P:resultDiscussionInPractice;
+      BPMN-Schritt: G5 Entscheidung | Radiologie: Gateway_0jgpvd3; Versicherte: Activity_0io1wvp → Gateway_1dj77wn'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 17); Quellen: Q04, X05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.6); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 17)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 2 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Freiwilligkeit (Versicherteninformation S. 2; TrG zur Versicherteninformation).
+  Dokumentationspflichtig ist nur die Einwilligung vor der LDCT (BGB § 630d Abs. 1, § 630f Abs. 2; KFE-RL
+  § 41 Abs. 2); sie gehört zu ldctInformedConsent.'
+- 'Umsetzung: eigenständig, auf die Entscheidung nach der Information begrenzt. Auf die Entscheidung nach
+  der Information (G5) begrenzen; die Entscheidung vor der LDCT über ldctInformedConsent, Fortsetzung
+  oder Abbruch über screeningEpisode abbilden. Als Observation: angenommen | abgelehnt | unentschieden
+  (abgelehnt = SNOMED 13015001000119105, sonst lokal), effectiveDateTime, optionaler Ablehnungsgrund (lokal).
+  Für „angenommen“ keinen Code setzen, solange keiner belegt ist. Die Entscheidungspunkte nach Information
+  und nach Ergebnis als Modellierung aus dem BPMN kennzeichnen.'
+- Für die Werte 'angenommen' und 'unentschieden' fehlen SNOMED-CT-Konzepte; ein Konzeptantrag (z. B. 'Lung
+  cancer screening accepted (situation)' als Pendant zu 31021000119100 Screening declined) über das deutsche
+  NRC ist zu prüfen.
+- Der optionale Ablehnungsgrund ist nicht standardkodierbar; die lokale Werteliste dafür ist noch festzulegen.
+- Offen ist, ob 'abgelehnt' als valueCodeableConcept oder als Observation.code 13015001000119105 mit valueBoolean
+  geführt wird; die Entscheidung sollte für alle Teilnahmewerte einheitlich fallen.
+- Kein Profil in MII KDS, ISiK 6.0.0, KBV Basis 1.9.0, KBV MIO, ePA, IPS 2.0.1, mCODE 4.0.0 oder Basis
+  DE 1.6.0 bildet die Teilnahmeentscheidung ab; Ziel bleibt die FHIR-R4-Basis-Observation. FHIR Consent
+  ist bewusst nicht vorgesehen, weil die Einwilligung vor der LDCT zu ldctInformedConsent gehört.
+- Das in den Quellen zitierte ACR-LCSR-Datenwörterbuch vom 28.05.2026 ist über keine offizielle öffentliche
+  URL verifizierbar; belegt ist nur das PDF 'LCSR Data Elements from Ordering Physician Records'.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.screeningInformationConsultation.v0.1

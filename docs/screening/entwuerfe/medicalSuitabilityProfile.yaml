@@ -1,0 +1,213 @@
+id: mihub.lung.screening.medicalSuitabilityProfile.v0.1
+uuid: 82747b76-f73c-5851-a027-97f276c9ecb8
+name: medicalSuitabilityProfile
+label_de: Medizinisches Eignungsprofil
+definition_de: Ärztliche Beurteilung der Eignung für kurativ intendierte Behandlung und ausreichender
+  Lebenserwartung, inkl. hoher Komorbiditätslast.
+phase: screening
+category: assessment
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: example
+  standard_binding_status: pending-mapping
+  notes: 'SNOMED CT INT 20260701 (MII TermServ), Stand 2026-10-15. Antwortwerte als lokale Werteliste:
+    geeignet | nicht geeignet | geeignet mit Hinweis auf erhöhtes Risiko von Überdiagnose und Übertherapie
+    (S3 Empf. 5.5/5.6, EK). Nur Teilmappings existieren: 713671003 Medically fit for surgery (equivalence
+    narrower, nur OP-Fähigkeit, nicht für ''geeignet'' insgesamt) und 1303301003 Not suitable for procedure
+    due to disease (für ''nicht geeignet'' wegen Erkrankung bzw. Komorbidität). Kein Element-Code: Ein
+    Observable für die medizinische Eignung zur Früherkennung bzw. zur kurativ intendierten Behandlung
+    gibt es nicht; Observation.code bleibt lokal. 762713009 Charlson Comorbidity Index ist ein Instrument
+    und kein Element-Code; ein CCI-Wert wird in standardizedAssessmentScore erfasst. Belege (comorbidity,
+    ecogPerformanceStatus, CCI) werden per dependsOn bzw. derivedFrom angebunden, nicht im Element kodiert.
+    1303300002 (Alter) gehört als Absagegrund zu eligibilityCheckResult. Rollen der Codes: local-no-standard-binding|suitable
+    = wert; local-no-standard-binding|not-suitable = wert; local-no-standard-binding|suitable-with-overdiagnosis-risk
+    = wert; snomed-ct|713671003 = wert; snomed-ct|1303301003 = wert.'
+  codings:
+  - system: local-no-standard-binding
+    code: suitable
+    display: geeignet
+  - system: local-no-standard-binding
+    code: not-suitable
+    display: nicht geeignet
+  - system: local-no-standard-binding
+    code: suitable-with-overdiagnosis-risk
+    display: geeignet mit Hinweis auf erhöhtes Risiko von Überdiagnose und Übertherapie
+  - system: snomed-ct
+    code: '713671003'
+    display: Medically fit for surgery
+  - system: snomed-ct
+    code: '1303301003'
+    display: Not suitable for procedure due to disease
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.value[x]
+  notes: 'hl7.fhir.r4.core#4.0.1 (stabil). Hauptziel mangels Fachprofil: valueCodeableConcept mit der
+    lokalen Werteliste, code lokal (762713009 nicht als code). derivedFrom 0..* verweist auf comorbidity,
+    ecogPerformanceStatus und einen CCI-Score. Die Fälligkeit der erneuten Prüfung ist kein Observation-Element
+    (Task bzw. ServiceRequest, siehe eligibilityProfileReviewDueDate).'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+  resource: ClinicalImpression
+  path: ClinicalImpression.summary; ClinicalImpression.finding.itemCodeableConcept; ClinicalImpression.investigation.item
+  notes: 'hl7.fhir.r4.core#4.0.1 (Ressource mit SD-Status draft, geringer Reifegrad). Alternative für
+    eine ärztliche Gesamtbeurteilung: investigation.item (0..*) referenziert die Belege, summary (string)
+    bzw. finding.itemCodeableConcept (example) das Urteil, effective[x]/date das Prüfdatum. Kein Element
+    für die nächste Fälligkeit.'
+- standard: mcode
+  profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-comorbidities
+  resource: Observation
+  path: Observation.extension:comorbidConditionPresent; Observation.value[x]
+  notes: 'hl7.fhir.us.mcode#4.0.0 (stabil; US-Muster auf Basis US Core Simple Observation). Nur Teilabbildung
+    der Komorbiditätslast, nicht des Eignungsurteils: code per Pattern SNOMED 398192003, Extensions comorbidConditionPresent/-Absent
+    0..* MS, value[x] (Quantity|integer) für einen Index wie den CCI.'
+- standard: other
+  profile_or_url: https://hl7.lt/fhir/lung/Questionnaire/questionnaire-pre-ldct-lt-lung
+  resource: Questionnaire
+  path: 'group ''grp-functional-status'': items ''self-care'' (Do you serve yourself?), ''bedridden''
+    (Bedridden/chairbound)'
+  notes: 'HL7 Litauen, Lung-IG 0.0.1 (CI-Build https://build.fhir.org/ig/HL7LT/ig-lt-lung/, kein publiziertes
+    Paket). Nur Teilabbildung: Funktionsstatus als Eignungsbeleg vor der LDCT; die ConceptMap des IG bildet
+    ihn auf eine Funktionsstatus-Observation ab. Kein Gesamturteil zur Eignung.'
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: Item 131 'Other comorbidities listed on patient record that limit life expectancy' (Mehrfachauswahl;
+    131.1 Freitext)
+  notes: ACR LCSR & IPN Data Dictionary 2026-05-28 (nicht-FHIR, Register USA), S. 22, Abschnitt Appropriateness
+    of Screening. Erfasst lebenszeitbegrenzende Komorbiditäten als Beleg (COPD, Emphysema, Pulmonary Fibrosis,
+    CAD, CHF, PVD, Lung Cancer, Cancer other than lung cancer, Other); kein Gesamturteil 'geeignet'.
+care_process:
+  trigger: Erstprüfung; erneute Prüfung nach S3 Empf. 5.6
+  responsible_role: berichterstellende Ärzt:in (Praxis)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 Nr. 3 b
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: ein medizinisches Eignungsprofil der zu untersuchenden Person und die hierfür relevanten anamnestischen
+      Daten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.5 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: die für eine kurativ intendierte Lungenkrebs-Behandlung geeignet sind
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.5 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Während die aktuell noch unzureichende Evidenz keine Definition von eindeutigen Ausschlusskriterien
+      in Bezug auf die medizinische Eignung erlaubt
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: andere
+    version: Whitepaper Blum et al. 2026, Supplement — Whitepaper Identifikation, Information und Eignungsprüfung
+      (Blum, Vogel-Claussen, Hoffmann et al.) mit Online-Supplement
+    url: https://doi.org/10.1055/a-2697-6434
+    section: 'Supplement S. 5–6 (Dokumentation im Bericht nach § 2 Abs. 1 Nr. 3: Zigarettenkonsum, medizinisches
+      Eignungsprofil); Abb. S 6 Prüfbericht (nur als Bildvorlage)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Medizinisches Eignungsprofil (relevante anamnestische Daten)
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q15
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 11 der Quellenrecherche zur Screening-Episode (Gruppe G3 Zulässigkeit/Eignung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R/S:=, L/P:medicalEligibilityProfile, L:highComorbidityBurden,
+      L:limitedLifeExpectancy; BPMN-Schritt: G3 Eignung | Praxis: Activity_0ya2ob0 → Bericht erstellen
+      (Activity_1npn3bx)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 11); Quellen: Q01, Q12, Q15'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.8); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 11)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 5 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 3 Buchst. b; KFE-RL §
+  39 Nr. 1 („das Vorliegen des medizinischen Eignungsprofils“). Der Inhalt ist nicht legaldefiniert (S3
+  Empf. 5.5, EK).'
+- 'Umsetzung: eigenständig. Lokale Werteliste: geeignet | nicht geeignet | geeignet mit Hinweis auf erhöhtes
+  Risiko von Überdiagnose und Übertherapie (S3 Empf. 5.5/5.6); standard_binding_status no-standard-found.
+  762713009 als Elementcode streichen; einen CCI-Wert über standardizedAssessmentScore erfassen. Belege
+  per Verweis anbinden (dependsOn comorbidity, ecogPerformanceStatus u. a.); inhaltlich verwandt mit curativeRecurrencePotential.
+  Teilmapping SNOMED 713671003 prüfen. Die Fälligkeit der Wiederholung als Attribut führen (eligibilityProfileReviewDueDate).
+  Hinweis: S3 zitiert „§ 2 Abs. 1 Satz 3“, richtig ist Satz 1 Nr. 3 Buchst. b.'
+- Ein Standardcode für das Element ('medizinische Eignung für Lungenkrebs-Früherkennung bzw. kurativ intendierte
+  Behandlung') fehlt ebenso wie Befundkonzepte für 'geeignet für kurativ intendierte Therapie' und 'geeignet
+  mit erhöhtem Risiko von Überdiagnose/Übertherapie'; ein Antrag bei SNOMED International bzw. dem deutschen
+  NRC ist zu prüfen.
+- Kein nationales oder internationales FHIR-Profil bildet das medizinische Eignungsprofil nach LuKrFrühErkV
+  § 2 Abs. 1 S. 1 Nr. 3 Buchst. b ab; der Inhalt ist nicht legaldefiniert (S3 Empf. 5.5, EK).
+- Die lokalen Codes der Werteliste sind vorläufige Platzhalter und noch fachlich abzustimmen.
+- Ob die Fälligkeit der Wiederholungsprüfung (eligibilityProfileReviewDueDate) als Attribut dieses Elements
+  geführt wird, ist zu entscheiden.
+- openEHR-Instrumente (charlson_comorbidity_index.v2, clinical_frailty_scale.v1) könnten Belege abbilden;
+  ihre Pfade sind noch nicht ausgewertet.
+- Die S3-Leitlinie zitiert 'LuKrFrühErkV § 2 Abs. 1 Satz 3'; richtig ist Satz 1 Nr. 3 Buchst. b – im Element
+  korrekt zitieren.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.primarycare.comorbidity.v0.1
+- relation: dependsOn
+  target: mihub.lung.followup.ecogPerformanceStatus.v0.1

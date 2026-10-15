@@ -1,0 +1,205 @@
+id: mihub.lung.screening.justifyingIndication.v0.1
+uuid: 3d3cf7e7-8677-54ec-b8b2-1c78daf266c5
+name: justifyingIndication
+label_de: Rechtfertigende Indikation (§ 83 Abs. 3 StrlSchG) mit Zeitpunkt
+definition_de: Rechtfertigende Indikation des Erstbefunders unter Berücksichtigung des Berichts, mit Zeitpunkt,
+  Person und Befragung zu früheren Strahlenanwendungen.
+phase: screening
+category: prozedur
+datatype: string
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'Für die strahlenschutzrechtliche rechtfertigende Indikation (Nutzen-Risiko-Entscheidung der
+    fachkundigen Ärzt:in nach § 83 Abs. 3 StrlSchG, Euratom 2013/59 Art. 55) gibt es weder in SNOMED CT
+    noch in LOINC ein Konzept. Elementcode und Ergebniswerte (gestellt | nicht-gestellt) sind daher lokal.
+    Optional kennzeichnet SNOMED CT 372049008 Assessment of history of previous radiation exposure den
+    Teilschritt ''Befragung zu früheren Strahlenanwendungen'' (StrlSchV § 119 Abs. 3 S. 2). Verworfen:
+    432678004 Indication for procedure (klinischer Grund), 225336000 Radiation risk assessment (Bedeutung
+    unklar), LOINC 18785-6 und 73569-6 (Befundabschnitte). Modellierung als Procedure: performed[x] =
+    Zeitpunkt der Indikationsstellung (StrlSchG § 85 Abs. 1 S. 2 Nr. 1), performer = Erstbefunder, outcome
+    = lokaler Wert. MII TermServ, SNOMED CT International 20260701 und LOINC 2.83, Stand 2026-10-15. Rollen
+    der Codes: local-no-standard-binding|rechtfertigende-indikation = element; local-no-standard-binding|gestellt
+    = wert; local-no-standard-binding|nicht-gestellt = wert; snomed-ct|372049008 = methode.'
+  codings:
+  - system: local-no-standard-binding
+    code: rechtfertigende-indikation
+    display: Rechtfertigende Indikation nach § 83 Abs. 3 StrlSchG
+  - system: local-no-standard-binding
+    code: gestellt
+    display: Rechtfertigende Indikation gestellt
+  - system: local-no-standard-binding
+    code: nicht-gestellt
+    display: Rechtfertigende Indikation nicht gestellt
+  - system: snomed-ct
+    code: '372049008'
+    display: Assessment of history of previous radiation exposure
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur
+  resource: Procedure
+  path: Procedure.basedOn (1..*) → mii-pr-bildgebung-anforderung-bildgebung; Procedure.performed[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Nur Kontext bzw. Verknüpfungsziel,
+    kein Mapping des Elementinhalts: Die LDCT-Prozedur verweist über basedOn (1..* MS) auf die Anforderung.
+    Die rechtfertigende Indikation selbst (Person, Zeitpunkt, Ergebnis) hat im Profil kein Element und
+    wird als eigene Procedure geführt, die über partOf auf die Bildgebungsprozedur zeigt.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.code (lokaler Code); Procedure.performed[x]:performedDateTime; Procedure.performer.actor;
+    Procedure.outcome (gestellt | nicht-gestellt); Procedure.partOf
+  notes: 'hl7.fhir.r4.core#4.0.1, stabil. Primäres FHIR-Ziel, solange kein validierter SNOMED-Prozedurcode
+    vorliegt: code ist nur example-gebunden, ein lokaler Code ist zulässig. performed[x] = Zeitpunkt der
+    Indikationsstellung, performer.actor = Erstbefunder, outcome = lokaler Ergebniswert, partOf = LDCT-Prozedur.
+    Das MII-Prozedurprofil scheidet aus, weil seine Invariante sct-ops-1 einen SNOMED-Code aus procedures-sct
+    (descendent-of 71388002) oder einen OPS-Code verlangt.'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ServiceRequestOrderEuImaging
+  resource: ServiceRequest
+  path: ServiceRequest.extension:reason (http://hl7.org/fhir/5.0/StructureDefinition/extension-ServiceRequest.reason);
+    ServiceRequest.reasonCode; ServiceRequest.reasonReference
+  notes: 'hl7.fhir.eu.imaging#1.0.0-ballot (status draft), Ballot. Äquivalenz related-to: Die Elemente
+    tragen die medizinische Begründung der Anforderung durch die Überweisenden (''Explanation/Justification
+    for procedure or service''), nicht die strahlenschutzrechtliche Indikationsstellung des Erstbefunders
+    mit Person, Zeitpunkt und Ergebnis.'
+- standard: other
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html
+  resource: DICOM-Attribute (Modality Worklist / Requested Procedure)
+  path: (0040,1002) Reason for the Requested Procedure (LO); (0040,100A) Reason for Requested Procedure
+    Code Sequence (SQ)
+  notes: 'DICOM PS3.6 (current, Edition 2025.3 bzw. abgerufen 2026-10-15), nicht-FHIR. Äquivalenz related-to:
+    Die Attribute bringen die Indikation in den Modalitäts-Workflow, nicht aber die Indikationsstellung
+    (Person, Zeitpunkt, gestellt/nicht gestellt).'
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_7001.html
+  resource: DICOM SR TID 2000 Basic Diagnostic Imaging Report, Überschrift aus CID 7001
+  path: CONTAINER (LN 18785-6 'Indications for Procedure')
+  notes: DICOM PS3.16 (current, abgerufen 2026-10-15), nicht-FHIR, breites Mapping. Im Befundbericht kann
+    die Indikation unter 18785-6 nur narrativ stehen; die Aufzeichnungspflicht nach StrlSchG § 85 Abs.
+    1 S. 2 Nr. 1 (Angaben und Zeitpunkt) ist damit nicht strukturiert abgedeckt.
+care_process:
+  trigger: vor jeder LDCT (Regel- und Kontroll-LDCT)
+  responsible_role: Erstbefunder (Person nach LuKrFrühErkV § 6 Abs. 1)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 3 Nr. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: die rechtfertigende Indikation nach § 83 Absatz 3 des Strahlenschutzgesetzes … unter Berücksichtigung
+      des Berichts …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: StrlSchG — Strahlenschutzgesetz §§ 5, 83–85 und Strahlenschutzverordnung §§ 119, 124, 127
+    url: https://www.gesetze-im-internet.de/strlschg/__85.html
+    section: § 85 Abs. 1 S. 2 Nr. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Angaben zur rechtfertigenden Indikation und den Zeitpunkt der Indikationsstellung
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q09
+  - source: andere
+    version: StrlSchV — Strahlenschutzgesetz §§ 5, 83–85 und Strahlenschutzverordnung §§ 119, 124, 127
+    url: https://www.gesetze-im-internet.de/strlschg/__85.html
+    section: § 119 Abs. 3 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zu diesem Zweck ist die zu untersuchende oder zu behandelnde Person über frühere Anwendungen
+      ionisierender Strahlung oder radioaktiver Stoffe, die für die vorgesehene Anwendung von Bedeutung
+      sein können, zu befragen.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q09
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 21 der Quellenrecherche zur Screening-Episode (Gruppe G7 Radiologie vor
+      LDCT; M1 Inkrement 1 (Screening)); zusammengeführt aus: R/S/P:=, R:priorRadiationExposureQuery,
+      B:justifiedIndication; BPMN-Schritt: G7 Radiologie | Erstbefunder: Rechtfertigende Indikation stellen
+      (Activity_0l9ecr6)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 21); Quellen: Q01, Q09'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 21)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 4 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. LuKrFrühErkV § 3 Nr. 2 (rechtfertigende Indikation nach
+  StrlSchG § 83 Abs. 3 unter Berücksichtigung des Berichts); Aufzeichnung mit Zeitpunkt StrlSchG § 85
+  Abs. 1 S. 2 Nr. 1; Befragung zu früheren Strahlenanwendungen StrlSchV § 119 Abs. 3 S. 2; Rolle KFE-RL
+  § 41 Abs. 1 S. 1, § 39 Nr. 3, § 43 Abs. 5.'
+- 'Umsetzung: eigenständig. Strukturiert modellieren, z. B. Procedure: performed[x] = Zeitpunkt der Indikationsstellung,
+  performer = Erstbefunder, outcome gestellt | nicht gestellt (lokal, no-standard-found). Die Befragung
+  zu früheren Strahlenanwendungen nicht doppelt führen, sondern über dependsOn auf lastQualifyingChestCtDate,
+  eligibilityReport und eligibilityCheckResult verweisen (statt des verworfenen firstReaderEligibilityVerification).
+  StrlSchG § 85 Abs. 1 S. 2 Nr. 1 als Quelle der Dokumentationspflicht und StrlSchV § 119 Abs. 3 S. 2
+  aus den notes in sources überführen.'
+- Für die rechtfertigende Indikation fehlt ein Standardkonzept; ein SNOMED-CT-Antrag ('Justification of
+  medical exposure to ionising radiation (procedure)') über das deutsche NRC ist zu prüfen. Auch die Ergebniswerte
+  gestellt/nicht gestellt sind nicht standardkodiert.
+- Das MII-Prozedurprofil ist erst nutzbar, wenn ein SNOMED-Prozedurcode unter 71388002 für die Indikationsstellung
+  gefunden und am MII TermServ validiert ist; bis dahin dient die FHIR-R4-Basis-Procedure.
+- 'Der Datentyp ist noch festzulegen: Der Kandidat nennt dateTime, die Modellierung sieht eine Reference
+  auf Procedure (bzw. CodeableConcept plus dateTime) je LDCT-Runde vor.'
+- Die Befragung zu früheren Strahlenanwendungen (StrlSchV § 119 Abs. 3 S. 2) soll nicht doppelt geführt
+  werden, sondern über dependsOn auf lastQualifyingChestCtDate, eligibilityReport und eligibilityCheckResult;
+  372049008 ist nur optional.
+- Die Rolle 'performer = Erstbefunder nach LuKrFrühErkV § 6 Abs. 1' ist in keinem Profil qualifiziert;
+  DICOM-Dosisberichte (RDSR) enthalten keine Rechtfertigung.
+- Kardinalität laut Quelle 1..1 je LDCT-Runde.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.eligibilityReport.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.lastQualifyingChestCtDate.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.eligibilityCheckResult.v0.1

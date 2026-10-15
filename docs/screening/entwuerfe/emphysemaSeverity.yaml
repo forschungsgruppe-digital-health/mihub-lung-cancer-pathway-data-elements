@@ -1,0 +1,231 @@
+id: mihub.lung.screening.emphysemaSeverity.v0.1
+uuid: 5b888c64-2d5e-5ec2-aeaa-a0d905944fda
+name: emphysemaSeverity
+label_de: Lungenemphysem – Ausprägung
+definition_de: Emphysem-Ausprägung (kein, leicht < 25 %, mittel 25–50 %, schwer > 50 %); Nebenbefund und
+  Brock-Eingang.
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 0..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  notes: 'Editionen: SNOMED CT INT 20260701 und RadLex 4.2, alle Codes auf dem MII TermServ aktiv (Stand
+    2026-10-15). Element-Code ist 87433001 als Befundfokus einer Bildbefund-Beobachtung (Interimslösung,
+    da weder SNOMED noch LOINC 2.83 ein Observable für die radiologische Emphysem-Ausprägung haben); ausdrücklich
+    keine Condition und keine COPD-Diagnose. RadLex RID4799 (bildgebungsnaher Befundbegriff ohne Krankheitssemantik)
+    ist optionales Zusatz-Coding. Antwortwerte der Schweregradachse (geschlossene Liste, required) nach
+    O''Dowd et al. 2023: kein = 260413007, leicht < 25 % = 255604002, mittel 25–50 % = 6736007, schwer
+    > 50 % = 24484000; die Prozentschwellen stehen nur in der Elementdefinition. Getrennte, optionale
+    Typ-Achse (Morphologie, nicht Teil der required-Schweregradliste): zentrilobulär 68328006 / RID28504,
+    panazinär 4981000 / RID28519, paraseptal 31898008 / RID28520. COPD- und Emphysem-Diagnosen bleiben
+    in comorbidity (ICD-10-GM). Für den Brock-Eingang (vorhanden/nicht vorhanden) wird kein → nicht vorhanden
+    abgeleitet. Rollen der Codes: snomed-ct|87433001 = element; radlex|RID4799 = element; snomed-ct|260413007
+    = wert; snomed-ct|255604002 = wert; snomed-ct|6736007 = wert; snomed-ct|24484000 = wert; snomed-ct|68328006
+    = wert; snomed-ct|4981000 = wert; snomed-ct|31898008 = wert; radlex|RID28504 = wert; radlex|RID28519
+    = wert; radlex|RID28520 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '87433001'
+    display: Pulmonary emphysema
+  - system: radlex
+    code: RID4799
+    display: emphysema
+  - system: snomed-ct
+    code: '260413007'
+    display: None
+  - system: snomed-ct
+    code: '255604002'
+    display: Mild
+  - system: snomed-ct
+    code: '6736007'
+    display: Moderate severity
+  - system: snomed-ct
+    code: '24484000'
+    display: Severe
+  - system: snomed-ct
+    code: '68328006'
+    display: Centriacinar emphysema
+  - system: snomed-ct
+    code: '4981000'
+    display: Panacinar emphysema
+  - system: snomed-ct
+    code: '31898008'
+    display: Paraseptal emphysema
+  - system: radlex
+    code: RID28504
+    display: centrilobular emphysema
+  - system: radlex
+    code: RID28519
+    display: panacinar emphysema
+  - system: radlex
+    code: RID28520
+    display: paraseptal emphysema
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]; Observation.component; Observation.bodySite;
+    Observation.category.coding:loinc
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Bildbefund-Beobachtung,
+    nicht Condition. code.coding:sct = 87433001 erfüllt das REQUIRED-Binding < 404684003 ($subsumes auf
+    dem MII TermServ bestätigt). value = valueCodeableConcept mit der Schweregradstufe; optional Prozentanteil
+    als component mit valueQuantity (UCUM %), wenn quantitativ befundet. bodySite (REQUIRED < 123037004)
+    = 39607008 Lung structure. Hinweis ''keine COPD-Diagnose'' in Observation.note bzw. Definition. Ballot-Hinweis
+    2027.0.0-ballot.1: value[x] dort nach Typ gesliced (valueCodeableConcept coding.system/code 1..1);
+    code.coding:sct trägt den Pattern-Defekt ''http://snomed.info/sct|…/version/20260701'', als Ballot-Kommentar
+    zu melden.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_AW_Observation_Befund
+  resource: Observation
+  path: Observation.value[x] (nur valueString, 1..1); Observation.code.coding:kbv_code (fixed „Befund“);
+    Observation.category (REQUIRED KBV_VS_AW_Befundart)
+  notes: 'kbv.ita.aws#1.2.0, stabil (KBV-Archiv- und Wechselschnittstelle nach § 371 SGB V, nur Differential).
+    Äquivalenz related, verlustbehaftet: Stufe nur als Freitext; category = Roentgenbefund (KBV_CS_AW_Befundart);
+    note und bodySite sind 0..0. Prozentanteil nur als component mit LOINC-Code, ein passender Code ist
+    nicht belegt.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.category:radiology
+  notes: hl7.fhir.uv.ips#2.0.1, stabil, internationales Referenzmuster. code PREFERRED an LOINC-Radiologiecodes,
+    SNOMED 87433001 als Alternative möglich; performer 1..* und effective[x] 1..1 Pflicht; category:radiology
+    Pattern imaging.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ObservationFindingEuImaging
+  resource: Observation
+  path: Observation.code; Observation.value[x]
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/Draft. Angebunden über DiagnosticReportEuImaging.extension:finding;
+    code nur Example-Binding; kein Werte-ValueSet für die Graduierung.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary, Datenelemente 153/154
+  path: '#154 Antwortoption „Emphysema, moderate or severe“ (Bedingung #153 = Yes)'
+  notes: 'ACR LCSR & IPN Data Dictionary, Stand 2026-05-28, nicht-FHIR. Äquivalenz broader/related: nur
+    binär ab mittel (S-Modifier-Befund), ohne Prozentstufen; deckt sich mit der Schwelle zur Überweisung
+    zur klinischen Abklärung (O''Dowd 2023 Tab. 2).'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  resource: OBSERVATION
+  path: /data[at0001]/events[at0002]/data[at0003]/items[at0044] (Structured imaging findings) bzw. items[at0008]
+    (Imaging findings)
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle published, nicht-FHIR. Kein Emphysem-CLUSTER;
+    Graduierung als lokalen CLUSTER im Slot at0044 modellieren.
+care_process:
+  trigger: jede Befundung (routinemäßige Angabe)
+  responsible_role: Erstbefunder
+evidence:
+  guideline_references:
+  - source: andere
+    version: O'Dowd et al. 2023 — ERS/ESTS/ESTRO/ESR/ESTI/EFOMP statement on incidental findings from
+      LDCT screening (O'Dowd et al.)
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10876118/
+    section: Emphysema
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: A suitable qualitative classification is mild (<25%) moderate (25–50%) and severe (>50%).
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q17
+  - source: andere
+    version: O’Dowd et al. 2023 — ERS/ESTS/ESTRO/ESR/ESTI/EFOMP statement on incidental findings from
+      LDCT screening (O'Dowd et al.)
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10876118/
+    section: Emphysema
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Emphysema on CT cannot be used to diagnose COPD
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q17
+  - source: andere
+    version: O’Dowd et al. 2023 — ERS/ESTS/ESTRO/ESR/ESTI/EFOMP statement on incidental findings from
+      LDCT screening (O'Dowd et al.)
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10876118/
+    section: Tab. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Refer those with moderate to severe radiological emphysema for clinical assessment
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q17
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 41 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: L:emphysemaVisualGrade, B:=; BPMN-Schritt: G9 Befundung
+      | Activity_1tdikdp → Activity_12ef5s1'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 41); Quellen: Q17'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 41)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 12 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 6 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. DRG/DGP/DGT-Supplement Tab. S1 Anm. 15; Graduierung nach
+  O’Dowd et al. 2023 („Emphysema“, Tab. 2).'
+- 'Umsetzung: Spezialisierung von incidentalFinding. Strikt als Bildbefund-Beobachtung modellieren, nicht
+  als Condition. 87433001 nur als Befundfokus bzw. Observation.code mit Hinweis „keine COPD-Diagnose“.
+  Wert = lokales Ordinal-ValueSet kein | leicht < 25 % | mittel 25–50 % | schwer > 50 % (no-standard-found;
+  Quelle O’Dowd 2023). specializes incidentalFinding; Eingang für noduleMalignancyProbability (Brock nutzt
+  nur vorhanden/nicht vorhanden). Optional Attribut „Überweisung zur klinischen Abklärung bei mittel/schwer“.
+  COPD- und Emphysem-Diagnosen bleiben in comorbidity.'
+- Es gibt kein standardisiertes Observable für die radiologische Emphysem-Ausprägung; die Nutzung der
+  Disorder 87433001 als Observation.code ist eine Interimslösung, die in Definition bzw. Constraints mit
+  dem Hinweis 'keine Condition/keine COPD-Diagnose' abzusichern ist.
+- Zu entscheiden ist, ob RadLex RID4799 als bevorzugter Element-Code neben bzw. vor 87433001 geführt wird;
+  dafür muss der Systemschlüssel 'radlex' im Schema dokumentiert sein.
+- Die Prozentschwellen (< 25 %, 25–50 %, > 50 %) sind in keinem Codesystem hinterlegt und stehen nur in
+  der Elementdefinition; ein standardisiertes Werte-ValueSet für die Graduierung fehlt in allen geprüften
+  Standards.
+- Die Morphologie-Achse (zentrilobulär, panazinär, paraseptal) muss im Datenmodell als eigenes optionales
+  Attribut getrennt von der Schweregradliste geführt werden.
+- Für einen quantitativ befundeten Emphysem-Prozentanteil ist kein LOINC-Code belegt.
+- Der Pattern-Defekt im MII-Bildgebungsmodul 2027.0.0-ballot.1 sollte als Ballot-Kommentar gemeldet werden.
+related_elements:
+- relation: specializes
+  target: mihub.lung.screening.incidentalFinding.v0.1

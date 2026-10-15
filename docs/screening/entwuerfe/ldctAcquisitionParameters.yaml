@@ -1,0 +1,232 @@
+id: mihub.lung.screening.ldctAcquisitionParameters.v0.1
+uuid: 433eaa12-5a91-5db0-b63a-e97ae020bb45
+name: ldctAcquisitionParameters
+label_de: Aufnahme- und Rekonstruktionsparameter nach Anlage zu § 4 (mit Konformität)
+definition_de: Protokollparameter nach Anlage (Gerät, Scan-/Rotationszeit, Kollimation, Pitch, kV/mA,
+  Schichtdicke, Kern, Rekonstruktion, kein Kontrastmittel) mit Konformität.
+phase: screening
+category: bildgebung
+datatype: Reference
+cardinality: 0..*
+unit: s
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'Kern des Elements ist die Konformität mit der Anlage zu § 4 LuKrFrühErkV (eingehalten ja/nein
+    plus Abweichungen; lokal, ohne Standardcode) mit Referenz auf den CT-Dosisbericht (Dokumentklasse
+    DCM 113701 X-Ray Radiation Dose Report, TID 10011) bzw. die DICOM-Studie. Element-Code DCM 113822
+    CT Acquisition Parameters (TID 10013). Einzelparameter als Element-Codes der Komponenten, aus dem
+    RDSR übernommen: unter 113819 CT Acquisition direkt 113820 CT Acquisition Type (Antwortwert SNOMED
+    116152004 Spiral), 113842 X-Ray Modulation Type (Werte aus DICOM CID 10035; Näherung für die Dosisautomatik)
+    und 113961 Reconstruction Algorithm (Antwortwerte 113962 Filtered Back Projection, 113963 Iterative
+    Reconstruction; CID 10033); unter 113822 die Parameter 113824 Exposure Time [s], 113826 Nominal Single
+    Collimation Width [mm] und 113828 Pitch Factor [{ratio}]; unter 113831 CT X-Ray Source Parameters
+    113733 KVP [kV], 113734 X-Ray Tube Current [mA] und 113834 Exposure Time per Rotation [s]. DCM 113824
+    ist nicht deckungsgleich mit dem MII-Slice exposureTime (ms, DICOM-Bildattribut). SNOMED 395081000119108
+    belegt „ohne Kontrastmittel“ auf Prozedurebene. Binding example, weil die Parameter aus dem RDSR übernommen
+    statt erfasst werden. Editionen: MII TermServ, DICOM 2025.3, SNOMED CT 20260701, UCUM 1.0.1; Stand
+    2026-10-15. Rollen der Codes: dicom-dcm|113822 = element; dicom-dcm|113701 = dokumentklasse; dicom-dcm|113820
+    = element; snomed-ct|116152004 = wert; dicom-dcm|113824 = element; dicom-dcm|113826 = element; dicom-dcm|113828
+    = element; dicom-dcm|113733 = element; dicom-dcm|113734 = element; dicom-dcm|113834 = element; dicom-dcm|113842
+    = element; dicom-dcm|113961 = element; dicom-dcm|113962 = wert; dicom-dcm|113963 = wert; snomed-ct|395081000119108
+    = methode.'
+  codings:
+  - system: dicom-dcm
+    code: '113822'
+    display: CT Acquisition Parameters
+  - system: dicom-dcm
+    code: '113701'
+    display: X-Ray Radiation Dose Report
+  - system: dicom-dcm
+    code: '113820'
+    display: CT Acquisition Type
+  - system: snomed-ct
+    code: '116152004'
+    display: Spiral computed tomography scan
+  - system: dicom-dcm
+    code: '113824'
+    display: Exposure Time
+  - system: dicom-dcm
+    code: '113826'
+    display: Nominal Single Collimation Width
+  - system: dicom-dcm
+    code: '113828'
+    display: Pitch Factor
+  - system: dicom-dcm
+    code: '113733'
+    display: KVP
+  - system: dicom-dcm
+    code: '113734'
+    display: X-Ray Tube Current
+  - system: dicom-dcm
+    code: '113834'
+    display: Exposure Time per Rotation
+  - system: dicom-dcm
+    code: '113842'
+    display: X-Ray Modulation Type
+  - system: dicom-dcm
+    code: '113961'
+    display: Reconstruction Algorithm
+  - system: dicom-dcm
+    code: '113962'
+    display: Filtered Back Projection
+  - system: dicom-dcm
+    code: '113963'
+    display: Iterative Reconstruction
+  - system: snomed-ct
+    code: '395081000119108'
+    display: CT of chest without contrast
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct
+  resource: ImagingStudy
+  path: ImagingStudy.series.extension:modalitaetCT
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil (in 2027.0.0-ballot.1
+    unverändert). Teilabdeckung der Anlage je Serie: Sub-Extensions KVP (kV), exposureTime (ms), exposure,
+    xRayTubeCurrent (mA), convolutionalKernel (string), CTDIvol, je 0..1. Es fehlen Pitch, Kollimation,
+    Rotationszeit, Dosis- und Spannungsautomatik, Rekonstruktionsverfahren, dynamische Kollimation und
+    das Konformitätsflag. exposureTime in ms ist nicht die RDSR-Expositionszeit in s; bei Übernahme umrechnen.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke
+  resource: ImagingStudy
+  path: ImagingStudy.series.extension:schichtdicke
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Schichtdicke je Serie
+    (value[x] Quantity 1..1 MS); eingebunden in mii-pr-bildgebung-bildgebungsstudie als series.extension:schichtdicke
+    0..1. Die Schichtdicke ist kein Parameter der Anlage zu § 4 (Belege S3 Kap. 6.3, ACR #150), nur ergänzend.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-kontrastmittel
+  resource: ImagingStudy
+  path: ImagingStudy.series.extension:kontrastmittel.extension:contrastBolus
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. „Kein Kontrastmittel“
+    nach Anlage als contrastBolus = false (boolean) je Serie; Sub-Extension contrastBolusDetails für Angaben
+    bei KM-Gabe. Eingebunden in mii-pr-bildgebung-bildgebungsstudie als series.extension:kontrastmittel
+    0..1.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-geraet
+  resource: Device
+  path: Device.version.value
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Gerätebezug des CT
+    (manufacturer 0..1 MS, deviceName 0..* MS, version.value 1..1 für die Softwareversion), referenziert
+    aus bildgebungsstudie series.performer.actor. Geräteanforderungen der Anlage (Detektorzeilen, Rotationszeit,
+    dynamische Kollimation) gehören in Struktur- bzw. QS-Daten, nicht in die Einzeluntersuchung.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_TID_10013.html
+  path: TID 10011 (113701) > TID 10013 > 113819 CT Acquisition > 113820 CT Acquisition Type, 113961 Reconstruction
+    Algorithm, 113842 X-Ray Modulation Type; 113822 CT Acquisition Parameters > 113824, 113826, 113827,
+    113828; 113831 CT X-Ray Source Parameters > 113733, 113734, 113834; TID 10015 CT Dose Check Details
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Vollständigste Quelle der Aufnahmeparameter je Bestrahlungsereignis
+    im CT-RDSR (SOP Class X-Ray Radiation Dose SR 1.2.840.10008.5.1.4.1.1.88.67). 113828 Pitch Factor
+    ist bei Spiral- oder Sequenzaufnahme gefordert. Rekonstruktionsverfahren (CID 10033) und Dosismodulation
+    (CID 10035) sind als Content-Items vorhanden. Als Element genügt eine Reference auf die RDSR-Instanz
+    plus das Konformitätsergebnis.
+care_process:
+  trigger: je LDCT bzw. im Rahmen der Protokoll-QS
+  responsible_role: Radiologie (MTR, Medizinphysik)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 7 Abs. 1 Nr. 3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: die physikalisch-technischen Parameter bei der Erstellung der Computertomographieaufnahme
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: Vereinbarung Strahlendiagnostik (ab 01.04.2026) — Vereinbarung zur Strahlendiagnostik und
+      -therapie (§ 135 Abs. 2 SGB V), §§ 13e–13g NDCT
+    url: https://www.kbv.de/documents/infothek/rechtsquellen/bundesmantelvertrag/anlage-03-qualitaetssicherung/qs-vereinbarung-strahlendiagnostik.pdf
+    section: § 11 Abs. 5
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Eine NDCT darf nur durchgeführt werden, wenn die Anforderungen … nach der Anlage zu § 4 Absatz
+      1 Satz 1 der LuKrFrühErkV erfüllt sind.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q07
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 29 der Quellenrecherche zur Screening-Episode (Gruppe G8 LDCT; M1 Inkrement
+      1 (Screening)); zusammengeführt aus: R:ldctAcquisitionProtocolParameters, S:=, B:scoutCtdiVol, scanDuration,
+      rotationTime, singleCollimationWidth, pitchFactor, tubeVoltage, tubeCurrentTimeProduct, reconstructedSliceThickness,
+      reconstructionKernelAndMethod, ldctProtocolCompliance, ctScannerDevice; BPMN-Schritt: G8 LDCT |
+      Activity_12qrin2; Activity_14vmlwn (Annotation Anlage zu §4)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 29); Quellen: Q01, Q07'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.55)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 29)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 15 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Die Einhaltung der Anlage ist Pflicht (LuKrFrühErkV § 4 Abs.
+  1 mit Anlage; QS-Vereinbarung § 11 Abs. 5); eine Einzeldokumentation je Untersuchung schreibt keine
+  Norm vor (das QS-System „berücksichtigt“ die Parameter, § 7 Abs. 1 S. 2 Nr. 3).'
+- 'Umsetzung: eigenständig, reduziert auf Konformität und RDSR-Referenz. Auf die Konformität je LDCT reduzieren
+  (Anlage zu § 4 eingehalten ja/nein plus Abweichungen) mit Reference auf den RDSR (DCM 113701) bzw. die
+  DICOM-Studie; Kerncode DCM 113822 statt 113828. Parameterliste an die Anlage angleichen: Spannungs-
+  und Dosisautomatik ja/nein statt kV/mA; „Schichtdicke“ stammt nicht aus der Anlage (Belege S3 Kap. 6.3,
+  ACR #150). Geräte- und protokollbezogene Anforderungen (dynamische Kollimation, Rekonstruktionsverfahren,
+  Befundarbeitsplatz) in Struktur- bzw. QS-Daten auslagern. Primärquelle auf § 4 Abs. 1 mit Anlage umstellen,
+  § 7 Abs. 1 S. 2 Nr. 3 als QS-Bezug.'
+- Für die Konformitätsaussage „Anlage zu § 4 LuKrFrühErkV eingehalten ja/nein plus Abweichungen“ gibt
+  es keinen Standardcode und kein Profilelement; ein lokales Element ist festzulegen.
+- Ob DICOM CID 10033 iterative und KI-basierte Rekonstruktion vollständig abdeckt, ist offen; Spannungsautomatik
+  und dynamische Kollimation haben keinen eigenen Code, der Faltungskern nur ein Textattribut.
+- Geräte- und protokollbezogene Anforderungen der Anlage (dynamische Kollimation, Rekonstruktionsverfahren,
+  Befundarbeitsplatz) sind in Struktur- bzw. QS-Daten auszulagern.
+- Die Parameterliste ist an die Anlage anzugleichen (Spannungs- und Dosisautomatik ja/nein statt kV/mA;
+  Schichtdicke nicht aus der Anlage).
+- Die Primärquelle ist auf LuKrFrühErkV § 4 Abs. 1 mit Anlage umzustellen, § 7 Abs. 1 S. 2 Nr. 3 als QS-Bezug;
+  Kardinalität 0..*.
+- Die Systemschlüssel dicom-dcm und ucum-Annotationen ({ratio}) sind in der Terminologieprüfung des Repos
+  zu berücksichtigen.
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.ldctExamination.v0.1

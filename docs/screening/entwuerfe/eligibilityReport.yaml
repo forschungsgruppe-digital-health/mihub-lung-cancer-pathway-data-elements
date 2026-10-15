@@ -1,0 +1,256 @@
+id: mihub.lung.screening.eligibilityReport.v0.1
+uuid: 8307be44-21cd-5281-a685-6f3ea4a5ec0e
+name: eligibilityReport
+label_de: Bericht gemäß § 2 Abs. 1 Nr. 3 LuKrFrühErkV (Prüfbericht)
+definition_de: Formfreier Bericht mit Zigarettenkonsum, Eignungsprofil, Anamnese und bestätigter Information;
+  Aushändigung (auch ePA) und Vorlage beim Erstbefunder.
+phase: screening
+category: dokument
+datatype: Reference
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'Alle Codes bezeichnen den Dokumenttyp des formfreien Berichts nach § 2 Abs. 1 Nr. 3 LuKrFrühErkV
+    (keine Antwortwerte). KDL AD010101 Ärztliche Stellungnahme (''ärztliche Einschätzung zum Gesundheitszustand
+    für nachfolgende Zwecke'') trifft den Bericht vor der LDCT und ist laut DVMD-ConceptMap kdl-ihe-typecode
+    (dvmd.kdl.r4#2025.0.1) konsistent mit IHE-D typeCode BERI; daher Kandidat für type.coding:KDL. KDL
+    AD020204 Krebsfrüherkennung ist laut KDL-Definition für Ergebnisse von Früherkennungsuntersuchungen
+    nach § 25 SGB V gedacht und wird auf BEFU/BEF abgebildet; für den Bericht nur ein breiter Programmbezug.
+    LOINC 75492-9 ist der internationale Dokumenttyp (Composition.type, doc-typecodes), steht aber nicht
+    in der R4-Liste c80-doc-typecodes. Binding example, weil kein Code den Bericht genau trifft. MII TermServ,
+    KDL 2025 und LOINC 2.83, Stand 2026-10-15. Rollen der Codes: kdl|AD010101 = dokumentklasse; kdl|AD020204
+    = dokumentklasse; loinc|75492-9 = dokumentklasse.'
+  codings:
+  - system: kdl
+    code: AD010101
+    display: Ärztliche Stellungnahme
+  - system: kdl
+    code: AD020204
+    display: Krebsfrüherkennung
+  - system: loinc
+    code: 75492-9
+    display: Risk Assessment and Screening Note
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-dokument/StructureDefinition/mii-pr-dokument-dokument
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (AD010101); DocumentReference.type.coding:XDS (BERI); DocumentReference.category.coding:XDS
+    (BRI); DocumentReference.content.attachment (content:Binaerdaten bzw. content:Verweis); DocumentReference.date;
+    DocumentReference.author
+  notes: 'de.medizininformatikinitiative.kerndatensatz.dokument#2026.0.1, stabil (2027.0.0-ballot.2 vorhanden).
+    type.coding:KDL REQUIRED an http://dvmd.de/fhir/ValueSet/kdl, type.coding:XDS REQUIRED an IHEXDStypeCode,
+    category.coding:XDS REQUIRED an IHEXDSclassCode. Widerspruchsfreie Kombination: KDL AD010101 mit BERI/BRI
+    (ConceptMap AD010101 → BERI). AD020204 würde laut ConceptMap BEFU/BEF verlangen und passt daher nicht
+    zu BERI/BRI. Das Profil führt den Bericht als Dokument (PDF) für Aushändigung und Vorlage beim Erstbefunder;
+    strukturierte Teile (u. a. packYearsCalculated) brauchen zusätzlich eine Composition.'
+- standard: gematik-epa-fhir
+  profile_or_url: https://gematik.de/fhir/epa-mhd/StructureDefinition/epa-mhd-document-reference
+  resource: DocumentReference (ePA MHD)
+  path: DocumentReference.category.coding (BRI); DocumentReference.type.coding (BERI); DocumentReference.context.event.coding
+    (KDL); DocumentReference.content.attachment.url; DocumentReference.context.facilityType
+  notes: 'de.gematik.epa.mhd#1.1.3 (Basis IHE.MHD.Minimal.DocumentReference), stabil; Terminologie de.gematik.terminology#1.0.9.
+    Optionales Ziel: Die elektronische Aushändigung über die ePA nennen die TrG zu § 39 Nr. 1 S. 2 nur
+    als Option ''soweit rechtlich zulässig''. category, type und context.event sind REQUIRED an epa-xds-class-code-vs,
+    epa-xds-type-code-vs und epa-xds-event-code-vs gebunden; die IHE-D-Codes stehen dort unter den OID-Systemen
+    urn:oid:1.3.6.1.4.1.19376.3.276.1.5.8 (class) und urn:oid:1.3.6.1.4.1.19376.3.276.1.5.9 (type), das
+    Event-ValueSet schließt das KDL-ValueSet ein. Weitere Pflichtangaben: masterIdentifier, identifier:uniqueId,
+    subject (subject.identifier), content.attachment nur per url (data 0..0) mit contentType und language,
+    author.display, context.facilityType.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKDokumentenMetadaten
+  resource: DocumentReference
+  path: DocumentReference.type.coding:KDL (1..1); DocumentReference.type.coding:XDS; DocumentReference.category.coding:XDS;
+    DocumentReference.context.event.coding (1..1); DocumentReference.context.facilityType; DocumentReference.context.practiceSetting;
+    DocumentReference.content.attachment
+  notes: 'de.gematik.isik#6.0.0, stabil, nur Differential; Dokumentaustausch im Krankenhaus, für den ambulanten
+    Bericht nur bedingt passend. type.coding:KDL ist 1..1 REQUIRED an kdl (AD010101, konsistent mit BERI/BRI).
+    Pflicht: masterIdentifier, securityLabel, content.format, attachment contentType/language/title/creation,
+    context.facilityType, context.practiceSetting, context.event.coding 1..1 (REQUIRED IHEXDSeventCodeList)
+    sowie subject mit identifier.system/value.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKBerichtSubSysteme
+  resource: Composition
+  path: Composition.type.coding:KDL; Composition.type.coding:XDS; Composition.category.coding:IHE; Composition.section
+    (title, text; section.entry → packYearsCalculated, creditableSmokingDurationYears, medicalSuitabilityProfile,
+    eligibilityCheckResult); Composition.author; Composition.date
+  notes: 'de.gematik.isik#6.0.0, stabil, nur Differential. Strukturmuster für die Composition-Variante
+    (Sektionen je Berichtsteil: Zigarettenkonsum, Eignungsprofil, relevante Anamnese mit Verweisen u.
+    a. auf comorbidity, Bestätigung der Information nach KFE-RL § 40 S. 3, Selbsterklärung als Anlage).
+    Pflicht: text (status extensions), identifier, status final, subject.reference, author.display, section
+    mit title und text. Das Profil ist für die krankenhausinterne Übermittlung von Subsystemen gedacht;
+    für den ambulanten Bericht nur als Vorlage, Austauschziel ist die R4-Composition bzw. MII Dokument.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKFormularDaten
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.questionnaire (mit Extension questionnaireDisplay); QuestionnaireResponse.item.answer.value[x];
+    QuestionnaireResponse.authored; QuestionnaireResponse.author
+  notes: 'de.gematik.isik#6.0.0, stabil, nur Differential. Nur optionale Umsetzungsvariante, falls der
+    Bericht als Formular nach einer KV-Vorlage (KVBB-Musterbericht, KVBW-Bericht) erhoben wird; dafür
+    wäre ein eigener Questionnaire nötig. Pflicht: language, questionnaire mit Extension questionnaireDisplay,
+    subject.reference, authored. Der Bericht ist formfrei (Anlagen II/III der KFE-RL nicht belegt), die
+    Formularvariante ist keine Normvorgabe.'
+- standard: other
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_DocumentReference
+  resource: DocumentReference
+  path: DocumentReference.type.coding:xds (BERI); DocumentReference.category.coding:xds (BRI); DocumentReference.content:anhang.attachment
+    (data, contentType, title)
+  notes: kbv.basis#1.9.0 (KBV Basisprofile, kein MIO), stabil, nur Differential; für den PVS-Kontext der
+    berichterstellenden Praxis. type.coding:xds REQUIRED IHEXDStypeCode, category.coding:xds REQUIRED
+    IHEXDSclassCode. type.coding:kbv ist an KBV_VS_Base_Document_Type_KBV gebunden, das nur Verordnungs-,
+    eAU- und Medikationsplan-Typen enthält; die Typisierung läuft daher über XDS. content:anhang verlangt
+    data, contentType und title (url 0).
+- standard: ihe-xds
+  profile_or_url: http://ihe-d.de/ValueSets/IHEXDStypeCode
+  resource: XDS DocumentEntry (FHIR-Pendant DocumentReference über MHD)
+  path: DocumentEntry.classCode = BRI; DocumentEntry.typeCode = BERI; DocumentEntry.eventCodeList = KDL
+    AD010101
+  notes: de.ihe-d.terminology#3.0.1, nicht-FHIR (XDS-Metadaten). BERI 'Arztberichte' umfasst laut Definition
+    u. a. ärztliche Stellungnahme und Ambulanzbericht, BRI 'Brief' alle Arztbriefe mit ärztlicher Bewertung.
+    Mit KDL AD010101 als eventCode konsistent zur DVMD-ConceptMap; AD020204 würde dort auf BEFU/BEF führen.
+    Eine genauere IHE-D-Zuordnung des Prüfberichts gibt es nicht.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Composition
+  resource: Composition
+  path: Composition.type (75492-9); Composition.date; Composition.author; Composition.section.entry
+  notes: hl7.fhir.r4.core#4.0.1, stabil. Basisziel für die eigenständige Composition, wenn kein ISiK-Server
+    beteiligt ist. type 1..1 PREFERRED an doc-typecodes (LOINC 75492-9 zulässig), date 1..1 und author
+    1..* sind Pflicht; die Berichtsteile werden über section.entry referenziert.
+care_process:
+  trigger: nach dem Gespräch je Runde, wenn die Voraussetzungen erfüllt sind
+  responsible_role: berichterstellende Ärzt:in; Aushändigung an die Versicherten; Vorlage beim Erstbefunder
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 39 Nr. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Bericht wird der versicherten Person zur Verfügung gestellt.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 40 S. 3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Ärztin oder der Arzt gemäß Satz 1 bestätigt im Bericht gemäß § 39 Nummer 1 die erfolgte
+      Information zur Vorlage bei der ärztlichen Person gemäß § 41 Absatz 1.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 39 Nr. 1 S. 2 (Aushändigung des Berichts)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Je nach Wunsch der Versicherten umfasst dies entweder eine Aushändigung in gedruckter Form
+      oder, soweit rechtlich zulässig, in elektronischer Form über insbesondere die elektronische Patientenakte
+      (vgl. § 341 Abs. 2 SGB V).
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: 'KVBB, Hinweise zum Musterbericht — KV-Berichtsvorlagen: KVBW ''Bericht Lungenkrebs-Screening''
+      und KVBB ''Musterbericht – Hinweise'''
+    url: https://www.kvbawue.de/api-file-fetcher?fid=5382
+    section: Hinweis
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Nutzen Sie gern diesen Musterbericht oder erstellen Sie gemäß den Vorgaben einen eigenen Bericht
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q11
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 19 der Quellenrecherche zur Screening-Episode (Gruppe G6 Bericht/Überweisung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R/S/P:=, P:eligibilityReportProvisionMode; BPMN-Schritt:
+      G6 Bericht | Praxis: Activity_1npn3bx → Activity_17m122u; Radiologie: Bericht lesen (Activity_1rd4qnc)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 19); Quellen: Q02, Q03, Q11'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.9); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 19)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 3 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 3; KFE-RL § 39 Nr. 1 (S.
+  2: Bericht an die Person), § 40 S. 3 (Bestätigung der Information), § 41 Abs. 1 (Berücksichtigung durch
+  den Erstbefunder); EBM 01875. Formfrei: Anlagen II und III der KFE-RL sind „[nicht belegt]“.'
+- 'Umsetzung: eigenständig (Composition). Kardinalität 1..* (je Runde). hasPart packYearsCalculated, creditableSmokingDurationYears,
+  medicalSuitabilityProfile, eligibilityCheckResult und die Bestätigung der erfolgten Information (§ 40
+  S. 3); Abschnitt „Relevante Anamnese“ mit Verweisen auf comorbidity u. a. (statt des verworfenen relevantAnamnesticData);
+  Selbsterklärung nach KFE-RL § 43 Abs. 2 S. 3 als Anlage (statt des verworfenen reportingPhysicianSelfDeclaration).
+  KDL AD020204 nur als breites Mapping (binding example/extensible). Notes korrigieren: Die BÄK-Vorgaben
+  (12.12.2025) verlangen nur, dass Fortbildungen eine Berichtsvorlage bereitstellen; eine konsentierte
+  Vorlage kündigt das Whitepaper an, in S3 5.1 ist sie nicht enthalten. Elektronische Aushändigung über
+  die ePA nennen die TrG (zu § 39 Nr. 1 S. 2) als Option „soweit rechtlich zulässig“, nicht der Normtext.'
+- Weder KDL noch LOINC haben einen Dokumenttyp genau für den Bericht nach § 2 Abs. 1 Nr. 3 LuKrFrühErkV;
+  fachlich zu bestätigen ist, ob AD010101 Ärztliche Stellungnahme (konsistent mit BERI/BRI) oder AD020204
+  Krebsfrüherkennung (Programmbezug, aber ConceptMap → BEFU/BEF) als type.coding:KDL geführt wird.
+- Kein Profil für den Bericht in MII KDS, ISiK, KBV (kein MIO zur Lungenkrebs-Früherkennung), ePA, IPS
+  oder mCODE; die strukturierten Berichtsteile brauchen eine eigene Composition, ISiKBerichtSubSysteme
+  ist nur ein Krankenhaus-Muster.
+- Es gibt weder einen Questionnaire noch eine konsentierte Berichtsvorlage; das Whitepaper kündigt eine
+  Vorlage an, die BÄK-Vorgaben verlangen nur ihre Bereitstellung in Fortbildungen.
+- Die Bestätigung 'Information erfolgt' (KFE-RL § 40 S. 3) hat in keinem Profil ein Element und muss als
+  lokale Sektion oder Observation geführt werden.
+- Die elektronische Aushändigung über die ePA ist nur eine Option ('soweit rechtlich zulässig'); ob sie
+  umgesetzt wird, ist offen.
+- Kardinalität laut Quelle 1..* (je Runde).
+related_elements:
+- relation: hasPart
+  target: mihub.lung.screening.packYearsCalculated.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.creditableSmokingDurationYears.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.medicalSuitabilityProfile.v0.1
+- relation: hasPart
+  target: mihub.lung.screening.eligibilityCheckResult.v0.1

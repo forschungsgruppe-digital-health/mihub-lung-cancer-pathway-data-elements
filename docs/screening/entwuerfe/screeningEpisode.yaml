@@ -1,0 +1,170 @@
+id: mihub.lung.screening.screeningEpisode.v0.1
+uuid: 7fd192e5-b692-5915-bf77-44f1fb1ebac0
+name: screeningEpisode
+label_de: Teilnahme-Episode und Status in der Früherkennung
+definition_de: Klammer über alle Runden mit Status (aktiv, Kontrolle, ausgesetzt, beendet, Wiedereintritt)
+  und bei Ende Datum und Grund.
+phase: screening
+category: versorgungskontext
+datatype: string
+cardinality: 1..*
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, FHIR episode-of-care-status 4.0.1; Stand 2026-10-15. Element-Code
+    (Typ der Episode, EpisodeOfCare.type): 275981009 ''Screening for malignant neoplasm of lung'' (Synonym
+    ''Lung cancer screening''). Antwortwerte Status (EpisodeOfCare.status, required): aktiv → active,
+    ausgesetzt → onhold, beendet → finished; ''Kontrolle'' ist kein Status (ableitbar aus screeningResultCategory
+    und recommendedControlInterval). Antwortwerte Austrittsgrund (teilweise standardisiert): Ablehnung
+    13015001000119105, Lungenkrebsdiagnose 93880001 (wie cancerDiagnosis); 171108006 ''Screening not needed''
+    nur als Beispiel für ''Kriterien nicht mehr erfüllt'', nicht für Altersgrenze oder Zehn-Jahres-Regel.
+    Die übrigen Austrittsgründe (Altersgrenze mit Vollendung des 76. Lebensjahres, Symptome bzw. kurative
+    Versorgung nach KFE-RL § 38 Abs. 3, Rauchstopp vor 10 oder mehr Jahren) sind lokal festzulegen. Ein
+    Wiedereintritt wird als neue Episode geführt. Rollen der Codes: snomed-ct|275981009 = element; http://hl7.org/fhir/episode-of-care-status|active
+    = wert; http://hl7.org/fhir/episode-of-care-status|onhold = wert; http://hl7.org/fhir/episode-of-care-status|finished
+    = wert; snomed-ct|13015001000119105 = wert; snomed-ct|93880001 = wert; snomed-ct|171108006 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '275981009'
+    display: Screening for malignant neoplasm of lung
+  - system: http://hl7.org/fhir/episode-of-care-status
+    code: active
+    display: Active
+  - system: http://hl7.org/fhir/episode-of-care-status
+    code: onhold
+    display: On Hold
+  - system: http://hl7.org/fhir/episode-of-care-status
+    code: finished
+    display: Finished
+  - system: snomed-ct
+    code: '13015001000119105'
+    display: Lung cancer screening declined
+  - system: snomed-ct
+    code: '93880001'
+    display: Primary malignant neoplasm of lung
+  - system: snomed-ct
+    code: '171108006'
+    display: Screening not needed
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/EpisodeOfCare
+  resource: EpisodeOfCare
+  path: EpisodeOfCare.status (1..1, required episode-of-care-status) | EpisodeOfCare.statusHistory.status
+    + .period (1..1) | EpisodeOfCare.type (0..*, example; 275981009) | EpisodeOfCare.period (Beginn/Ende)
+    | EpisodeOfCare.patient (1..1) | EpisodeOfCare.managingOrganization | EpisodeOfCare.referralRequest
+    (ServiceRequest) | EpisodeOfCare.careManager | Extension für den Austrittsgrund (lokal)
+  notes: hl7.fhir.r4.core#4.0.1, stabil; unprofiliertes Basisziel, da in keinem geprüften deutschen oder
+    internationalen Paket ein EpisodeOfCare-Profil existiert. Status-Abbildung aktiv → active, ausgesetzt
+    → onhold, beendet → finished; optional planned für die Zeit zwischen Anspruchsprüfung und erster LDCT.
+    Statusverlauf über statusHistory, Ende über period.end. EpisodeOfCare.type = 275981009 'Screening
+    for malignant neoplasm of lung'. Für den Austrittsgrund gibt es in R4 kein Element (EpisodeOfCare.reason
+    erst in R5); er braucht eine lokale Extension. Encounter bzw. Procedure verweisen über ihr Element
+    episodeOfCare auf die Episode. Wiedereintritt = neue EpisodeOfCare.
+care_process:
+  trigger: Beginn mit der ersten Anspruchsprüfung; Statuswechsel je Runde; Ende beim Austritt
+  responsible_role: Praxis bzw. Programm (systemseitig geführt)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Tab. 16 Schritt 6
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Strukturierte Fortführung, Verlassen bzw. Beendigung des Früherkennungsprozesses
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Tab. 16, Schritt 8
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Wiedereintritt in den Früherkennungsprozess
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 49 der Quellenrecherche zur Screening-Episode (Gruppe G11 Teilnahmeverlauf;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: L:screeningParticipationStatus, E:screeningProgrammeExit,
+      P:=, P:screeningExitReason; BPMN-Schritt: G11 Verlauf | pfadübergreifend bis Gateway_1dj77wn → Screening
+      beendet (Event_1fjvvjs)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 49); Quellen: Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.6); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 49)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 1 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. S3 Tab. 16 Schritte 6 und 8 (Hintergrund ohne Empfehlungsgrad).
+  Austrittsgründe sind normativ ableitbar: KFE-RL § 38 Abs. 1 (Altersgrenze) und Abs. 3 (Behandlung, Verdacht);
+  LuKrFrühErkV § 2 Abs. 1 Nr. 3; S3 Empf. 5.5/5.6.'
+- 'Umsetzung: eigenständig (EpisodeOfCare). Reference auf FHIR EpisodeOfCare (type 275981009, status,
+  statusHistory, period) oder Period plus CodeableConcept für den Austrittsgrund. Status auf aktiv | ausgesetzt
+  | beendet begrenzen (lokal); „Kontrolle“ streichen (ableitbar aus screeningResultCategory und recommendedControlInterval).
+  Austrittsgründe lokal: Altersgrenze (Vollendung des 76. Lebensjahres), Lungenkrebsdiagnose, Symptome
+  bzw. kurative Versorgung (§ 38 Abs. 3 KFE-RL), Ablehnung, Eignungsprofil, Rauchstopp vor 10 oder mehr
+  Jahren. Wiedereintritt als neue Episode (statt des verworfenen screeningEntryRoute). Bezug zu screeningProgramEnrolment
+  (Beginn beim Übergang aus der Nachsorge; Spannung zu § 38 Abs. 3). „ausgesetzt“ sowie Enddatum und Grund
+  als lokale MiHUB-Festlegung kennzeichnen.'
+- Für die Austrittsgründe Altersgrenze (Vollendung des 76. Lebensjahres), Symptome bzw. kurative Versorgung
+  (KFE-RL § 38 Abs. 3) und Rauchstopp vor 10 oder mehr Jahren gibt es keine SNOMED- oder LOINC-Konzepte;
+  lokale Codes sind festzulegen.
+- FHIR R4 EpisodeOfCare hat kein Element für den Austrittsgrund; eine lokale Extension ist zu definieren,
+  eine R5-Cross-Version-Extension ist ungeprüft.
+- Es gibt kein deutsches Profil (MII KDS, ISiK, KBV, Basisprofil DE, ePA) für EpisodeOfCare bzw. eine
+  Screening-Programmteilnahme.
+- Der Status 'ausgesetzt' sowie Enddatum und Austrittsgrund sind lokale MiHUB-Festlegungen und als solche
+  zu kennzeichnen.
+- Das Verhältnis zu screeningProgramEnrolment (Beginn beim Übergang aus der Nachsorge, Spannung zu KFE-RL
+  § 38 Abs. 3) ist zu klären; Kardinalität 1..* je Person (Wiedereintritt = neue Episode) statt 1..1 ist
+  zu entscheiden.
+- Ein openEHR-Archetyp für eine Screening-Episode wurde nicht geprüft.
+- Kardinalität laut Quelle 1..* je Person (Wiedereintritt = neue Episode).

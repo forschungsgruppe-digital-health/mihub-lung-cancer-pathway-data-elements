@@ -1,0 +1,199 @@
+id: mihub.lung.screening.ctdiVol.v0.1
+uuid: d1b04231-6f35-5fbe-9d81-7de6f802cb09
+name: ctdiVol
+label_de: Volumen-CT-Dosisindex (CTDIvol) der Spiral-LDCT
+definition_de: Mittlerer CTDIvol der Spiralaufnahme (mGy, ohne Übersicht) aus dem Dosisbericht; Definitionsmerkmal
+  der LDCT (≤ 1,3 mGy).
+phase: screening
+category: messwert
+datatype: Quantity
+cardinality: 1..*
+unit: mGy
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'Element-Code DICOM DCM 113830 Mean CTDIvol (im CT-Dosisbericht/RDSR unter 113829 CT Dose innerhalb
+    von 113819 CT Acquisition, TID 10013), Einheit UCUM mGy wie im MII-Slice CTDIvol; RadLex RID12357
+    und NCIt C101138 als zusätzliche Element-Mappings. Methode: der CT Acquisition Type trennt das Spiral-Bestrahlungsereignis
+    (SNOMED 116152004) von der Übersichtsaufnahme (DCM 113805 Constant Angle Acquisition); maßgeblich
+    ist der CTDIvol der Spiralaufnahme ohne Übersicht. Für Constant-Angle-Ereignisse fordert das RDSR
+    keinen CT-Dose-Container, ein Übersichts-CTDIvol ist dort daher ggf. nicht verfügbar. Kein LOINC-
+    oder SNOMED-CT-Observable für CTDIvol. Editionen: MII TermServ, DICOM 2025.3, RadLex 4.2, NCIt 25.6,
+    SNOMED CT 20260701, UCUM 1.0.1; Stand 2026-10-15. Rollen der Codes: dicom-dcm|113830 = element; radlex|RID12357
+    = element; ncit|C101138 = element; snomed-ct|116152004 = methode; dicom-dcm|113805 = methode.'
+  codings:
+  - system: dicom-dcm
+    code: '113830'
+    display: Mean CTDIvol
+  - system: radlex
+    code: RID12357
+    display: volume CT dose index
+  - system: ncit
+    code: C101138
+    display: Computed Tomography Dose Index Volume
+  - system: snomed-ct
+    code: '116152004'
+    display: Spiral computed tomography scan
+  - system: dicom-dcm
+    code: '113805'
+    display: Constant Angle Acquisition
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct
+  resource: ImagingStudy
+  path: ImagingStudy.series.extension:modalitaetCT.extension:CTDIvol
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. Direkte Abbildung
+    des Werts: Sub-Extension CTDIvol 0..1, valueQuantity mit unit milligray, system http://unitsofmeasure.org,
+    code mGy; eingebunden in mii-pr-bildgebung-bildgebungsstudie als series.extension:modalitaetCT 0..1.
+    Der Wert hängt an der Serie, nicht am Bestrahlungsereignis: Spiralserie wählen, Übersichtsaufnahme
+    ausschließen. Konformität (≤ 1,3 mGy) und Überschreitungsgrund fehlen im Profil. DCM 113830 ist im
+    Profil nicht hinterlegt (Identifikation über die Extension-URL).'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct
+  resource: ImagingStudy
+  path: ImagingStudy.series.extension:modalitaetCT.extension:CTDIvol
+  notes: de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot. Gegenüber
+    2026.0.0 unverändert (Sub-Extensions CTDIvol, KVP, exposureTime, exposure, xRayTubeCurrent, convolutionalKernel;
+    Pattern mGy).
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_TID_10013.html
+  path: TID 10011 (113701 X-Ray Radiation Dose Report) > TID 10013 CT Irradiation Event Data > 113819
+    CT Acquisition > 113829 CT Dose > 113830 Mean CTDIvol (NUM, mGy)
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Primärquelle des Werts ist das CT-RDSR (SOP Class X-Ray Radiation
+    Dose SR 1.2.840.10008.5.1.4.1.1.88.67) mit einer Angabe je Bestrahlungsereignis. Maßgeblich ist das
+    Ereignis mit CT Acquisition Type Spiral (SNOMED 116152004). Der Container 113829 CT Dose ist nur gefordert,
+    wenn das Ereignis keine Constant Angle Acquisition (113805, Übersichtsaufnahme) ist.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/radiation-dose-summary/StructureDefinition/radiation-dose-summary
+  resource: Observation
+  path: Observation.component
+  notes: 'hl7.fhir.uv.radiation-dose-summary#1.0.0, stabil (HL7/IHE, international). Dosiszusammenfassung
+    je Untersuchung aus dem RDSR: code-Pattern LOINC 73569-6, partOf:imagingStudyRef 1..1 MS, performer:irradiationAuthorizingPerson
+    1..1 MS (passt zur Strahlenschutzverantwortlichen), value[x] string 1..1 MS – jede Instanz braucht
+    also zusätzlich eine textuelle Dosiszusammenfassung. component.code extensible an component-radiation-dose-summary-vs
+    (für CT nur DCM 113813 DLP); 113830 als zusätzlicher component.code mit valueQuantity in mGy zulässig.'
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ObservationRadiationDoseEuImaging
+  resource: Observation
+  path: Observation.component
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot (SD-Status draft). Code LOINC 73569-6, partOf:study
+    1..1, value[x] string 1..1, component.code nur example-gebunden; CTDIvol nur als freie Komponente.
+    Schwächer als die MII-Extension; Ausblick (EHDS).
+care_process:
+  trigger: je LDCT (Spiral-Bestrahlungsereignis)
+  responsible_role: Radiologie (Übernahme aus dem Dosisbericht/RDSR)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: ein Volumen-Computertomographie-Dosisindex von 1,3 Milligray nicht überschritten wird oder
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 4 Abs. 1 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Der Strahlenschutzverantwortliche hat dafür zu sorgen, dass die Anforderungen eingehalten werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: ACR LCSR & IPN Data Dictionary (28.05.2026) — ACR Lung-RADS v2022 (mit Summary of Changes)
+      und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: '#143 CTDIvol (mGy)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Do not include the topogram.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 28 der Quellenrecherche zur Screening-Episode (Gruppe G8 LDCT; M1 Inkrement
+      1 (Screening)); zusammengeführt aus: R/B:=, S:ctDoseIndexVolume, E:ldctCtdiVol; BPMN-Schritt: G8
+      LDCT | Activity_12qrin2; Qualitätsdaten (§7) (Activity_14vmlwn)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 28); Quellen: Q01, Q20'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.75); Dublette/Scope: nicht widerlegt (Konfidenz 0.8)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 28)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 5 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. Definitionsmerkmal der LDCT (LuKrFrühErkV § 1 Abs. 1
+  S. 1 Nr. 1 und S. 2) mit Einhaltungspflicht nach § 4 Abs. 1 S. 2 und Anlage; Aufzeichnung der Exposition
+  nach StrlSchG § 85 Abs. 1 S. 2 Nr. 3 Buchst. a (ohne bestimmte Dosisgröße).'
+- 'Umsetzung: eigenständig (isPartOf ldctExamination). Kardinalität 0..* (1 je LDCT bzw. Spiral-Bestrahlungsereignis),
+  unit mGy; isPartOf ldctExamination. Mapping: …/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct
+  (Slice CTDIvol) bzw. DICOM TID 10013. Konformität (≤ 1,3 mGy) und ggf. den Grund einer Überschreitung
+  (Körperstatur) hier als Attribut führen (statt des verworfenen ctdiVolExceedanceJustification). Optional
+  den CTDIvol der Übersichtsaufnahme als Komponente (Anlage: ≤ 0,2 × angestrebter Spiral-CTDIvol). Fundstelle
+  präzisieren: § 1 Abs. 1 S. 1 Nr. 1 und S. 2. Codesysteme dicom-dcm und ncit im Repo ergänzen.'
+- Konformität mit dem Grenzwert (≤ 1,3 mGy) und ein Überschreitungsgrund (Körperstatur) haben keinen Standardcode
+  und kein Profilelement; sie sind als lokale Attribute dieses Elements zu führen.
+- Die Bedingung der Anlage für die Übersichtsaufnahme (≤ 0,2 × angestrebter Spiral-CTDIvol) ist ohne Datenquelle,
+  weil das RDSR für Constant-Angle-Ereignisse keinen CT-Dose-Container fordert; Quelle bzw. Verzicht ist
+  zu klären.
+- Die MII-Extension hängt an der Serie statt am Bestrahlungsereignis; die Zuordnung der Spiralserie ist
+  festzulegen.
+- Kardinalität 0..* (eine Angabe je LDCT bzw. Spiral-Bestrahlungsereignis) statt 1..1; Fundstelle auf
+  LuKrFrühErkV § 1 Abs. 1 S. 1 Nr. 1 und S. 2 präzisieren.
+- Die Systemschlüssel dicom-dcm, radlex und ncit sind in der Terminologieprüfung des Repos (SYSTEM_URL)
+  zu hinterlegen.
+- Das ACR LCSR & IPN Data Dictionary (#143 CTDIvol) ist ohne stabile URL und deshalb nicht als Mapping
+  aufgenommen.
+- Kardinalität laut Quelle 0..* (1 je LDCT).
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.ldctExamination.v0.1

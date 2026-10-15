@@ -8,7 +8,9 @@ des Katalogs. Dieser Ordner enthält die Arbeitsgrundlage für die Erhebung 2026
 | --- | --- | --- |
 | [`dossier.md`](dossier.md) | Quellenverzeichnis (54 Quellen), Prozessschritt → Datenelement-Matrix entlang des BPMN-Modells, 53 geprüfte Kandidaten mit Einzelblättern (Definition, Fundstellen mit Zitat, Verbindlichkeit, Codes, Bezug zum Bestand), verworfene Kandidaten mit Begründung, Umsetzungsvorschlag (U1–U10), Entscheidungsfragen (E1–E24), offene Punkte | alle |
 | [`datenelement-erhebung-screening.xlsx`](datenelement-erhebung-screening.xlsx) | Vorbefüllte Erhebungsmappe (Vorlage des Repos): Zeilen DE-S01 … DE-S53 entsprechen den Einzelblättern Nr. 1–53 des Dossiers | klinische Expert:innen |
-| [`quellen.json`](quellen.json) | Maschinenlesbares Quellenverzeichnis mit Prüfvermerk und zitierenden Kandidaten | MI-Team |
+| [`entwuerfe/`](entwuerfe/) | **53 schema-valide YAML-Entwürfe** (je Kandidat ein Datenelement): Definition, Datentyp, MII-TermServ-geprüfte Codes, Profilziele über alle Standards, Quellenangaben mit wörtlichem Zitat und URL, Herkunft (`provenance.origin`), Prüfvermerke (`provenance.verification`) und offene Punkte | MI-Team, Review |
+| [`quellen.json`](quellen.json) | Maschinenlesbares Quellenverzeichnis mit Prüfvermerk und zitierenden Kandidaten (`locator` der Entwürfe verweist auf die Q-ID) | MI-Team |
+| [`pruefprotokoll.json`](pruefprotokoll.json) | Prüfprotokoll je Kandidat: Urteile der Gegenprüfung (Quelle, Dublette/Scope) mit Begründung, alle Code- und Profilvorschläge mit Skeptiker-Urteil, Änderungen bei der Zusammenführung | Review, Audit |
 
 ## Ablauf der Erhebung
 
@@ -22,13 +24,18 @@ des Katalogs. Dieser Ordner enthält die Arbeitsgrundlage für die Erhebung 2026
    und `scripts/verify-terminology.py` gegen den MII TermServ; Aufnahme nach `elements/screening/` per Pull Request (siehe
    [`docs/howto-add-element.md`](../howto-add-element.md)).
 
+## Codes, Profile und Herkunft (Stand 2026-10-15)
+
+- **Codes:** am MII TermServ ermittelt (Lookup/Expand), von einer Skeptiker:in gegengeprüft, Teilkorrekturen zusammengeführt und abschließend per `scripts/verify-terminology.py` geprüft: **355 Codings, davon 294 aus Standardterminologien — alle gefunden und aktiv** (SNOMED CT 20260701, LOINC 2.83, DICOM DCM, RadLex 4.2, KDL, OPS, NCIt, HL7) und 61 lokale Platzhalter dort, wo es keinen Standardcode gibt (Konzeptbedarf in `issues`). Die Rolle jedes Codes (Element-Code, Antwortwert, Methode, Dokumentklasse) steht in `value_set.notes`.
+- **Profile:** über alle Standards zugeordnet, nicht nur MII KDS: 301 Ziele (MII KDS 85, ISiK 28 — u. a. `ISiKRaucherStatus`, `ISiKLebensZustand`, `ISiKProzedur`, `ISiKBerichtSubSysteme` —, FHIR-Basis 32, IPS/Basisprofil DE und weitere unter `other`, DICOM SR 14, openEHR 33, KBV MIO 5, gematik ePA 5, IHE 5, mCODE 5). Alle **214 FHIR-Canonicals existieren** als StructureDefinition in den publizierten Paketen (maschinell geprüft); Nur-Ballot-Profile sind in `notes` gekennzeichnet.
+- **Herkunft:** jede Quellenangabe trägt ein wörtliches Zitat — **151/151** maschinell gegen die beschafften Quelltexte geprüft —, die URL und die Q-ID aus `quellen.json`; `provenance.origin` nennt Dossier-Nummer, Prozessgruppe, BPMN-Schritt und die zusammengeführten Rohkandidaten; `provenance.verification` die Prüfläufe mit Ergebnis.
+
 ## Stand und Grenzen
 
 - Rechtsgrundlagen: LuKrFrühErkV vom 15.05.2024 (in Kraft 01.07.2024); KFE-RL Abschnitt D.III (§§ 37–46, Fassung
   18.12.2025, in Kraft 12.03.2026); Abrechnung nach EBM seit 01.04.2026. Leitlinie: S3-LL Lungenkarzinom 5.1, Kap. 5.
 - Recherche und Gegenprüfung sind KI-gestützt (sechs Recherche-Perspektiven, je Kandidat zwei unabhängige Skeptiker;
   Methode im Anhang des Dossiers, Offenlegung in [`AI_USAGE.md`](../../AI_USAGE.md)). Das klinische Review steht aus.
-- Codes wurden in der Recherche überwiegend über tx.fhir.org geprüft (SNOMED CT INT 20250201, LOINC 2.82). Vor der
-  Aufnahme in den Katalog sind alle Codes gegen den MII TermServ zu prüfen (Dossier, Abschnitt 8.2).
+- Die Code-Angaben im Dossier stammen aus der Recherche (tx.fhir.org); maßgeblich sind die am MII TermServ geprüften Codes der Entwürfe.
 - Raucheranamnese ist ein Querschnittsthema: Die sieben Bausteine der Gruppe G2 sollen später auch Behandlung und
   Nachsorge dienen (`smokingStatus` im Bestand wird spezialisiert, nicht dupliziert).

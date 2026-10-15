@@ -1,0 +1,256 @@
+id: mihub.lung.screening.screeningInvitation.v0.1
+uuid: 36fd91bb-159d-5830-8752-ce638d14dd5d
+name: screeningInvitation
+label_de: Aufforderung, Wiedereinladung, Erinnerung (Recall)
+definition_de: Aufforderung, Wiedereinladung oder Erinnerung mit Zeitpunkt, Kanal, auffordernder Stelle
+  und Anlass (Erstaufforderung, Jahresrunde, Kontroll-LDCT, Neubewertung).
+phase: screening
+category: kontakt-visite
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, HL7 v3 ParticipationMode 4.0.0, HL7 CommunicationCategory
+    1.0.0; Stand 2026-10-15. Das Ereignis wird als FHIR Communication modelliert. Elementcode (Communication.category
+    bzw. topic) ist 308535007 ''Screening call'', das nur Früherkennungs-Einladungen umfasst; 310422005
+    ''Prevention/screening invitation'' ist breiter (schließt Impf- und Monitoring-Einladungen ein) und
+    nur Rückfallkodierung. Antwortwerte Kanal: entweder die SNOMED-Prozeduren 185534005 (Brief), 185535006
+    (Telefon), 185536007 (mündlich), alle unter 308535007, oder - passend zu Communication.medium - v3
+    ParticipationMode MAILWRIT (Brief), PHONE (Telefon), FACE (mündlich in der Praxis; VERBAL wäre Oberbegriff
+    inkl. Telefon), EMAILWRIT (E-Mail), MSGWRIT (App-/Push-Nachricht), ONLINEWRIT (Portalnachricht). CommunicationCategory
+    ''reminder'' kennzeichnet Wiedereinladung und Erinnerung. Ziel der Aufforderung (Communication.reasonCode
+    bzw. about) ist 275981009; das frühere 724167008 ''Lung cancer screening'' ist inaktiv und per SAME_AS
+    durch 275981009 ersetzt. Dokumenttyp des Einladungsschreibens (DocumentReference.type) ist LOINC 108276-7.
+    Der Anlass (Erstaufforderung, Jahresrunde, Kontroll-LDCT, Neubewertung) hat keinen Standardcode und
+    wird lokal kodiert. Binding example, weil weder Programm noch Rechtsgrundlage ein Einladungsverfahren
+    vorgeben. Rollen der Codes: snomed-ct|308535007 = element; snomed-ct|310422005 = element; snomed-ct|185534005
+    = wert; snomed-ct|185535006 = wert; snomed-ct|185536007 = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|MAILWRIT
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|PHONE = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|FACE
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|EMAILWRIT = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|MSGWRIT
+    = wert; http://terminology.hl7.org/CodeSystem/v3-ParticipationMode|ONLINEWRIT = wert; http://terminology.hl7.org/CodeSystem/communication-category|reminder
+    = wert; snomed-ct|275981009 = wert; loinc|108276-7 = dokumentklasse; local-no-standard-binding|erstaufforderung
+    = wert; local-no-standard-binding|jahresrunde = wert; local-no-standard-binding|kontroll-ldct = wert;
+    local-no-standard-binding|neubewertung = wert.'
+  codings:
+  - system: snomed-ct
+    code: '308535007'
+    display: Screening call
+  - system: snomed-ct
+    code: '310422005'
+    display: Prevention/screening invitation
+  - system: snomed-ct
+    code: '185534005'
+    display: Letter invite to screening
+  - system: snomed-ct
+    code: '185535006'
+    display: Telephone invite to screening
+  - system: snomed-ct
+    code: '185536007'
+    display: Verbal invite to screening
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: MAILWRIT
+    display: mail
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: PHONE
+    display: telephone
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: FACE
+    display: face-to-face
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: EMAILWRIT
+    display: email
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: MSGWRIT
+    display: messaging
+  - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationMode
+    code: ONLINEWRIT
+    display: online written
+  - system: http://terminology.hl7.org/CodeSystem/communication-category
+    code: reminder
+    display: Reminder
+  - system: snomed-ct
+    code: '275981009'
+    display: Screening for malignant neoplasm of lung
+  - system: loinc
+    code: 108276-7
+    display: Screening Invitation Letter
+  - system: local-no-standard-binding
+    code: erstaufforderung
+    display: Erstaufforderung
+  - system: local-no-standard-binding
+    code: jahresrunde
+    display: Wiedereinladung zur jährlichen Untersuchungsrunde
+  - system: local-no-standard-binding
+    code: kontroll-ldct
+    display: Erinnerung an Kontroll-LDCT
+  - system: local-no-standard-binding
+    code: neubewertung
+    display: Neubewertung des Eignungsprofils
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Communication
+  resource: Communication
+  path: Communication.sent
+  notes: 'hl7.fhir.r4.core#4.0.1, Ressource Trial Use (FMM 2). Hauptziel, weil kein nationales Profil
+    passt. Die Einladung ist ein stattgefundenes Übermittlungsereignis: sent (0..1 dateTime) = Zeitpunkt,
+    status 1..1 (event-status, required), medium 0..* (example v3-ParticipationMode) = Kanal, category
+    bzw. topic (example) = 308535007 bzw. SNOMED-Kanalprozedur und ''reminder'', reasonCode (example clinical-findings)
+    = lokaler Anlass bzw. 275981009, sender = Praxis (Practitioner, PractitionerRole oder Organization),
+    recipient und subject = Patient:in. basedOn verweist auf CommunicationRequest oder Appointment, wenn
+    die Fälligkeit geplant war.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/CommunicationRequest
+  resource: CommunicationRequest
+  path: CommunicationRequest.occurrenceDateTime
+  notes: 'hl7.fhir.r4.core#4.0.1, Trial Use; optional und sekundär. Bildet einen fälligen, noch nicht
+    versandten Recall ab: occurrence[x] (dateTime oder Period) = geplanter Zeitpunkt, medium wie bei Communication,
+    requester = Praxis. reasonCode ist hier an v3-ActReason (http://terminology.hl7.org/CodeSystem/v3-ActReason,
+    example) gebunden, nicht an clinical-findings; der lokale Anlass-Code ist trotzdem zulässig. Die Fälligkeit
+    selbst wird aus recommendedControlInterval bzw. plannedFollowUpAppointment abgeleitet.'
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/action/openEHR-EHR-ACTION.screening.v0.adl
+  resource: openEHR-EHR-ACTION.screening.v0
+  path: ism_transition careflow_step at0002 'Screening planned' bzw. at0003 'Screening scheduled'; /description[at0026]/items[at0028]
+    Reason
+  notes: openEHR CKM, Revision 0.0.1-alpha, lifecycle in_development, nicht-FHIR; nur nicht-bindendes
+    Referenzmuster. Kein Careflow-Schritt für Einladung oder Recall; Annäherung über 'Screening planned'
+    mit Reason als Anlass, ein abgelehntes Angebot über at0030 'Screening declined'. Kanal und auffordernde
+    Stelle fehlen.
+care_process:
+  trigger: Person mit Risikofaktoren identifiziert; fällige Jahresrunde, Kontroll-LDCT oder Neubewertung
+    des Eignungsprofils
+  responsible_role: Praxis (Allgemeinmedizin, Innere Medizin, Arbeitsmedizin); optional Patientenportal
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Tab. 14, Kernelement 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Einladung und regelmäßige Wiedereinladung der Versicherten
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Kap. 5.1.4.5, S. 90 (Hintergrund)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: zentralisierte und strukturierte Terminbuchungen bzw. Erinnerungen für das jährlich wiederkehrende
+      Niedrigdosis-CT sowie gegebenenfalls vorgezogene 3- und 6-Monats-Kontrollen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 43 Abs. 2 S. 2 Nr. 2 (Fortbildungsinhalt)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Maßnahmen zur Ansprache der versicherten Person und Prüfung der Zulässigkeitsvoraussetzungen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: KBV PraxisInfoSpezial (Oktober 2026) — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: S. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: wendet er sich dann wieder an den Allgemeinmediziner oder Internisten, der die Kriterien für
+      die Teilnahme prüft
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 1 der Quellenrecherche zur Screening-Episode (Gruppe G1 Zugang; M1 Inkrement
+      1 (Screening)); zusammengeführt aus: S/E/P:=, P:screeningReminder; BPMN-Schritt: G1 Zugang | Praxis:
+      Versichterte Person zu LKS auffordern (Activity_0o694d5)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 1); Quellen: Q12, Q02, Q05'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.55); Dublette/Scope: nicht widerlegt (Konfidenz 0.65)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 1)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 18 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Kein gesetzliches Einladungs- oder Recall-Verfahren (Maßnahme
+  nach § 25, kein Programm nach § 25a SGB V). S3 Tab. 14 Nr. 1 gilt nur für ein künftiges § 25a-Programm;
+  S3 Kap. 5.1.4.5 (Hintergrund) hält Erinnerungen für erforderlich.'
+- 'Umsetzung: eigenständig, optional (pfad- und portalspezifisch). Als Übermittlungsereignis modellieren
+  (Communication: sent, medium, sender, reasonCode) statt dateTime. Kanal über SNOMED 185534005/185535006/185536007,
+  lokal ergänzt um Portal/App; Anlass lokal (Erstaufforderung, Jahresrunde, Kontroll-LDCT, Neubewertung).
+  Anlässe belegen mit KFE-RL § 38 Abs. 1, § 42 Abs. 3 Nr. 1, S3 Empf. 5.6 und KFE-RL § 43 Abs. 2 S. 2
+  Nr. 2. Fälligkeit nicht hier speichern, sondern aus recommendedControlInterval bzw. plannedFollowUpAppointment
+  ableiten. S3 Tab. 14 Nr. 1 nur als Ausblick zitieren; in notes festhalten, dass das heutige Programm
+  kein Einladungsverfahren hat.'
+- Der Anlass der Aufforderung (Erstaufforderung, Jahresrunde, Kontroll-LDCT, Neubewertung) hat weder in
+  SNOMED CT noch in LOINC oder HL7 einen Code; die lokalen Codes müssen fachlich bestätigt und als CodeSystem
+  veröffentlicht werden.
+- Es ist festzulegen, ob der Kanal über Communication.medium (v3 ParticipationMode) oder über die SNOMED-Prozeduren
+  185534005/185535006/185536007 geführt wird; empfohlen wird medium für den Kanal und SNOMED nur für category/topic.
+- Für den Portal- bzw. App-Kanal ist zwischen MSGWRIT (App- oder Push-Nachricht) und ONLINEWRIT (Portalnachricht)
+  zu entscheiden.
+- SNOMED CT 20260701 hat kein lungen- oder LDCT-spezifisches Einladungs- oder Recall-Konzept; 308535007
+  ist der engste verfügbare Code.
+- Es gibt kein deutsches FHIR-Profil (MII KDS, KBV-Basis, gematik ePA, ISiK) für eine Screening-Einladung.
+  ISiKNachricht (de.gematik.isik-terminplanung#4.0.3) ist ungeeignet, weil es einen Empfänger vom Typ
+  Practitioner oder HealthcareService verlangt und damit eine Einladung der Praxis an die Patient:in nicht
+  konform abbildet; das Profil fehlt zudem in de.gematik.isik#6.0.0.
+- Der Datentyp sollte von dateTime auf Reference(Communication) umgestellt werden, damit Zeitpunkt, Kanal,
+  auffordernde Stelle und Anlass gemeinsam erfasst werden.
+- Das heutige Programm (Maßnahme nach § 25 SGB V) hat kein gesetzliches Einladungsverfahren; S3-LL Tab.
+  14 Nr. 1 gilt nur für ein künftiges Programm nach § 25a SGB V.
+- Die NHS Lung Cancer Screening Data Set (LCSDS) v1.0 soll Einladungsangaben enthalten, die Spezifikation
+  war jedoch nicht abrufbar und ist nicht zugeordnet.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.recommendedControlInterval.v0.1
+- relation: dependsOn
+  target: mihub.lung.primarycare.plannedFollowUpAppointment.v0.1

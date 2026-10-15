@@ -1,0 +1,202 @@
+id: mihub.lung.screening.eligibilityCheckResult.v0.1
+uuid: 040f8b24-8f17-5471-a764-9973aedd061f
+name: eligibilityCheckResult
+label_de: Ergebnis der Zulässigkeitsprüfung in der Praxis
+definition_de: Ergebnis der Prüfung nach § 2 je Kriterium und gesamt mit Datum; bei Nichterfüllung strukturierter
+  Absagegrund.
+phase: screening
+category: assessment
+datatype: CodeableConcept
+cardinality: 1..*
+value_set:
+  binding_strength: example
+  standard_binding_status: pending-mapping
+  notes: 'SNOMED CT INT 20260701 (MII TermServ), Stand 2026-10-15. Element-Code (Näherung): 472061000124107
+    Evaluation of eligibility for program für die Prüfung der Anspruchsberechtigung nach § 2 LuKrFrühErkV;
+    das Ergebnis steht in Observation.value. Antwortwerte für das Gesamtergebnis je Runde als lokale Werteliste:
+    erfüllt | nicht erfüllt | Nachweis unvollständig. Absagegrund 0..* (optional, lokal) mit den Teilmappings
+    1303300002 (Alter außerhalb 50–75 Jahre) und 1303301003 (medizinisch nicht geeignet, wie in medicalSuitabilityProfile).
+    Einzelkriterien werden per dependsOn bzw. derivedFrom verknüpft und nicht doppelt kodiert (Alter aus
+    dem Geburtsdatum, Rauchstopp aus den Konsumabschnitten, lastQualifyingChestCtDate, symptomAndLungCancerCareStatus,
+    medicalSuitabilityProfile). Nicht verwenden: LOINC LA185-1, SNOMED 171108006 und 444734003 (anderer
+    Kontext). Rollen der Codes: snomed-ct|472061000124107 = element; local-no-standard-binding|criteria-met
+    = wert; local-no-standard-binding|criteria-not-met = wert; local-no-standard-binding|evidence-incomplete
+    = wert; snomed-ct|1303300002 = wert; snomed-ct|1303301003 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '472061000124107'
+    display: Evaluation of eligibility for program
+  - system: local-no-standard-binding
+    code: criteria-met
+    display: erfüllt
+  - system: local-no-standard-binding
+    code: criteria-not-met
+    display: nicht erfüllt
+  - system: local-no-standard-binding
+    code: evidence-incomplete
+    display: Nachweis unvollständig
+  - system: snomed-ct
+    code: '1303300002'
+    display: Not suitable for procedure due to age
+  - system: snomed-ct
+    code: '1303301003'
+    display: Not suitable for procedure due to disease
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Observation
+  resource: Observation
+  path: Observation.value[x]
+  notes: 'hl7.fhir.r4.core#4.0.1 (stabil). Hauptziel für das Gesamtergebnis je Runde: valueCodeableConcept
+    mit der lokalen Werteliste; effective[x] = Prüfdatum; performer = berichterstellende Ärzt:in bzw.
+    Erstbefunder; component 0..* für den optionalen Absagegrund; derivedFrom 0..* auf die Einzelkriterien
+    (smokingStatusScreening, creditableSmokingDurationYears, packYearsCalculated, lastQualifyingChestCtDate,
+    symptomAndLungCancerCareStatus, medicalSuitabilityProfile). Die Prüfung durch den Erstbefunder (LuKrFrühErkV
+    § 3 Nr. 1) über care_process.data_flows abbilden, nicht als eigene Ressource.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-screening-assessment
+  resource: Observation
+  path: Observation.value[x]; Observation.derivedFrom
+  notes: hl7.fhir.us.core#9.0.0 (stabil; US-Muster, nicht als Ziel übernehmen). Referenzmuster für ein
+    Gesamtergebnis aus Einzelbewertungen (derivedFrom und hasMember 0..* MS); category:survey 1..1 und
+    die US-VSAC-Bindung von code passen nicht zu einer ärztlichen Zulässigkeitsprüfung.
+care_process:
+  trigger: Abschluss der Anspruchsprüfung je Runde
+  responsible_role: berichterstellende Ärzt:in; Prüfung durch den Erstbefunder (LuKrFrühErkV § 3 Nr. 1)
+evidence:
+  guideline_references:
+  - source: andere
+    version: KBV PraxisInfoSpezial — PraxisInfoSpezial Lungenkrebs-Früherkennung mit Niedrigdosis-CT
+    url: https://www.kbv.de/documents/infothek/publikationen/praxisinfo/praxisinfospezial-lungenkrebs-frueherkennung.pdf
+    section: Bericht und Überweisung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Sie dokumentieren nach dem Gespräch in einem Bericht, dass der beziehungsweise die Versicherte
+      die …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q05
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 3 Nr. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: die Zulässigkeitsvoraussetzungen nach § 2 prüft
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 41
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Dabei sollte sich der Erstbefunder durch Rückfrage bei der versicherten Person versichern,
+      dass die Angaben des Berichts zum Zeitpunkt der Indikationsstellung noch aktuell sind.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: BPMN lung-cancer-screening-pathway — BPMN lung-cancer-screening-pathway und Quellenlisten
+      des Pfad-Repos (pathway-clinical-sources.md, pathway-data-sources.m
+    url: https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway/blob/dev/models/lung-cancer-screening-pathway.bpmn
+    section: Event_0rhy6wb (documentation)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Die Person erfüllt nicht alle Zulässigkeitsvoraussetzungen gemäß §2 LuKrFrühErkV. Die Ablehnung
+      wird der Person mitgeteilt.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q39
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 13 der Quellenrecherche zur Screening-Episode (Gruppe G3 Zulässigkeit/Eignung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: S:eligibilityCriteriaAssessment, E:eligibilityAssessmentResult,
+      P:=, P:eligibilityNotMetReason; BPMN-Schritt: G3 Zulässigkeit | Praxis: Gateway_1whuu15; nein →
+      Teilnahme nicht möglich (Event_0rhy6wb)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 13); Quellen: Q05, Q01, Q03, Q39'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.7); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 13)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 6 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 2 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. Pflicht ist nur die positive Bestätigung der erfüllten
+  Kriterien im Bericht (LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 3 Buchst. a/b; KFE-RL § 38, § 39 Nr. 1, § 40
+  S. 3). Die Zulässigkeitsprüfung des Erstbefunders regeln LuKrFrühErkV § 3 Nr. 1 und KFE-RL § 41 Abs.
+  1. Negatives Ergebnis und Absagegrund haben keine Rechtsgrundlage.'
+- 'Umsetzung: eigenständig (Gesamtergebnis; Rolle Erstbefunder über data_flows). Auf das Gesamtergebnis
+  je Runde reduzieren (lokale Werteliste: erfüllt | nicht erfüllt | Nachweis unvollständig), dazu Absagegrund
+  0..* (lokal, optional) und Datum (Observation.effective). Einzelkriterien per dependsOn verknüpfen statt
+  doppelt führen; Alter aus dem Geburtsdatum, Rauchstopp aus den Konsumabschnitten ableiten. Umbenennen
+  in „Ergebnis der Prüfung der Anspruchsberechtigung“. Die Prüfung durch den Erstbefunder (Zulässigkeit,
+  Aktualitätsrückfrage nach TrG) über care_process.data_flows abbilden (usage_type validate, system ris-pacs).
+  KBV PraxisInfoSpezial nur als Sekundärbeleg.'
+- Es fehlen Standardkonzepte 'Meets/Does not meet eligibility criteria for lung cancer screening' sowie
+  'Nachweis unvollständig'; die Werteliste bleibt lokal.
+- 'Absagegründe ohne Standardcode: Rauchanamnese unter 25 Packungsjahren bzw. zu kurz, Rauchstopp länger
+  als 10 Jahre zurück, letzte befundungsgeeignete CT innerhalb von 12 Monaten, Symptome bzw. Verdacht,
+  laufende Behandlung; ob sie als lokale Werte geführt werden, ist zu entscheiden.'
+- Kein Profil in MII KDS, ISiK, KBV, ePA, IPS oder mCODE bildet das Ergebnis der Anspruchsprüfung nach
+  LuKrFrühErkV § 2 und KFE-RL §§ 38–40 ab. Das ACR LCSR Data Dictionary führt nur Einzelkriterien (Items
+  124–126 und 131 im Abschnitt Appropriateness of Screening, Item 138 im Abschnitt About the Exam), kein
+  Gesamtergebnis; NHS LCSDS ist nicht ausgewertet.
+- Rechtsgrundlage ist nur die positive Bestätigung der erfüllten Kriterien im Bericht; ob negatives Ergebnis
+  und Absagegrund überhaupt erfasst werden, ist fachlich zu entscheiden. Umbenennung in 'Ergebnis der
+  Prüfung der Anspruchsberechtigung' und Kardinalität 1..* je Episode sind zu bestätigen.
+- Kardinalität laut Quelle 1..* je Episode.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.creditableSmokingDurationYears.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.packYearsCalculated.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.lastQualifyingChestCtDate.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.symptomAndLungCancerCareStatus.v0.1
+- relation: dependsOn
+  target: mihub.lung.screening.medicalSuitabilityProfile.v0.1

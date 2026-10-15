@@ -1,0 +1,250 @@
+id: mihub.lung.screening.coronaryArteryCalcification.v0.1
+uuid: ddf193fc-2d81-546c-b58c-29f8d88c8b7e
+name: coronaryArteryCalcification
+label_de: Koronararterienverkalkung (visuell, optional Agatston)
+definition_de: Koronarkalk visuell (keine, gering, mäßig, schwer), optional Agatston-Score, mit Empfehlung
+  zur hausärztlichen Abklärung.
+phase: screening
+category: befund
+datatype: CodeableConcept
+cardinality: 0..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  notes: 'Editionen: SNOMED CT INT 20260701, RadLex 4.2 und DICOM 2025.3, alle Codes auf dem MII TermServ
+    aktiv (Stand 2026-10-15). Element-Code ist das Observable 450360000 (Observation.code). 445512009
+    (Disorder, Subtyp von 404684003 Clinical finding) ist ein alternativer Element-Code nur für MII-Bildgebungsprofile,
+    deren Slice code.coding:sct Clinical findings verlangt; er ist kein Antwortwert. RadLex RID50146 ist
+    ein optionales Zusatz-Coding für radiologische Befundsysteme. Antwortwerte (geschlossene Liste, required)
+    sind die visuellen Stufen nach O''Dowd et al. 2023 Tab. 2: keine = 260413007, gering = 255604002,
+    mäßig = 6736007, schwer = 24484000. Die Graduierung unter dem Score-Observable ist eine Modellierungsentscheidung
+    des Projekts, keine SNOMED-Definition. Der optionale Agatston-Score ist eine dimensionslose Quantity
+    (UCUM ''{score}'', gleichwertig zu ''1'') mit Instrument 450734004 (Skala) und Methode DCM 112055
+    (Observation.method); beide gehören nicht zur Stufenliste. Die Empfehlung zur hausärztlichen Abklärung
+    gehört zu incidentalFinding bzw. zur Überweisung. LOINC 2.83 enthält kein Observable für die visuelle
+    CAC-Graduierung, nur Untersuchungscodes. Rollen der Codes: snomed-ct|450360000 = element; snomed-ct|445512009
+    = element; radlex|RID50146 = element; snomed-ct|260413007 = wert; snomed-ct|255604002 = wert; snomed-ct|6736007
+    = wert; snomed-ct|24484000 = wert; snomed-ct|450734004 = instrument; dicom-dcm|112055 = methode.'
+  codings:
+  - system: snomed-ct
+    code: '450360000'
+    display: Coronary artery calcium score
+  - system: snomed-ct
+    code: '445512009'
+    display: Calcification of coronary artery
+  - system: radlex
+    code: RID50146
+    display: coronary artery calcification
+  - system: snomed-ct
+    code: '260413007'
+    display: None
+  - system: snomed-ct
+    code: '255604002'
+    display: Mild
+  - system: snomed-ct
+    code: '6736007'
+    display: Moderate severity
+  - system: snomed-ct
+    code: '24484000'
+    display: Severe
+  - system: snomed-ct
+    code: '450734004'
+    display: Coronary artery calcium score
+  - system: dicom-dcm
+    code: '112055'
+    display: Agatston scoring method
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.value[x]; Observation.component; Observation.bodySite;
+    Observation.category.coding:loinc; Observation.partOf; Observation.derivedFrom
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2026.0.0, stabil. code.coding:sct ist
+    REQUIRED an mii-vs-bildgebung-findings-sct (< 404684003 Clinical finding) gebunden: 445512009 ist
+    zulässig, das Observable 450360000 nicht (beides per $subsumes auf dem MII TermServ bestätigt); 450360000
+    daher nur als zusätzliches Coding außerhalb des sct-Slice bzw. gar nicht. value[x] ist 1..1: visuelle
+    Stufe als valueCodeableConcept; ist nur ein Agatston-Score vorhanden, braucht es eine eigene Observation
+    (siehe radiologische-messung) oder dataAbsentReason. Agatston-Score alternativ als component (component.code
+    Example-Binding, valueQuantity). bodySite (REQUIRED < 123037004) = 41801008 Coronary artery structure.
+    category.coding:loinc Pattern 18782-3; partOf → radiologische-befundungsprozedur; derivedFrom → ImagingStudy.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-messung
+  resource: Observation
+  path: Observation.code.coding:sct; Observation.valueQuantity (system Pattern http://unitsofmeasure.org);
+    Observation.method.coding:sct; Observation.category.coding:sct (Pattern 122869004)
+  notes: 'de.medizininformatikinitiative.kerndatensatz.bildgebung#2027.0.0-ballot.1, Ballot (nicht normativ).
+    Nur für den Teilwert Agatston-Score; die visuelle Stufe bleibt bei radiologische-beobachtung. value[x]
+    nur Quantity (unit, system, code 1..1), Einheit UCUM ''{score}'' bzw. ''1''. code.coding:sct verlangt
+    einen Clinical-finding-Code (445512009), method = Agatston (SNOMED-Code ungeprüft; DICOM DCM 112055).
+    Paketdefekt: patternCoding.system von code.coding:sct und method.coding:sct lautet ''http://snomed.info/sct|http://snomed.info/sct/900000000000207008/version/20260701''
+    (System und Version in einer URI), sodass der Slice womöglich nicht greift.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.component.code; Observation.category:radiology
+  notes: hl7.fhir.uv.ips#2.0.1, stabil, internationales Referenzmuster. code ist PREFERRED an LOINC-Radiologiecodes
+    gebunden, SNOMED 450360000 als Alternative zulässig. category:radiology Pattern observation-category#imaging
+    (1..1); effective[x] 1..1 und performer 1..* sind Pflicht. Agatston-Wert als valueQuantity bzw. component.
+- standard: other
+  profile_or_url: http://hl7.eu/fhir/imaging/StructureDefinition/ObservationFindingEuImaging
+  resource: Observation
+  path: Observation.code; Observation.value[x]; Observation.component
+  notes: hl7.fhir.eu.imaging#1.0.0-ballot, Ballot/Draft (EHDS-Kontext). Angebunden über DiagnosticReportEuImaging.extension:finding
+    (HL7IDRFinding). code nur Example-Binding; Stufe und Agatston-Score frei als value bzw. component;
+    kein eigener Koronarkalk-Code.
+- standard: dicom-sr
+  profile_or_url: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_TID_3905.html
+  resource: TID 3905 Calcium Scoring Results (in TID 3900 CT/MR Cardiovascular Analysis Report)
+  path: 'Row 6: INCLUDE TID 300 mit $Measurement = (450360000, SCT, "Coronary artery calcium score"),
+    $Method = (112055, DCM, "Agatston Scoring Method"), $Units = (1, UCUM); Row 2: Analysis Performed
+    = (122603, DCM, "Calcium Scoring Analysis")'
+  notes: DICOM PS3.16 2026d, nicht-FHIR. Nur für den Teilwert Agatston-Score; eine Werteliste für die
+    visuelle Stufe fehlt. Die Vorlage gehört zum kardialen CT-Bericht (TID 3900), nicht zum Lungen-Screening-Bericht;
+    sie verwendet den Element-Code 450360000 ausdrücklich.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary, Datenelemente 153/154
+  path: '#153 Other clinically significant abnormalities – S-Modifier (Yes/No); #154 Antwort „Coronary
+    arterial calcification moderate or severe“'
+  notes: 'ACR LCSR & IPN Data Dictionary, Stand 2026-05-28, nicht-FHIR (US-Register). Äquivalenz broader/related:
+    erfasst nur binär ab mäßig (mäßig/schwer → ja), ohne vierstufige Skala und ohne Agatston-Score; Anschluss
+    an Lung-RADS v2022 Note 15.'
+- standard: openehr-archetype
+  profile_or_url: openEHR-EHR-OBSERVATION.imaging_exam_result.v1
+  resource: OBSERVATION
+  path: /data[at0001]/events[at0002]/data[at0003]/items[at0044] (Structured imaging findings, CLUSTER-Slot)
+    bzw. items[at0008] (Imaging findings, DV_TEXT)
+  notes: openEHR CKM (CKM-mirror master, Stand 2026-10-15), Lifecycle published, nicht-FHIR. Kein Koronarkalk-CLUSTER
+    vorhanden; die Stufe als lokalen CLUSTER im Slot at0044 modellieren.
+care_process:
+  trigger: jede Befundung (routinemäßige Angabe)
+  responsible_role: Erstbefunder
+evidence:
+  guideline_references:
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 15
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Emphysem oder Koronarkalk sollten routinemäßig als häufige Komorbiditäten im Befund angegeben
+      werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+  - source: andere
+    version: O’Dowd et al. 2023 (Eur J Cardiothorac Surg 2023;64:ezad302) — ERS/ESTS/ESTRO/ESR/ESTI/EFOMP
+      statement on incidental findings from LDCT screening (O'Dowd et al.)
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10876118/
+    section: Tab. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Classify (using simple visual scoring) as: None, Mild, Moderate, Severe'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q17
+  - source: andere
+    version: O’Dowd et al. 2023 — ERS/ESTS/ESTRO/ESR/ESTI/EFOMP statement on incidental findings from
+      LDCT screening (O'Dowd et al.)
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10876118/
+    section: Coronary artery calcification
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: The statements recommend primary care evaluation of cardiovascular risk factors in case of
+      significant CAC.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q17
+  - source: andere
+    version: DRG/DGP/DGT-Positionspapier, Supplement — DRG/DGP/DGT-Positionspapier nationales LDCT-Programm
+      mit Supplement; DGP-Positionspapier Tabakentwöhnung (Rupp et al.)
+    url: https://www.thieme-connect.de/media/roefo/202402/supmat/roefo-21782846_10-1055-a-2178-2846-s.pdf
+    section: Tab. S1 Anm. 15
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Emphysem oder Koronarkalk sollten routinemäßig als häufige Komorbiditäten im Befund angegeben
+      werden.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q16
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 40 der Quellenrecherche zur Screening-Episode (Gruppe G9 Befundung; M1
+      Inkrement 1 (Screening)); zusammengeführt aus: L/B:coronaryArteryCalcificationGrade, B:coronaryArteryCalciumScore;
+      BPMN-Schritt: G9 Befundung | Activity_1tdikdp → Activity_12ef5s1'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 40); Quellen: Q16, Q17'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 40)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 9 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 7 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. DRG/DGP/DGT-Supplement Tab. S1 Anm. 15 („sollten routinemäßig
+  … angegeben werden“); Skala und Empfehlung nach O’Dowd et al. 2023 (Tab. 2).'
+- 'Umsetzung: Spezialisierung von incidentalFinding. Element-Code als Observable SNOMED 450360000; Wert
+  = visuelle Stufe keine | gering | mäßig | schwer (lokales Ordinal-ValueSet, no-standard-found; Quelle
+  O’Dowd 2023 Tab. 2); Agatston-Score als optionale, alternative Komponente (Quantity); 445512009 nur
+  als Befundwert bei vorhandenem Kalk. Die Empfehlung (hausärztliche Abklärung des kardiovaskulären Risikos
+  bei mäßigem oder schwerem Koronarkalk) gehört in die Empfehlungskomponente von incidentalFinding bzw.
+  in die Überweisung, nicht ins Element. specializes incidentalFinding.'
+- Für die visuelle Koronarkalk-Graduierung (keine | gering | mäßig | schwer) gibt es weder in SNOMED CT
+  noch in LOINC ein eigenes Observable oder ValueSet; die Nutzung des Score-Observables 450360000 mit
+  Qualifier-Werten ist eine Projektentscheidung, die bestätigt werden muss.
+- Der Element-Code 450360000 ist mit dem REQUIRED-Binding der MII-Bildgebungsprofile (code.coding:sct
+  < 404684003) unvereinbar; für die MII-Abbildung muss 445512009 verwendet werden – es ist festzulegen,
+  welcher Code im Datenelement führend ist.
+- Für den Agatston-Score existiert kein eigener SNOMED- oder LOINC-Code; die Einheit ('{score}' bzw. '1')
+  ist projektweit einheitlich festzulegen.
+- Ist nur ein Agatston-Score ohne visuelle Stufe vorhanden, ist wegen value[x] 1..1 im MII-Profil eine
+  eigene Messungs-Observation nötig; die Modellierung (component vs. separate Observation) ist zu entscheiden.
+- Der Systemschlüssel 'radlex' (http://radlex.org) muss in der Schema-Beschreibung von value_set.codings[].system
+  ergänzt werden, falls noch nicht geschehen.
+- Der Pattern-Defekt (System mit Versionsanhang) im MII-Bildgebungsmodul 2027.0.0-ballot.1 sollte als
+  Ballot-Kommentar gemeldet werden.
+related_elements:
+- relation: specializes
+  target: mihub.lung.screening.incidentalFinding.v0.1

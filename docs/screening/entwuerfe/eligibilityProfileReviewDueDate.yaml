@@ -1,0 +1,157 @@
+id: mihub.lung.screening.eligibilityProfileReviewDueDate.v0.1
+uuid: cd7dc5c3-dc5c-5df9-a3c9-6d85655ecd99
+name: eligibilityProfileReviewDueDate
+label_de: Fälligkeit der erneuten Prüfung des Eignungsprofils
+definition_de: 'Fälligkeit der erneuten Eignungsprüfung nach erster LDCT: bis 70 J. alle 5 Jahre, 70–75
+  J. mind. alle 3 Jahre, vorgezogen bei neuer Komorbidität.'
+phase: screening
+category: versorgungsplanung
+datatype: date
+cardinality: 0..1
+value_set:
+  binding_strength: example
+  standard_binding_status: pending-mapping
+  notes: 'SNOMED CT INT 20260701 (MII TermServ), Stand 2026-10-15. Das Element ist ein berechnetes Datum
+    ohne Wertkodierung. Element-Code ist nur eine Näherung (broader): 472061000124107 Evaluation of eligibility
+    for program bezeichnet das fällige Ereignis (die erneute Eignungsprüfung), nicht das Fälligkeitsdatum;
+    die ID stammt aus dem US-Namensraum, das Konzept ist aber Teil der INT-Edition. Ein Temporal Observable
+    ''Datum fällige Neubewertung'' gibt es nicht; LOINC 90060-5 Date task due ist zu generisch. Berechnungsregel
+    (S3 Empf. 5.6, EK) in constraints_de: unter 70 Jahren Prüfdatum + 5 Jahre, 70 bis 75 Jahre + 3 Jahre,
+    vorgezogen bei neuer hoher Komorbiditätslast; Eingänge Prüfdatum und Geburtsdatum. Rollen der Codes:
+    snomed-ct|472061000124107 = element.'
+  codings:
+  - system: snomed-ct
+    code: '472061000124107'
+    display: Evaluation of eligibility for program
+standard_mappings:
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/Task
+  resource: Task
+  path: Task.restriction.period
+  notes: 'hl7.fhir.r4.core#4.0.1 (Ressource mit SD-Status draft). Bevorzugtes Ziel: restriction.period.end
+    = spätester Zeitpunkt der erneuten Eignungsprüfung; code lokal (''Neubewertung Eignungsprofil''),
+    focus auf die Observation medicalSuitabilityProfile, for = Patient, status requested, intent plan.
+    Gleiche Fälligkeitskonvention (Task.restriction.period.end) wie im MiHUB-Patientenportal.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/ServiceRequest
+  resource: ServiceRequest
+  path: ServiceRequest.occurrence[x]
+  notes: 'hl7.fhir.r4.core#4.0.1 (stabil). Nachrangige Alternative, wenn die erneute Prüfung als geplante
+    Leistung angefordert wird: occurrence[x] (dateTime|Period|Timing) 0..1, reasonReference auf die Eignungsprofil-Observation.
+    Für einen reinen Recall-Hinweis weniger passend.'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/CarePlan
+  resource: CarePlan
+  path: CarePlan.activity.detail.scheduled[x]
+  notes: 'hl7.fhir.r4.core#4.0.1 (stabil). Option, wenn die Früherkennungs-Episode als CarePlan geführt
+    wird: activity.detail.scheduled[x] (Timing|Period|string) 0..1, activity.detail.code lokal (example).
+    Recall-Anlass ''Neubewertung'' gemeinsam mit screeningInvitation.'
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.614
+  resource: openEHR-EHR-INSTRUCTION.service_request.v1
+  path: /activities[at0001]/description[at0009]/items[at0040] (Service due)
+  notes: openEHR CKM service_request.v1, Revision 1.1.3-alpha (lifecycle in_development, nicht stabil;
+    nicht-FHIR). 'Service due' at0040 = Fälligkeitsdatum, 'Service name' at0121 = erneute Eignungsprüfung.
+care_process:
+  trigger: nach der ersten LDCT, bei jeder Eignungsprüfung neu berechnet; vorgezogen bei neuer hoher Komorbiditätslast
+  responsible_role: Praxis (berechneter Wert)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.6 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: bis zu einem Alter von 70 Jahren alle 5 Jahre sowie im Alter von 70 bis 75 Jahren mindestens
+      alle 3 Jahre eine …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Empf. 5.6 (EK)
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: ggf. vorgezogen bei Bekanntwerden einer neuen hohen Komorbiditätslast
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+iso13972_metadata:
+  type: plan
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 12 der Quellenrecherche zur Screening-Episode (Gruppe G3 Zulässigkeit/Eignung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: L:=, P:eligibilityProfileReviewDue; BPMN-Schritt:
+      G3 Eignung | Praxis: Wiedereintritt Anfrage erhalten (Event_1d2c01e); im BPMN fehlend'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 12); Quellen: Q12'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 12)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 4 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Leitlinie. S3 Empf. 5.6 (EK, „sollten“); keine Rechtspflicht. Im
+  BPMN fehlt ein Schritt für die erneute Prüfung.'
+- 'Umsetzung: abgeleitetes Attribut (Zusammenlegung mit medicalSuitabilityProfile prüfen). Nicht als eigenständig
+  erhobenes Element führen, sondern als berechnetes Attribut „nächste Eignungsprüfung fällig“ von medicalSuitabilityProfile:
+  Regel nach S3 Empf. 5.6 in constraints_de (unter 70 Jahren +5 Jahre, 70 bis 75 Jahre +3 Jahre, vorgezogen
+  bei Bekanntwerden einer neuen hohen Komorbiditätslast; Eingänge Prüfdatum und Geburtsdatum). Zusätzlich
+  Recall-Anlass „Neubewertung“ in screeningInvitation. Definition auf das medizinische Eignungsprofil
+  beschränken. Die KBV-Information sieht ohnehin eine Kriterienprüfung je Runde vor.'
+- Es fehlt ein SNOMED-Temporal-Observable 'Date of next eligibility reassessment due' bzw. 'Date lung
+  cancer screening due' sowie eine spezifische Prozedur 'Reassessment of eligibility for lung cancer screening';
+  der Element-Code ist nur eine Näherung.
+- Kein nationales Profil (MII KDS, ISiK, KBV, ePA) bildet eine Fälligkeit bzw. Wiedervorlage einer Bewertung
+  ab; ISiKTermin und KBV_PR_Base_Appointment beschreiben nur konkrete Termine.
+- Zu entscheiden ist, ob das Element als berechnetes Attribut von medicalSuitabilityProfile geführt wird
+  statt als eigenständiges Element.
+- Im BPMN-Screening-Pfad fehlt ein Schritt für die erneute Eignungsprüfung; der Recall-Anlass 'Neubewertung'
+  ist in screeningInvitation zu ergänzen.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.medicalSuitabilityProfile.v0.1

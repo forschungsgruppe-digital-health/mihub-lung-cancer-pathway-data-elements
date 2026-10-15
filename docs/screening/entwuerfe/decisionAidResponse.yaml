@@ -1,0 +1,205 @@
+id: mihub.lung.screening.decisionAidResponse.v0.1
+uuid: 9db5e8f4-32b4-53cc-b090-74507aac8d8f
+name: decisionAidResponse
+label_de: Entscheidungshilfe der Versicherteninformation (Antworten)
+definition_de: 'Antworten in der Entscheidungshilfe: bevorzugte Option mit Gründen, Entscheidungsstand
+  0–10 und eigene Fragen für das Gespräch.'
+phase: screening
+category: prom
+datatype: Reference
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'KDL 2025, SNOMED CT INT 20260701, LOINC 2.83 (MII TermServ), Stand 2026-10-15. Das Element ist
+    eine QuestionnaireResponse zur Entscheidungshilfe der G-BA-Versicherteninformation (Anlage I KFE-RL,
+    Abschnitt ''Unterstützung Ihrer Entscheidung''). Für Instrument und Items gibt es weder ein LOINC-Panel
+    noch SNOMED-Konzepte; die Item-Codes (Element-Codes) sind lokale Platzhalter: vorstellbare Option(en),
+    Gründe dafür, Gründe dagegen, Stand der Entscheidung 0–10, eigene Fragen. Antwortwerte des Options-Items
+    lokal: keine Früherkennung | Früherkennung mit Niedrigdosis-CT. Der Entscheidungsstand wird als integer
+    ohne Einheit erfasst (item.answer.valueInteger), Gründe und Fragen als string. KDL AM170103 ist nur
+    eine Näherung für die Dokumentklasse (die KDL ordnet Patientenfragebogen unter AM1701 Qualitätssicherungen
+    ein), keine Wertbindung. Nicht verwenden: LOINC 77302-8 (DISCOURAGED), 107905-2, 28086-7; SNOMED 53209001
+    (anderes Konstrukt) und 13015001000119105 (getroffene Entscheidung, gehört zu participationDecision).
+    Rollen der Codes: local-no-standard-binding|preferred-option = element; local-no-standard-binding|no-screening
+    = wert; local-no-standard-binding|ldct-screening = wert; local-no-standard-binding|reasons-for = element;
+    local-no-standard-binding|reasons-against = element; local-no-standard-binding|decision-stage = element;
+    local-no-standard-binding|own-questions = element; kdl|AM170103 = dokumentklasse.'
+  codings:
+  - system: local-no-standard-binding
+    code: preferred-option
+    display: Option, die ich mir vorstellen kann
+  - system: local-no-standard-binding
+    code: no-screening
+    display: keine Früherkennung
+  - system: local-no-standard-binding
+    code: ldct-screening
+    display: Früherkennung mit Niedrigdosis-CT
+  - system: local-no-standard-binding
+    code: reasons-for
+    display: Gründe dafür
+  - system: local-no-standard-binding
+    code: reasons-against
+    display: Gründe dagegen
+  - system: local-no-standard-binding
+    code: decision-stage
+    display: Stand der Entscheidung (Skala 0–10)
+  - system: local-no-standard-binding
+    code: own-questions
+    display: eigene Fragen für das Gespräch
+  - system: kdl
+    code: AM170103
+    display: Patientenfragebogen
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item.answer.value[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.pros#2026.7.0 (stabil; Basis sdc-questionnaireresponse).
+    Hauptziel für die Selbsteingabe im Portal: questionnaire 1..1 MS (canonical auf sdc-questionnaire
+    – eigener Questionnaire nach mii-pr-pro-questionnaire aus demselben Paket nötig), authored 1..1 MS,
+    author 0..1 MS (Patient). item.answer.value[x] 0..1 MS: valueCoding für die Option(en), valueString
+    für Gründe und Fragen, valueInteger 0–10 für den Entscheidungsstand. Das Modul ist auf validierte
+    PRO-Instrumente ausgelegt; die Entscheidungshilfe ist kein PROM.'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKFormularDaten
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item
+  notes: 'de.gematik.isik#6.0.0 (stabil). ISiK-Formularmodul, primär für Krankenhausformulare: questionnaire
+    min 1 MS mit extension:questionnaireDisplay 1..1 MS, authored min 1, author und item MS. Formulardefinition
+    über ISiKFormularDefinition (https://gematik.de/fhir/isik/StructureDefinition/ISiKFormularDefinition;
+    url, version, title min 1).'
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item.answer.value[x]
+  notes: hl7.fhir.r4.core#4.0.1 (stabil). Basis-Fallback ohne verbindliches Fachprofil; die SDC-Implementierung
+    des Patientenportals schreibt QuestionnaireResponse. item.answer.value[x] 0..1 (example).
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaireresponse
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.item.answer.value[x]
+  notes: hl7.fhir.us.core#9.0.0 (stabil; nur internationales Muster). Basis SDC QuestionnaireResponse
+    wie MII PRO; questionnaire und authored je 1..1 MS.
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: Item 128 'Is there documentation of shared decision making?' (Yes | No | Unknown)
+  notes: ACR LCSR & IPN Data Dictionary 2026-05-28 (nicht-FHIR, Register USA), S. 21. Erfasst nur ja/nein/unbekannt
+    zur SDM-Dokumentation, keine Inhalte einer Entscheidungshilfe; allenfalls als Ableitung (Antworten
+    vorhanden → SDM dokumentiert).
+care_process:
+  trigger: optional vor oder nach dem Informationsgespräch; Wiederholung möglich
+  responsible_role: Versicherte (Selbsteingabe im Portal)
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: Entscheidungshilfe
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Kreuzen Sie in der Tabelle an, welche Option Sie sich vorstellen können, und tragen Sie ein,
+      was für Sie dafür und …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: Unterstützung Ihrer Entscheidung
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Markieren Sie den Stand Ihrer Entscheidung auf der Skala von 0 bis 10.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: ACR LCSR & IPN Data Dictionary (28.05.2026) — ACR Lung-RADS v2022 (mit Summary of Changes)
+      und LCSR & IPN Data Dictionary
+    url: https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/Lung-Rads
+    section: Item 128
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Is there documentation of shared decision making?
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q20
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 16 der Quellenrecherche zur Screening-Episode (Gruppe G5 Information/Entscheidung/Entwöhnung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:decisionReadinessScale, P:decisionAidOptionPreference,
+      P:decisionStage, P:patientQuestionsForConsultation; BPMN-Schritt: G5 Entscheidung | Versicherte:
+      um Activity_00yhsqy; Portal'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 16); Quellen: Q02, Q20'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.7); Dublette/Scope: nicht widerlegt (Konfidenz 0.6)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 16)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 8 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Freiwilliges Arbeitsblatt der Anlage I KFE-RL; keine Dokumentations-
+  oder Übermittlungspflicht (§§ 39–44 KFE-RL).'
+- 'Umsetzung: eigenständig, optional (Portal). Nur als optionales Portal-Element führen (QuestionnaireResponse;
+  data_flows patientenportal/patient-entered; standardmäßig privat, Weitergabe nur mit Zustimmung; DPIA
+  prüfen). Definition quellentreu: Option(en), die sich die Person vorstellen kann (keine Früherkennung
+  / Früherkennung mit Niedrigdosis-CT), je mit Gründen dafür und dagegen; Entscheidungsstand 0–10 (lokales
+  Item); eigene Fragen. Fundstelle: Anlage I, Abschnitt „Unterstützung Ihrer Entscheidung“ (PDF-S. 39–40;
+  Broschüre S. 18–21); den Begriff „Entscheidungshilfe“ nur mit Verweis auf die TrG vom 18.12.2025. Kategorie
+  eher versorgungsplanung statt prom. dependsOn patientInformationLeafletProvided; Vorstufe von participationDecision.'
+- Für die Entscheidungshilfe der G-BA-Versicherteninformation fehlen ein standardisierter Questionnaire
+  (kein LOINC-Panel, kein MII- oder ISiK-Formular) und Codes für die Items; ein projekteigener Questionnaire
+  mit kanonischer URL ist zu definieren, ggf. ein LOINC-Antrag zu stellen.
+- Die lokalen Item- und Antwortcodes sind vorläufige Platzhalter und mit dem Wortlaut der Anlage I abzugleichen.
+- Die DPIA-Prüfung für die Selbsteingabe im Portal (standardmäßig privat, Weitergabe nur mit Zustimmung)
+  steht aus.
+- Kategorie (versorgungsplanung statt prom), Kardinalität 0..* und die Verwendung des Begriffs 'Entscheidungshilfe'
+  (nur mit Verweis auf die Tragenden Gründe vom 18.12.2025) sind zu entscheiden.
+- In openEHR wurde kein Archetyp für Entscheidungshilfen gefunden.
+related_elements:
+- relation: dependsOn
+  target: mihub.lung.screening.patientInformationLeafletProvided.v0.1

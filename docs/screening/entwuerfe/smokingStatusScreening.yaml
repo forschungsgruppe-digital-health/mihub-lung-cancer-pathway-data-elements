@@ -1,0 +1,254 @@
+id: mihub.lung.screening.smokingStatusScreening.v0.1
+uuid: b3b40c22-d63c-5b2f-aaa1-b00ac6bf5008
+name: smokingStatusScreening
+label_de: Raucherstatus bei Anspruchsprüfung
+definition_de: Status des Tabakrauchens (täglich, gelegentlich, ehemals, nie, unbekannt) bei Anspruchsprüfung
+  und Folgekontakten; steuert Unterbrechungsregel und Entwöhnungsangebot.
+phase: screening
+category: sozialanamnese
+datatype: CodeableConcept
+cardinality: 1..1
+value_set:
+  binding_strength: required
+  standard_binding_status: mapped
+  notes: 'MII TermServ, LOINC 2.83, SNOMED CT 20260701; Stand 2026-10-15. Elementcode (Observation.code)
+    ist LOINC 72166-2 (Pflicht-Pattern in ISiKRaucherStatus); SNOMED 77176002 ist dort nur optionales
+    Zusatz-Coding (Slice 0..*, mustSupport) und wird nicht als Wert verwendet. Antwortwerte sind required
+    an https://gematik.de/fhir/isik/ValueSet/current-smoking-status-uv-ips 1.1.0 gebunden (8 LOINC-LA-Codes,
+    inhaltsgleich mit LL2201-3): LA18976-3 täglich, LA18977-1 gelegentlich, LA15920-4 ehemals, LA18978-9
+    nie, LA18980-5 unbekannt, ob je geraucht, LA18979-7 Raucher:in mit unbekannter Häufigkeit. LA18981-3
+    ''Heavy tobacco smoker'' und LA18982-1 ''Light tobacco smoker'' sind Intensitäts- statt Häufigkeitsangaben
+    und werden per lokaler Profilregel ausgeschlossen. Die SNOMED-Werte sind nur Mapping (z. B. für IPS):
+    449868002 täglich, 428041000124106 gelegentlich, 8517006 ehemals, 266919005 nie, 77176002 zu LA18979-7,
+    266927001 nur als ungefähres Mapping (wider/relatedto) zu LA18980-5. 65568007, 281018007 und 230059006
+    sind zigarettenspezifische Zusatz-Codings für aktuell, ehemals und gelegentlich. E-Zigarette (722499006)
+    und Passivrauch (43381005) gehören nicht in den Status. Rollen der Codes: loinc|72166-2 = element;
+    snomed-ct|77176002 = element; loinc|LA18976-3 = wert; loinc|LA18977-1 = wert; loinc|LA15920-4 = wert;
+    loinc|LA18978-9 = wert; loinc|LA18980-5 = wert; loinc|LA18979-7 = wert; snomed-ct|449868002 = wert;
+    snomed-ct|428041000124106 = wert; snomed-ct|8517006 = wert; snomed-ct|266919005 = wert; snomed-ct|266927001
+    = wert; snomed-ct|77176002 = wert; snomed-ct|65568007 = wert; snomed-ct|281018007 = wert; snomed-ct|230059006
+    = wert.'
+  codings:
+  - system: loinc
+    code: 72166-2
+    display: Tobacco smoking status
+  - system: snomed-ct
+    code: '77176002'
+    display: Smoker
+  - system: loinc
+    code: LA18976-3
+    display: Current every day smoker
+  - system: loinc
+    code: LA18977-1
+    display: Current some day smoker
+  - system: loinc
+    code: LA15920-4
+    display: Former smoker
+  - system: loinc
+    code: LA18978-9
+    display: Never smoker
+  - system: loinc
+    code: LA18980-5
+    display: Unknown if ever smoked
+  - system: loinc
+    code: LA18979-7
+    display: Smoker, current status unknown
+  - system: snomed-ct
+    code: '449868002'
+    display: Smokes tobacco daily
+  - system: snomed-ct
+    code: '428041000124106'
+    display: Occasional tobacco smoker
+  - system: snomed-ct
+    code: '8517006'
+    display: Ex-smoker
+  - system: snomed-ct
+    code: '266919005'
+    display: Never smoked tobacco
+  - system: snomed-ct
+    code: '266927001'
+    display: Tobacco smoking consumption unknown
+  - system: snomed-ct
+    code: '77176002'
+    display: Smoker
+  - system: snomed-ct
+    code: '65568007'
+    display: Cigarette smoker
+  - system: snomed-ct
+    code: '281018007'
+    display: Ex-cigarette smoker
+  - system: snomed-ct
+    code: '230059006'
+    display: Occasional cigarette smoker
+standard_mappings:
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKRaucherStatus
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: 'de.gematik.isik#6.0.0, stabil (gleiche Canonical und Bindung in de.gematik.isik-basismodul#4.0.3).
+    Primäres nationales Ziel; Basis ISiKLebensZustand. category Pattern social-history; code.coding:loinc
+    Pattern 72166-2 (Pflicht), code.coding:snomed-ct Pattern 77176002 (optional); valueCodeableConcept
+    1..1 required an ISiK current-smoking-status-uv-ips 1.1.0 (nur LOINC-LA-Codes); effective[x] 1..1,
+    subject.reference 1..1. Grenze: Status bezieht sich auf Tabakrauchen allgemein, nicht auf Zigaretten;
+    der Zigarettenbezug steht in constraints_de bzw. instruction_de und optional im SNOMED-Zusatz-Coding.
+    ISiK ist für Krankenhäuser verpflichtend und wird im ambulanten Screening nur nachgenutzt.'
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, Ballot, kein stabiles
+    Release. baseDefinition ISiKRaucherStatus, daher dieselbe required-Bindung; zusätzlich code.coding.version
+    1..1. Komponenten packungsjahre, zigarettenProTag, rauchbeginn und rauchdauer erlauben Status und
+    Raucheranamnese in einer Observation.
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: HL7 IPS hl7.fhir.uv.ips#2.0.1, stabil; internationales Ziel. code Pattern 72166-2, effective[x]
+    nur dateTime 1..1, valueCodeableConcept preferred an das SNOMED-ValueSet http://hl7.org/fhir/uv/ips/ValueSet/current-smoking-status-uv-ips;
+    component 0..0. Übertragung von ISiK nach IPS braucht eine ConceptMap LOINC-LA nach SNOMED; die SNOMED-Mapping-Werte
+    des Elements decken diese ab.
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0029]/items[at0052] (Status je Typ, Type at0095 = at0054 Cigarettes); gesamt
+    /data[at0001]/items[at0089]
+  notes: openEHR CKM, Revision 2.0.1, published, nicht-FHIR. Einziges Modell, das den Zigarettenstatus
+    getrennt vom Tabakstatus abbildet (Per type mit Type Cigarettes). Overall status at0089 entspricht
+    dem ISiK-Status. Täglich bzw. nicht täglich steht im Pattern der Episode /data[at0001]/items[at0029]/items[at0064]/items[at0030];
+    Statusdefinitionen im Protokoll (at0075, at0076, at0079).
+- standard: other
+  profile_or_url: http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus
+  resource: Observation
+  path: Observation.valueCodeableConcept
+  notes: hl7.fhir.us.core#9.0.0, stabil; nur US-Referenzmuster, kein Zielprofil. code und valueCodeableConcept
+    extensible an VSAC-ValueSets (Inhalt nicht im Paket); Invariante us-core-24 verlangt für 72166-2 ein
+    valueCodeableConcept.
+care_process:
+  trigger: jede Anspruchsprüfung (vor jeder Runde) und Folgekontakte; steuert Unterbrechungsregel und
+    Entwöhnungsangebot
+  responsible_role: berichterstellende Ärzt:in (Praxis); Selbstauskunft der Versicherten im Portal möglich
+evidence:
+  guideline_references:
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 37 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Personen mit erhöhtem Lungenkrebsrisiko aufgrund von derzeitigem oder ehemaligem starken Zigarettenkonsum
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 37 Abs. 1 (Zielbestimmung)
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Ziel der Früherkennungsuntersuchung auf Lungenkrebs ist die frühzeitige Entdeckung von Lungenkarzinomen
+      bei Personen mit erhöhtem Lungenkrebsrisiko aufgrund von derzeitigem oder ehemaligem starken Zigarettenkonsum
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: Abschn. 2.1, S. 3
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: wobei der Zigarettenkonsum noch andauert oder vor weniger als 10 Jahren beendet wurde
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026 (Anlage I Versicherteninformation)
+    url: https://www.g-ba.de/downloads/39-261-7628/2025-12-18_KFE-RL_Lungenkrebsfrueherkennung-Versicherteninfo.pdf
+    section: S. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Sie rauchen aktuell oder haben früher stark geraucht
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q04
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 2 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: R:=, L/S/P:smokingStatus, E:smokingStatusAtAssessment,
+      E:smokingCessationOutcome; BPMN-Schritt: G2 Raucheranamnese | Praxis: Zulässigkeitsvoraussetzungen
+      prüfen (§2) (Activity_0ya2ob0)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 2); Quellen: Q02, Q03, Q04'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.65); Dublette/Scope: nicht widerlegt (Konfidenz 0.7)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 2)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 17 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 5 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 4/4 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. Der Status allein entscheidet nicht über den Anspruch.
+  Operative Norm: KFE-RL § 38 Abs. 1 i. V. m. LuKrFrühErkV § 2 Abs. 1 Nr. 3 Buchst. a und § 1 Abs. 2;
+  KFE-RL § 37 Abs. 1 ist Zielbestimmung.'
+- 'Umsetzung: Spezialisierung von smokingStatus (followup). Als Phasen-Pendant mit specializes mihub.lung.followup.smokingStatus.v0.1
+  anlegen (Präzedenz ecogPerformanceStatusSurveillance). Werte an die LOINC-Antwortliste LL2201-3 binden
+  (ISiKRaucherStatus: required), SNOMED CT nur als Mapping. E-Zigarette und Passivrauch nicht im Status
+  führen, sondern in otherTobaccoNicotineProductUse bzw. einem Expositionselement. Klarstellen, dass für
+  Anspruch und Unterbrechungsregel der Zigarettenstatus zählt (nur Zigaretten, TrG S. 17). Das nicht existierende
+  MII-Mapping (…/modul-person/StructureDefinition/Raucher) nicht übernehmen und in smokingStatus korrigieren.'
+- Vor der Aufnahme ist mit check-duplicate-data-element gegen follow-up/smokingStatus zu prüfen, ob das
+  Element als Phasen-Pendant (related_elements specializes) oder durch Wiederverwendung des Bestands abgebildet
+  wird.
+- LOINC 72166-2 und das ISiK-ValueSet beschreiben Tabakrauchen allgemein; für Anspruchsprüfung und Unterbrechungsregel
+  zählt nach KFE-RL und Tragenden Gründen nur der Zigarettenkonsum. Zu entscheiden ist, ob der Zigarettenbezug
+  über SNOMED-Zusatz-Codings (65568007, 281018007, 230059006) oder über eine eigene Teilangabe dokumentiert
+  wird.
+- Der Ausschluss von LA18981-3 und LA18982-1 aus dem required-ValueSet erfordert eine lokale Profilregel
+  oder Erfassungsanweisung.
+- Für 'unbekannt, ob je geraucht' (LA18980-5) gibt es in SNOMED CT nur das ungefähre Mapping 266927001.
+- Ein stabiles MII-KDS-Profil zum Rauchen gibt es nicht, nur das Kardiologie-Ballot 2027; KBV-Basis, KBV
+  MIO, gematik ePA und MII Soziodemographie haben kein Raucherprofil.
+related_elements:
+- relation: specializes
+  target: mihub.lung.followup.smokingStatus.v0.2

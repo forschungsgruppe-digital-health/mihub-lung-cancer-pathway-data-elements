@@ -1,0 +1,164 @@
+id: mihub.lung.screening.cigarettesPerDayInPeriod.v0.1
+uuid: 0e5a89b6-a930-5a34-a3f0-3aaed43b88d5
+name: cigarettesPerDayInPeriod
+label_de: Zigaretten pro Tag im Jahresdurchschnitt je Konsumabschnitt
+definition_de: Im Jahresdurchschnitt pro Tag gerauchte Zigaretten je Konsumabschnitt; Basis der Packungsjahre
+  (÷ 20), NELSON-Kriterien und PLCOm2012.
+phase: screening
+category: sozialanamnese
+datatype: Quantity
+cardinality: 1..*
+unit: /d
+value_set:
+  binding_strength: preferred
+  standard_binding_status: mapped
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83, UCUM (TermServ-Fragment); Stand 2026-10-15. Elementcode
+    ist 230056004 ''Cigarette consumption'' (Näherung), in derselben Observation wie der Konsumabschnitt
+    (effectivePeriod). LOINC 64219-9 hat den Status TRIAL (PhenX) und ist nur Mapping für die Variante
+    ''Durchschnitt über die gesamte Rauchdauer'', nicht für Werte je Abschnitt. Einheit /d oder {#}/d
+    (beide im TermServ-Fragment gültig, eine davon festlegen); das MII-Kardiologie-Ballot verlangt per
+    Pattern {cigarettes-per-day}, das das TermServ-Fragment nicht enthält, nach UCUM-Grammatik aber zulässig
+    ist. Verworfen: LOINC 63640-7 (Nominalskala, Fagerström-Antwortliste LL1447-3, keine Mengenangabe),
+    8663-7 (aktuelle Packungen pro Tag), 64218-1 (nur aktueller Konsum). Rollen der Codes: snomed-ct|230056004
+    = element; loinc|64219-9 = element.'
+  codings:
+  - system: snomed-ct
+    code: '230056004'
+    display: Cigarette consumption
+  - system: loinc
+    code: 64219-9
+    display: On the average of the entire time you smoked, how many cigarettes did you smoke per day [PhenX]
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-kardio/StructureDefinition/mii-pr-kardio-observation-rauchen
+  resource: Observation
+  path: Observation.component:zigarettenProTag.valueQuantity
+  notes: de.medizininformatikinitiative.kerndatensatz.kardiologie#2027.0.0-ballot, Ballot. Slice zigarettenProTag
+    0..*, code Pattern LOINC 63640-7, valueQuantity 1..1 mit Pattern UCUM {cigarettes-per-day}, mustSupport
+    value und comparator. Die Komponente hat keinen eigenen Zeitraum und gilt für effective[x] der ganzen
+    Observation; das Profil bildet daher nur eine Intensität je Observation ab (ein Abschnitt oder ein
+    gemittelter Wert). Bei Abbildung Einheit {cigarettes-per-day} setzen. Der Pattern-Code 63640-7 ist
+    in LOINC nominal skaliert und passt nicht zu einer Quantity.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKLebensZustand
+  resource: Observation
+  path: Observation.valueQuantity
+  notes: 'de.gematik.isik#6.0.0, stabil; nur Ableitungsbasis (in 6.0.0 abstrakt), Teil desselben abgeleiteten
+    Profils wie cigaretteConsumptionPeriod: valueQuantity Zigaretten pro Tag bei effectivePeriod = Abschnitt;
+    value[x] ist offen nach Typ gesliced, min 1. Ein LOINC-Coding ist Pflicht; ein passender Code für
+    Zigaretten pro Tag je Abschnitt fehlt (63640-7 nominal, 64219-9 TRIAL und nur Lebenszeitdurchschnitt,
+    8663-7 aktuelle Packungen).'
+- standard: openehr-archetype
+  profile_or_url: https://raw.githubusercontent.com/openEHR/CKM-mirror/master/local/archetypes/entry/evaluation/openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2.adl
+  resource: openEHR-EHR-EVALUATION.tobacco_smoking_summary.v2
+  path: /data[at0001]/items[at0029]/items[at0064]/items[at0023] (Typical use (units))
+  notes: openEHR CKM, Revision 2.0.1, published, nicht-FHIR. DV_QUANTITY je Episode mit Einheiten 1/d
+    oder 1/wk (Anzahl Zigaretten), passt zu isPartOf cigaretteConsumptionPeriod. Die Alternativeinheit
+    g/d gilt für losen Tabak und ist hier ausgeschlossen. Der Jahresdurchschnitt nach § 1 Abs. 2 S. 2
+    LuKrFrühErkV ist nicht explizit und gehört ins Protokoll bzw. in instruction_de.
+care_process:
+  trigger: je Konsumabschnitt bei der Anspruchsprüfung
+  responsible_role: berichterstellende Ärzt:in; Selbstauskunft (Portal)
+evidence:
+  guideline_references:
+  - source: S3-LL Lungenkarzinom
+    version: 5.1 (Juli 2026, AWMF 020-007OL)
+    url: https://www.leitlinienprogramm-onkologie.de/fileadmin/user_upload/Downloads/Leitlinien/Lungenkarzinom/Version_5/S3_LL_Lungenkarzinom_Langversion_5.1.pdf
+    section: Statement 5.2
+    recommendation_grade: Statement
+    evidence_level: n/a
+    quote: einer Raucheranamnese von ≥ 15 Zigaretten/Tag für mindestens 25 Jahre oder ≥ 10 Zigaretten
+      pro Tag für mindestens …
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q12
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 1 Abs. 2 S. 2
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: für jedes Jahr des Zigarettenkonsums die im Jahresdurchschnitt pro Tag gerauchte Anzahl der
+      Zigaretten durch 20 zu teilen
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+iso13972_metadata:
+  type: social
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - Q3 Raucheranamnese
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 4 der Quellenrecherche zur Screening-Episode (Gruppe G2 Raucheranamnese;
+      Q3 Raucheranamnese); zusammengeführt aus: S/E:averageCigarettesPerDay, P:=; BPMN-Schritt: G2 Raucheranamnese
+      | Praxis: Activity_0ya2ob0'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 4); Quellen: Q12, Q01'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.65); Dublette/Scope: nicht widerlegt (Konfidenz 0.75)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 4)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 2 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: mittelbar. LuKrFrühErkV § 1 Abs. 2 S. 2 (im Jahresdurchschnitt pro
+  Tag gerauchte Zigaretten, geteilt durch 20); KFE-RL § 39 Nr. 1. S3 Statement 5.2 ist ein Statement (ST,
+  LoE 1) mit NELSON-Schwellen, keine Empfehlung.'
+- 'Umsetzung: Teil von cigaretteConsumptionPeriod. isPartOf cigaretteConsumptionPeriod; Einheit UCUM „/d“
+  bzw. „{Zigaretten}/d“, Jahresdurchschnitt in instruction_de erläutern. Primärquelle auf LuKrFrühErkV
+  § 1 Abs. 2 S. 2 umstellen; S3 5.2 als Statement für die NELSON-Schwellen führen. NELSON-Ableitung (≥
+  15 Zigaretten/Tag über ≥ 25 Jahre bzw. ≥ 10 über ≥ 30 Jahre) und Packungsjahre als abgeleitete Größen
+  beim Packungsjahr-Element führen; die Ableitungsregel bei wechselnder Intensität ist offen (E1). Für
+  PLCOm2012 wäre eine eigene Primärquelle nötig.'
+- Kein SNOMED- oder LOINC-Konzept beschreibt die im Jahresdurchschnitt pro Tag gerauchten Zigaretten je
+  Konsumabschnitt (Zählweise nach § 1 Abs. 2 S. 2 LuKrFrühErkV); 230056004 ist nur eine Näherung.
+- 'Die Einheit ist festzulegen: /d bzw. {#}/d (im TermServ-Fragment gültig) oder {cigarettes-per-day}
+  (Pattern im MII-Kardiologie-Ballot).'
+- Das MII-Kardiologie-Ballot verwendet LOINC 63640-7 (nominal, Fagerström-Kategorien) als Code einer Quantity-Komponente;
+  dieser Modellierungsfehler sollte im Ballot gemeldet werden.
+- Für ein von ISiKLebensZustand abgeleitetes Profil fehlt ein geeigneter LOINC-Pflichtcode.
+- Die Ableitungsregel bei wechselnder Intensität innerhalb eines Abschnitts (Entscheidung E1) ist offen;
+  für die NELSON-Schwellen und PLCOm2012 fehlt eine Primärquelle in den Elementen.
+- Kardinalität laut Quelle 1..1 je Abschnitt (insgesamt 1..*).
+related_elements:
+- relation: isPartOf
+  target: mihub.lung.screening.cigaretteConsumptionPeriod.v0.1

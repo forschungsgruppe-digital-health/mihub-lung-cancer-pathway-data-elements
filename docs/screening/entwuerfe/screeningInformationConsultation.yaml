@@ -1,0 +1,227 @@
+id: mihub.lung.screening.screeningInformationConsultation.v0.1
+uuid: 535b35ce-df81-5cc5-8bdd-b0e39eaf6d1f
+name: screeningInformationConsultation
+label_de: Informations- und Beratungsgespräch (Erstberatung)
+definition_de: Mündliches Informationsgespräch der berichterstellenden Ärzt:in (gemeinsame Entscheidungsfindung)
+  mit Datum, Dauer, Person und Kontaktform.
+phase: screening
+category: kontakt-visite
+datatype: string
+cardinality: 1..1
+unit: min
+value_set:
+  binding_strength: extensible
+  standard_binding_status: mapped
+  notes: 'SNOMED CT INT 20260701, UCUM 1.0.1 (MII TermServ), Stand 2026-10-15. Element-Code: 225328009
+    Pre-screening counseling (Procedure.code; liegt unter 71388002 und damit in den Prozedur-ValueSets
+    von MII, ISiK und KBV); 410306009 nur als breiterer Fallback. Methoden-Code für den Aspekt gemeinsame
+    Entscheidungsfindung: 710873001; soll die Teilnahme als Befund dokumentiert werden, alternativ 1397166002
+    Participates in shared decision making. Antwortwerte für die Kontaktform aus consultationModality:
+    1269515004, 719410009, 386472008; Telefon und Video sind nach KBV ausdrücklich nur für GOP 01880/01881
+    vorgesehen und daher als lokale Angabe zu kennzeichnen. Einheit der Gesprächsdauer: UCUM min, falls
+    die Dauer nicht aus Period berechnet wird. Die EBM-GOP 01876 ist kein Konzeptcode, sondern nur Abrechnungsbezug
+    (keine belegte FHIR-System-URI für EBM-GOPs). Ein lungenkrebs-spezifischer Beratungscode existiert
+    weder in SNOMED CT noch in LOINC 2.83. Rollen der Codes: snomed-ct|225328009 = element; snomed-ct|410306009
+    = element; snomed-ct|710873001 = methode; snomed-ct|1397166002 = wert; snomed-ct|1269515004 = wert;
+    snomed-ct|719410009 = wert; snomed-ct|386472008 = wert.'
+  codings:
+  - system: snomed-ct
+    code: '225328009'
+    display: Pre-screening counseling
+  - system: snomed-ct
+    code: '410306009'
+    display: Screening education, guidance, and counseling
+  - system: snomed-ct
+    code: '710873001'
+    display: Involving client in decision making process
+  - system: snomed-ct
+    code: '1397166002'
+    display: Participates in shared decision making
+  - system: snomed-ct
+    code: '1269515004'
+    display: Face to face consultation with patient
+  - system: snomed-ct
+    code: '719410009'
+    display: Consultation via video conference
+  - system: snomed-ct
+    code: '386472008'
+    display: Telephone consultation
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (stabil). Hauptziel für den Informationsakt:
+    performed[x] 1..1 MS (Period mit Beginn und Ende bzw. dateTime); code.coding:sct REQUIRED an procedures-sct
+    (descendent-of 71388002, SCT 20250701; 225328009 enthalten); category.coding:sct preferred; performer
+    0..* = Ärzt:in; encounter 0..1 MS; report 0..* auf DocumentReference (Versicherteninformation). EBM
+    01876 nicht als code; ein OPS-Code für das Gespräch existiert nicht.'
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Encounter
+  resource: Encounter
+  path: Encounter.period
+  notes: 'kbv.basis#1.9.0 (stabil; KBV-Basisprofil, kein MIO – im Bestand erste Verwendung unter kbv-mio).
+    Passend zum vertragsärztlichen Kontakt: period min 1 (start/end = Gesprächsdauer); serviceType.coding:KBV-Fachgruppencodierung
+    REQUIRED an KBV_VS_SFHIR_BAR2_ARZTNRFACHGRUPPE (berechtigte Fachgruppe: Innere Medizin, Allgemeinmedizin,
+    Arbeitsmedizin, ab 01.10.2026 weitere); class extensible an EncounterClassDE.'
+- standard: kbv-mio
+  profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_Base_Procedure
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: 'kbv.basis#1.9.0 (stabil; KBV-Basisprofil, kein MIO). Prozedur-Variante für das PVS: Slices performedPeriod
+    und performedDateTime; code.coding:snomed REQUIRED an KBV_VS_Base_Procedure_SNOMED_CT (is-a 71388002,
+    SCT-DE 20260515; system, version, code, display je 1..1).'
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: de.gematik.isik#6.0.0 (stabil). Gleiche Abbildung wie die MII-Prozedur (performed[x] min 1 MS;
+    code.coding:SNOMED-CT REQUIRED an ProzedurenCodesSCT, descendent-of 71388002; subject.reference 1..).
+    Nur nachrangig, da ISiK auf das KIS zielt und das Gespräch vertragsärztlich stattfindet.
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung
+  resource: Encounter
+  path: Encounter.period
+  notes: 'de.medizininformatikinitiative.kerndatensatz.base#2026.0.1 (stabil). Nur nachrangig: auf Kontakte
+    mit Gesundheitseinrichtungen ausgelegt (class 1..1 MS REQUIRED EncounterClassDE; type:Kontaktebene
+    und type:KontaktArt REQUIRED); period 0..1 MS. Für das ambulante Beratungsgespräch ist das Prozedur-Profil
+    der bessere Anker.'
+- standard: other
+  profile_or_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Procedure-uv-ips
+  resource: Procedure
+  path: Procedure.performed[x]
+  notes: hl7.fhir.uv.ips#2.0.1 (stabil; HL7 IPS, internationales Muster). performed[x] 1..1 MS; code 1..1
+    MS preferred an procedures-uv-ips (descendent-of 71388002).
+- standard: openehr-archetype
+  profile_or_url: https://ckm.openehr.org/ckm/archetypes/1013.1.1395
+  resource: openEHR-EHR-ACTION.health_education.v1
+  path: ISM-Transition at0008 'Education provided' + ACTION.time; /description[at0001]/items[at0002] (Topic
+    name); items[at0004] (Method); items[at0010] (Reason)
+  notes: 'openEHR CKM health_education.v1, Revision 1.1.3 (published; nicht-FHIR). Mündliches Informationsgespräch
+    als durchgeführte Gesundheitsinformation: Thema Lungenkrebs-Früherkennung mit LDCT, Method at0004
+    für die Kontaktform, Recipient at0032, Interpreter details at0034; die Versicherteninformation über
+    Additional details at0033 (CLUSTER).'
+- standard: other
+  profile_or_url: https://nrdrsupport.acr.org/support/solutions/articles/11000041247
+  resource: ACR LCSR & IPN Data Dictionary
+  path: Item 128 'Is there documentation of shared decision making?' (Yes | No | Unknown, Optional)
+  notes: ACR LCSR & IPN Data Dictionary 2026-05-28 (nicht-FHIR, Register USA), S. 21. Erfasst nur, dass
+    ein SDM-Gespräch dokumentiert ist (ohne Datum, Dauer, Person, Form); bei Folgeuntersuchungen ohne
+    erneuten SDM-Besuch 'no' – entspricht der Einmaligkeit der Erstberatung (EBM 01876).
+care_process:
+  trigger: vor der Berichtserstellung; Erstberatung (EBM 01876 nur einmal je Versicherten)
+  responsible_role: berichterstellende Ärzt:in (Innere Medizin, Allgemeinmedizin, Arbeitsmedizin; ab 01.10.2026
+    laut BA 854 auch Praktische Ärzt:innen und Ärzt:innen ohne Gebietsbezeichnung)
+evidence:
+  guideline_references:
+  - source: LuKrFrühErkV
+    version: vom 15.05.2024 (BGBl. 2024 I Nr. 162), in Kraft seit 01.07.2024
+    url: https://www.gesetze-im-internet.de/lukrfr_herkv/BJNR0A20A0024.html
+    section: § 2 Abs. 1 Nr. 4
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: in einem mündlichen Gespräch und durch Aushändigung von Informationen in Textform über Folgendes
+      informiert wurden
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q01
+  - source: andere
+    version: 'G-BA Tragende Gründe 18.06.2025 — Tragende Gründe: Einführung der Lungenkrebsfrüherkennung
+      mittels Niedrigdosis-CT bei Rauchern'
+    url: https://www.g-ba.de/downloads/40-268-11634/2025-06-18_KFE-RL_Einf-Lungenkrebsfrueherkennung-Niedrigdosis-CT-Raucher_TrG.pdf
+    section: zu § 40
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: darf erst durchgeführt werden, wenn ein Informationsgespräch durch einen an der vertragsärztlichen
+      Versorgung teilnehmenden Internisten oder Allgemein- oder Arbeitsmediziner stattgefunden hat
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q03
+  - source: andere
+    version: 'EBA 87. Sitzung (11.03.2026) — EBM-Beschlüsse: Erweiterter Bewertungsausschuss 87. Sitzung
+      (GOP 01871–01881) und Bewertungsausschuss 854. Sitzung'
+    url: https://www.gkv-spitzenverband.de/media/dokumente/krankenversicherung_1/aerztliche_versorgung/verguetung_und_leistungen/beschluesse_ba_eba_de_eg/87_sitzung_eba/EBA_87_Lungenkrebsfrueherkennung.pdf
+    section: GOP 01876
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Einmalige Erstberatung des Versicherten zur Früherkennung von Lungenkrebs gemäß § 40 der Krebsfrüherkennungs-Richtlinie
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q06
+iso13972_metadata:
+  type: procedure
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 14 der Quellenrecherche zur Screening-Episode (Gruppe G5 Information/Entscheidung/Entwöhnung;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: R:informationProvidedConfirmation, L:screeningCounsellingConsultation,
+      S/P:=; BPMN-Schritt: G5 Information | Praxis: Aufklärungsgespräch (§2 Abs.1 Nr.4) (Activity_0e82ewp)'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 14); Quellen: Q01, Q03, Q06'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.85); Dublette/Scope: nicht widerlegt (Konfidenz 0.85)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 14)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 7 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 8 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 3/3 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: Pflicht. LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 4 (mündliches Gespräch
+  und Textform); KFE-RL § 40 S. 1 i. V. m. § 43 Abs. 2.'
+- 'Umsetzung: eigenständig (Anker des Informationsakts). Als Anker behalten. Datentyp Period (Beginn/Ende)
+  oder Reference(Procedure/Encounter) mit performer. Konzeptcode SNOMED 225328009 statt EBM 01876; die
+  GOP nur als Abrechnungsbezug führen. Kontaktform mit der Werteliste von consultationModality, aber als
+  lokale Angabe kennzeichnen (die KBV erlaubt Telefon und Video ausdrücklich nur für GOP 01880 und 01881).
+  „Gemeinsame Entscheidungsfindung“ nur über S3 Kap. 5.1.4.5 (Hintergrund) stützen. patientInformationLeafletProvided
+  als hasPart; die erfolgte Information wird im eligibilityReport bestätigt (KFE-RL § 40 S. 3).'
+- Ein spezifisches Konzept 'Counseling about lung cancer screening' bzw. 'Lung cancer screening shared
+  decision-making visit' fehlt in SNOMED CT und LOINC.
+- Für EBM-GOPs (hier 01876) gibt es keine belegte FHIR-System-URI; ob und wie die GOP als Abrechnungsbezug
+  maschinenlesbar geführt wird, ist offen.
+- Kein Profil erfasst die Pflichtinhalte nach LuKrFrühErkV § 2 Abs. 1 S. 1 Nr. 4 bzw. KFE-RL § 40 (mündlich
+  plus Textform, Strahlenrisiko, Tabakentwöhnung) strukturiert.
+- Ob Telefon bzw. Video über Encounter.class (EncounterClassDE) ausdrückbar ist, ist ungeklärt; die Kontaktform
+  bleibt bis dahin eine lokal gekennzeichnete Angabe.
+- Datentyp (Period bzw. Reference auf Procedure/Encounter statt dateTime) ist zu entscheiden; die Konvention
+  für kbv.basis-Profile unter dem Schlüssel kbv-mio ist festzulegen.
+related_elements:
+- relation: hasPart
+  target: mihub.lung.screening.patientInformationLeafletProvided.v0.1

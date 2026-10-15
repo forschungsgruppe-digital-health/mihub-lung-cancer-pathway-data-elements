@@ -1,0 +1,156 @@
+id: mihub.lung.screening.participantExperienceFeedback.v0.1
+uuid: 5b8068f8-3490-51bf-8764-401aeba70327
+name: participantExperienceFeedback
+label_de: Rückmeldung der Teilnehmenden (PREM, Belastung)
+definition_de: Optionale Rückmeldung nach der Mitteilung zu Information, Termin, Untersuchung, Wartezeit,
+  Angst und Verständnis; ggf. EQ-5D-5L.
+phase: screening
+category: prom
+datatype: string
+cardinality: 0..*
+value_set:
+  binding_strength: example
+  standard_binding_status: no-standard-found
+  notes: 'MII TermServ, SNOMED CT 20260701, LOINC 2.83; Stand 2026-10-15. Kein Standardkonzept für eine
+    PREM zur Lungenkrebs-Früherkennung vorhanden; LOINC und SNOMED CT bieten nur Zufriedenheits-Scores
+    bzw. Präferenzen (77218-6, 81893-0, 95541-9, 763382004) oder das Aushändigen eines Zufriedenheitsfragebogens
+    (711124002), die nicht passen. Instrument-Code daher lokal (PREM-LCS) als Questionnaire.code; die
+    Items werden lokal kodiert nach der Itemliste NHS England Standard protocol v3 vom 03.02.2025 (PR1646),
+    Abschnitt 8.7.1 (lung health check, booking, consent process, scanning, information, understanding,
+    willingness to continue, smoking cessation advice) als UK-Vorbild. Angst bzw. Belastung und EQ-5D-5L
+    werden nicht hier, sondern über distressThermometerScore bzw. ein HRQoL-Element abgebildet. Rollen
+    der Codes: local-no-standard-binding|PREM-LCS = instrument.'
+  codings:
+  - system: local-no-standard-binding
+    code: PREM-LCS
+    display: Rückmeldung zur Erfahrung mit der Lungenkrebs-Früherkennung (PREM, lokaler Fragebogen nach
+      NHS England Standard protocol v3, 8.7.1)
+standard_mappings:
+- standard: fhir-mii-kds
+  profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-pro/StructureDefinition/mii-pr-pro-questionnaire-response
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.questionnaire (1..1, MS; canonical auf sdc-questionnaire) | QuestionnaireResponse.status
+    (1..1, required) | QuestionnaireResponse.authored (1..1, MS) | QuestionnaireResponse.author (0..1,
+    MS, inkl. Patient) / .source | QuestionnaireResponse.subject (0..1, MS) | QuestionnaireResponse.item.linkId
+    (1..1, MS) | QuestionnaireResponse.item.answer.value[x] (MS) | QuestionnaireResponse.basedOn (CarePlan|ServiceRequest)
+  notes: de.medizininformatikinitiative.kerndatensatz.pros#2026.7.0, stabil; Primärziel für eine PREM-Antwort
+    aus dem Portal (Versicherte als author bzw. source). Voraussetzung ist ein lokal definierter PREM-Fragebogen
+    nach mii-pr-pro-questionnaire; dort ist Questionnaire.code 1..* (MS, example, Slices snomed, loinc,
+    mii), mangels Standardinstrument mit lokalem Code. Das Profil ist SDC-basiert, die SDC-Konformität
+    des Questionnaire-Canonical ist sicherzustellen.
+- standard: fhir-isik
+  profile_or_url: https://gematik.de/fhir/isik/StructureDefinition/ISiKFormularDaten
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.questionnaire (1.., Extension questionnaireDisplay 1..1) | QuestionnaireResponse.subject
+    (1..) | QuestionnaireResponse.authored (1..) | QuestionnaireResponse.author | QuestionnaireResponse.item.linkId
+    | QuestionnaireResponse.item.answer.value[x] | QuestionnaireResponse.language (1..)
+  notes: de.gematik.isik#6.0.0, stabil; nur Differential (kein Snapshot im Paket). Alternative für den
+    stationären bzw. ISiK-Kontext; zugehöriger Fragebogen als ISiKFormularDefinition. Für ein ambulantes
+    Portal ist das MII-PRO-Profil naheliegender.
+- standard: fhir-r4-base
+  profile_or_url: http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+  resource: QuestionnaireResponse
+  path: QuestionnaireResponse.questionnaire | QuestionnaireResponse.authored | QuestionnaireResponse.item
+  notes: hl7.fhir.r4.core#4.0.1, stabil; Basisressource als Rückfallebene ohne profilierte Constraints.
+care_process:
+  trigger: optional nach der Mitteilung des Ergebnisses
+  responsible_role: Versicherte (Portal)
+evidence:
+  guideline_references:
+  - source: andere
+    version: 'NHS England Standard protocol — NHS England Lung Cancer Screening Programme: Standard protocol
+      v3, QA standards v3, LCSDS user guidance, NHS Data Dictio'
+    url: https://www.england.nhs.uk/wp-content/uploads/2019/02/2502-B1646-standard-protocol-prepared-for-the-lung-cancer-screening-programme.pdf
+    section: 8.7.1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'consideration should be given to offering participants a basic questionnaire about their experience
+      including:'
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q26
+  - source: G-BA KFE-RL
+    version: Fassung vom 18.12.2025, in Kraft seit 12.03.2026
+    url: https://www.g-ba.de/downloads/62-492-4074/KFE-RL_2025-12-18_iK-2026-03-12.pdf
+    section: § 37 Abs. 1
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Dabei ist eine Minimierung der Belastungen, die mit einer Früherkennungsuntersuchung auf Lungenkrebs
+      verbunden sein können, zu gewährleisten.
+    accessed: '2026-10-14'
+    locator: docs/screening/quellen.json#Q02
+iso13972_metadata:
+  type: observation
+  keywords:
+  - Lungenkarzinom
+  - Früherkennung
+  - LDCT
+  - M1 Inkrement 1 (Screening)
+  authors:
+  - MiHUB Konsortium AP8 — Quellenrecherche Screening (KI-gestützt)
+  endorsing_authority: MiHUB Konsortium AP8
+  version_number: 0.1.0
+  creation_date: '2026-10-15'
+  publication_status: AuthorDraft
+  publisher: MiHUB Konsortium AP8
+  language:
+  - de
+  license: CC-BY-4.0
+provenance:
+  created_by: MiHUB Konsortium AP8 — Quellenrecherche Screening-Episode (KI-gestützt, Claude Opus 5.5)
+  reviewers: []
+  git_commit: ''
+  origin:
+    type: quellenrecherche
+    description: 'Kandidat Nr. 50 der Quellenrecherche zur Screening-Episode (Gruppe G11 Teilnahmeverlauf;
+      M1 Inkrement 1 (Screening)); zusammengeführt aus: E/P:=; BPMN-Schritt: G11 Verlauf | Versicherte:
+      nach Activity_0io1wvp; Portal'
+    date: '2026-10-14'
+    reference: 'docs/screening/dossier.md (Einzelblatt Nr. 50); Quellen: Q26, Q02'
+  history:
+  - version: 0.1.0
+    date: '2026-10-15'
+    change: Entwurf aus der Quellenrecherche mit Code- und Profilzuordnung; noch nicht in den Katalog
+      übernommen (Erhebung und Entscheidungen E1–E24 ausstehend)
+    reference: docs/screening/
+  verification:
+  - date: '2026-10-14'
+    method: 'Gegenprüfung des Kandidaten durch zwei unabhängige Skeptiker (Quelle: Fundstelle, Wortlaut,
+      Verbindlichkeit; Dublette/Scope: Abgleich mit dem Katalog)'
+    scope: Kandidat, Quellen
+    result: 'Quelle: nicht widerlegt (Konfidenz 0.65); Dublette/Scope: nicht widerlegt (Konfidenz 0.5)'
+    report: docs/screening/dossier.md (Einzelblatt Nr. 50)
+  - date: '2026-10-15'
+    method: Codezuordnung am MII TermServ (Lookup/Expand) mit Gegenprüfung; Teilkorrekturen zusammengeführt
+    scope: value_set
+    result: 1 Codes zugeordnet
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Profilzuordnung über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, mCODE, DICOM
+      SR, openEHR u. a.) mit Gegenprüfung; FHIR-Canonicals maschinell gegen die Pakete geprüft
+    scope: standard_mappings
+    result: 3 Ziele
+    report: docs/screening/README.md
+  - date: '2026-10-15'
+    method: Zitatprüfung gegen die in der Recherche beschafften Quelltexte (scripts/verify-quotes.py,
+      Normalisierung)
+    scope: evidence.guideline_references
+    result: 2/2 Zitate wörtlich gefunden
+    report: docs/screening/README.md
+issues:
+- 'Verbindlichkeit nach Gegenprüfung: keine. Internationale Empfehlung (NHS England Standard protocol
+  v3, 8.7.1); kein deutscher Normbezug, allenfalls mittelbar KFE-RL § 37 Abs. 1 (Minimierung der Belastungen).'
+- 'Umsetzung: eigenständig, optional (projektspezifisch). Auf eine reine PREM mit der Itemliste aus NHS
+  8.7.1 begrenzen (lung health check, booking, consent process, scanning, information, understanding,
+  willingness to continue, smoking cessation advice). Angst/Belastung und EQ-5D-5L herausnehmen und bei
+  Bedarf über bestehende Instrumente abbilden (distressThermometerScore bzw. ein HRQoL-Element); „Belastung“
+  aus dem Label nehmen. Lokaler Fragebogen (no-standard-found bzw. pending-mapping). Fassung (v3 vom 03.02.2025,
+  PR1646) und URL angeben; als UK-Vorbild kennzeichnen.'
+- Es gibt kein standardisiertes PREM-Instrument für die Lungenkrebs-Früherkennung (weder als LOINC-Panel
+  noch als publizierter FHIR-Fragebogen); der lokale Fragebogen mit Items nach NHS England 8.7.1 ist zu
+  erstellen und sein Code festzulegen.
+- Zu entscheiden ist, ob ein LOINC-Neuantrag oder ein Refset für die Screening-PREM angestrebt wird.
+- Das Label ist anzupassen ('Belastung' entfernen), da Angst bzw. Belastung und EQ-5D-5L über distressThermometerScore
+  bzw. ein HRQoL-Element erfasst werden.
+- Der deutsche Normbezug ist nur mittelbar (KFE-RL § 37 Abs. 1, Minimierung der Belastungen); das NHS-Protokoll
+  ist als UK-Vorbild mit Fassung und URL zu kennzeichnen.
+- Ein openEHR-Archetyp für Patientenerfahrung wurde nicht geprüft.
