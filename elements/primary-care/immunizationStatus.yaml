@@ -65,6 +65,9 @@ evidence:
     section: DE-076 Impfstatus (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-076
+    quote: Impfstatus
+    accessed: '2026-10-15'
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -73,6 +76,10 @@ evidence:
       S. 96'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'bei Einfluss auf zukünftige Impfungen: Hinweise zum Impfen + Impfstatus'
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Weiteres; Ergebnisse
+      S. 96
   - source: andere
     version: Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen und Immunsuppression“ (DGHO/AGIHO),
       Stand Mai 2026
@@ -83,6 +90,13 @@ evidence:
       Tab. 4'
     recommendation_grade: A
     evidence_level: I–IIu (AGIHO/ESCMID-Skala, nicht AWMF)
+    quote: 'Empfehlungen zur Impfung von Pat. mit soliden Tumoren … COVID-19 Impfung … A IIu Influenza
+      Impfung Reduktion von Mortalität A IIu,r,h … Pneumokokken: Konjugat Impfstoff … A I … RSV-Impfung
+      … A IIu … Adjuvanted Glycoprotein E-based rekombinante Vakzine Verhinderung einer VZV-Reaktivierung
+      A I'
+    accessed: '2026-10-15'
+    locator: Onkopedia „Impfungen bei malignen Erkrankungen und Immunsuppression“ (Mai 2026), Kap. 6.1
+      Solide Tumore, Tabelle 5
 iso13972_metadata:
   type: procedure
   keywords:
@@ -103,6 +117,47 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-076; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - S3-LL Lungenkarzinom 5.1 enthält keine Impfempfehlung (Kap. 12 verweist auf S3-LL Supportive Therapie);
   Quelle STIKO/Onkopedia „Impfungen“ noch zu prüfen.

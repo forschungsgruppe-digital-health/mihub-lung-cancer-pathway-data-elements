@@ -53,6 +53,11 @@ evidence:
     section: Empf. 16.7 (EK, geprüft 2026)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: die Patienten in den ersten 2 Jahren vierteljährlich (alle 3 Monate), ab dem 3. Jahr halbjährlich
+      untersucht und nach 5 Jahren in ein Screeningprogramm eingeschlossen werden. Diese Intervalle beginnen
+      mit der Erstvorstellung innerhalb von 8 Wochen nach Abschluss der Therapie.
+    accessed: '2026-10-15'
+    locator: Empf. 16.7 (EK, geprüft 2026, Starker Konsens), S. 498
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
@@ -60,12 +65,21 @@ evidence:
       Rezidiv-/Zweittumorpotenzial)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Bei einigen Pat. mit Rezidiv oder einem Zweitkarzinom besteht ein kuratives Potenzial. Bei
+      diesen Pat. kann das Nachsorgeintervall auf 6-8 Wochen verkürzt werden [117]. … Tabelle 12: Strukturierte
+      Nachsorge nach kurativer Therapie | Untersuchung | Monate 3 | 6 | 12 | 18 | 24 | 36 | 48 | 60'
+    accessed: '2026-10-15'
+    locator: Kap. 8.1, Text und Tab. 12
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
     section: 'Kap. 10.2, Tabelle 9 (SCLC: 3,6,9,12,18,24,36,48,60 Mo)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 9: Strukturierte Nachsorge nach kurativer Therapie Untersuchung Monate 3 6 9 12 18
+      24 36 48 60'
+    accessed: '2026-10-15'
+    locator: Kap. 10.2, Tab. 9
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -75,6 +89,10 @@ evidence:
       nach Lungenkarzinom; Übertragung über Empf. 16.7)'
     recommendation_grade: Statement
     evidence_level: '1'
+    quote: 'Asymptomatische Risikopersonen für ein Lungenkarzinom, definiert durch: … profitieren in der
+      Regel von einem strukturierten Lungenkarzinom-Früherkennungsprogramm mittels jährlicher Niedrigdosis-CT-Untersuchungen.'
+    accessed: '2026-10-15'
+    locator: Statement 5.2 (evidenzbasiert, geprüft 2026), Kap. 5, S. 75
 iso13972_metadata:
   type: plan
   keywords:
@@ -83,7 +101,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -95,6 +113,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 LOCAL
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'followUpInterval: Die Granularität vereinheitlichen. Entweder einen zusammengesetzten S3-Code „Q3M-Y1-Y2;Q6M-Y3-Y5“
   analog zu den Onkopedia-Gesamtrastern (und wie in followUpVisitDate.frequency_pattern) einführen, oder
@@ -108,4 +172,4 @@ related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.curativeRecurrencePotential.v0.1
 - relation: isPartOf
-  target: mihub.lung.followup.structuredFollowUpPlan.v0.1
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.2

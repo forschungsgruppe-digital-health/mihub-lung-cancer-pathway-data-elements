@@ -112,6 +112,11 @@ evidence:
     section: DE-001 Befund / DE-010 Bildgebung / DE-011 Diagnostik
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-001 (weitere Zeilen: DE-010, DE-011)'
+    quote: Befund … alle Bildgebungen sehr wichtig, Zusammenfassung lesen … Bildgebung … Röntgen Thorax,
+      CT Thorax, PET-CT, MRT, EBUS … Diagnostik … Biopsie, EBUS (endobronchialer Ultraschall), Bronchoskopie,  Bildgebung
+      (siehe Punkt Bildgebung)
+    accessed: '2026-10-15'
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -120,6 +125,11 @@ evidence:
       im Anhang)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: aktuelle Diagnostik im Anhang (bei Laborwerten inkl. Normwerten) … Diagnostik ▪ nur relevante
+      Scores/Testwerte angegeben, ggf. mit Erläuterung ▪ letzte, aktuelle Befunde im Anhang
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise; Dos › Format › Diagnostik
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
@@ -127,6 +137,11 @@ evidence:
       Bronchoskopie mit Biopsie) und Tab. 3 (EUS/EBUS mit Biopsie; MRT Schädel)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 2: Diagnostik bei neu aufgetretenen Symptomen … CT1 Thorax / Oberbauch mit Kontrastmittel,
+      oder FDG-PET-CT2 … Methode der ersten Wahl … Bronchoskopie mit Biopsie4 … Tabelle 3: Weiterführende
+      Diagnostik … EUS / EBUS2 mit Biopsie … MRT4 Schädel'
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC (April 2025), Kap. 5.2.1 Erstdiagnose, Tabelle 2 und Tabelle 3
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
@@ -134,6 +149,11 @@ evidence:
       Sicherung per Bronchoskopie mit Biopsie; Stufe 3/4 MRT Schädel, EUS/EBUS mit Biopsie)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 2: Diagnostik bei Lungentumorverdacht … Röntgen Thorax Übersicht in 2 Ebenen … CT1
+      Thorax / Abdomen mit KM6 / FDG-PET-CT7 Methode der ersten Wahl … Histologische oder zytologische
+      Sicherung Bronchoskopie mit Biopsie3 … MRT Schädel … EUS / EBUS5 mit Biopsie'
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC (August 2026), Kap. 5.2.1 Erstdiagnose, Tabelle 2 (Stufen 1–4)
 iso13972_metadata:
   type: observation
   keywords:
@@ -154,6 +174,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-001, DE-010,
+      DE-011; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 10 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 6 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Das Element führt nur KDL-Codes (z. B. DG020103, DG020111, PT080102, PT260102). XDS und ePA verlangen
   für classCode/typeCode IHE-D-Codes (classCode BEF; typeCode BILD für Röntgen, CT, MRT, PET, Sonographie
@@ -165,6 +226,6 @@ related_elements:
 - relation: hasPart
   target: mihub.lung.primarycare.tumorHistology.v0.1
 - relation: hasPart
-  target: mihub.lung.followup.ctThoraxFinding.v0.1
+  target: mihub.lung.followup.ctThoraxFinding.v0.2
 - relation: hasPart
-  target: mihub.lung.followup.brainMriFinding.v0.1
+  target: mihub.lung.followup.brainMriFinding.v0.2

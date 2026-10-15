@@ -78,6 +78,9 @@ evidence:
     section: DE-003 Lokalisation
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-003
+    quote: Lokalisation … wo genau der Tumor in der Lunge liegt
+    accessed: '2026-10-15'
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -87,6 +90,11 @@ evidence:
       der Bioptate (Angabe der einsendenden Stelle)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 47: Pathologiebericht Lungenkarzinom – Resektionspräparat (Stand: 03/2025) … Angabe
+      anatomische Lokalisation im Resektat: z.B. zentral … oder subpleural, welches Lungensegment (soweit
+      erkennbar) … Angabe Lokalisation durch Einsender'
+    accessed: '2026-10-15'
+    locator: Kap. 19.2, Tab. 47 (Stand 03/2025), S. 515; Kap. 19.1, Tab. 46, S. 514
 iso13972_metadata:
   type: condition
   keywords:
@@ -107,6 +115,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-003; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Seitenlokalisation des Primärtumors (rechts/links; ggf. beidseitig/unbekannt) als eigene Teilangabe
   bzw. Qualifier ergänzen: Die ICD-O-3-Topographie C34.x kodiert keine Seite, ‚Lungenoberlappen‘ allein

@@ -1,4 +1,4 @@
-id: mihub.lung.followup.psychoOncologyReferral.v0.1
+id: mihub.lung.followup.psychoOncologyReferral.v0.2
 uuid: ec8d4dcd-eff3-537a-be4a-9410126c4aa0
 name: psychoOncologyReferral
 label_de: Psychoonkologische Anbindung
@@ -37,6 +37,12 @@ evidence:
       geprüft 2026); Kap. 11 (Verweis auf S3-LL Psychoonkologie)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: psychoonkologischen Unterstützung, Sozialberatung bzw. Unterstützung durch Selbsthilfegruppen
+      … angesprochen werden. … Zur psychoonkologischen Versorgung liegt ebenfalls eine S3-Leitlinie …
+      vor … den Bedarf an Psychoonkologie, Palliativmedizin und Sozialberatung zu erkennen.
+    accessed: '2026-10-15'
+    locator: Empf. 8.77 (EK, geprüft 2026), S. 287; Kap. 11, S. 469; Empf. 16.1/16.2 (EK, geprüft 2026),
+      S. 492
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -45,6 +51,11 @@ evidence:
       Appendix B Psychological needs (Referral-Kriterien, u. a. distress that requires specialist intervention)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: The team also needs to decide whether the patient requires ongoing referral to supportive care
+      services. … Consider a referral to a psychologist, psychiatrist, pastoral/spiritual care practitioner,
+      social worker, specialist nurse … distress that requires specialist intervention
+    accessed: '2026-10-15'
+    locator: Principle 4 (S. 13–14); Step 5.4.1 (S. 46); Appendix B (S. 58)
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -53,6 +64,10 @@ evidence:
       Kontakte vermitteln'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: wie auch vorhandene Angebote psychoonkologischer, spiritueller und sozialrechtlicher Unterstützung
+      sowie Leistungen durch Selbsthilfegruppen. Bei Bedarf sind entsprechende Kontakte sind zu vermitteln.
+    accessed: '2026-10-15'
+    locator: Kap. 7.3.2 (Hintergrundtext), S. 196
 iso13972_metadata:
   type: procedure
   keywords:
@@ -61,7 +76,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -73,8 +88,56 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.followup.psychoOncologyReferral.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): „ja“ bedeutet jetzt erfolgte Vermittlung
+      nach festgestelltem Bedarf (nicht nur festgestellter Bedarf). Zudem Leitlinien-Resync, Terminologie-
+      und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 related_elements:
 - relation: dependsOn
-  target: mihub.lung.followup.distressThermometerScore.v0.1
+  target: mihub.lung.followup.distressThermometerScore.v0.2
 - relation: dependsOn
-  target: mihub.lung.followup.structuredFollowUpPlan.v0.1
+  target: mihub.lung.followup.structuredFollowUpPlan.v0.2

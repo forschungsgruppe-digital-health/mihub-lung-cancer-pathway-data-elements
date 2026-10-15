@@ -60,6 +60,10 @@ evidence:
     section: DE-014 Laborwerte / DE-015 Auffälligkeiten der Werte
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: 'docs/reviews/2026-10-13-erhebungen.md#amed-de-014 (weitere Zeilen: DE-015)'
+    quote: Laborwerte … Hausarzt bei Symptomen, Kontrollen in Nachsorge; Tumormarker … Auffälligkeiten
+      der Werte
+    accessed: '2026-10-15'
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -68,6 +72,11 @@ evidence:
       1a“ bezieht sich auf Lit. [1878], kontroverse Bedeutung der Serummarker)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Laborparameter Nach Maßgabe des Behandlers … Die Bedeutung von Serummarkern beim Lungenkarzinom
+      wird kontrovers diskutiert [1878] (Evidenzgrad 1a). … Daher wird die routinemäßige Bestimmung von
+      Serummarkern in der Nachsorge des Lungenkarzinoms nicht empfohlen.
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Tabelle 44 (S. 499); Kap. 16.3.4 Hintergrundtext (S. 496)
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -77,6 +86,11 @@ evidence:
       „aktuelle Diagnostik im Anhang (bei Laborwerten inkl. Normwerten)“'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Bei Laborwerten ist auf eine … tabellarische Darstellung inkl. Normwer … ten zu achten. … aktuelle
+      Diagnostik im Anhang (bei Laborwerten inkl. Normwerten)
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Ergebnisse „Anamnese, Abschlussstatus und Epikrise“, S. 95; Anhang 2 (=
+      Abb. 2), Dos › Relevante Informationen
 iso13972_metadata:
   type: observation
   keywords:
@@ -97,6 +111,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-014, DE-015;
+      Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'DE-015 „Auffälligkeiten der Werte“ wurde als eigenes Freitext-Element der Hausärzt:in erhoben und ist
   im Reference-Element nicht eigenständig abbildbar. Festzulegen ist: Laborflags über Observation.interpretation

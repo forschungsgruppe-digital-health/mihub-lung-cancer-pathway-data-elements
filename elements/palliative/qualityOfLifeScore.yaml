@@ -70,6 +70,11 @@ evidence:
       (ohne Vorgabe zu Erhebungsinstrument/-zeitpunkt) — Wortlaut verifiziert 2026-10-14
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Alle Maßnahmen in der Sterbephase eines Patienten mit Lungenkarzinom sollen in … ihrer Häufigkeit
+      und Ausprägung den Bedürfnissen des Sterbenden angepasst werden. Dabei sollen alle Dimensionen von
+      Lebensqualität (physisch, psychisch, sozial, spirituell) … berücksichtigt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 14.4, Empf. 14.8 (S. 483)
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -77,11 +82,18 @@ evidence:
       Instrument „für Lebensqualität“ in der Dimension „Beeinträchtigung durch die Atemnot“
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 9: Dimensionen und Outcomes von Atemnot und ihre Erfassungsinstrumente … (z.B. CRQ,
+      EORTC-QLQ-C15-Pal … für Lebensqualität)'
+    accessed: '2026-10-15'
+    locator: Kap. 9.2, Tab. 9 (S. 161)
   - source: Expert:innen-Erhebung MiHUB
     version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
     section: DE-065 Lebensqualität (Palliativversorgung, Kategorie PROM)
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-065
+    quote: Lebensqualität … S3-LL Lungenkrebs Apr. 2026 Empf. 14.8
+    accessed: '2026-10-15'
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -91,6 +103,11 @@ evidence:
       keine Empfehlung)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Gesundheitsbezogene Lebensqualität ist die subjektive Selbsteinschätzung von Individuen oder
+      Gruppen im Hinblick auf physische, psychische, soziale und alltagsnahe Aspekte des Wohlbefindens
+      und der Funktionsfähigkeit. … existieren psychometrisch geprüfte und normierte Messinstrumente.
+    accessed: '2026-10-15'
+    locator: Kap. 3 Glossar, „Lebensqualität“ (S. 39)
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -98,6 +115,12 @@ evidence:
       inkl. Lebensqualität routinemäßig erheben; online, per Smartphone oder auf Papier)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Patient-reported experience measures (PREMs) and patient-reported outcome measures (PROMs)
+      should be incorporated into routine cancer care. … PROMs measure aspects of a person’s health status
+      such as symptoms, quality of life and needs and are collected directly from patients
+    accessed: '2026-10-15'
+    locator: 'Principle 2: Safe and quality care, Abschnitt „Patient-reported experience and outcome measures“
+      (S. 12)'
 iso13972_metadata:
   type: observation
   keywords:
@@ -119,6 +142,47 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-065; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 2 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 5/5 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'frequency_pattern „Q1M in SPV“ ist keine Leitlinienempfehlung und durch die Leitlinienreferenzen des
   Elements (S3-LL Lungenkarzinom 5.1, Empf. 14.8; S3-LL Palliativmedizin 3.0, Tab. 9) nicht gedeckt. Die
@@ -149,6 +213,6 @@ issues:
   integer.'
 related_elements:
 - relation: specializes
-  target: mihub.lung.surveillance.qolEortcQlqC30.v0.1
+  target: mihub.lung.surveillance.qolEortcQlqC30.v0.2
 - relation: dependsOn
   target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1

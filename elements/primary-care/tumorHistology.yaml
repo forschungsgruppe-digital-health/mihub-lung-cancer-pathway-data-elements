@@ -85,6 +85,9 @@ evidence:
     section: DE-026 Histologie
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-026
+    quote: Histologie … mikroskopische Untersuchung von entnommenem Gewebe
+    accessed: '2026-10-15'
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -93,6 +96,11 @@ evidence:
       ICD-O-3)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Die histologische Typisierung von Lungentumoren an Resektionspräparaten wie … auch anhand kleiner
+      Biopsien und zytologischer Präparate soll nach den Kriterien der jeweils gültigen WHO-Klassifikation
+      vorgenommen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 6.6.4, Empf. 6.50, S. 165; Tab. 27; Kap. 19, Tab. 46/47 (S. 514–515)
 iso13972_metadata:
   type: condition
   keywords:
@@ -113,6 +121,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-026; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 8 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Das Profil mii-pr-onko-histologie-icdo3 verlangt eine Probenreferenz (Observation.specimen 1..1 auf
   mii-pr-onko-specimen), die in der Hausarztpraxis meist fehlt; Observation.code lässt nur LOINC 59847-4
@@ -122,4 +171,4 @@ related_elements:
 - relation: isPartOf
   target: mihub.lung.primarycare.cancerDiagnosis.v0.1
 - relation: dependsOn
-  target: mihub.lung.surveillance.molecularResistanceFinding.v0.1
+  target: mihub.lung.surveillance.molecularResistanceFinding.v0.2

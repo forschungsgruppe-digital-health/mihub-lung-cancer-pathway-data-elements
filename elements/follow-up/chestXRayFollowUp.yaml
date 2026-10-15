@@ -66,11 +66,20 @@ evidence:
       Kap. 16.3.3'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Viele Patienten mussten randomisiert werden um zu zeigen, dass der Röntgen-Thorax nicht die
+      relevante Untersuchung für diese Fragestellung darstellt. … geeignete bildgebende Verfahren (Röntgen
+      Thorax, Sonografie Abdomen oder CT-Untersuchungen) … Röntgen Thorax … Tumorkinetik
+    accessed: '2026-10-15'
+    locator: S3 Kap. 16.3.3 (S. 495); Empf. 16.7 (EK, S. 498); Tab. 44 (S. 499)
   - source: Expert:innen-Erhebung MiHUB
     version: Excel-Erhebung Nachsorge-WG, Stand 2026-07-30 (Lungenkrebszentrum; Vorlage datenelement-erhebung_Nachsorge_WG_ak.xlsx)
     section: 'DE-021 Röntgen Thorax (Onkologische Nachsorge; Quelle lt. Erhebung: S3-LL 16.7)'
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-021
+    quote: Röntgen Thorax … Erstvorstellung innerhalb von 8 Wochen nach Abschluss der multimodalen Therapie
+      (inklusive OP oder CTx/RTx … S3-LL Lungenkarzinom … 16.7 Apr. 2026
+    accessed: '2026-10-15'
 iso13972_metadata:
   type: procedure
   keywords:
@@ -92,6 +101,47 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-021; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 1 Änderung übernommen, 3 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - Onkopedia NSCLC (April 2025) und SCLC (August 2026) sehen Röntgen Thorax in der Nachsorge nicht vor
   — Aufnahme auf Wunsch der Nachsorge-WG mit S3-Beleg (Option).

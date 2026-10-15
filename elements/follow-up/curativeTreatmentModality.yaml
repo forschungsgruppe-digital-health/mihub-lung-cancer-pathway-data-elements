@@ -129,6 +129,12 @@ evidence:
     section: Kap. 8.1, Tab. 12 Fußnote „* nach Strahlentherapie“; Kap. 8.1 Text (Lungenfunktion nach RT/RCT)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: CT Thorax | X* | X* | X | X* | X | X | X | X | Lungenfunktion | X | X | (X) | (X) | (X) | |
+      | * nach Strahlentherapie; Bei Pat. nach alleiniger Strahlentherapie oder nach Radiochemotherapie
+      soll die Überprüfung der Lungenfunktion bis zum Ende des Pneumonitis-Risikos fortgeführt werden
+      [121].
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 8.1, Tab. 12 inkl. Fußnote und Text nach Tab. 12
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -138,6 +144,12 @@ evidence:
       Konsens, geprüft 2026
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Nach Abschluss einer multimodalen Therapie (Stadium I-IIIC, OMD), die ein lokal … ablatives
+      Verfahren (OP, RTx, CTx/RTx) beinhaltet … (Operation im Stadium I-II und III, … Strahlentherapie/
+      Strahlenchemotherapie im Stadium I und II) … (inklusive OP oder CTx/RTx)
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.1 (S. 492), Empf. 16.4 (S. 497), Empf. 16.7 (S. 498) – jeweils EK, Starker Konsens,
+      geprüft 2026
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -146,6 +158,11 @@ evidence:
       von 8 Wochen nach Abschluss der Strahlentherapie erfolgen'
     recommendation_grade: A
     evidence_level: '2'
+    quote: NSCLC im Stadium III nach ablativer lokaler Therapie (Strahlentherapie/Strahlenchemotherapie)
+      sollten die posttherapeutischen Komplikationen … erfasst und behandelt werden. Die erste klinische
+      Vorstellung nach Abschluss der Strahlentherapie soll innerhalb von 8 Wochen erfolgen.
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.5 (Empfehlungsgrad A/B, Evidenzlevel 2, Konsens, geprüft 2026), S. 497
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
@@ -155,6 +172,11 @@ evidence:
       nur „MRT Schädel bei LD ohne PCI“'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Eine strukturierte Nachsorge kann sich an den Empfehlungen für das NSCLC orientieren, siehe
+      Tabelle 9. … CT Thorax X X X X X X X X X Lungenfunktion X X X (X) (X) (X) MRT Schädel bei LD ohne
+      PCI
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 10.2, Tab. 9
 iso13972_metadata:
   type: procedure
   keywords:
@@ -175,6 +197,47 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 11 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 5 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 11 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Modalitätscodes von curativeTreatmentModality auf die Onko-Profile und oBDS abbilden. Für die durchgeführte
   Therapie führen MII Onkologie und oBDS keinen eigenen Modalitätscode: Je Therapie wird eine Prozedur

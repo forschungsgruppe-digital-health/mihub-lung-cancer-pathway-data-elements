@@ -60,6 +60,9 @@ evidence:
     section: DE-004 Therapiebarkeit
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-004
+    quote: Therapiebarkeit … ob und wie gut der Tumor behandelt werden kann
+    accessed: '2026-10-15'
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -68,6 +71,11 @@ evidence:
       treatment plan including intent)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: • curative • anti-cancer therapy to improve quality of life and/or longevity without expectation
+      of cure • symptom palliation. The treatment intent should be established in a multidisciplinary
+      setting, documented in the patient’s medical record and conveyed to the patient and carer as appropriate.
+    accessed: '2026-10-15'
+    locator: Step 4.1 Treatment intent, S. 34
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
@@ -75,6 +83,11 @@ evidence:
       kurativ); Kap. 8.1 Kurative Therapie / 8.2 Nicht-kurativ intendierte Therapie (Nachsorge nach Intention)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Bei der Mehrzahl dieser Pat. ist der Therapieanspruch nicht kurativ [44, 83, 149]. Ausnahme
+      sind Pat. im neu definierten, sog. oligometastatischen Stadium M1b, z. B. mit solitären Nebennieren-,
+      ZNS- oder Lungenmetastasen, bei denen ein potenziell kurativer Therapieansatz in Frage kommt.
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.6 Stadium IV
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
@@ -82,6 +95,11 @@ evidence:
       Intention, palliative Intention“); Kap. 10.2 (strukturierte Nachsorge nach kurativer Therapie)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Bei VLD ist die wirksamste Behandlungsform eine Operation mit Chemotherapie mit kurativem Anspruch.
+      … besteht auch bei LD ein kurativer Anspruch unter Radiochemotherapie mit nachfolgender Immuntherapie,
+      bei ED wird neben der palliativen Symptomverbesserung
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1 Erstlinientherapie, Abb. 5
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -102,6 +120,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-004; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Die Intention wird je Ziel unterschiedlich kodiert: oBDS mit Buchstabencodes je Abschnitt (OP K/P/D/R/S/X,
   ST K/P/O/S/X, SYST K/P/S/X), MII Onko über Procedure.extension:Intention (REQUIRED, dieselben oBDS-Codes;

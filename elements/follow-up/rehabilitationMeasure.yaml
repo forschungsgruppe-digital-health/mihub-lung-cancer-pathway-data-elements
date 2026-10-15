@@ -50,6 +50,11 @@ evidence:
     section: Kap. 7 Rehabilitation (Klinik mit onkologischem Schwerpunkt, § 9 SGB IX)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Die Pat. sollen über die Möglichkeiten ambulanter und stationärer Rehabilitationsmaßnahmen
+      sowie weiterer Ansprüche, die sich aus dem Sozialrecht ergeben, frühzeitig informiert werden. …
+      Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben werden
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC, Kap. 7 Rehabilitation
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -59,6 +64,11 @@ evidence:
       — pneumologische Fachkompetenz der Reha-Einrichtung, Primärbehandelnde an der Klinikauswahl beteiligt'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Primärbehandelnde Ärzte sollten bei der Auswahl der geeigneten Klinik beteiligt sein. … Operierte
+      Patienten und jene nach eingreifenden anderen Therapien (kombinierte … Radiochemotherapie) und mit
+      ausgeprägten Folgestörungen sollten in Bezug auf … einer Rehabilitation zugeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 15 Rehabilitation (ausgesetzt), Empf. 15.4 und 15.5, S. 490
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
@@ -66,6 +76,11 @@ evidence:
       Reha; Patientenwunsch, § 9 SGB IX; Empfehlung einer Klinik mit onkologischem Schwerpunkt)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Medikamentöse Tumortherapie, Operation, Strahlentherapie und Komorbidität können bei Pat. mit
+      kleinzelligem Lungenkarzinom zu Therapiefolgestörungen unterschiedlichen Schwergrades führen. …
+      Dennoch sollte eine Empfehlung für eine Klinik mit onkologischem Schwerpunkt abgegeben werden
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC, Kap. 9 Rehabilitation
 iso13972_metadata:
   type: procedure
   keywords:
@@ -86,6 +101,47 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 8 Änderungen übernommen, 2 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 6 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'S3-LL Lungenkarzinom 5.1: Kap. 15 „derzeit wegen laufender Überarbeitung ausgesetzt“ — Referenz vorläufig.'
 - 'Label und Definition nennen Attribute, die als einzelnes CodeableConcept (Maßnahmen-Codes) nicht erfassbar

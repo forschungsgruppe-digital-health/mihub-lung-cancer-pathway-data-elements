@@ -88,6 +88,11 @@ evidence:
       „LD ohne PCI“)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Der Wert einer prophylaktischen Schädelbestrahlung ist in den Stadien N0-1 nicht gesichert.
+      … Die PCI ist daher etablierter Therapiebestandteil für Pat. nach simultaner CT-RT. … als Alternative
+      zur Überwachung mit MR-Verlaufskontrollen angeboten … MRT Schädel bei LD ohne PCI
+    accessed: '2026-10-15'
+    locator: Kap. 6.1.1.1; 6.1.1.3; 6.1.1.5; Kap. 10.2, Tab. 9
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -95,6 +100,10 @@ evidence:
       beim ED-SCLC MRT Schädel alle drei Monate)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Im Gegenteil MUSS hier bei einer gewählten Observation Strategie wie in der japanischen Studie
+      beim ED-SCLC ein MRT Schädel alle drei Monate durchgeführt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.3.4 (Hintergrundtext), S. 496
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -102,6 +111,10 @@ evidence:
       Chemo-Strahlentherapie – PCI soll angeboten werden; Referenz-Empfehlung für QI 15, Tab. 45)'
     recommendation_grade: A
     evidence_level: '1'
+    quote: Bei allen Patienten mit SCLC Stadium III mit Remission nach Abschluss der Chemo- … Strahlentherapie
+      soll eine prophylaktische Schädelbestrahlung angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.17 (evidenzbasiert, geprüft 2026, Konsens), Kap. 9.5.2.4, S. 427; QI 15 (Tab. 45)
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -110,6 +123,11 @@ evidence:
       6-monatlich)'
     recommendation_grade: A
     evidence_level: '2'
+    quote: Bei SCLC-Patienten mit Ansprechen auf die Erstlinienchemotherapie soll die prophylaktische
+      Schädelbestrahlung oder eine active surveillance mit 3-monatiger MRT- Kontrolle des Gehirns im 1.
+      Jahr, anschließend aller 6 Monate, angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.26 (evidenzbasiert, geprüft 2026, Konsens), Kap. 9.6.3.1, S. 442
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -117,6 +135,10 @@ evidence:
       im Stadium I/II neben adjuvanter Chemotherapie PCI anbieten)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Nach kurativer Therapie des SCLC im Stadium I/II sollte neben der adjuvanten … Chemotherapie
+      eine prophylaktische Radiatio des Schädels angeboten werden.
+    accessed: '2026-10-15'
+    locator: Empf. 9.7 (EK, geprüft 2026, Starker Konsens), Kap. 9.4.3, S. 416
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -126,6 +148,11 @@ evidence:
       als sinnvolle Alternative zur PCI)'
     recommendation_grade: '0'
     evidence_level: '3'
+    quote: Bei Patienten mit schlechtem Allgemeinzustand oder kognitiven Einschränkungen wird eine PCI
+      nicht empfohlen. Für Patienten > 70 Jahre … kann die Entscheidung im Rahmen eines partizipativen
+      Prozesses getroffen werden; eine engmaschige MRT-Kontrolle des ZNS stellt hierbei eine sinnvolle
+    accessed: '2026-10-15'
+    locator: Empf. 9.37 (evidenzbasiert, modifiziert 2026, Starker Konsens), Kap. 9.7, S. 450
 iso13972_metadata:
   type: procedure
   keywords:
@@ -146,6 +173,47 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 LOCAL
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 6/6 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Wertebereich/Kardinalität: Bei cardinality 1..1 fehlt ein Status „PCI nicht indiziert“. Er betrifft
   (a) fehlende Remission bzw. fehlendes Ansprechen oder Progress nach der Erstlinientherapie (S3-LL Lungenkarzinom
@@ -169,4 +237,4 @@ related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.curativeTreatmentModality.v0.1
 - relation: dependsOn
-  target: mihub.lung.surveillance.recistResponse.v0.1
+  target: mihub.lung.surveillance.recistResponse.v0.2

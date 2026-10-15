@@ -58,6 +58,10 @@ evidence:
     section: 'Tab. 44 (Thorax CT: Tumorkinetik und lokale Ausdehnung); Empf. 16.7 (EK, geprüft 2026)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: geeignete bildgebende Verfahren (Röntgen Thorax, Sonografie Abdomen oder CT-Untersuchungen)
+      durchzuführen. … Thorax CT … Tumorkinetik und lokale Ausdehnung
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.7 (EK, geprüft 2026), S. 498; Tab. 44, S. 499
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -65,6 +69,10 @@ evidence:
       NSCLC Stadium III zum Ausschluss einer Progression vor Durvalumab
     recommendation_grade: A
     evidence_level: '2'
+    quote: Nach lokal ablativer Therapie des NSCLC im Stadium III soll zum Ausschluss einer … Progression
+      ein CT-Thorax durchgeführt werden (zwecks Beginn des Einsatzes von Durvalumab).
+    accessed: '2026-10-15'
+    locator: S3 Empf. 16.6 (A, LoE 2, Starker Konsens, geprüft 2026), S. 497
   - source: Onkopedia NSCLC
     version: Stand April 2025
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-nicht-kleinzellig-nsclc
@@ -73,12 +81,20 @@ evidence:
       Monaten nach Ende der Bestrahlung; Thorax-CT zur Diagnostik der Strahlenpneumonitis geeignet)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Der akuten Pneumonitis folgt oft der Übergang in eine pulmonale Fibrose … Sie kann innerhalb
+      von 6-24 Monaten nach Ende der Bestrahlung auftreten. Zur Diagnostik der Strahlenpneumonitis ist
+      das Thorax CT geeignet … CT Thorax | X* | X* | X | X* | X | X | X | X | … * nach Strahlentherapie;
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 6.2.2.1; Kap. 8.1, Tab. 12
   - source: Onkopedia SCLC
     version: Stand August 2026
     url: https://www.onkopedia.com/de/onkopedia/guidelines/lungenkarzinom-kleinzellig-sclc
     section: Kap. 10.2, Tab. 9 (CT Thorax an allen 9 Zeitpunkten Mo 3–60)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'Tabelle 9: Strukturierte Nachsorge nach kurativer Therapie … CT Thorax X X X X X X X X X Lungenfunktion'
+    accessed: '2026-10-15'
+    locator: Onkopedia SCLC Kap. 10.2, Tab. 9
 iso13972_metadata:
   type: procedure
   keywords:
@@ -87,7 +103,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -99,6 +115,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 2 Änderungen übernommen, 4 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 5 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.curativeTreatmentModality.v0.1

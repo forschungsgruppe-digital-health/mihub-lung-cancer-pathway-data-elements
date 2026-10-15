@@ -53,6 +53,10 @@ evidence:
       Kontext
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Der individuelle Allgemeinzustand wird in der Onkologie üblicherweise mit dem ECOG Performance
+      Score (PS) angegeben, der auch bei der Selektion von Pat. für klinische Studien zur Anwendung kommt.
+    accessed: '2026-10-15'
+    locator: Onkopedia NSCLC Kap. 5.6 Allgemeinzustand und Komorbidität
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -60,6 +64,12 @@ evidence:
       2026)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Bei Patient:innen mit einer nicht-heilbaren Krebserkrankung soll die Komplexität … der Situation
+      durch die Patienten- und Angehörigenbedürfnisse, den Funktionsstatus d. Patient:in und die Krankheitsphase
+      eingeschätzt werden. … 3. Funktionsstatus … Eastern Cooperative Oncology Group (ECOG) [43]
+    accessed: '2026-10-15'
+    locator: S3 Palliativmedizin 3.0 Empf. 5.4 (EK, Starker Konsens, modifiziert 2026), Kap. 5.3; Tab.
+      6, S. 56
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -67,6 +77,9 @@ evidence:
       vor Therapieeinleitung; in Kap. 16 Nachsorge nicht explizit genannt)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Vor Einleitung der Therapie soll der ECOG Performance Status erhoben werden.
+    accessed: '2026-10-15'
+    locator: S3 Lungenkarzinom Kap. 8.6.1, Empf. 8.80 (EK, Starker Konsens, geprüft 2026), S. 288
 iso13972_metadata:
   type: observation
   keywords:
@@ -75,7 +88,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -87,6 +100,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 5 Änderungen übernommen, 4 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 2 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Abweichung vom MII-Profil mii-pr-onko-allgemeiner-leistungszustand-ecog (MII KDS Onkologie 2025.0.4,
   2026.0.3, 2027.0.0-ballot.1): Observation.value[x] ist dort CodeableConcept 1..1 mit required-Bindung

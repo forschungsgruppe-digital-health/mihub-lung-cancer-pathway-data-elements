@@ -55,6 +55,10 @@ evidence:
     section: DE-020 aktuelle Therapien + Anbindungen
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-020
+    quote: aktuelle Therapien + Anbindungen … Physio, Ergo, weitere FÄ, Krankenhaus, Pflegedienst, SAPV
+      (Unterscheidung ist Pat. nicht immer bewusst, Info relevant
+    accessed: '2026-10-15'
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -63,6 +67,11 @@ evidence:
       der palliativmedizinischen Versorgung und Einbeziehung von APV und/oder SPV, wenn indiziert)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: 'mit einer nicht-heilbaren Krebserkrankung und niedriger Komplexität soll folgende Aufgabenfelder
+      beinhalten: … Koordination der palliativmedizinischen Versorgung … Einbeziehung von APV und/oder
+      SPV, wenn indiziert'
+    accessed: '2026-10-15'
+    locator: S3-LL Palliativmedizin 3.0, Kap. 5.4.1, Empf. 5.5 (EK, neu 2026, Starker Konsens), S. 58
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -72,6 +81,12 @@ evidence:
       care requirements)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: The team also needs to decide whether the patient requires ongoing referral to supportive care
+      services. … interventions and treatment plans from other health providers … supportive care services
+      provided … supportive and palliative care requirements
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Principle 4 Supportive care (S. 13/14); Step 5.1 Treatment summary (S.
+      43); Step 5.4.4 (S. 47)
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -81,6 +96,10 @@ evidence:
       Hausarztpraxen (Kontext: Langzeitüberlebende)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Hinweise zu bereits bestehenden … oder angebahnten Versorgungsanbindun … gen sowie ggf. empfohlenen
+      Kontaktda
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Ergebnisse, Relevante Informationen – Weiteres, S. 96
 iso13972_metadata:
   type: social
   keywords:
@@ -101,6 +120,47 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-020; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 4 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Code-Achsen im Value Set trennen und an die Mapping-Zuordnung angleichen: laufende Therapien (Physiotherapie
   91251008, Ergotherapie 84478008, häusliche Pflege durch Pflegedienst 90817005, ggf. SPV-Behandlung 395669003;

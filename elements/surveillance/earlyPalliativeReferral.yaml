@@ -38,6 +38,11 @@ evidence:
       (konsensbasiert, neu 2026, Starker Konsens)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Optionen der tumorzentrierten onkologischen Therapie und der Palliativversorgung sollen systematisch
+      und patient:innenindividuell in der Behandlungsplanung berücksichtigt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 5.5 Gleichzeitigkeit von Palliativversorgung und tumorspezifischer Therapie, Empf. 5.32
+      (EK, neu 2026, Starker Konsens), S. 98
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -45,6 +50,12 @@ evidence:
       Überweisung); Step 6.1.3 (ab Diagnose: supportive care, ACP, symptombezogene Interventionen)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Early referral to palliative care can improve the quality of life for people with cancer …
+      Referral should be based on need rather than prognosis. … From the time of diagnosis, the team should
+      offer patients appropriate psychosocial care, supportive care, advance care planning
+    accessed: '2026-10-15'
+    locator: Step 4.3 Palliative care; Step 6.5 Palliative care; Step 6.1.3 Metastatic disease (Managing
+      metastatic disease)
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -52,6 +63,12 @@ evidence:
       Palliativberatung); Empf. 16.2 (EK: Bedarf an Palliativmedizin im Verlaufsplan erkennen)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Neben einer frühzeitigen Palliativberatung sollte ein standardisiertes Symptomassessment regelmässig
+      durchgeführt werden, um eine bedarfsorientierte In-tegration von Palliativversorgung zu ermöglichen.
+      … den Bedarf an Psychoonkologie, Palliativmedizin und Sozialberatung zu erkennen.
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Statement 8.6 (EK, modifiziert 2026, Starker Konsens), S. 203; Empf. 16.2 (EK,
+      geprüft 2026), S. 492
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -60,6 +77,10 @@ evidence:
       und -versorgung nach Diagnosestellung)'
     recommendation_grade: A
     evidence_level: '3'
+    quote: Patienten mit einer nicht-heilbaren Lungenkarzinomerkrankung sollen nach Diagnosestellung frühzeitig
+      das Angebot einer Integration von Palliativberatung und - versorgung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Empf. 8.2 (Empfehlungsgrad A, Evidenzlevel 3, Konsens, geprüft 2026), S. 202
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -67,6 +88,11 @@ evidence:
       2 Monate nach Diagnosestellung)'
     recommendation_grade: B
     evidence_level: '3'
+    quote: Das Angebot zur Integration von Palliativberatung und -versorgung bei Patienten … mit einer
+      nicht-heilbaren Lungenkarzinomerkrankung sollte frühzeitig (innerhalb der ersten 2 Monate) nach
+      Diagnosestellung erfolgen.
+    accessed: '2026-10-15'
+    locator: Kap. 8.2, Empf. 8.3 (Empfehlungsgrad B, Evidenzlevel 3, Konsens, geprüft 2026), S. 202
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -74,6 +100,12 @@ evidence:
       Empf. 5.3 (konsensbasiert, neu 2026, Starker Konsens)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Bei Patient:innen soll nach der Diagnose einer nicht-heilbaren Krebserkrankung … regelmäßig
+      die Komplexität der Bedürfnisse und Probleme (niedrig/mittel/hoch) evaluiert und die Indikation
+      der Versorgungsstufe … gestellt werden.
+    accessed: '2026-10-15'
+    locator: Kap. 5.3 Bestimmung der Komplexität der Situation und Indikation für Intensität der Palliativversorgung,
+      Empf. 5.3 (EK, neu 2026, Starker Konsens), S. 55
   - source: S3-LL Palliativmedizin
     version: 3.0 (Juli 2026, AWMF 128-001OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/palliativmedizin
@@ -81,6 +113,11 @@ evidence:
       2026, Konsens: hohe Komplexität → SPV)'
     recommendation_grade: A
     evidence_level: '3'
+    quote: Patient:innen mit einer nicht-heilbaren Krebserkrankung und einer hohen Komplexität ihrer Situation
+      sollen eine spezialisierte Palliativversorgung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 5.4.3 Spezialisierte Palliativversorgung (SPV), Empf. 5.7 (Empfehlungsgrad A, Evidenzlevel
+      3, Konsens, geprüft 2026), S. 60
 iso13972_metadata:
   type: procedure
   keywords:
@@ -89,7 +126,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.1.1
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -101,6 +138,52 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.1.1
+    date: '2026-10-15'
+    change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 9 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 1 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 7/7 Zitate gefunden
+    report: docs/audit-log.md §14.8
 related_elements:
 - relation: dependsOn
   target: mihub.lung.palliative.symptomAssessmentInstrument.v0.1

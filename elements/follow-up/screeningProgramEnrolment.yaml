@@ -32,6 +32,11 @@ evidence:
       Kap. 16.3.2/16.3.3 (LDCT-Evidenz)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Nach abgeschlossener multimodaler Therapie (inklusive OP oder CTx/RTx) sollten … die Patienten
+      in den ersten 2 Jahren vierteljährlich (alle 3 Monate), ab dem 3. Jahr halbjährlich untersucht und
+      nach 5 Jahren in ein Screeningprogramm eingeschlossen werden.
+    accessed: '2026-10-15'
+    locator: Kap. 16.3, Empf. 16.7 (EK, geprüft 2026), S. 498
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -42,6 +47,11 @@ evidence:
       und ≥ 15 Packungsjahre); Tab. 11 (gesetzliche Vorgaben der LuKrFrühErkV, § 2 Zulässigkeit)'
     recommendation_grade: Statement
     evidence_level: '1'
+    quote: Asymptomatische Risikopersonen für ein Lungenkarzinom … • ein Alter zwischen 50 und höchstens
+      75 Jahren • einer Raucheranamnese von ≥ 15 Zigaretten/Tag für mindestens 25 Jahre … profitieren
+      in der Regel von einem strukturierten Lungenkarzinom-Früherkennungsprogramm
+    accessed: '2026-10-15'
+    locator: Kap. 5.1, Statement 5.2 (ST, LoE 1, geprüft 2026), S. 75
 iso13972_metadata:
   type: plan
   keywords:
@@ -62,6 +72,47 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Leitlinien-Abgleich 2026-10
   reviewers: []
   git_commit: ''
+  origin:
+    type: leitlinien-abgleich
+    description: Ergänzt, um eine Abdeckungslücke aus dem Leitlinien-Abgleich (S3-LL Lungenkarzinom 5.1,
+      Onkopedia NSCLC 04/2025, SCLC 08/2026) zu schließen
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.2, §13.5; docs/reviews/2026-10-13-leitlinien-abgleich/
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: keine Codings
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 2/2 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'Status vs. Datentyp/Zulässigkeit: definition_de nennt „Datum/Status“, datatype ist nur dateTime. Ein
   Einschluss in ein LDCT-Früherkennungsprogramm nach 5 Jahren (S3-LL Lungenkarzinom 5.1, Empf. 16.7) setzt
@@ -78,4 +129,4 @@ related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.followUpInterval.v0.1
 - relation: dependsOn
-  target: mihub.lung.followup.smokingStatus.v0.1
+  target: mihub.lung.followup.smokingStatus.v0.2

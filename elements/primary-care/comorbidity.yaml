@@ -59,12 +59,18 @@ evidence:
     section: DE-074 Weitere Diagnosen (Übergreifende Datenelemente, Projekt LoTeCaS-GP)
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-074
+    quote: Weitere Diagnosen
+    accessed: '2026-10-15'
   - source: Expert:innen-Erhebung MiHUB
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-021 Komorbiditäten
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-021
+    quote: Komorbiditäten … oft weitere Erkrankungen oder Risiken; Anbindung in Disease-Management-Programm(en)
+    accessed: '2026-10-15'
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -72,6 +78,11 @@ evidence:
       › Anamnese, Abschlussstatus und Epikrise: ''weitere Diagnosen ohne Details''; Ergebnisse S. 94'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Anamnese, Abschlussstatus und Epikrise ▪ onkologische Diagnose und assoziierte Erkrankungen;
+      weitere Diagnosen ohne Details
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Anhang 2 (= Abb. 2), Dos › Relevante Informationen › Anamnese, Abschlussstatus
+      und Epikrise; Ergebnisse S. 94
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -80,6 +91,11 @@ evidence:
       any comorbidities“)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'General practitioners (including nurses) can: … manage comorbidities … Ongoing coordination
+      of care between providers should also deal with any comorbidities, particularly ongoing complex
+      and life-threatening comorbid conditions.'
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 5.2 Follow-up care and Step 5.2.1 Preventing recurrence, S. 45
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -88,6 +104,10 @@ evidence:
       8.1 (konsensbasiert, Starker Konsens, geprüft 2026; S. 200; Geltungsbereich NSCLC)
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Ein höheres Lebensalter sollte kein alleiniger Ausschlussgrund zur Behandlung … mit einer Therapiemodalität
+      (Chemotherapie, Radiotherapie, Operation) sein. Von größerer Relevanz ist das Spektrum der Komorbiditäten.
+    accessed: '2026-10-15'
+    locator: S3-LL Lungenkarzinom 5.1, Kap. 8.1, Empf. 8.1 (EK, geprüft 2026, Starker Konsens), S. 200
   - source: AG LONKO / Survivorship
     version: Empfehlungspapiere UAG Daten (17.06.2021) und UAG Versorgungsmodelle (18.06.2021), Nationaler
       Krebsplan
@@ -98,6 +118,12 @@ evidence:
       Innere Medizin; Nutzen ausdrücklich nicht auf jüngere Krebspatient:innen beschränkt)'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Neben den Nachsorgeempfehlungen sollten die vorhandenen bzw. noch zu etablierenden Nachsorgepässe
+      auch die Informationen zur Tumordiagnose und -therapie (einschließlich deren Komplikationen) sowie
+      die ggf. bestehenden Komorbiditäten des/der Patienten/Patientin zusammenfassen.
+    accessed: '2026-10-15'
+    locator: AG LONKO, Empfehlungspapier UAG „Daten“ (17.06.2021), Kap. 4 Grundsätzlicher Datenbedarf,
+      S. 9 (Datei ag-lonko-daten.txt)
 iso13972_metadata:
   type: condition
   keywords:
@@ -119,6 +145,47 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-074, DE-021; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 6 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 1 Mapping-Operation
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 6/6 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - 'DMP-Einschreibung (DE-021: ''Anbindung in Disease-Management-Programm(en)'') ist keine Diagnose und
   nicht nach ICD-10-GM codierbar. Entweder als eigenes Attribut bzw. Element (Programmteilnahme) modellieren

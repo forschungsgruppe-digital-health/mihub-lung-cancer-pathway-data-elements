@@ -1,4 +1,4 @@
-id: mihub.lung.followup.smokingStatus.v0.1
+id: mihub.lung.followup.smokingStatus.v0.2
 uuid: 0e39538d-7ac1-5c78-a7aa-ee553e5bf28e
 name: smokingStatus
 label_de: Rauchstatus
@@ -109,12 +109,20 @@ evidence:
       Produkte regelmäßig erfragen und dokumentieren'
     recommendation_grade: A
     evidence_level: '1'
+    quote: Bei Patienten mit Lungenkarzinom soll der Konsum von Tabak- und E-Zigaretten … sowie verwandter
+      Produkte regelmäßig erfragt und dokumentiert werden.
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.2 (A, LoE 1, modifiziert 2026), S. 61
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
     section: Empf. 16.3 (B, LoE 3, geprüft 2026)
     recommendation_grade: B
     evidence_level: '3'
+    quote: Patienten mit Lungenkarzinom sollten nachhaltig motiviert werden, mit dem Tabakrauchen aufzuhören.
+      Zur Unterstützung sollten die Patienten wirksame Hilfen zur Raucherentwöhnung erhalten.
+    accessed: '2026-10-15'
+    locator: Kap. 16.2, Empf. 16.3 (B, LoE 3, geprüft 2026), S. 493
   - source: S3-LL Tabakentwöhnung
     version: 3.1 (Stand 01/2021, Langversion 03/2021, AWMF 076-006; Gültigkeit bis 31.12.2025 abgelaufen,
       Aktualisierung angemeldet 12/2024)
@@ -126,6 +134,12 @@ evidence:
       (u. a. Raucher zu Hause/im Betrieb)'
     recommendation_grade: A
     evidence_level: 1a
+    quote: Alle Patientinnen und Patienten sollen … in regelmäßigen Abständen im Behandlungsverlauf nach
+      ihrem Konsum von Tabak oder E-Zigaretten oder verwandten Produkten2 gefragt werden. … Der Konsum
+      von Tabak und verwandten Produkten soll in der Patientendokumentation erfasst werden
+    accessed: '2026-10-15'
+    locator: Empf. 3.2.3.1 Systematisches Screening (A, LoE 1a), S. 39; Empf. 3.3.3.1 (A, LoE 1a), S.
+      47
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -133,6 +147,10 @@ evidence:
       Passivrauchexposition konsequent vermeiden'
     recommendation_grade: A
     evidence_level: '1'
+    quote: Aktives Tabakrauchen, das Rauchen der E-Zigarette und eine Passivrauchexposition sollen konsequent
+      vermieden werden.
+    accessed: '2026-10-15'
+    locator: Kap. 4.2, Empf. 4.1 (A, LoE 1, modifiziert 2026), S. 61
 iso13972_metadata:
   type: social
   keywords:
@@ -141,7 +159,7 @@ iso13972_metadata:
   authors:
   - MiHUB Konsortium AP8 — Datenelement-Erhebung
   endorsing_authority: MiHUB Konsortium AP8
-  version_number: 0.1.0
+  version_number: 0.2.0
   creation_date: '2026-05-04'
   publication_status: AuthorDraft
   publisher: MiHUB Konsortium AP8
@@ -153,6 +171,53 @@ provenance:
   created_by: MiHUB Konsortium AP8 — Datenelement-Erhebung
   reviewers: []
   git_commit: ''
+  origin:
+    type: erstbefuellung-leitlinien
+    description: Erstbefüllung des Katalogs aus den Nachsorge-, Verlaufs- und Palliativ-Kapiteln der S3-LL
+      Lungenkarzinom, der S3-LL Palliativmedizin, Onkopedia NSCLC/SCLC und dem OCP Lung (Projektstart
+      AP8)
+    date: '2026-05-04'
+    reference: docs/audit-log.md §1–§2
+  history:
+  - version: 0.1.0
+    id: mihub.lung.followup.smokingStatus.v0.1
+    date: '2026-05-04'
+    change: Erstfassung; veröffentlicht in v0.1.0-rc.1 (2026-06-30) und v0.1.0-rc.2 (2026-07-01)
+    reference: Zenodo 10.5281/zenodo.21083230, 10.5281/zenodo.21106995
+  - version: 0.2.0
+    date: '2026-10-15'
+    change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
+      entfernt bzw. ersetzt: [''snomed-ct|722498003'']. Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 7 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: 3 Mapping-Operationen
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 7 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 issues:
 - „Verwandte Produkte“ (z. B. Tabakerhitzer, Nikotinbeutel) gemäß S3 Empf. 4.2 bislang ohne Coding — SNOMED-CT-Kandidaten
   prüfen.

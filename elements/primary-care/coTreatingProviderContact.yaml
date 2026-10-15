@@ -52,12 +52,18 @@ evidence:
       LoTeCaS-GP)
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-078
+    quote: Kontaktdaten für Rückfragen an Mitbehandler
+    accessed: '2026-10-15'
   - source: Expert:innen-Erhebung MiHUB
     version: Excel-Erhebung Allgemeinmedizin, Stand 2026-10-13 (Kontakt AK; Vorlage datenelement-erhebung
       (1)-Amed.xlsx)
     section: DE-034 Kontaktdaten Mitbehandler
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-034
+    quote: Kontaktdaten Mitbehandler
+    accessed: '2026-10-15'
   - source: andere
     version: Klein A-A et al. 2026, Die Onkologie 32(1):91–99 (online 02.12.2025), doi:10.1007/s00761-025-01867-1
     url: https://doi.org/10.1007/s00761-025-01867-1
@@ -66,6 +72,11 @@ evidence:
       Dos – Weiteres: „Kontaktdaten“'
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: Die Angabe … von Kontaktdaten eines Ansprechpartners … sind für Rückfragen und den weiteren
+      in … terkollegialen Austausch hilfreich. … Kontaktdaten
+    accessed: '2026-10-15'
+    locator: Klein et al. 2026, Ergebnisse, Relevante Informationen – Weiteres, S. 96; Anhang 2 (= Abb.
+      2), Dos › Weiteres
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -74,6 +85,11 @@ evidence:
       (contact details of the care team involved, S. 47)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: provide a treatment care plan including contact details for the treating team … contact information
+      for key healthcare providers. … providing contact details of the care team involved
+    accessed: '2026-10-15'
+    locator: OCP Lung 2nd ed., Step 3.6.4 (S. 33); Step 5.1 Treatment summary (S. 43); Step 5.4.3 (S.
+      47)
 iso13972_metadata:
   type: social
   keywords:
@@ -95,6 +111,47 @@ provenance:
   created_by: Nachsorge-WG (Klinik-Spur, Excel-Erhebung 2026-07)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Nachsorge-WG eines Lungenkrebszentrums (2026-07-30), Zeile(n)
+      DE-078, DE-034; Wortlaut der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 3 Änderungen übernommen, 1 Vorschlag verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 4/4 Zitate gefunden
+    report: docs/audit-log.md §14.8
 related_elements:
 - relation: isPartOf
   target: mihub.lung.followup.survivorshipCarePlan.v0.1

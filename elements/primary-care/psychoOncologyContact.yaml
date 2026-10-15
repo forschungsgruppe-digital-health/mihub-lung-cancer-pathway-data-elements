@@ -48,6 +48,10 @@ evidence:
     section: DE-007 Psychoonkologische Gespräche
     recommendation_grade: n/a
     evidence_level: n/a
+    locator: docs/reviews/2026-10-13-erhebungen.md#amed-de-007
+    quote: Psychoonkologische Gespräche … psychischen und emotionalen Unterstützung von Krebspatienten
+      und Angehörigen, Ängste, Informationen
+    accessed: '2026-10-15'
   - source: S3-LL Lungenkarzinom
     version: 5.1 (Juli 2026, AWMF 020-007OL)
     url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
@@ -59,6 +63,11 @@ evidence:
       ermutigt werden); Kap. 11 (Verweis auf S3-LL Psychoonkologie, ohne eigene Empfehlungen)'
     recommendation_grade: EK
     evidence_level: n/a
+    quote: Neben der medizinischen Behandlung sollten die Möglichkeiten zur Rehabilitation, psychoonkologischen
+      Unterstützung, Sozialberatung bzw. Unterstützung … angesprochen werden. … Der strukturierte Nachsorgeplan
+      sollte geeignet sein, … den Bedarf an Psychoonkologie und Sozialberatung zu erkennen
+    accessed: '2026-10-15'
+    locator: Kap. 8.6.1, Empf. 8.77, S. 287; Kap. 16.1, Empf. 16.1 (und 16.2), S. 492
   - source: OCP Lung (AU)
     version: 2nd ed. 2021 (Update 07/2025)
     url: https://www.cancer.org.au/assets/pdf/ocp/lung-cancer-2nd-edition
@@ -66,6 +75,11 @@ evidence:
       review points); Appendix B Psychological needs (Überweisungsanlässe; Unterstützung für Angehörige)
     recommendation_grade: n/a
     evidence_level: n/a
+    quote: 'For health professionals, supportive care involves: • screening and assessing patients and
+      families for their supportive care needs … • support for the carer – encourage referrals to psychosocial
+      support from a social worker, psychologist or general practitioner'
+    accessed: '2026-10-15'
+    locator: Principle 4 Supportive care, S. 13; Appendix B Psychological needs, S. 58
 iso13972_metadata:
   type: procedure
   keywords:
@@ -86,10 +100,51 @@ provenance:
   created_by: Allgemeinmedizin (Klinik-Spur, Excel-Erhebung 2026-10)
   reviewers: []
   git_commit: ''
+  origin:
+    type: expert-erhebung
+    description: Aus der Excel-Erhebung Allgemeinmedizin/LoTeCaS-GP (2026-10-13), Zeile(n) DE-007; Wortlaut
+      der Mappe in evidence (quote/locator)
+    date: '2026-10-13'
+    reference: docs/audit-log.md §13.4; docs/reviews/2026-10-13-erhebungen.md
+  history:
+  - version: 0.1.0
+    date: '2026-10-13'
+    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
+      geprüft und korrigiert
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+  verification:
+  - date: '2026-10-13'
+    method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
+    scope: value_set.codings
+    result: Codes geprüft, Anzeigetexte vom Server übernommen
+    report: docs/reviews/2026-10-13-terminologie-verifikation.md
+  - date: '2026-10-14'
+    method: 'Zweitprüfung gegen die Primärquellen (Verifizierer + zwei unabhängige Skeptiker: Quelle,
+      Terminologie/Semantik)'
+    scope: Referenzen, Codings, Definition, Prozessangaben
+    result: 4 Änderungen übernommen, 0 Vorschläge verworfen
+    report: docs/reviews/2026-10-14-zweitpruefung.md
+  - date: '2026-10-15'
+    method: Mapping-Audit gegen die publizierten FHIR-Pakete und Standards (Autor + Skeptiker, Canonicals
+      maschinell geprüft)
+    scope: standard_mappings
+    result: keine Änderung nötig
+    report: docs/reviews/2026-10-14-zweitpruefung.md §3.5
+  - date: '2026-10-15'
+    method: Terminologie-Nachprüfung aller Codings am MII TermServ (SNOMED CT 20260701, LOINC 2.83)
+    scope: value_set.codings
+    result: 3 OK
+    report: docs/audit-log.md §14.5
+  - date: '2026-10-15'
+    method: 'Zitatprüfung: jede Quellenangabe mit wörtlichem Kurzzitat und Fundort belegt; Zitate maschinell
+      gegen Textfassungen der Quellen bzw. den Mappen-Auszug geprüft (scripts/verify-quotes.py)'
+    scope: evidence.guideline_references
+    result: 3/3 Zitate gefunden
+    report: docs/audit-log.md §14.8
 related_elements:
 - relation: dependsOn
-  target: mihub.lung.followup.psychoOncologyReferral.v0.1
+  target: mihub.lung.followup.psychoOncologyReferral.v0.2
 - relation: dependsOn
-  target: mihub.lung.followup.distressThermometerScore.v0.1
+  target: mihub.lung.followup.distressThermometerScore.v0.2
 - relation: dependsOn
   target: mihub.lung.primarycare.mentalHealthStatus.v0.1
