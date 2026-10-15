@@ -42,7 +42,11 @@ SYSTEM_URL: dict[str, str] = {
     "icf": "http://fhir.de/CodeSystem/bfarm/icf",
     "meddra": "http://terminology.hl7.org/CodeSystem/mdr",
     "hl7-v3": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "dicom-dcm": "http://dicom.nema.org/resources/ontology/DCM",
+    "radlex": "http://radlex.org",
+    "ncit": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
 }
+# Systeme ohne Repo-Schlüssel dürfen als vollständige kanonische URL angegeben werden (z. B. HL7-v3-Codesysteme).
 LOCAL_SYSTEMS = {"local-no-standard-binding"}
 
 
@@ -103,10 +107,10 @@ def main() -> int:
                    "code": code, "display_repo": c.get("display")}
             if system in LOCAL_SYSTEMS:
                 row.update(status="LOCAL")
-            elif system not in SYSTEM_URL:
+            elif system not in SYSTEM_URL and not str(system).startswith(("http://", "https://", "urn:")):
                 row.update(status="UNKNOWN-SYSTEM")
             else:
-                row.update(lookup(args.base_url, ctx, SYSTEM_URL[system], code, args.timeout))
+                row.update(lookup(args.base_url, ctx, SYSTEM_URL.get(system, system), code, args.timeout))
             rows.append(row)
 
     # Codesysteme, die der Server gar nicht kennt → alle Codes darin als UNVERIFIZIERBAR markieren
