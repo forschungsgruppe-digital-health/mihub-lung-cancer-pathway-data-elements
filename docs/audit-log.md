@@ -618,10 +618,14 @@ Sechs Recherche-Perspektiven (Recht, Leitlinien, Befundung, Standards, Evidenz, 
 | `docs/screening/` | Dossier (Quellen, Prozessmatrix, 53 Einzelblätter, verworfene Kandidaten, Umsetzungsvorschlag U1–U10, Entscheidungsfragen E1–E24), vorbefüllte Erhebungsmappe (DE-S01 … DE-S53; Round-trip über den Importer für alle 53 Zeilen validiert), `quellen.json`, Einstiegsseite |
 | GLOSSARY §21 | Screening-Begriffe wörtlich aus LuKrFrühErkV §§ 1–5 (Packungsjahr, Zulässigkeit, Befundkategorien, Erst-/Zweitbefundung u. a.) |
 
-### 15.3 Offene Punkte
+### 15.3 Codes, Profile und Herkunft der Kandidaten (2026-10-15)
+
+Je Gruppe ermittelte ein Agent die Codes am MII TermServ, ein zweiter die Profilziele über alle Standards (MII KDS, ISiK, IPS, KBV, Basisprofil DE, gematik, mCODE, DICOM SR, IHE, openEHR); je eine Skeptiker:in prüfte Codes bzw. Profile (314/317 Codes und 293/300 Ziele bestätigt, 122 Teilkorrekturen), ein dritter Schritt führte die Korrekturen zusammen. Ergebnis: 53 schema-valide Entwürfe unter `docs/screening/entwuerfe/` (nicht im Katalog). Abschließende maschinelle Prüfung: 294/294 Standard-Codes am MII TermServ gefunden und aktiv (61 lokale Platzhalter), 214/214 FHIR-Canonicals in den Paketen, 151/151 Zitate wörtlich in den beschafften Quelltexten (ein als Zitat ausgewiesener paraphrasierter Satz wurde durch den Wortlaut des Whitepaper-Supplements ersetzt). `scripts/verify-terminology.py` kennt jetzt DICOM DCM, RadLex, NCIt und vollständige System-URLs. Vorbefüllte Mappe neu aus den Entwürfen erzeugt (Round-trip 53/53). Prüfprotokoll: `docs/screening/pruefprotokoll.json`.
+
+### 15.4 Offene Punkte
 
 1. Entscheidungsfragen E1–E24 (Dossier, Abschnitt 7) mit Praxis, Radiologie, Datenschutz/Justiziariat und MI-Team klären — mindestens E1–E3 (Raucheranamnese, Packungsjahre), E12 (Lung-RADS neben den §-Kategorien), E21–E23 (Modellierung).
-2. Codes der Kandidaten vor der Aufnahme gegen den MII TermServ prüfen (Recherche überwiegend über tx.fhir.org, SNOMED CT INT 20250201 / LOINC 2.82).
+2. ~~Codes gegen den MII TermServ prüfen~~ → erledigt 2026-10-15 (§15.3); offen bleiben die 61 lokalen Platzhalter (Konzeptbedarf).
 3. DPIA-Berührungspunkte (Einwilligungen, Portal-Selbstauskunft, Rückkanal aus der Abklärung) vor der Aufnahme der Gruppen G5/G11/G12 klären.
 4. Befunde am BPMN-Screeningmodell (Dossier, Abschnitt 8.4) an die Modellierer:innen des Pfad-Repositorys geben.
 
