@@ -308,7 +308,10 @@
                 "enum": ["A", "B", "0", "EK", "Statement", "n/a"]
               },
               "evidence_level": { "type": "string", "description": "z. B. 1a, 1b, 2b, 3, 4." },
-              "url": { "type": "string", "format": "uri" }
+              "url": { "type": "string", "format": "uri" },
+              "quote": { "type": "string", "maxLength": 600, "description": "Wörtlicher Auszug aus der Quelle (Kurzzitat), der die Fundstelle belegt; Auslassungen mit „…“. Bei Expert:innen-Erhebungen der in der Erhebungsmappe eingetragene Wortlaut." },
+              "accessed": { "type": "string", "format": "date", "description": "Datum, an dem Fundstelle und Zitat gegen die Quelle geprüft wurden." },
+              "locator": { "type": "string", "description": "Fundort, wenn keine öffentliche URL existiert (z. B. Repo-Pfad des Erhebungsauszugs mit Zeilen-ID)." }
             }
           }
         }
@@ -375,7 +378,48 @@
       "properties": {
         "created_by": { "type": "string" },
         "reviewers": { "type": "array", "items": { "type": "string" } },
-        "git_commit": { "type": "string" }
+        "git_commit": { "type": "string" },
+        "origin": {
+          "type": "object",
+          "description": "Wie das Element in den Katalog kam.",
+          "required": ["type", "description", "date"],
+          "properties": {
+            "type": { "type": "string", "enum": ["erstbefuellung-leitlinien", "leitlinien-abgleich", "expert-erhebung", "quellenrecherche", "sonstige"] },
+            "description": { "type": "string" },
+            "date": { "type": "string", "format": "date" },
+            "reference": { "type": "string", "description": "Audit-Log-Abschnitt, Bericht oder Erhebungsauszug." }
+          }
+        },
+        "history": {
+          "type": "array",
+          "description": "Versionshistorie des Elements (Regeln: docs/howto-add-element.md §C).",
+          "items": {
+            "type": "object",
+            "required": ["version", "date", "change"],
+            "properties": {
+              "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+              "id": { "type": "string", "description": "Element-ID dieser Version, falls sie von der aktuellen abweicht." },
+              "date": { "type": "string", "format": "date" },
+              "change": { "type": "string" },
+              "reference": { "type": "string" }
+            }
+          }
+        },
+        "verification": {
+          "type": "array",
+          "description": "Prüfläufe gegen Quellen, Terminologie oder Standards; nachvollziehbar über den genannten Bericht.",
+          "items": {
+            "type": "object",
+            "required": ["date", "method", "report"],
+            "properties": {
+              "date": { "type": "string", "format": "date" },
+              "method": { "type": "string" },
+              "scope": { "type": "string" },
+              "result": { "type": "string" },
+              "report": { "type": "string" }
+            }
+          }
+        }
       }
     },
     "issues": {

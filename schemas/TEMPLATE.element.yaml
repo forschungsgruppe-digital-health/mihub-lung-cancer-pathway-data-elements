@@ -81,11 +81,14 @@ care_process:                                  # ISO 13972 §6.11 / ISO 13940
 evidence:
   guideline_references:
     - source: S3-LL Lungenkarzinom
-      version: "4.0 (April 2025)"
+      version: "5.1 (Juli 2026, AWMF 020-007OL)"
       section: <Kap./Empfehlungs-Nr./Tabelle>
       recommendation_grade: <A|B|0|EK|Statement|n/a>
       evidence_level: <1a|1b|2b|3|4|n/a>
       url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
+      quote: "<wörtliches Kurzzitat der Fundstelle, max. 600 Zeichen; Auslassungen mit …>"   # prüfbar mit scripts/verify-quotes.py
+      accessed: 2026-10-15                     # Datum der Prüfung gegen die Quelle
+      # locator: docs/reviews/2026-10-13-erhebungen.md#wg-de-012   # statt url, wenn die Quelle nicht öffentlich ist
 
 iso13972_metadata:                             # ISO 13972 Tabelle 2 (mandatory subset)
   type: observation                            # observation|procedure|evaluation|plan|condition|medication|social
@@ -106,6 +109,16 @@ provenance:
   created_by: "<Person/Organisation>"
   reviewers: []
   git_commit: ""                               # füllt CI
+  origin:                                      # wie das Element in den Katalog kam
+    type: leitlinien-abgleich                  # erstbefuellung-leitlinien|leitlinien-abgleich|expert-erhebung|quellenrecherche|sonstige
+    description: "<Anlass, Quelle bzw. Erhebungsmappe und Zeile>"
+    date: 2026-10-15
+    reference: "<Audit-Log-Abschnitt, Bericht oder Erhebungsauszug>"
+  history:                                     # Versionen (Regeln: docs/howto-add-element.md §C); letzter Eintrag = version_number
+    - version: 0.1.0
+      date: 2026-10-15
+      change: Erstfassung
+  verification: []                             # Prüfläufe: {date, method, scope, result, report}
 
 issues: []                                     # offene Punkte
 related_elements: []                           # Beziehungen; target = vollständige id des Ziel-Elements, z. B.

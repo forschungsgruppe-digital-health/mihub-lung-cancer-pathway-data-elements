@@ -15,6 +15,7 @@ Zusätzlich zur Schema-Prüfung (Konsistenz über Dateien hinweg):
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -83,6 +84,13 @@ def consistency_errors(path: Path, doc: dict | None, known_ids: set[str]) -> lis
     phase, name, eid = doc.get("phase"), doc.get("name"), str(doc.get("id", ""))
     if phase and name and not eid.startswith(f"mihub.lung.{phase}.{name}.v"):
         errs.append(f"id: '{eid}' passt nicht zu phase '{phase}' und name '{name}'")
+    vn = str((doc.get("iso13972_metadata") or {}).get("version_number", ""))
+    m = re.search(r"\.v(\d+)\.(\d+)$", eid)
+    if m and vn and ".".join(vn.split(".")[:2]) != f"{m.group(1)}.{m.group(2)}":
+        errs.append(f"id-Suffix v{m.group(1)}.{m.group(2)} passt nicht zu version_number {vn} (Regel: docs/howto-add-element.md §C)")
+    hist = (doc.get("provenance") or {}).get("history") or []
+    if hist and vn and hist[-1].get("version") != vn:
+        errs.append(f"provenance.history: letzter Eintrag {hist[-1].get('version')} ≠ version_number {vn}")
     try:
         inside = path.resolve().relative_to((ROOT / "elements").resolve())
     except ValueError:

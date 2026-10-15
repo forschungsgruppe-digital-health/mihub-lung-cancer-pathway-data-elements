@@ -200,17 +200,26 @@ ausfüllen, klinische:n Reviewer:in markieren. **`main`** ist die Release-Branch
 
 ---
 
-## C · Bestehendes Element ändern
+## C · Bestehendes Element ändern (Versionierung)
 
-Drei Fälle:
+Jedes Element trägt eine SemVer-Version (`iso13972_metadata.version_number`, ISO 13972 Metadatum #8); das ID-Suffix
+`v<major>.<minor>` entspricht immer Major und Minor dieser Version (`scripts/validate.py` prüft das). Bezugspunkt für einen
+Versionssprung ist die **zuletzt veröffentlichte Fassung des Elements** (Git-Tag bzw. Zenodo-Archiv); mehrere Änderungen
+zwischen zwei Katalog-Releases ergeben einen Sprung. Elemente, die noch in keinem Release enthalten waren, bleiben bei `0.1.0`.
 
-| Änderung | Versions-Bump | Status |
+| Änderung gegenüber der veröffentlichten Fassung | Entwurf (`0.x`, `AuthorDraft`/`CommitteeDraft`) | freigegeben (`≥ 1.0`) |
 | --- | --- | --- |
-| Tippfehler / Doku-Klarstellung | `0.1.0 → 0.1.1` (Patch) | gleich |
-| Neues Coding / neues Standard-Mapping / `binding_strength` lockern | `0.1.0 → 0.2.0` (Minor, additive) | ggf. weiter |
-| Datentyp/Bezeichnung/Definition geändert (semantischer Bruch) | `0.1.0 → 1.0.0` (Major) | neue ID, alte als `Superseded` markieren, mit `related_elements: [{relation: supersededBy, target: <neue Element-ID>}]` verlinken |
+| **nicht brechend:** Tippfehler; Präzisierung der Definition ohne Bedeutungsänderung; Quellen/Referenzen, Hinweise, `issues`, Standard-Mappings; Anzeigetexte; zusätzliche Codes; Codes korrigiert oder entfernt bei Bindung `example`/`preferred`/`extensible`; Kardinalität gelockert | **Patch** `0.1.0 → 0.1.1`, ID unverändert | **Patch** `1.0.0 → 1.0.1`, ID unverändert |
+| **brechend:** Datentyp oder Einheit; Kardinalität eingeschränkt; Bindung verschärft; Codes entfernt oder ersetzt bei Bindung `required`; **Bedeutungsänderung** (ein nach der alten Definition erfasster Wert würde umgedeutet, unzulässig oder mehrdeutig) | **Minor** `0.1.x → 0.2.0`, ID-Suffix `v0.2`; frühere ID in `provenance.history[].id` | **Major** `1.x → 2.0.0`: neues Element mit ID `v2.0`; das alte bleibt als `Superseded` bestehen und wird mit `related_elements: [{relation: supersededBy, target: <neue Element-ID>}]` verlinkt |
+| **Erstfreigabe** nach klinischem Review (`publication_status` ≥ `ApprovedForTesting`) | `→ 1.0.0`, ID `v1.0` | — |
 
-Major-Änderungen erzeugen **immer ein neues Element** mit neuer ID (`...v1.0`), weil bestehende Daten gegen `v0.x` weiter auflösbar bleiben müssen.
+Warum so: Im Entwurfsstadium (Major 0) sind brechende Änderungen nach SemVer ein Minor-Sprung; die ID ändert sich mit,
+damit Daten, die gegen eine veröffentlichte Fassung erfasst wurden, eindeutig auf diese Fassung verweisen. Nicht brechende
+Änderungen lassen die ID stabil. Ob eine geänderte Definition brechend ist, entscheidet die Frage „Würde ein bereits
+erfasster Wert umgedeutet?“ — im Zweifel brechend.
+
+Jeder Sprung wird in `provenance.history[]` festgehalten (Version, Datum, Änderung, Verweis auf Audit-Log/PR); Prüfläufe
+stehen in `provenance.verification[]`. Beispiel: [`elements/surveillance/adverseEventCtcaeGrade.yaml`](../elements/surveillance/adverseEventCtcaeGrade.yaml).
 
 ---
 
