@@ -44,9 +44,16 @@ def norm(text: str) -> str:
     return t.strip()
 
 
-def loose(text: str) -> str:
-    """Zusätzlich ohne Bindestrich-Leerzeichen-Folgen ("wer- den") und ohne Leerraum vor Satzzeichen."""
-    t = re.sub(r"(\w)- (\w)", r"\1\2", norm(text))
+def loose(text: str, compound: bool = False) -> str:
+    """Zusätzlich ohne Bindestrich-Leerzeichen-Folgen ("wer- den") und ohne Leerraum vor Satzzeichen.
+
+    compound=True behält den Bindestrich vor Großbuchstaben/Ziffern (Komposita über den Zeilenumbruch,
+    z. B. „Niedrigdosis- CT“ → „Niedrigdosis-CT“); geprüft wird zusätzlich zur Grundform.
+    """
+    t = norm(text)
+    if compound:
+        t = re.sub(r"(\w)- ([A-ZÄÖÜ0-9])", r"\1-\2", t)
+    t = re.sub(r"(\w)- (\w)", r"\1\2", t)
     return re.sub(r" ([,.;:)])", r"\1", t)
 
 
@@ -65,6 +72,8 @@ def tokens_index(raw: str):
                 if toks[j][:1].islower():
                     f[w[:-1] + toks[j]] = j
                     break
+                if toks[j][:1].isupper() or toks[j][:1].isdigit():
+                    f.setdefault(w + toks[j], j)    # Kompositum mit Bindestrich, z. B. „Niedrigdosis-CT“
         forms.append(f)
         for v in f:
             index.setdefault(v, []).append(i)
@@ -107,7 +116,7 @@ def main() -> int:
     for key, val in mapping.items():
         files = val if isinstance(val, list) else [val]
         raw = "\n".join((base / f).read_text(encoding="utf-8", errors="replace") if not Path(f).is_absolute() else Path(f).read_text(encoding="utf-8", errors="replace") for f in files)
-        texts[key] = (norm(raw), loose(raw), *tokens_index(raw))
+        texts[key] = (norm(raw), loose(raw), loose(raw, True), *tokens_index(raw))
     files = []
     for p in a.paths or [str(ROOT / "elements")]:
         pp = Path(p)
@@ -126,8 +135,8 @@ def main() -> int:
             if key not in texts:
                 rows.append({"element": doc.get("name"), "index": i, "source": r.get("source"), "status": "KEINE-TEXTFASSUNG"})
                 continue
-            strict, lax, forms, index = texts[key]
-            ok = bool(fragments(q)) and all(norm(fr) in strict or loose(fr) in lax or gap_match(fr, forms, index) for fr in fragments(q))
+            strict, lax, lax_c, forms, index = texts[key]
+            ok = bool(fragments(q)) and all(norm(fr) in strict or loose(fr) in lax or loose(fr, True) in lax_c or gap_match(fr, forms, index) for fr in fragments(q))
             status = "GEFUNDEN" if ok else "NICHT-GEFUNDEN"
             missing += not ok
             rows.append({"element": doc.get("name"), "index": i, "source": r.get("source"), "status": status, "quote": q[:120]})
