@@ -260,7 +260,7 @@ HELP: dict[str, str] = {
     "guideline_source": "Belegende Leitlinie/Quelle — aus der Liste wählen (Pflicht).",
     "guideline_section": "Kapitel / Empfehlungs-Nr. / Tabelle in der Quelle (Pflicht).",
     "recommendation_grade": "Empfehlungsgrad lt. Leitlinie (A/B/0/EK/Statement/n/a). Optional.",
-    "evidence_level": "Evidenzlevel (1a…4, n/a). Vorschlag — Freitext erlaubt. Optional.",
+    "evidence_level": "Evidenzlevel wie in der Quelle (z. B. 1–5 oder 1a…2b; n/a). Vorschlag — Freitext erlaubt. Optional.",
     "notes": "Beziehungen zu anderen Elementen, Sensitivitäts-Hinweise, offene Fragen.",
     "contact": "Name + Klinik/Fachgesellschaft für Rückfragen. Optional.",
     "system": "WO wird das Datenelement genutzt (Systemklasse)? Aus der Liste wählen.",

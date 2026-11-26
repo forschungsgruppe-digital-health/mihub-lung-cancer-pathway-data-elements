@@ -186,14 +186,15 @@ provenance:
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
       3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
       Abgleich 2026-11-25: Definition und Auslöser nach S3-LL Supportive Therapie 2.1 Kap. 13 erweitert
-      (nicht brechend); Codes ergänzt: SNOMED CT 1360081003, 72527006, 439990003; Quelle ergänzt: S3-LL
-      Supportive Therapie bei onkologischen PatientInnen 2.1 – Kap. 13.1.1.2 Monitoring im Verlauf einer
-      ICI-Behandlung, Empf. 13.2 (EK, neu 2025), S. 629; Quelle ergänzt: S3-LL Supportive Therapie bei
-      onkologischen PatientInnen 2.1 – Kap. 13.1.2 Verdacht auf irAE, Empf. 13.11 (B, LoE 4, neu 2025),
-      S. 636; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 – Kap. 13.1.2.2,
-      Hintergrundtext, S. 637'
+      (nicht brechend: bereits erfasste Werte bleiben gültig und behalten ihre Bedeutung, die Definition
+      schließt lediglich weitere Fälle ein; Einstufung durch die Maintainer:in bestätigt 2026-11-26);
+      Codes ergänzt: SNOMED CT 1360081003, 72527006, 439990003; Quelle ergänzt: S3-LL Supportive Therapie
+      bei onkologischen PatientInnen 2.1 – Kap. 13.1.1.2 Monitoring im Verlauf einer ICI-Behandlung, Empf.
+      13.2 (EK, neu 2025), S. 629; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen
+      2.1 – Kap. 13.1.2 Verdacht auf irAE, Empf. 13.11 (B, LoE 4, neu 2025), S. 636; Quelle ergänzt: S3-LL
+      Supportive Therapie bei onkologischen PatientInnen 2.1 – Kap. 13.1.2.2, Hintergrundtext, S. 637'
     reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
-      §16
+      §16; docs/audit-log.md §16.8
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ

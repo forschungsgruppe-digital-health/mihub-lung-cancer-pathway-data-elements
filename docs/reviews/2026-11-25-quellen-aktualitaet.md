@@ -15,7 +15,7 @@
   (August 2026) und „Impfungen“ (Mai 2026) oder des OCP Lung (2nd ed., Update 07/2025). Die S3-LL Rauchen und
   Tabakabhängigkeit (2021, gültig bis 31.12.2025) hat weiterhin keine Nachfolgefassung.
 - **Standards:** neu ist der **oBDS 3.1.0** (XML-Schema vom 14.10.2026; Annahme durch die Landeskrebsregister
-  geplant ab 01.04.2027). Er ergänzt abwärtskompatibel ICD-O-4, TNM-9-Werte und CTCAE 6.0. Die 17
+  geplant ab 01.04.2027). Er ergänzt abwärtskompatibel ICD-O-4, TNM-9-Werte und CTCAE 6.0. Die 18
   oBDS-Mappings sind abgeglichen.
 - **Neue Quellen (freigegeben):** S3-LL Supportive Therapie 2.1 (Juni 2026), G-BA Krebsfrüherkennungs-Richtlinie
   (LDCT-Screening, GKV-Leistung seit April 2026) und STIKO-Empfehlungen 2026. Sie sind in 9 Elementen
@@ -82,7 +82,7 @@ Katalog relevante Änderungen:
 | `Morphologie_ICD_O_4` als Alternative zu `Morphologie_ICD_O` in Histologie und Tumorzuordnung (Code-Muster `\d\d\d\d[\dA-Z]/\d`, Version 40 = ICD-O-4 2026, b6 = WHO-Klassifikationen 6. Auflage); Meldung laut Plattform § 65c erst nach abgestimmter deutscher Übersetzung | `tumorHistology` |
 | Topographie-Version (5.5): zusätzlicher Wert `40` (ICD-O-4, 2026) | `tumorLocalisation` |
 | `TNM_Typ`: neues optionales Feld `LV` (LVX/LV0/LV1), Feld `B` (peripheres Blut) und UICC-Stadium `IB3`; B und IB3 für das Lungenkarzinom nicht einschlägig; TNM-Version 9 seit 3.0.4 | `tnmStage` |
-| alle übrigen in den Mappings genannten Felder und XML-Namen | unverändert; Verweis auf XSD 3.1.0 umgestellt (12 weitere Elemente) |
+| alle übrigen in den Mappings genannten Felder und XML-Namen | unverändert; Verweis auf XSD 3.1.0 umgestellt (14 weitere Elemente) |
 
 ## 5 Terminologie (MII TermServ, mTLS)
 

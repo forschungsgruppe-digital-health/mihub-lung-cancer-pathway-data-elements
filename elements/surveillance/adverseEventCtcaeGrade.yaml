@@ -154,9 +154,10 @@ provenance:
       auf XSD 3.1.0 (14.10.2026) abgeglichen; value_set.uri auf NCI-Seite „CTCAE and AE Reporting“ (CTCAE
       v6.0) umgestellt; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 –
       Kap. 13.1.2.2, Hintergrundtext, S. 637; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen
-      PatientInnen 2.1 – Kap. 13.1.2.2, Empf. 13.12 (EK, neu 2025), S. 639'
+      PatientInnen 2.1 – Kap. 13.1.2.2, Empf. 13.12 (EK, neu 2025), S. 639; 2026-11-26: offener Punkt
+      zur value_set.uri erledigt (URI am 2026-11-25 umgestellt)'
     reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
-      §16
+      §16; docs/audit-log.md §16.8
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -194,9 +195,6 @@ provenance:
     result: 4 Änderung(en) übernommen
     report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
-- 'value_set.uri prüfen: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm leitet
-  per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
-  UNSICHER); ggf. auf die aktuelle CTCAE-Seite des NCI umstellen.'
 - 'Repräsentation CTCAE-Grad: Das Element kodiert den Grad als CodeableConcept mit fünf SNOMED-Schweregraden
   (255604002, 6736007, 24484000, 442452003, 399166001). Die nationale Referenzkodierung (MII-CodeSystem
   mii-cs-onko-nebenwirkung-ctcae-grad: 1–5, U, K) steht nur in value_set.notes. MII Onkologie 2026.0.3

@@ -57,7 +57,7 @@ GitHub-Issue: [#28](https://github.com/forschungsgruppe-digital-health/mihub-lun
 - Neu: `instruction_de` (Termine in `followUpVisitDate` bzw. `plannedFollowUpAppointment`), `standard_mappings` `CarePlan.activity.detail.scheduled[x] (scheduledTiming).code`; `frequency_pattern` angleichen; `definition_de` unverändert.
 - Granularitäts-Issue schließen; Kommentar-Issue nur fortschreiben („(a)/(c) umgesetzt, (b) offen“).
 - Stufe 2 nach WG-Rückmeldung: bei Variante (b) Code „individuell festgelegt“, Begründung im Plan-Dokument, Quellenangabe `#wg-de-010`; bei rein hausärztlichen/supportiven Kontakten Kommentar als „über die Termin-Elemente abgedeckt“ schließen, PVS-`capture` in `plannedFollowUpAppointment` vorziehen.
-- Versionierung: nicht brechend, nur history-Text 0.1.1, ID v0.1 bleibt; Termin-Elemente bleiben 0.1.0; Schema und Zähler 16/35/61 unverändert, Issue-Zähler „126“ fortschreiben.
+- Versionierung: nicht brechend, nur history-Text 0.1.1, ID v0.1 bleibt; Termin-Elemente bleiben 0.1.0; Schema und Zähler 16/35/61 unverändert, Issue-Zähler „125“ fortschreiben.
 - Verworfen: Definition als „Mindestraster“ (im Zweifel Minor-Sprung), harte Muss-Regel für Q6-8W (brechend). Option 3 nicht jetzt, nur bei Bedarf an maschinenlesbaren Soll-Terminen; Entscheidung vor der Erstfreigabe 1.0.
 
 **Umsetzungsschritte**
@@ -107,7 +107,7 @@ GitHub-Issue: [#29](https://github.com/forschungsgruppe-digital-health/mihub-lun
 - constraints_de: im Kontext `postTherapyComplication` Systemtherapie nur als Komponente lokal-ablativer Therapie. instruction_de: nur begründbar zuordnen; Vorschlag statt Automatik; „nicht zuordenbar“ ≠ leer; Müdigkeit → `reasonForEncounter`.
 - Mappings: condition-dueTo (nicht für Arzneimittelfolgen), suspectEntity.instance (MedDRA, Grad required), Procedure.complication (UNSICHER), oBDS.
 - Eltern: +hasPart, instruction_de (Sekundärkode nur am Primärkode), value_set.notes nach Ursache, Mappings, issues; `reasonForEncounter`: instruction_de, Mapping-notes zu reasonReference/diagnosis (UNSICHER).
-- Vor dem Tag: neu 0.1.0, `postTherapyComplication` 0.1.1, `treatmentSideEffectOrComplication`/`reasonForEncounter` 0.1.0, ggf. `adverseEventCtcae`/`immuneRelatedAdverseEvent` 0.1.1; danach nächster Patch. IDs bleiben, solange die Definition von `postTherapyComplication` weder verengt noch erweitert wird (sonst 0.2.0/v0.2); hasPart als Patch ist Auslegung.
+- Vor dem Tag: neu 0.1.0, `postTherapyComplication` 0.1.1, `treatmentSideEffectOrComplication`/`reasonForEncounter` 0.1.0, ggf. `adverseEventCtcae`/`immuneRelatedAdverseEvent` 0.1.1; danach nächster Patch. IDs bleiben, solange die Definition von `postTherapyComplication` weder verengt noch so geändert wird, dass bereits erfasste Werte umgedeutet würden (sonst 0.2.0/v0.2); hasPart als Patch ist Auslegung.
 - Zähler 112 → 113 (primarycare 38 → 39), neu ermitteln; nur nach datenelementweiser Freigabe.
 
 **Umsetzungsschritte**
@@ -167,7 +167,7 @@ GitHub-Issue: [#30](https://github.com/forschungsgruppe-digital-health/mihub-lun
 4. Fundstellen der Langversion 3.0 ermitteln (UNSICHER/zu prüfen), per `verify-quotes.py` prüfen.
 5. Stufe 2 und 3 nach klinischer Bestätigung je Element freigeben.
 6. Versionierung nachziehen; `validate.py` und `build-catalog.py` laufen lassen.
-7. Audit-Log: Folgeeintrag zu §16.7, Zähler offener Punkte (derzeit 126) aktualisieren; Doku-Konsistenz prüfen.
+7. Audit-Log: Folgeeintrag zu §16.7, Zähler offener Punkte (derzeit 125) aktualisieren; Doku-Konsistenz prüfen.
 8. Lücken (Fremdeinschätzung Atemnot/Schmerz, Unruhe/Delir, Sterbedatum) erst nach `check-duplicate-data-element` aufnehmen.
 
 **Klinisch zu entscheiden**
@@ -237,7 +237,7 @@ GitHub-Issue: [#32](https://github.com/forschungsgruppe-digital-health/mihub-lun
 - `socialSituation` (0.1.0/v0.1, AuthorDraft, in keinem Release): Pflegegrad nur unspezifisch (301887005, Z74.9) oder als Text erfassbar; Value Set extensible/mapped; offene issues: Gliederung nach Rolle, Aufteilung in Teil-Elemente.
 - `ongoingSupportiveServices` (Pflegedienst, SNOMED 90817005, auch ohne Pflegegrad möglich) ersetzt die Angabe nicht; `rehabilitationAndSocialCounselling` ist Beratung, kein Status.
 - Kein Treffer für „Pflegegrad“, „Pflegestufe“, „9-984“, „80391“ (außer §16.7). Dubletten-Check: EIGENSTÄNDIG.
-- Zähler: 112 Elemente (38 primarycare), 434 Codings (18 OPS), 339 Zitate, 126 offene issues.
+- Zähler: 112 Elemente (38 primarycare), 434 Codings (18 OPS), 339 Zitate, 125 offene issues.
 - HL7-DE-Basisprofil `observation-de-pflegegrad` 1.6.0: LOINC 80391-6 (TRIAL), Wert OPS 9-984.6–.b, required; KBV Basis 1.10.0 leitet ab (value.coding max 1).
 - KBV-MIO Überleitungsbogen 1.0.0: Core-Observation (kein Ableger des Basisprofils), OPS 9-984.6–.a (Version 2021), Antrag über Extension `beantragungsstatus`.
 
@@ -257,7 +257,7 @@ GitHub-Issue: [#32](https://github.com/forschungsgruppe-digital-health/mihub-lun
 - frequency_pattern ad-hoc (Anamnese, Entlassung, Bescheid/Antrag, Progression, Palliativ-Übergang). Evidence: rollenbezogener Word-Auszug, § 15 SGB XI; S3-LL 16.1/16.2 nur optional, indirekt. „Kein Pflegegrad/abgelehnt/unbekannt“ zunächst als issue.
 - `careGrade` isPartOf `socialSituation` (dort hasPart; Definition verweist auf `careGrade`, kein Ausschluss). Kein neues dependsOn.
 - Versionierung: `careGrade` 0.1.0/v0.1; `socialSituation` bleibt 0.1.0/v0.1; keine neuen IDs, kein Schema-Bump. required bewusst jetzt: späteres Verschärfen wäre brechend (v0.2), Lockern auf extensible regelt howto §C nicht ausdrücklich.
-- Zähler: Elemente 112 → 113, Codings 434 → 440 (nach TermServ-Lauf), Zitate 339 → 341 bzw. 342, offene Punkte 126 → 128. Rückfallebene ohne Votum vor dem Tag: Option 2 (126 → 127). UNSICHER/zu prüfen u. a.: OPS 2027, Canonical `pflegegrad-de`; TermServ-Prüfung steht aus.
+- Zähler: Elemente 112 → 113, Codings 434 → 440 (nach TermServ-Lauf), Zitate 339 → 341 bzw. 342, offene Punkte 125 → 127. Rückfallebene ohne Votum vor dem Tag: Option 2 (125 → 126). UNSICHER/zu prüfen u. a.: OPS 2027, Canonical `pflegegrad-de`; TermServ-Prüfung steht aus.
 
 **Umsetzungsschritte**
 1. Datenelementweise Freigabe durch die Maintainer:in (inkl. Name, Zeitpunkt); klinisches Review (Nachsorge-WG, Allgemeinmedizin).

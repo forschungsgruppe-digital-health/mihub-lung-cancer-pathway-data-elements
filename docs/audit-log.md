@@ -633,7 +633,7 @@ Alle klinischen Pins sind aktuell (S3-LL Lungenkarzinom 5.1, Palliativmedizin 3.
 
 ### 16.3 oBDS 3.1.0
 
-XSD-Vergleich 3.0.5 ↔ 3.1.0: CTCAE-Version 6.0 (15.3), `Morphologie_ICD_O_4` (Histologie, Tumorzuordnung), Topographie-Version 40, `TNM_Typ` mit `LV`, `B` und UICC `IB3`; alle übrigen referenzierten Felder unverändert. 17 Elemente angepasst (Verweis auf XSD 3.1.0; inhaltliche Hinweise in `adverseEventCtcaeGrade`, `tumorHistology`, `tumorLocalisation`, `tnmStage`; offener Punkt in `adverseEventCtcae`).
+XSD-Vergleich 3.0.5 ↔ 3.1.0: CTCAE-Version 6.0 (15.3), `Morphologie_ICD_O_4` (Histologie, Tumorzuordnung), Topographie-Version 40, `TNM_Typ` mit `LV`, `B` und UICC `IB3`; alle übrigen referenzierten Felder unverändert. 18 Elemente mit oBDS-Mapping angepasst (Verweis auf XSD 3.1.0; inhaltliche Hinweise in `adverseEventCtcaeGrade`, `tumorHistology`, `tumorLocalisation`, `tnmStage`); zusätzlich offener Punkt in `adverseEventCtcae`.
 
 ### 16.4 Terminologie
 
@@ -650,7 +650,7 @@ XSD-Vergleich 3.0.5 ↔ 3.1.0: CTCAE-Version 6.0 (15.3), `Morphologie_ICD_O_4` (
 1. `screeningProgramEnrolment`/`followUpInterval`: Zugang zum LDCT-Screening nach fünf Jahren Nachsorge — KFE-RL § 38 Abs. 3 („Behandlung oder Nachbehandlung“ → kurative Versorgung) vs. S3 Empf. 16.7; Statusangabe im Element.
 2. `laboratoryPanelSurveillance`: ICI-spezifisches Monitoring (S3-LL Supportive Therapie Tab. 99) in die Definition aufnehmen oder als eigenes Element führen.
 3. `immunizationStatus`: therapiebedingte Besonderheiten (Lebendimpfungen, Impfzeitpunkt vor Immunsuppression) im Element oder in `recommendationsForPrimaryCare`/`riskFactorAndAlert`.
-4. Weiterhin offen aus §14.6: 126 `issues[]` im Katalog (Stand nach §16.7), verworfene Vorschläge der Zweitprüfung, `responsiblePrimaryCarePhysician` 0..1, Nur-Ballot-Profile, `dependsOn`-Semantik (vier Zyklen), Rolle der KDL-Codings in Code-Elementen (`complexityLevel`, `illnessPhase`, `palliativeCareTier`, `recistResponse`, `structuredFollowUpPlan`).
+4. Weiterhin offen aus §14.6: 125 `issues[]` im Katalog (Stand nach §16.8), verworfene Vorschläge der Zweitprüfung, `responsiblePrimaryCarePhysician` 0..1, Nur-Ballot-Profile, `dependsOn`-Semantik (vier Zyklen), Rolle der KDL-Codings in Code-Elementen (`complexityLevel`, `illnessPhase`, `palliativeCareTier`, `recistResponse`, `structuredFollowUpPlan`).
 
 **Terminologie und Standards**
 
@@ -730,6 +730,12 @@ Wortlaut der Reviewer-Kommentare (Word-Fassung der Phasen-Übersicht v0.1, Nachs
 **Auftrag der Maintainer:in (2026-11-26):** die Änderungen vom 2026-11-25 committen und als PR zur Review vorlegen. Für diesen Schritt gilt die ausdrückliche Anweisung anstelle der Regel „keine `git`-Operationen durch Agenten“ (AGENTS.md Nr. 6); gemergt wird nicht.
 
 - Branch `feat/source-check-2026-11-25`, abgezweigt von `feat/guideline-resync-terminology-primarycare` (PR #15, Stand `0b18f6f`).
-- Fünf Commits: Tooling (Issue-Formulare, Element-Vorlage, CI-Drift-Check, Skripte, Skills) · 30 Elemente · Audit-Log, Berichte und Glossar · Doku-Aufräumen · neu erzeugter Katalog.
+- Sechs Commits: Tooling (Issue-Formulare, Element-Vorlage, CI-Drift-Check, Skripte, Skills) · 30 Elemente · Audit-Log, Berichte und Glossar · Doku-Aufräumen · neu erzeugter Katalog · Korrekturen aus der Gegenprüfung (unten).
 - Draft-PR gegen `feat/guideline-resync-terminology-primarycare`, damit die Review nur die Änderungen dieses Prüflaufs zeigt; nach Freigabe fließen sie in PR #15 ein.
 - Vorab lokal geprüft: `validate.py` 112/112 OK, `build-catalog.py` ohne Drift, `validate-agent-skills.py` OK; Zitate der neuen Quellen 11/11 gefunden (die übrigen 328 Zitate ohne lokale Textfassung, in diesem Lauf nicht erneut geprüft); relative Links der geänderten Markdown-Dateien geprüft; Diff vor dem Push auf Personenbezug und Zugangsdaten geprüft.
+
+- **Gegenprüfung vor dem Push:** fünf unabhängige Prüfer (Commit-Nachrichten, PR-Text, Datenschutz und Zugangsdaten, inhaltliche Review-Risiken), deren Befunde je ein weiterer Prüfer zu widerlegen versuchte; 25 Befunde, davon 18 bestätigt, kein Datenschutzbefund. Commit-Nachrichten und PR-Text danach korrigiert (u. a. oBDS-Umstellung in 18 statt 17 Elementen).
+- **Korrekturen mit Freigabe der Maintainer:in (2026-11-26):** Zählung der oBDS-Umstellung 17 → 18 in §16.3, `docs/methodology.md` und im Prüfbericht (dort zusätzlich „12 weitere“ → 14 Elemente); KDL-Status in `docs/methodology.md` §2 und `AI_USAGE.md` §3; Hilfetext der Evidenzlevel in `scripts/_elicitation.py` (Erhebungsmappe neu erzeugt); Aufzählung der CodeSystems im Docstring von `scripts/build-fhir-logical-models.py`.
+- **`adverseEventCtcaeGrade`:** erledigten offenen Punkt zur `value_set.uri` entfernt (die URI wurde am 2026-11-25 umgestellt; im Schwester-Element `adverseEventCtcae` war der Hinweis schon entfernt); offene Punkte im Katalog 126 → 125 (README, Release-Notes, §16.6 Nr. 4, Umsetzungsvorschlag).
+- **`immuneRelatedAdverseEvent`:** Einstufung der erweiterten Definition („unter oder nach“ ICI-Therapie, offene Organliste) als nicht brechend bestätigt; Begründung im history-Eintrag 0.1.1 ergänzt. Die Regel im Umsetzungsvorschlag ist angeglichen: Minor-Sprung nur bei Verengung oder Umdeutung bereits erfasster Werte.
+- **GitHub-Labels** `data-element`, `element-feedback`, `klinik-spur`, `needs-triage` im Repo angelegt (Freigabe 2026-11-26). Die Issue-Formulare vergeben sie, sie existierten aber nicht; ohne `data-element` startete der Dubletten-Check (`.github/workflows/duplicate-check.yml`) bei Formular-Issues nie.

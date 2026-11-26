@@ -25,7 +25,7 @@
 > - **Ein neues Element vorschlagen:** Issue-Formular oder Excel-Vorlage, siehe [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 > - **Technisch mitarbeiten (YAML, Skripte, FHIR):** [`docs/howto-add-element.md`](./docs/howto-add-element.md).
 
-> 📊 **Reifegrad (Stand 2026-11-25):** 112 Datenelemente in vier Versorgungsphasen, **alle im Status `AuthorDraft` — noch nicht klinisch reviewt.** Maschinell geprüft sind Schema, Codes (MII TermServ), wörtliche Quellenzitate und Mapping-Ziele; die klinische Bewertung steht aus. Offene Fachfragen stehen je Element unter `issues` (126 im Katalog). Letzte Veröffentlichung: `v0.1.0-rc.2` (51 Elemente); `v0.2.0-rc.1` ist in Vorbereitung ([Release-Notes](./docs/releases/v0.2.0-rc.1.md)). **Noch nicht abgedeckt:** eigene Phasen für Früherkennung, Diagnostik/Staging und Primärtherapie; FHIR-Profile bzw. ein Implementation Guide (es gibt nur ein generiertes Logical Model).
+> 📊 **Reifegrad (Stand 2026-11-25):** 112 Datenelemente in vier Versorgungsphasen, **alle im Status `AuthorDraft` — noch nicht klinisch reviewt.** Maschinell geprüft sind Schema, Codes (MII TermServ), wörtliche Quellenzitate und Mapping-Ziele; die klinische Bewertung steht aus. Offene Fachfragen stehen je Element unter `issues` (125 im Katalog). Letzte Veröffentlichung: `v0.1.0-rc.2` (51 Elemente); `v0.2.0-rc.1` ist in Vorbereitung ([Release-Notes](./docs/releases/v0.2.0-rc.1.md)). **Noch nicht abgedeckt:** eigene Phasen für Früherkennung, Diagnostik/Staging und Primärtherapie; FHIR-Profile bzw. ein Implementation Guide (es gibt nur ein generiertes Logical Model).
 
 ---
 
