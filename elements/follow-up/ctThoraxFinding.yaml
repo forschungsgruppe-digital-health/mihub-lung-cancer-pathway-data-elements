@@ -59,11 +59,13 @@ standard_mappings:
     17.5 Tumorstatus Fernmetastasen, jeweils mit 17.1 Untersuchungsdatum Verlauf (XSD: Verlauf/Gesamtbeurteilung_Tumorstatus,
     Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen,
     Untersuchungsdatum_Verlauf)'
-  notes: 'Pflichtmeldung gem. § 65c SGB V. ''Tumorstatus_Lokoregionaeres'' existiert in oBDS 3.0.5 nicht.
-    Wertebereiche: 17.2 V, T, K, P, D, B, R, Y, U, X (Y = Rezidiv, U = Beurteilung unmöglich); 17.3 bis
-    17.5 K, T, P, N, R, F, U, X (R = Lokalrezidiv, neu aufgetretenes Lymphknotenrezidiv bzw. neue Fernmetastase).
-    Ein Zweitkarzinom ist kein Verlaufsstatus, sondern eine eigene Meldung mit Diagnose-Teil (eigene Tumorzuordnung).
-    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+  notes: 'Pflichtmeldung gem. § 65c SGB V. ''Tumorstatus_Lokoregionaeres'' existiert im oBDS nicht (XSD
+    3.0.5 und 3.1.0). Wertebereiche: 17.2 V, T, K, P, D, B, R, Y, U, X (Y = Rezidiv, U = Beurteilung unmöglich);
+    17.3 bis 17.5 K, T, P, N, R, F, U, X (R = Lokalrezidiv, neu aufgetretenes Lymphknotenrezidiv bzw.
+    neue Fernmetastase). Ein Zweitkarzinom ist kein Verlaufsstatus, sondern eine eigene Meldung mit Diagnose-Teil
+    (eigene Tumorzuordnung). Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd.
+    Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027):
+    diese Felder unverändert gegenüber 3.0.5.'
 - standard: mcode
   profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-cancer-disease-status
   resource: Observation (Profil CancerDiseaseStatus)
@@ -137,8 +139,10 @@ provenance:
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Befundkategorien neu geschnitten
       (lokoregionäres Rezidiv, Metastasierung, Zweitkarzinom, unklarer Befund). Zudem Leitlinien-Resync,
-      Terminologie- und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      Terminologie- und Mapping-Korrekturen; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -168,6 +172,12 @@ provenance:
     scope: evidence.guideline_references
     result: 1/1 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Werte für MII Bildgebung prüfen: DiagnosticReport.conclusionCode.coding:sct ist REQUIRED an Clinical
   findings (< 404684003) gebunden (MII_VS_Bildgebung_Findings_SCT); die SNOMED-CT-Werte des Elements müssen

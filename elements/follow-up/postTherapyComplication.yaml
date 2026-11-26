@@ -107,6 +107,18 @@ evidence:
       Therapie und den Bedarf an Psychoonkologie und Sozialberatung zu erkennen
     accessed: '2026-10-15'
     locator: Empf. 16.1 (EK, geprüft 2026, Starker Konsens), S. 492
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Kap. 11.11 Radiogene Pneumonitis (Hintergrundtext: subakute Pneumonitis und späte Lungenfibrose
+      als Strahlenreaktion der Lunge; Nachweis bevorzugt per CT/HRCT; Therapie Empf. 11.117–11.120, EK)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Klinisch manifestiert sich die Strahlenreaktion der Lunge subakut als Pneumonitis und/oder
+      in der Spätreaktion als Lungenfibrose. … Das bevorzugte bildgebende Verfahren zum Nachweis der radiogenen
+      Pneumonitis ist die Computertomographie (CT)
+    accessed: '2026-11-25'
+    locator: Kap. 11.11 Radiogene Pneumonitis, Hintergrundtext, S. 555
 iso13972_metadata:
   type: condition
   keywords:
@@ -142,8 +154,12 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1
+      – Kap. 11.11 Radiogene Pneumonitis, Hintergrundtext, S. 555; offener Punkt aus Reviewer-Kommentar
+      der Nachsorge-WG (2026-06-12) ergänzt'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -173,6 +189,14 @@ provenance:
     scope: evidence.guideline_references
     result: 5/5 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py); Reviewer-Kommentare der Nachsorge-WG
+      (Word-Fassung) abgeglichen, Texte von Entwurf und zwei Prüfern abgestimmt
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 2 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Der Wertebereich deckt die Definition nur teilweise ab. Für Haut-, Rückenmarks- und kardiale RT-Folgen
   sowie die OP-Komplikationen (Schmerz, Infektion, Lungenfunktionsverlust, Post-Pneumonektomie-Syndrom)
@@ -183,6 +207,18 @@ issues:
   Thorakotomie). Für das Post-Pneumonektomie-Syndrom fand die $expand-Textsuche kein SNOMED-Konzept (UNSICHER).
   Zusätzlich ist die Abgrenzung zu immuneRelatedAdverseEvent zu klären: S3-LL Lungenkarzinom 5.1, Kap.
   16.3 nennt „immun-bezogene Komplikationen“.'
+- 'Reviewer-Kommentar der Nachsorge-WG (Word-Fassung der Phasen-Übersicht, 2026-06-12; von der WG in die
+  Erhebungsmappe übernommen, docs/reviews/2026-10-13-erhebungen.md#wg-de-011; docs/audit-log.md §16.7):
+  „Für Hausarzt sehr allgemein. Komplikation zuordnen zu Operation/Chemo/Strahlentherapie. Wenn das überhaupt
+  möglich ist. Patient kommt mit Beratungsanlass Müdigkeit.“ Beratungsanlass und Diagnose decken in der
+  Hausarztpraxis reasonForEncounter und treatmentSideEffectOrComplication ab; die auslösende Therapie
+  je Eintrag fehlt dort wie hier. Die Definition gliedert nach OP- und RT/CTx-RTx-Folgen (S3-LL Lungenkarzinom
+  5.1, Kap. 16.3.1); die Codings nennen die Ursache nur bei Strahlenfolgen, nicht bei 205237003 (Pneumonitis)
+  und 709073001 (Neurocognitive disorder); dependsOn curativeTreatmentModality gilt nur auf Elementebene.
+  Zu entscheiden: (a) Teilangabe „auslösende Therapie“ (OP / Strahlentherapie / systemische Therapie /
+  mehrere / unklar) je Eintrag, einheitlich mit treatmentSideEffectOrComplication; (b) FHIR-Abbildung,
+  zu prüfen: Extension condition-dueTo → Procedure bzw. AdverseEvent.suspectEntity wie in adverseEventCtcaeGrade;
+  (c) keine Zuordnung, wenn sie nicht sicher möglich ist (z. B. Müdigkeit), Hinweis über reasonForEncounter.'
 related_elements:
 - relation: specializes
   target: mihub.lung.primarycare.treatmentSideEffectOrComplication.v0.1

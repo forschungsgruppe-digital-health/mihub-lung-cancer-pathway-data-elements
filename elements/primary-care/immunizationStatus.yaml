@@ -3,7 +3,7 @@ uuid: 24fe6203-fd48-526c-80ca-822d37016d78
 name: immunizationStatus
 label_de: Impfstatus
 definition_de: Impfstatus der Patient:in (Impfausweis/Impfhistorie), insbesondere Influenza-, Pneumokokken-,
-  COVID-19- und Herpes-zoster-Impfung bei onkologischen Patient:innen.
+  COVID-19-, Herpes-zoster- und RSV-Impfung bei onkologischen Patient:innen.
 phase: primarycare
 tumor_entity:
 - lung_cancer_any
@@ -97,6 +97,25 @@ evidence:
     accessed: '2026-10-15'
     locator: Onkopedia „Impfungen bei malignen Erkrankungen und Immunsuppression“ (Mai 2026), Kap. 6.1
       Solide Tumore, Tabelle 5
+  - source: andere
+    version: STIKO-Empfehlungen 2026, Epidemiologisches Bulletin 4/2026 (22.01.2026), Robert Koch-Institut
+    url: https://www.rki.de/DE/Aktuelles/Publikationen/Epidemiologisches-Bulletin/2026/04_26.pdf
+    section: 'Tab. 2 Indikationsimpfungen (I): Pneumokokken (PCV20) u. a. bei malignen neoplastischen
+      Krankheiten; COVID-19 u. a. bei maligner aktiver neoplastischer Krankheit; Herpes zoster (adjuvantierter
+      Totimpfstoff) ab 18 Jahren bei Immundefizienz, u. a. bei malignen neoplastischen Krankheiten und
+      zytostatischer Chemotherapie; RSV einmalig für 60- bis 74-Jährige mit schwerer Grunderkrankung (u.
+      a. hämato-onkologisch); Kap. 4.9 Impfen bei Immundefizienz (Anwendungshinweise Papier III: hämatologische
+      und onkologische Erkrankungen)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: 'Maligne neoplastische Krankheiten … Maligne aktive neoplastische Krankheiten … Personen ≥
+      18 Jahre mit erhöhter gesundheitlicher Gefährdung an Herpes zoster zu erkranken infolge einer angeborenen
+      bzw. erworbenen, insbesondere einer iatrogenen, Immundefizienz … Indikationsimpfung für Personen
+      im Alter von 60 bis 74 Jahren: Für Personen mit einer schweren Grunderkrankung … Daher sollten Menschen
+      mit Immundefizienz grundsätzlich einen möglichst weitreichenden Schutz durch Impfungen erhalten.'
+    accessed: '2026-11-25'
+    locator: Epid Bull 4/2026, Tab. 2 (COVID-19 S. 10, Herpes zoster S. 14, Pneumokokken S. 17); RSV S.
+      33; Kap. 4.9, S. 46
 iso13972_metadata:
   type: procedure
   keywords:
@@ -126,9 +145,13 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: Definition: RSV-Impfung ergänzt (STIKO
+      2026, Onkopedia Impfungen Tab. 5); Quelle ergänzt: STIKO-Empfehlungen 2026, Epidemiologisches Bulletin
+      4/2026 – Epid Bull 4/2026, Tab. 2 (COVID-19 S. 10, Herpes zoster S. 14, Pneumokokken S. 17); RSV
+      S. 33; Kap. 4.9, S. 46; offene Punkte: STIKO-Abgleich erledigt, Rest zusammengeführt'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -158,19 +181,23 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 3 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
-- S3-LL Lungenkarzinom 5.1 enthält keine Impfempfehlung (Kap. 12 verweist auf S3-LL Supportive Therapie);
-  Quelle STIKO/Onkopedia „Impfungen“ noch zu prüfen.
-- 'Stand 2026-10-14 zu den Impfempfehlungen: Die Onkopedia-Leitlinie „Impfungen bei malignen Erkrankungen
-  und Immunsuppression“ (DGHO/AGIHO, Stand Mai 2026; Webabruf 2026-10-14, außerhalb des kuratierten Quellkorpus,
-  UNSICHER) ist geprüft. Ihre Tab. 5 empfiehlt für Patient:innen mit soliden Tumoren u. a. Influenza-,
-  Pneumokokken-Konjugat-, COVID-19-, RSV- und rekombinante Zoster-Impfung (je SoR A, AGIHO/ESCMID-Skala).
-  Zur Entscheidung: (a) RSV in die Aufzählung in definition_de aufnehmen? (b) Therapiebedingte Besonderheiten
-  (z. B. Lebendimpfungen im Kontext der Tumortherapie nicht empfohlen, Onkopedia Kap. 2.1.1; Abweichungen
-  von den allgemeinen Impfempfehlungen zusammen mit dem Impfstatus darstellen, Klein et al. 2026, S. 96)
-  im Impfstatus oder als Hinweis in recommendationsForPrimaryCare bzw. riskFactorAndAlert führen? Offen
-  bleibt der Abgleich mit den aktuellen STIKO-Empfehlungen (Indikationsimpfungen bei Immundefizienz);
-  aus dem Issue zur fehlenden S3-Impfempfehlung ist damit nur noch dieser STIKO-Teil offen.'
+- 'Stand 2026-11-25 zu den Impfempfehlungen: Abgeglichen sind die Onkopedia-Leitlinie „Impfungen bei malignen
+  Erkrankungen und Immunsuppression“ (DGHO/AGIHO, Mai 2026, Tab. 5) und die STIKO-Empfehlungen 2026 (Epid
+  Bull 4/2026, Tab. 2 und Kap. 4.9; GKV-Umsetzung über die Schutzimpfungs-Richtlinie, zuletzt geändert
+  03.09.2026, in Kraft 29.10.2026). Die S3-LL Lungenkarzinom 5.1 enthält keine eigene Impfempfehlung (Kap.
+  12 verweist auf die S3-LL Supportive Therapie). RSV wurde in definition_de aufgenommen. Offen: Therapiebedingte
+  Besonderheiten (keine Lebendimpfungen im Kontext der Tumortherapie, Onkopedia Kap. 2.1.1; Impfzeitpunkt
+  rechtzeitig vor geplanter iatrogener Immunsuppression, STIKO Kap. 4.9; Abweichungen von den allgemeinen
+  Impfempfehlungen zusammen mit dem Impfstatus darstellen, Klein et al. 2026, S. 96) im Impfstatus oder
+  als Hinweis in recommendationsForPrimaryCare bzw. riskFactorAndAlert führen?'
 - 'Das Element ist als Impfstatus modelliert (CodeableConcept mit 304250009, 425457005, 87273-9, 105580-5,
   AM160102); das Impfpass-MIO dokumentiert dagegen einzelne Impfungen mit Impfstoffcode (SNOMED/ATC),
   Zielerkrankung und Datum. Zu entscheiden: den Impfstatus als aus Immunization-Einträgen abgeleitete

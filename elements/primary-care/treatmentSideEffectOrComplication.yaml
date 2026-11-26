@@ -94,6 +94,18 @@ evidence:
       and expected outcomes) … • potential long-term and late effects of treatment
     accessed: '2026-10-15'
     locator: Step 4.5.4, S. 41; Step 5.1, S. 43
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Empf. 13.2 (EK, neu 2025, Starker Konsens): Aufklärung über Zeichen und Symptome von irAE,
+      die während und auch nach Beendigung einer ICI-Behandlung auftreten können; niedrigschwellige Kommunikation'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Patient*innen, Angehörige und Pflegende sollen über Zeichen und Symptome von irAE, die jederzeit
+      während, aber auch nach Beendigung einer ICI-basierten Behandlung auftreten können, aufgeklärt und
+      für eine niedrigschwellige Kommunikation sensibilisiert werden.
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.1.2 Monitoring im Verlauf einer ICI-Behandlung, Empf. 13.2 (EK, neu 2025), S. 629
 iso13972_metadata:
   type: condition
   keywords:
@@ -123,9 +135,12 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: Quelle ergänzt: S3-LL Supportive Therapie
+      bei onkologischen PatientInnen 2.1 – Kap. 13.1.1.2 Monitoring im Verlauf einer ICI-Behandlung, Empf.
+      13.2 (EK, neu 2025), S. 629'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -155,6 +170,13 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Laut Erhebung (DE-018, DE-028) ist die Onkolog:in verantwortlich, in den data_flows ist sie aber nur
   lesend (kis/read) eingetragen. Klären und ggf. ergänzen: Erfassung durch die Onkolog:in (KIS, Übermittlung

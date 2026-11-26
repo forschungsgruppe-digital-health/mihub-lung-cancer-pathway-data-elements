@@ -27,7 +27,9 @@ standard_mappings:
   path: '12.1 Allgemeiner Leistungszustand (XSD: Verlauf/Allgemeiner_Leistungszustand bzw. Diagnose/Allgemeiner_Leistungszustand)'
   notes: 'Pflichtmeldung gem. § 65c SGB V; im XSD Pflichtfeld der Diagnose- und der Verlaufsmeldung. Allgemeiner_Leistungszustand_Typ:
     ECOG 0, 1, 2, 3, 4, U (unbekannt) oder Karnofsky 10% bis 100%. Feldseite 12.1: https://basisdatensatz.de/feld/189/allgemeiner-leistungszustand.
-    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+    Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd.
+    Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027):
+    diese Felder unverändert gegenüber 3.0.5.'
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-allgemeiner-leistungszustand-ecog
   resource: Observation
@@ -115,8 +117,10 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026) abgeglichen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -146,6 +150,12 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Abweichung vom MII-Profil mii-pr-onko-allgemeiner-leistungszustand-ecog (MII KDS Onkologie 2025.0.4,
   2026.0.3, 2027.0.0-ballot.1): Observation.value[x] ist dort CodeableConcept 1..1 mit required-Bindung
