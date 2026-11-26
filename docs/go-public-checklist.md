@@ -28,7 +28,7 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 ## 4. Community-Health & Discovery
 
 - [ ] `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/`, `PULL_REQUEST_TEMPLATE.md` vorhanden.
-- [ ] `README.md`: alle `<repo-name>`-Platzhalter durch `mihub-lung-cancer-pathway-data-elements`
+- [x] `README.md`: alle `<repo-name>`-Platzhalter durch `mihub-lung-cancer-pathway-data-elements`
       ersetzt; Disclaimer-/Lizenz-/Zitier-Verweise auflösbar.
 - [ ] Repo-Beschreibung + **Topics** gesetzt (`ai-assisted`, `fhir`, `oncology`, `lung-cancer`,
       `clinical-information-model`, `iso-13972`, `mihub`).
@@ -57,8 +57,8 @@ Releases entstehen reproduzierbar aus Conventional Commits (`feat`/`fix`/… →
 
 - [x] `release-please-config.json` + `.release-please-manifest.json` + `version.txt` (Release-Type
       `simple`, `prerelease: true`, `bump-minor-pre-major`). *Hinweis:* `version.txt` ist die
-      Versionsquelle; `CITATION.cff` (`version`/`date-released`) + README-DOI-Badge werden vorerst
-      **manuell in der Release-PR** mitgepflegt (kein `extra-files`-Automatismus, analog Pathway-Repo).
+      Versionsquelle; `CITATION.cff` `version` setzt release-please mit (`extra-files`); `date-released` und
+      der Versions-DOI in README/`CITATION.cff` werden **manuell in der Release-PR** nachgezogen.
 - [x] Workflow `.github/workflows/release-please.yml` (googleapis/release-please-action; Release-PRs
       gegen **`main`**, Entwicklung auf `dev`). ⚠ `ubuntu-latest` ist im privaten Zustand geblockt
       (siehe [`../RUNNERS.md`](../RUNNERS.md)); greift erst, wenn Commits `main` erreichen (dev→main).

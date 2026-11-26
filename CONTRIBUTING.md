@@ -19,6 +19,9 @@ landen am Ende als Pull Request auf dem `dev`-Branch und werden dort fachlich un
 | 🟡 **2. Excel-Vorlage** | Klinische Expert:innen, **viele** Elemente am Stück, auch offline / im Workshop | Excel/LibreOffice/Numbers | je nach Menge | eine ausgefüllte `.xlsx`-Mappe |
 | 🔵 **3. YAML + Pull Request** | Medizininformatiker:innen / technisch Versierte | Git, Editor, Python ≥ 3.10 | variabel | fertige YAML-Datei(en) + PR |
 
+> **Rückmeldung zu einem bestehenden Element** (Definition, Werte, Quelle, offener Punkt): Issue-Formular
+> „✏️ Änderung / Rückmeldung zu bestehendem Element“ — ebenfalls ohne Git/YAML.
+>
 > **Kein YAML, kein Git, keine Programmierung nötig für Weg 1 und 2.** Das MI-Team übernimmt die
 > technische Umsetzung (Codes, FHIR-Mappings) und bittet Sie am Ende, das Ergebnis inhaltlich zu
 > bestätigen. Es ist **keine Schande**, einen niederschwelligen Weg zu nutzen — sie sind genau
@@ -47,7 +50,8 @@ senden oder an ein Issue anhängen. Das MI-Team importiert sie automatisch
 → Ausführliche Schritt-für-Schritt-Anleitung in [`docs/howto-add-element.md`](docs/howto-add-element.md) (§B).
 
 ```bash
-cd data-elements
+git clone https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements
+cd mihub-lung-cancer-pathway-data-elements
 python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt                       # pyyaml + jsonschema (+ openpyxl für die Excel-Vorlage)
 
@@ -66,7 +70,8 @@ python scripts/verify-terminology.py --cert <crt> --key <key> <neu.yaml>   # opt
 - Alle Pflichtfelder (im CSV mit `*` markiert) müssen befüllt sein, bevor der PR gemergt wird.
 - **Dubletten vermeiden:** neue Kandidaten vor Aufnahme gegen den Bestand prüfen
   (`scripts/check-duplicates.py` bzw. Skill [`check-duplicate-data-element`](skills/check-duplicate-data-element/SKILL.md)).
-- Statuswechsel (`AuthorDraft → CommitteeDraft → ApprovedForProductionUse`) erfolgen je Element einzeln.
+- Statuswechsel (`AuthorDraft → CommitteeDraft → ApprovedForTesting → ApprovedForProductionUse`; alle Werte in
+  `GLOSSARY.md` §21) erfolgen je Element einzeln und nur im klinischen Review.
 - Versions-Bumps folgen SemVer (siehe `docs/howto-add-element.md` §C).
 - **Branching:** Beiträge gehen per Pull Request gegen **`dev`** (Integrations-/Review-Branch).
   **`main`** ist die Release-Branch — nicht direkt auf `main` pushen.

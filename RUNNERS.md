@@ -38,7 +38,7 @@ a fork can execute arbitrary code on the runner host. The public sibling
 ## What the jobs need (host prerequisites)
 
 This repo's workflows are minimal — `validate.yml`, `skill-lint.yml`, `duplicate-check.yml`,
-`citation-validate.yml`, `link-check.yml`. Python is installed **per job** by
+`citation-validate.yml`, `link-check.yml`, `release-please.yml`. Python is installed **per job** by
 `actions/setup-python`; the other tools (cff-validator, lychee) are pulled as actions. The host only
 needs the runner basics: **`git`, `bash`, `curl`, `tar`** (Linux x64). No Docker, no browser, no Java.
 

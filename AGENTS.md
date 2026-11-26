@@ -13,7 +13,7 @@ pfads (NSCLC/SCLC) im Projekt **MiHUB** (TU Dresden / Forschungsgruppe Digital H
 in den Use-Case-Arbeitspaketen AP6/AP7/AP8 mit Bezug zum BPMN-Pfad aus AP3
 ([`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway)).
 Befüllt: Nachsorge (`followup`), Surveillance, Palliativ, Hausärztliche Versorgung (`primarycare`) —
-**112 Datenelemente** (Stand 2026-10-13; aktuelle Zahl in `docs/phases-overview.md`).
+**112 Datenelemente** (Stand 2026-11-25; aktuelle Zahl in `docs/phases-overview.md`).
 
 ## Repository-Konventionen
 
@@ -84,7 +84,7 @@ Brücke): `python3 .github/scripts/validate-agent-skills.py` (CI: `.github/workf
 | `data-element-analyzer` | klinisch-inhaltlich (Quellen → Elemente) | `elements/`, `audit-log.md` |
 | `data-element-validator` | technische Konsistenz (valide, Codings, Sichten) | `elements/`, `catalog/`, `derived/`, `audit-log.md` |
 | `check-duplicate-data-element` | Eingangskontrolle (Dubletten vor Aufnahme) | `elements/_incoming/`, `audit-log.md` (read-only) |
-| `ai-usage-curator` | Werkzeug/Governance (KI-Disклosure) | `AI_USAGE.md`, `audit-log.md`, README-Badge |
+| `ai-usage-curator` | Werkzeug/Governance (KI-Disklosure) | `AI_USAGE.md`, `audit-log.md`, README-Badge |
 
 Die Skills rufen sich **nicht** gegenseitig auf; sie geben am Ende höchstens einen Hinweis aus
 (z. B. „Curator-Lauf empfehlenswert"). Die Entscheidung über Folgeläufe bleibt bei der Nutzer:in.

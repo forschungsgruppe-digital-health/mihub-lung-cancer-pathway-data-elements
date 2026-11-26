@@ -93,13 +93,13 @@ dann nach `elements/<phase>/` verschoben und wie in §B per PR auf `dev` eingebr
 ### Schritt B1 — Repository klonen + Python-Umgebung einrichten
 
 ```bash
-git clone <repo-url>
-cd data-elements
+git clone https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements
+cd mihub-lung-cancer-pathway-data-elements
 
 # einmaliges Setup einer isolierten Python-Umgebung (.venv ist gitignored)
 python3 -m venv .venv
 source .venv/bin/activate            # Windows: .venv\Scripts\activate
-pip install -r requirements.txt      # pyyaml + jsonschema
+pip install -r requirements.txt      # pyyaml + jsonschema (+ openpyxl für die Excel-Vorlage)
 ```
 
 Bei späteren Terminal-Sessions reicht `source .venv/bin/activate`.
@@ -127,7 +127,7 @@ Pflichtfelder (Schema `required`, im CSV mit `*` markiert):
 | Feld | Was eintragen |
 | --- | --- |
 | `id` | `mihub.lung.<phase>.<elementName>.v0.1` |
-| `uuid` | mit `uuidgen` neu erzeugen |
+| `uuid` | mit `uuidgen` neu erzeugen (Konvention; das Schema erzwingt das Feld nicht, `validate.py` prüft die Eindeutigkeit) |
 | `name` | technischer camelCase-Name (identisch mit Dateiname ohne `.yaml`) |
 | `label_de` | klinisch verständliche deutsche Bezeichnung |
 | `definition_de` | semantische Definition (1–3 Sätze) |
@@ -166,7 +166,8 @@ Ergebnis muss `OK` sein. Bei `FAIL` zeigt das Skript den Pfad und die Schema-Ver
 python scripts/build-catalog.py
 ```
 
-Aktualisiert `catalog/data-dictionary.csv` (25 Spalten). **Diese CSV gehört in den Commit** — die CI bricht sonst ab.
+Aktualisiert `catalog/data-dictionary.csv` (25 Spalten), den Markdown-Spiegel `catalog/data-dictionary.md` und
+`docs/phases-overview.md`. **Alle drei Dateien gehören in den Commit** — die CI bricht sonst ab.
 
 ### Schritt B6.5 — Dubletten prüfen
 
@@ -190,7 +191,7 @@ Bei Einstufung `DUBLETTE`/`NAH-DUBLETTE`: bestehendes Element verfeinern statt n
 ### Schritt B7 — Commit & Push & PR (gegen `dev`)
 
 ```bash
-git add elements/<phase>/<elementName>.yaml catalog/data-dictionary.csv
+git add elements/<phase>/<elementName>.yaml catalog/ docs/phases-overview.md
 git commit -m "feat(<phase>): add <elementName> (Quelle: <LL>)"
 git push -u origin feat/<phase>/<elementName>
 ```
@@ -225,16 +226,18 @@ stehen in `provenance.verification[]`. Beispiel: [`elements/surveillance/adverse
 
 ## D · Neue Versorgungsphase aufnehmen
 
-Wenn z. B. eine Phase „Rehabilitation" oder „Diagnostik" ergänzt werden soll, sind **acht Stellen** zu ändern (Beispiel: PR „Phase `primarycare`", 2026-10):
+Wenn z. B. eine Phase „Rehabilitation" oder „Diagnostik" ergänzt werden soll, sind **zehn Stellen** zu ändern (Beispiel: PR „Phase `primarycare`", 2026-10):
 
 1. `schemas/data-element.schema.json` — Enum `phase` ergänzen, ID-Pattern erweitern (ggf. `tumor_entity`).
-2. `elements/<neue-phase>/` Ordner anlegen (Ordnername mit Bindestrich, Enum-Wert ohne: `primary-care` ↔ `primarycare`).
+2. `elements/<neue-phase>/` Ordner anlegen (bei zusammengesetzten Namen Ordner mit Bindestrich, Enum-Wert ohne: `primary-care` ↔ `primarycare`).
 3. `scripts/build-catalog.py` — Phasenliste `phases` in `write_phases_overview()` (Ordner, Titel, Beschreibung) ergänzen; `docs/phases-overview.md` wird daraus generiert.
 4. `scripts/_elicitation.py` — `PHASE_LAYMEN` (Excel-Dropdown) ergänzen und `templates/datenelement-erhebung.xlsx` neu erzeugen.
 5. `.github/ISSUE_TEMPLATE/new-data-element.yml` — Phase-Dropdown ergänzen.
 6. `scripts/build-fhir-logical-models.py` — `PhasesCS` ergänzen (nur für die FSH-Ableitung).
 7. `.github/CODEOWNERS` — Reviewer:in für die neue Phase eintragen.
 8. `README.md`, `AGENTS.md`, `docs/methodology.md` §5 — Phasenlisten/Zähler aktualisieren.
+9. `scripts/validate.py` (`PHASE_DIRS`) und `scripts/build-fhir-logical-models.py` (`phase_dir`) — Zuordnung Ordner ↔ Enum-Wert ergänzen, wenn der Ordnername vom Enum-Wert abweicht (sonst meldet `validate.py` „Ordner passt nicht zu phase“).
+10. `schemas/TEMPLATE.element.yaml` — Phasenliste in `id` und `phase` ergänzen.
 
 Schritt 1 ist die einzige Stelle, an der das Schema selbst betroffen ist — daher ist eine Phasen-Erweiterung eine **Minor-Schema-Version** (alle alten YAMLs bleiben gültig).
 
