@@ -1,0 +1,71 @@
+name: "✏️ Änderung / Rückmeldung zu bestehendem Element"
+description: "Korrektur, Ergänzung oder Antwort auf einen offenen Punkt zu einem Datenelement, das es schon gibt — kein YAML, kein Git nötig."
+title: "[Änderung] <Element-Bezeichnung>"
+labels: ["element-feedback", "needs-triage", "klinik-spur"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Danke für Ihre Rückmeldung
+
+        Die Elemente finden Sie in der [Phasen-Übersicht](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/blob/main/docs/phases-overview.md);
+        offene Fachfragen stehen im jeweiligen Element unter `issues`. Das MI-Team setzt Ihre Rückmeldung um
+        und bittet Sie anschließend, das Ergebnis zu bestätigen.
+
+  - type: input
+    id: element
+    attributes:
+      label: Betroffenes Element
+      description: Bezeichnung oder technischer Name aus der Phasen-Übersicht (z. B. „Strukturierter Nachsorgeplan“ / structuredFollowUpPlan)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: aspect
+    attributes:
+      label: Was betrifft die Rückmeldung?
+      multiple: true
+      options:
+        - Definition / Bedeutung
+        - Wann und von wem erhoben (Auslöser, Rolle)
+        - Häufigkeit / Intervall
+        - Mögliche Werte / Codes
+        - Quelle / Leitlinienbezug
+        - Antwort auf einen offenen Punkt (issues)
+        - Element streichen oder mit anderem zusammenführen
+        - Sonstiges
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Was steht dort jetzt bzw. was ist das Problem?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Was schlagen Sie vor?
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Quelle (falls vorhanden)
+      description: Leitlinie mit Kapitel/Empfehlung, Publikation oder klinische Praxis
+      placeholder: "S3-LL Lungenkarzinom 5.1 (Juli 2026), Empf. 16.7"
+    validations:
+      required: false
+
+  - type: input
+    id: contact
+    attributes:
+      label: Rolle / Kontakt für Rückfragen (optional)
+      placeholder: "z. B. Fachärztin Pneumologie, Lungenkrebszentrum"
+    validations:
+      required: false

@@ -23,7 +23,7 @@ Du erhältst von der Nutzer:in eines oder mehrere Eingabedokumente (PDF, URL, Ma
 
 **3. Web-Recherche-Pflicht.** Vor Entscheidungsvorlage prüfst du den aktuellen Stand der referenzierten Standards und Leitlinien per `WebSearch` / `WebFetch` (S3-Leitlinien, Onkopedia, SNOMED-CT-Releases, LOINC-Releases, KDL-Versionen, MII-KDS-Modul-Updates, oBDS-Versionen, mCODE-STU-Stand, gematik-IG-Updates). Wenn neuere Versionen verfügbar sind, nimm dies in die Vorlage auf.
 
-**4. Neue Standards.** Wenn das Quelldokument einen Standard nutzt, der im `MiHUBStandardsCS` (`schemas/data-element.schema.json`, Enum `standard_mappings.standard`) noch nicht enthalten ist: Schlage die Aufnahme separat zur Element-Diskussion vor und hole dazu eine eigenständige Zustimmung ein. Nach Zustimmung: Veranlasse die Schema-Erweiterung (delegiert an Validator-Agent oder Direkt-Editor) und stoße eine systematische Re-Evaluation aller bestehenden Datenelemente auf Anwendbarkeit des neuen Standards an.
+**4. Neue Standards.** Wenn das Quelldokument einen Standard nutzt, der im Enum `standard_mappings.standard` (`schemas/data-element.schema.json`; im FSH-Export `StandardsCS`) noch nicht enthalten ist: Schlage die Aufnahme separat zur Element-Diskussion vor und hole dazu eine eigenständige Zustimmung ein. Nach Zustimmung: Veranlasse die Schema-Erweiterung (delegiert an Validator-Agent oder Direkt-Editor) und stoße eine systematische Re-Evaluation aller bestehenden Datenelemente auf Anwendbarkeit des neuen Standards an.
 
 **5. Audit-Pflicht.** Jede der Nutzer:in vorgelegte Entscheidung — angenommen, abgelehnt oder zurückgestellt — protokollierst du in `docs/audit-log.md` als neuen Eintrag mit:
 - Element-ID(s)

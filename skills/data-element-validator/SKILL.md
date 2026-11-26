@@ -17,7 +17,7 @@ Du erhältst von der Nutzer:in (oder vom `data-element-analyzer`) eine Liste neu
 
 a) **Schema-Validierung** — `python scripts/validate.py <pfad>` muss `OK` zurückliefern. Bei `FAIL`: melde den genauen Schema-Verstoß an die Nutzer:in und frage, ob (i) das YAML korrigiert oder (ii) das Schema angepasst werden soll. Keine eigenständige Schema-Änderung ohne Zustimmung.
 
-b) **Codings-Plausibilitätsprüfung** — Für jedes Coding (`value_set.codings[].system` + `.code`) prüfst du via `WebSearch` bzw. zugehörigem Terminologie-Browser (snomedbrowser.com, loinc.org, simplifier.net/kdl, basisdatensatz.de), ob Code und Display korrekt sind. Bei abweichendem Display: schlage Korrektur per `AskUserQuestion` vor (Optionen: `Display korrigieren auf "..."` / `Code austauschen` / `Beibehalten`). Bei `system: local-no-standard-binding`: keine Web-Prüfung, nur Konsistenz-Check der Konvention.
+b) **Codings-Plausibilitätsprüfung** — Für jedes Coding (`value_set.codings[].system` + `.code`) prüfst du primär mit `python scripts/verify-terminology.py --cert <crt> --key <key> <pfad>` gegen den MII TermServ (`$lookup`; Zertifikat der Nutzer:in, nie im Repo), ob Code und Display korrekt sind; für Systeme ohne Server-Abdeckung (ICF, MedDRA, derzeit KDL) ergänzend per `WebSearch` bzw. Terminologie-Browser (loinc.org, simplifier.net/kdl, basisdatensatz.de). Bei abweichendem Display: schlage Korrektur per `AskUserQuestion` vor (Optionen: `Display korrigieren auf "..."` / `Code austauschen` / `Beibehalten`). Bei `system: local-no-standard-binding`: keine Web-Prüfung, nur Konsistenz-Check der Konvention.
 
 c) **Konsistenz mit Bestand** — Pro Element prüfst du:
    - ID-Eindeutigkeit
@@ -34,7 +34,7 @@ d) **Versions-Pin-Check** — Wenn ein Datenelement eine Mapping- oder Quellen-R
 python scripts/build-catalog.py
 ```
 
-Damit wird `catalog/data-dictionary.csv` neu erzeugt. Bei Bedarf der Nutzer:in zusätzlich:
+Damit werden `catalog/data-dictionary.csv`, `catalog/data-dictionary.md` und `docs/phases-overview.md` neu erzeugt. Bei Bedarf der Nutzer:in zusätzlich:
 
 ```bash
 python scripts/build-fhir-logical-models.py
@@ -47,7 +47,7 @@ Vor jedem dieser Schritte holst du eine kurze Bestätigung über `AskUserQuestio
 **4. Audit-Pflicht.** Jeder Verifikations-Lauf endet mit einem neuen Eintrag in `docs/audit-log.md` unter dem Tabellenkopf:
 
 ```markdown
-## v0.1.x — Validator-Lauf <YYYY-MM-DD>
+## <nächste Abschnittsnummer> <Katalogversion> — Validator-Lauf <YYYY-MM-DD>
 
 | Element-ID | Schema | Codings | Konsistenz | Aktion |
 | --- | --- | --- | --- | --- |
@@ -58,7 +58,7 @@ Sowie ggf. einer Liste der Codings-Korrekturen mit Vorher/Nachher.
 
 **5. Doku-Konsistenz-Pflicht.** Vor Abschluss prüfst du:
 - Element-Zähler in `README.md`, `docs/methodology.md` §5, `docs/phases-overview.md` Eingangstext, `docs/audit-log.md` Header → entsprechen sie der neuen Anzahl in `elements/*/*.yaml`?
-- Phasen-Übersicht (`docs/phases-overview.md`) — bei Änderungen automatisch regenerieren (kleines Inline-Skript, siehe `scripts/build-catalog.py` als Vorlage; alternativ neuen Generator-Lauf vorschlagen).
+- Phasen-Übersicht (`docs/phases-overview.md`) — wird von `scripts/build-catalog.py` mit erzeugt; prüfen, dass sie nach dem letzten Element-Änderungslauf neu gebaut wurde.
 - Iterations-Log in `docs/methodology.md` §7 — neue Iteration eintragen (analog zu bestehenden Zeilen).
 - Alle gefundenen Inkonsistenzen führst du der Nutzer:in als `AskUserQuestion` mit `Korrigieren`/`Belassen` vor.
 
@@ -109,7 +109,7 @@ Sowie ggf. einer Liste der Codings-Korrekturen mit Vorher/Nachher.
 - Iterations-Log: aktualisiert
 
 ### Audit-Eintrag
-`docs/audit-log.md` — Sektion „v0.1.x — Validator-Lauf <YYYY-MM-DD>" angelegt.
+`docs/audit-log.md` — Sektion „<Nr.> <Katalogversion> — Validator-Lauf <YYYY-MM-DD>" angelegt.
 ```
 
 ## Verknüpfung mit `ai-usage-curator`

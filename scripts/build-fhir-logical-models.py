@@ -2,7 +2,7 @@
 """Generator: YAML-Datenelemente → FHIR Logical Model (FSH-Form).
 
 Projekt-agnostisch wiederverwendbar: das eingebettete Schema (BaseDataElement
-Logical Model + 10 generische CodeSystems/ValueSets) ist domänen-neutral
+Logical Model + 11 generische CodeSystems/ValueSets) ist domänen-neutral
 formuliert; nur die URL-Basis (`--namespace-base`) und der Logical-Model-Title
 (`--title`) sind projekt-spezifisch parametrisierbar.
 
@@ -10,7 +10,7 @@ Trennung Struktur / Inhalt:
   - STRUKTUR (im Skript embedded, reusable):
       Logical Model 'BaseDataElement' (EHDS-Pattern: kind=logical,
       Parent=Base, alle Felder als reguläre Sub-Elemente, KEINE Extensions);
-      10 CS/VS für Phase, Tumorentität, Datentypen, Binding-Status, Standards,
+      11 CS/VS für Phase, Tumorentität, Datentypen, Binding-Status, Standards,
       ISO 13972 Type, ISO 13972 Publication Status (8 Werte), Guideline Source,
       Recommendation Grade, Relation.
   - INHALT (aus elements/<phase>/*.yaml, projekt-spezifisch):
@@ -635,7 +635,7 @@ Dieser Ordner ist **autogeneriert** durch `scripts/build-fhir-logical-models.py`
 
 Single Source of Truth bleibt `elements/<phase>/*.yaml`.
 
-Hintergrund-Doku (archiviert): `MiHUB Patientenpfad/.archive/fhir-logical-model/`.
+Hintergrund: `docs/methodology.md` (§3.6, §7) und `python scripts/build-fhir-logical-models.py --help`.
 
 ## Struktur
 

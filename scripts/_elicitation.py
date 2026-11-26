@@ -164,7 +164,7 @@ ROLE_SUGGESTIONS: list[str] = [
     "Tumorboard / MDT", "Tumordokumentar:in", "Radiolog:in", "Patholog:in",
     "Patient:in (Selbsteinschätzung)",
 ]
-EVIDENCE_LEVELS: list[str] = ["1a", "1b", "2a", "2b", "3", "4", "n/a"]
+EVIDENCE_LEVELS: list[str] = ["1", "2", "3", "4", "5", "1a", "1b", "2a", "2b", "n/a"]
 
 # Dropdowns, die zusätzlich Freitext erlauben (Vorschlag statt Zwang).
 SUGGESTION_LISTS: set[str] = {
@@ -362,7 +362,7 @@ EXAMPLE_ELEMENT: dict[str, str] = {
     "guideline_source": "S3-LL Lungenkarzinom",
     "guideline_section": "Empf. 16.3",
     "recommendation_grade": "B",
-    "evidence_level": "2b",
+    "evidence_level": "3",
     "notes": "BEISPIELZEILE — wird beim Import ignoriert; bitte überschreiben oder löschen.",
     "contact": "",
 }

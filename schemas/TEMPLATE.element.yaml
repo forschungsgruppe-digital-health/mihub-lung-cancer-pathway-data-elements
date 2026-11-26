@@ -7,7 +7,7 @@
 # Tipp: Mit VS Code + 'YAML' Extension validiert die Zeile oben in Echtzeit.
 # =====================================================================
 
-id: mihub.lung.<followup|surveillance|palliative>.<element>.v0.1
+id: mihub.lung.<followup|surveillance|palliative|primarycare>.<element>.v0.1
 uuid: 00000000-0000-0000-0000-000000000000   # neu erzeugen (uuidgen)
 name: <camelCaseTechnicalName>
 label_de: <deutsche Anzeigebezeichnung>
@@ -15,10 +15,11 @@ label_en: <english display label>             # optional
 definition_de: |
   <klinisch-semantische Definition>
 
-phase: <followup | surveillance | palliative>
+phase: <followup | surveillance | palliative | primarycare>
 tumor_entity:                                  # 1..*; lung_cancer_any wenn unspezifisch
   - NSCLC
   - SCLC
+category: befund                               # optional; Werte siehe GLOSSARY.md §20
 
 datatype: <z. B. CodeableConcept | Quantity | code | dateTime | boolean>
 cardinality: 0..1                              # Pattern: [01*]..[1*]
@@ -28,7 +29,7 @@ value_set:                                     # ISO 13972 §6.6.5 / §6.6.8
   binding_strength: extensible                 # required | extensible | preferred | example
   standard_binding_status: mapped              # mapped | no-standard-found | pending-mapping | n/a
   uri: <FHIR ValueSet URL>                     # optional
-  notes: <falls no-standard-found: warum kein Standard, ggf. perspektivische Pfade>
+  notes: "<falls no-standard-found: warum kein Standard, ggf. perspektivische Pfade>"
   codings:
     - system: snomed-ct                        # bevorzugt internationale Standards
       code: "<SCTID>"
@@ -84,7 +85,7 @@ evidence:
       version: "5.1 (Juli 2026, AWMF 020-007OL)"
       section: <Kap./Empfehlungs-Nr./Tabelle>
       recommendation_grade: <A|B|0|EK|Statement|n/a>
-      evidence_level: <1a|1b|2b|3|4|n/a>
+      evidence_level: <wie in der Quelle, z. B. 1|2|3|4|5 (Oxford 2011) oder 1a|2b; n/a bei EK/ungraduiert>
       url: https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom
       quote: "<wörtliches Kurzzitat der Fundstelle, max. 600 Zeichen; Auslassungen mit …>"   # prüfbar mit scripts/verify-quotes.py
       accessed: 2026-10-15                     # Datum der Prüfung gegen die Quelle
@@ -96,12 +97,12 @@ iso13972_metadata:                             # ISO 13972 Tabelle 2 (mandatory 
     - Lungenkarzinom
     - Nachsorge
   authors:
-    - "MiHUB AP8 (TBD)"
-  endorsing_authority: "MiHUB Konsortium AP8"
+    - "<Autor:in bzw. Arbeitspaket, z. B. MiHUB AP8>"
+  endorsing_authority: "<verantwortliches Gremium, z. B. MiHUB Konsortium AP8>"
   version_number: "0.1.0"
   creation_date: 2026-05-04
   publication_status: AuthorDraft
-  publisher: "MiHUB Konsortium AP8"
+  publisher: "<z. B. MiHUB Konsortium AP8>"
   language: [de, en]
   license: CC-BY-4.0
 
