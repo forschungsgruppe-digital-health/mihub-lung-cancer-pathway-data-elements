@@ -41,8 +41,10 @@ standard_mappings:
   resource: 5 Diagnose (Meldung mit Tumorzuordnung)
   path: Tumorzuordnung/Primaertumor_ICD (Code, Version; 5.1, 5.2); Tumorzuordnung/Diagnosedatum (5.6);
     Diagnose/Primaertumor_Diagnosetext (5.3); Diagnose/Menge_Fruehere_Tumorerkrankung (5.9)
-  notes: Pflichtmeldung §65c SGB V. Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach
-    dem Schema https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
+  notes: 'Pflichtmeldung §65c SGB V. Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen
+    nach dem Schema https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd. Abgeglichen mit oBDS 3.1.0 (XSD vom
+    14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027): diese Felder unverändert
+    gegenüber 3.0.5.'
 - standard: kbv-mio
   profile_or_url: https://fhir.kbv.de/StructureDefinition/KBV_PR_MIO_NFD_Condition
   resource: Condition (MIO Patientenkurzakte 1.0.0, Notfalldaten)
@@ -149,9 +151,11 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -181,6 +185,12 @@ provenance:
     scope: evidence.guideline_references
     result: 4/4 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Das Diagnosedatum steht in definition_de, lässt sich mit datatype CodeableConcept aber nicht abbilden;
   ein eigenes Datumselement fehlt im Katalog. Entweder ein Teilelement anlegen (date, z. B. Feststellungs-/Erstdiagnosedatum;

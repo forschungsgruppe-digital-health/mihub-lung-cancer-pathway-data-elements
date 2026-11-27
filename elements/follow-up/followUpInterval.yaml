@@ -128,8 +128,11 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: offener Punkt: Querverweis KFE-RL § 38 Abs. 3; offener Punkt aus Reviewer-Kommentar
+      der Nachsorge-WG (2026-06-12) ergänzt'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -159,6 +162,13 @@ provenance:
     scope: evidence.guideline_references
     result: 4/4 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; Reviewer-Kommentare
+      der Nachsorge-WG (Word-Fassung) abgeglichen, Texte von Entwurf und zwei Prüfern abgestimmt
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 2 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'followUpInterval: Die Granularität vereinheitlichen. Entweder einen zusammengesetzten S3-Code „Q3M-Y1-Y2;Q6M-Y3-Y5“
   analog zu den Onkopedia-Gesamtrastern (und wie in followUpVisitDate.frequency_pattern) einführen, oder
@@ -168,6 +178,23 @@ issues:
   der zusätzlich zu einem Basisraster gilt (Onkopedia NSCLC Kap. 8.1: Verkürzung des Nachsorgeintervalls
   auf 6–8 Wochen bei Rezidiv oder Zweitkarzinom mit kurativem Potenzial) – ein weiteres Argument für 0..*
   bzw. FHIR Timing.'
+- 'Q12M-PostY5 („Überführung in ein LDCT-Früherkennungsprogramm“): Nach G-BA KFE-RL § 38 Abs. 3 (in Kraft
+  12.03.2026) werden Versicherte in Behandlung oder Nachbehandlung wegen Lungenkrebs kurativ versorgt,
+  nicht im GKV-Früherkennungsprogramm; ob das nach fünf Jahren Nachsorge noch gilt, ist offen (Details
+  und Quelle in screeningProgramEnrolment). Anzeigetext ggf. neutral fassen („jährliche LDCT nach Jahr
+  5“).'
+- 'Reviewer-Kommentar der Nachsorge-WG (Word-Fassung der Phasen-Übersicht, 2026-06-12; von der WG in die
+  Erhebungsmappe übernommen, docs/reviews/2026-10-13-erhebungen.md#wg-de-010; docs/audit-log.md §16.7):
+  „Flexibel gestalten. Zu Beginn der Nachsorge eher 1x wöchentlich oder monatlich. Später 1x jährlich“.
+  „Jährlich“ ist hinterlegt (Onkopedia NSCLC Tab. 12 und SCLC Tab. 9 ab Jahr 3, S3-LL dort halbjährlich;
+  ab Jahr 6 Q12M-PostY5). Abweichend ist der Beginn: S3-LL Lungenkarzinom 5.1, Empf. 16.7 (EK) sieht ab
+  der Erstvorstellung binnen 8 Wochen nach Therapieende in Jahr 1–2 vierteljährliche Termine vor; kürzer
+  ist im Element nur Q6-8W bei Rezidiv/Zweitkarzinom mit kurativem Potenzial (Onkopedia NSCLC Kap. 8.1).
+  Wöchentliche oder monatliche Termine belegen die hinterlegten Quellen nicht. Zu klären: Sind strukturierte
+  Nachsorgetermine (followUpVisitDate) gemeint oder andere Kontakte, z. B. in der Hausarztpraxis (plannedFollowUpAppointment)?
+  Zu entscheiden: (a) Leitlinienraster beibehalten, Kommentar begründet ablehnen; (b) individuell festgelegtes
+  Intervall mit Begründung zulassen (Darstellung siehe Punkt zur Granularität); (c) engmaschigere Kontakte
+  nur in followUpVisitDate bzw. plannedFollowUpAppointment erfassen.'
 related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.curativeRecurrencePotential.v0.1

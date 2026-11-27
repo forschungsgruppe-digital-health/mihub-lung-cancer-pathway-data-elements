@@ -26,8 +26,10 @@ standard_mappings:
   resource: 13 OP / 14 Strahlentherapie / 16 Systemische Therapie (jeweils Intention)
   path: 'OP/Intention (13.1: K, P, D, R, S, X); ST/Intention (14.1: K, P, O, S, X); SYST/Intention (16.1:
     K, P, S, X)'
-  notes: Die Wertebereiche unterscheiden sich je Abschnitt (oBDS_v3.0.5.xsd); die SNOMED-Codes des Elements
-    sind nicht direkt meldbar (Abbildung 373808002 → K, 363676003 → P).
+  notes: 'Die Wertebereiche unterscheiden sich je Abschnitt (oBDS_v3.1.0.xsd); die SNOMED-Codes des Elements
+    sind nicht direkt meldbar (Abbildung 373808002 → K, 363676003 → P). Abgeglichen mit oBDS 3.1.0 (XSD
+    vom 14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027): diese Felder unverändert
+    gegenüber 3.0.5.'
 - standard: mcode
   profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-procedure-intent
   resource: Extension (Kontext u. a. Procedure, MedicationRequest, MedicationAdministration, ServiceRequest)
@@ -129,9 +131,11 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -161,6 +165,12 @@ provenance:
     scope: evidence.guideline_references
     result: 4/4 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Die Intention wird je Ziel unterschiedlich kodiert: oBDS mit Buchstabencodes je Abschnitt (OP K/P/D/R/S/X,
   ST K/P/O/S/X, SYST K/P/S/X), MII Onko über Procedure.extension:Intention (REQUIRED, dieselben oBDS-Codes;

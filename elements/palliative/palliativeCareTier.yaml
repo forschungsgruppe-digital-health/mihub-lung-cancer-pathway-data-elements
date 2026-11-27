@@ -18,7 +18,11 @@ value_set:
   notes: 'Versorgungsstufen-Konzept der deutschen S3-LL Palliativmedizin (PBP / APV / SPV). SNOMED CT
     International hat keine deckungsgleichen Codes; die DACH-spezifische Strukturierung der Palliativversorgung
     ist nicht international standardisiert. Mögliche Standardisierungspfade: SNOMED-CT-DE-Edition (BfArM),
-    nationaler Refset, oder Aufnahme in Onkopedia-/AWMF-Strukturierung als kontrolliertes Vokabular.'
+    nationaler Refset, oder Aufnahme in Onkopedia-/AWMF-Strukturierung als kontrolliertes Vokabular. Teilentsprechungen
+    (MII TermServ 2026-11-25, SNOMED CT 20260701, aktiv; nicht deckungsgleich, daher nicht als Werte übernommen):
+    SPV ≈ 395669003 „Specialist palliative care treatment“, ambulante SPV (SAPV) ≈ 395086005 „Community
+    specialist palliative care“; für PBP/APV nur das generische 103735009 „Palliative care“ (deutsche
+    Bezeichnung in der SNOMED CT Germany Edition 20261115: „Palliative Versorgung“).'
   codings:
   - system: local-no-standard-binding
     code: PBP
@@ -105,8 +109,10 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: Hinweis: SNOMED-Teilentsprechungen für SPV/SAPV'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -136,6 +142,12 @@ provenance:
     scope: evidence.guideline_references
     result: 2/2 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - ICD-10-GM Z51.5 'Palliativbehandlung' (Z51 'Sonstige medizinische Behandlung', Gruppe Z40–Z54) ist ein
   stufenunabhängiger Behandlungsanlass-Code und weder das Elementkonzept 'Versorgungsstufe' noch einer

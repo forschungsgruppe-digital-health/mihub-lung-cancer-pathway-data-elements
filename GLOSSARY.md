@@ -9,7 +9,7 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 - **Beschreibung** — Kontext, Wertebereich, ggf. Cut-off, klinische Relevanz
 - **Quelle** — Verlinkung zur Primärquelle bzw. Standard
 
-**Verifikations-Hinweis (siehe §18):** Alphanumerische Codes (SNOMED-IDs, LOINC-Nummern, ICD-O-3-Codes) sollten gegen Terminologie-Server validiert werden — die hier angegebenen Codes sind plausibel, aber nicht durchgehend Server-verifiziert.
+**Verifikations-Hinweis (siehe §18):** Alphanumerische Codes (SNOMED-IDs, LOINC-Nummern, ICD-O-3-Codes) sollten gegen Terminologie-Server validiert werden — die Codings der Datenelemente selbst sind gegen den MII TermServ geprüft (Ausnahmen und Stand in §18); Codes in diesem Glossar dienen der Erläuterung.
 
 > **Pflege-Verantwortung:** Der `data-element-analyzer`-Sub-Agent (siehe `AGENTS.md`) prüft bei jedem Lauf, ob neue Begriffe in den YAMLs auftauchen, und schlägt Erweiterungen vor.
 
@@ -26,6 +26,7 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 | **VLD** | Very Limited Disease | SCLC T1–2 N0–1 M0 (kuratives Setup, ggf. inkl. Operation) | S3-LL Lungenkarzinom v5.1 Kap. 9.4 |
 | **OMD** | Oligometastatic Disease | Begrenzte Anzahl Fernmetastasen, oft lokal-ablativ behandelbar | ESMO/ESTRO/EORTC Konsens 2020 (Lancet Oncol 21:e18–e28) |
 | **TNM** | Tumor – Node – Metastasis | UICC-Klassifikation des Tumorstadiums; aktuell 9. Auflage 2024 | IASLC Staging Project; UICC TNM 9th ed. (2024) |
+| **LV** | Lymphvaskuläre Invasion | Zusatzangabe zur TNM-Klassifikation (LVX nicht beurteilbar, LV0 keine, LV1 vorhanden); im oBDS ab XML-Schema 3.1.0 als eigenes Feld `LV` in `TNM_Typ` (neben L und V) | oBDS-XML-Schema 3.1.0 (14.10.2026) |
 | **R0/R1/R2** | Residualtumor-Klassifikation | R0 = mikroskopisch tumorfrei; R1 = mikroskopisch positiv; R2 = makroskopisch positiv | UICC TNM Supplement |
 | **C34.x** | ICD-10-GM Topographie Lungentumor | C34.0 Hauptbronchus, C34.1 Oberlappen, C34.2 Mittellappen, C34.3 Unterlappen, C34.8 Übergreifend, C34.9 n.n.b. | BfArM ICD-10-GM 2026 |
 
@@ -137,6 +138,7 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 | **ctDNA** | circulating tumor DNA | Liquid Biopsy aus Plasma; Resistenz-Monitoring, Mutations-Tracking | Onkopedia NSCLC Kap. 8.2; LOINC 84141-0 |
 | **HGVS** | Human Genome Variation Society Nomenclature | Standardisierte Variant-Notation (z. B. `c.2369C>T (p.Thr790Met)`) | varnomen.hgvs.org |
 | **ICD-O-3** | International Classification of Diseases for Oncology, 3rd Edition | M-Codes (Histologie, 8000–9999) und T-Codes (Topographie); BfArM publiziert deutsche Edition | WHO/IARC ICD-O-3.2 (2019); BfArM; OID `urn:oid:2.16.840.1.113883.6.43.1` |
+| **ICD-O-4** | International Classification of Diseases for Oncology, 4th Edition | Nachfolger der ICD-O-3; im oBDS ab XML-Schema 3.1.0 als `Morphologie_ICD_O_4` (Version 40 = ICD-O-4 2026; b6 = neue Codes der WHO-Klassifikationen, 6. Auflage) und als Topographie-Version 40 vorgesehen; Meldungen erst nach einer bundesweit abgestimmten deutschen Übersetzung (Termin offen) | oBDS-XML-Schema 3.1.0; Plattform § 65c |
 
 ## 9 Bildgebung & Funktionsdiagnostik
 
@@ -146,6 +148,7 @@ Strukturierte Auflistung der medizinischen Terminologie, Akronyme, Klassifikatio
 | **MRT / MRI** | Magnetresonanztomographie | Schnittbildverfahren ohne ionisierende Strahlung | LOINC 24590-2 (MR Brain); OPS 3-820 |
 | **PET-CT** | Positronen-Emissions-Tomographie + CT | Hybrid-Bildgebung mit ¹⁸F-FDG; Stoffwechselaktivität + Anatomie | Onkopedia NSCLC Kap. 5 |
 | **LDCT** | Low-Dose-CT | Strahlenarmes CT; Lungenkarzinom-Screening (NLST, NELSON) | de Koning HJ et al. NEJM 382:503 (2020) |
+| **NDCT** | Niedrigdosis-Computertomographie | Begriff der KFE-RL und der LuKrFrühErkV für das LDCT-Lungenkrebs-Screening | G-BA KFE-RL Abschnitt D III; LuKrFrühErkV |
 | **DICOM** | Digital Imaging and Communications in Medicine | Standard für Bilddaten und Bildbefunde | dicomstandard.org |
 | **DICOM SR** | DICOM Structured Report | Strukturierter Bildbefund-Container | DICOM PS3.3 Annex A.35 |
 | **FEV1** | Forciertes exspiratorisches Volumen in 1 Sekunde | Spirometrie-Hauptparameter; relevant für Operabilität, COPD-Diagnose, Pneumonitis-Verlauf | LOINC 20150-9; SNOMED 59328004 |
@@ -196,6 +199,9 @@ Diese Codes sind als `local-no-standard-binding` markiert (kein etabliertes Valu
 | `per-cycle` | pro Therapiezyklus | Systemtherapie | projekt-spezifisch |
 | `per-event` | pro Ereignis | Toxizität (AE/CTCAE) | projekt-spezifisch |
 | `once` / `once-per-treatment-completion` / `once-per-transition` | einmalig | Pläne, Übergaben | projekt-spezifisch |
+| `once-then-ongoing` | einmalig erfassen, danach fortlaufend aktualisieren | Stammdaten mit Änderungen | projekt-spezifisch |
+| `per-update` | bei jeder Aktualisierung der Quelle (z. B. neuer Medikationsplan) | Dokumente, Pläne | projekt-spezifisch |
+| `per-encounter-if-indicated` | bei Kontakten, sofern klinisch angezeigt | bedarfsabhängige Erhebung | projekt-spezifisch |
 | `weekly` | wöchentlich | Web-PROM (Denis 2017) | Onkopedia NSCLC Kap. 8.2 |
 | `Q1M in SPV` | monatlich in spezialisierter Palliativversorgung | Caregiver-Burden-Verlauf | S3-LL Palliativ v3.0 Kap. 7.4 |
 | `ad-hoc` | bei Bedarf | situativ | projekt-spezifisch |
@@ -218,7 +224,7 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
 | --- | --- | --- | --- |
-| **oBDS** | Onkologischer Basisdatensatz | DE Krebsregister-Pflichtmeldung; aktuelle Version 3.0 (03/2022); Plattform §65c SGB V | basisdatensatz.de; §65c SGB V |
+| **oBDS** | Onkologischer Basisdatensatz | DE Krebsregister-Pflichtmeldung (Plattform §65c SGB V); Feldliste BAnz 12.07.2021; XML-Schema 3.1.0 vom 14.10.2026 (Annahme durch die Landeskrebsregister ab 01.04.2027) ergänzt ICD-O-4, TNM-9-Werte (LV) und CTCAE 6.0, bis dahin 3.0.5 | basisdatensatz.de; §65c SGB V |
 | **GEKID / ADT** | GEKID = Gesellschaft der epidemiologischen Krebsregister; ADT = Arbeitsgemeinschaft Deutscher Tumorzentren | Vorgänger und Träger des oBDS | gekid.de |
 | **MII** | Medizininformatik-Initiative | BMBF-gefördertes Konsortium der Universitätskliniken | medizininformatik-initiative.de |
 | **MII KDS** | MII Kerndatensatz | Module Person, Diagnose, Prozedur, Labor, Medikation, Bildgebung, Onkologie u. a. | medizininformatik-initiative.de |
@@ -226,10 +232,11 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | **DSF** | Dezentrale Systemföderation | MII Datenintegrations-Pattern (HiGHmed/MIRACUM/SMITH/DIFUTURE) | dsf.dev |
 | **gematik ePA** | gematik elektronische Patientenakte (für alle) | DE gesetzliche ePA-Plattform; verpflichtend seit 01/2025 | fachportal.gematik.de |
 | **eRezept** | gematik elektronisches Rezept | DE gesetzliche elektronische Verordnung | gematik.de |
-| **ISiK** | Informationstechnische Systeme im Krankenhaus | gematik FHIR-IGs für KIS/AIS-Primärsysteme; Stufen 1–4 | gematik.de/isik |
+| **ISiK** | Informationstechnische Systeme im Krankenhaus | gematik FHIR-IGs für KIS/AIS-Primärsysteme; Mapping-Prüfung gegen Paket `de.gematik.isik` 6.0.0 | gematik.de/isik |
 | **KBV MIO** | KBV Medizinisches Informationsobjekt | DE ePA-Module (Patientenkurzakte, Impfpass, Mutterpass, ZahnBonusheft u. a.) | mio.kbv.de |
-| **KDL** | Klinische Dokumentenklassen-Liste (DVMD) | DE-Standard-Klassifikation für klinische Dokumente; verbindlich seit 01.01.2024; OID `urn:oid:1.2.276.0.76.5.451` | DVMD; gemspec.gematik.de/ig/fhir/terminology |
+| **KDL** | Klinische Dokumentenklassen-Liste (DVMD) | DE-Standard-Klassifikation für klinische Dokumente; verbindlich seit 01.01.2024; OID `urn:oid:1.2.276.0.76.5.451`; auf dem MII TermServ seit 11/2026 nicht mehr abrufbar (Stand 2026-11-25) | DVMD; gemspec.gematik.de/ig/fhir/terminology |
 | **mCODE** | minimal Common Oncology Data Elements | HL7 FHIR Onkologie IG; aktuell STU4 (~40 Profile in 6 Bereichen) | hl7.org/fhir/us/mcode/ |
+| **SNOMED CT Germany Edition** | Nationale Edition von SNOMED CT für Deutschland (Modul 11000274103) | auf dem MII TermServ als Version 20261115; enthält für einen Teil der Konzepte deutsche Bezeichnungen (z. B. 103735009 „Palliative Versorgung“). Der Katalog referenziert die International Edition 20260701; alle Codes sind auch in der Germany Edition aktiv (Prüfung 2026-11-25) | BfArM (National Release Center); MII TermServ |
 | **OMOP CDM** | Observational Medical Outcomes Partnership Common Data Model | OHDSI; international Versorgungsforschung; mit Onkologie-Extension | ohdsi.github.io/CommonDataModel/ |
 | **CDISC SDTM** | Clinical Data Interchange Standards Consortium · Study Data Tabulation Model | Klinische Studien; Regulatorik (FDA, EMA) | cdisc.org/standards/foundational/sdtm |
 | **HL7 V2** | HL7 Messaging V2 | Legacy ADT, Labor, DALE-UV | hl7.org/v2 |
@@ -282,6 +289,8 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | **4** | Case Series / poor cohort / case-control | Fallserien / qualitativ schwache Studien | Oxford CEBM |
 | **5** | Expert Opinion | Expertenmeinung | Oxford CEBM |
 
+**Weitere Skalen im Katalog:** Neuere S3-Leitlinien (Lungenkarzinom 5.x, Supportive Therapie 2.x) graduieren nach Oxford CEBM 2011 mit Ziffern **1–5** ohne a/b. Einzelne Quellen nutzen andere Skalen: SIGN (**1++/1+/1−** … **4**), GRADE (**⊕⊕⊕⊕** hoch … **⊕◯◯◯** sehr niedrig) und die AGIHO/ESCMID-Skala (**I, II** mit Zusätzen wie u, r, h, t; **III**). `n/a` bedeutet: Die Quelle graduiert nicht (z. B. Onkopedia, OCP, Erhebungen) oder es handelt sich um eine Konsensempfehlung (EK) ohne Evidenzlevel. Im Katalog steht immer die Angabe der Quelle.
+
 ## 17 ePA / DSF / DiGA / Versorgungs-Akronyme (DE)
 
 | Akronym | Bedeutung | Beschreibung | Quelle |
@@ -298,6 +307,11 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | **DKH** | Deutsche Krebshilfe (Stiftung) | Förderorganisation; Co-Träger Leitlinienprogramm | krebshilfe.de |
 | **AWMF** | Arbeitsgemeinschaft der Wissenschaftlichen Medizinischen Fachgesellschaften | Dachverband; Leitlinien-Register | awmf.org |
 | **DGHO** | Deutsche Gesellschaft für Hämatologie und Medizinische Onkologie | Wiss. Fachgesellschaft; Träger Onkopedia | dgho.de; onkopedia.com |
+| **G-BA** | Gemeinsamer Bundesausschuss | Beschlussgremium der gemeinsamen Selbstverwaltung; konkretisiert den GKV-Leistungsanspruch in Richtlinien (z. B. KFE-RL, SI-RL, SAPV-RL) | g-ba.de |
+| **KFE-RL** | Krebsfrüherkennungs-Richtlinie des G-BA | regelt die GKV-Krebsfrüherkennung; Abschnitt D III (§§ 37–46, in Kraft seit 05.09.2025) die Lungenkrebsfrüherkennung mittels NDCT für 50- bis 75-Jährige mit starkem Zigarettenkonsum (GKV-Leistung seit April 2026); § 38 Abs. 3: Personen in Behandlung oder Nachbehandlung wegen Lungenkrebs werden kurativ versorgt | g-ba.de/richtlinien/17/ |
+| **LuKrFrühErkV** | Lungenkrebs-Früherkennungs-Verordnung (2024) | strahlenschutzrechtliche Zulässigkeit der NDCT-Früherkennung bei rauchenden Personen (Alter, Zigarettenkonsum, medizinisches Eignungsprofil, Qualitätsanforderungen); Grundlage der KFE-RL | BGBl. 2024 I Nr. 162 |
+| **STIKO** | Ständige Impfkommission am Robert Koch-Institut | gibt jährlich Impfempfehlungen heraus (2026: Epid Bull 4/2026), inkl. Indikationsimpfungen bei Immundefizienz und malignen Erkrankungen | rki.de/stiko |
+| **SI-RL** | Schutzimpfungs-Richtlinie des G-BA | setzt die STIKO-Empfehlungen in den GKV-Leistungsanspruch um; zuletzt geändert 03.09.2026, in Kraft 29.10.2026 | g-ba.de/richtlinien/60/ |
 
 ## 18 Verifikations-Status
 
@@ -308,13 +322,14 @@ Australian Palliative Care Phases — übernommen in S3-LL Palliativmedizin Kap.
 | Score-Bereiche (PHQ-9, HADS, Zarit, NRS, EORTC, ECOG, Karnofsky) | ✓ stichprobenartig verifiziert | Zarit per Web-Lookup bestätigt; übrige aus Primärpublikation |
 | RECIST 1.1 (CR/PR/SD/PD/NE) | ✓ verifiziert | Eisenhauer 2009 |
 | CTCAE-Grade 1–5 | ✓ verifiziert | NCI-Standard |
-| LL-Empfehlungs-Verweise (S3-LL Lung v5.1 Juli 2026, Onkopedia NSCLC April 2025 / SCLC August 2026, S3-LL Palliativ v3.0, OCP, AG LONKO, Klein 2026, S3-LL Tabak 3.1) | ✓ verifiziert (2026-10-13; Zweitprüfung aller Elemente 2026-10-14) | Leitlinien-Abgleiche in `docs/reviews/2026-10-13-leitlinien-abgleich/`; Erratum zu den Empfehlungsgraden in `audit-log.md` §13.1 |
-| SNOMED-CT-IDs | ✓ verifiziert (2026-10-13; erneut 2026-10-14/15) | alle Codings per `$lookup` gegen den MII TermServ (SNOMED CT 20260701) — `docs/reviews/2026-10-13-terminologie-verifikation.md`; Anzeigetexte = Server-Displays |
-| LOINC-, ICD-10-GM-, OPS-, ATC-, KDL-, ICD-O-3-Codes | ✓ verifiziert (2026-10-13) | MII TermServ (LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3); Instrumente ohne Code (Distress-Thermometer, Zarit, AKPS, Atemnot-NRS) als `pending-mapping` markiert |
+| LL-Empfehlungs-Verweise (S3-LL Lung v5.1 Juli 2026, Onkopedia NSCLC April 2025 / SCLC August 2026, S3-LL Palliativ v3.0, OCP, AG LONKO, Klein 2026, S3-LL Tabak 3.1; seit 2026-11-25 auch S3-LL Supportive Therapie 2.1, G-BA KFE-RL, STIKO 2026) | ✓ verifiziert (2026-10-13; Zweitprüfung aller Elemente 2026-10-14; Aktualität aller Quellen erneut geprüft 2026-11-25) | Leitlinien-Abgleiche in `docs/reviews/2026-10-13-leitlinien-abgleich/`; Erratum zu den Empfehlungsgraden in `audit-log.md` §13.1 |
+| SNOMED-CT-IDs | ✓ verifiziert (2026-10-13; erneut 2026-10-14/15 und 2026-11-25) | alle Codings per `$lookup` gegen den MII TermServ (SNOMED CT 20260701; 2026-11-25 zusätzlich alle aktiv in der Germany Edition 20261115) — `docs/reviews/2026-10-13-terminologie-verifikation.md`; Anzeigetexte = Server-Displays |
+| LOINC-, ICD-10-GM-, OPS-, ATC-, ICD-O-3-Codes | ✓ verifiziert (2026-10-13; erneut 2026-11-25) | MII TermServ (LOINC 2.83, ICD-10-GM/OPS/ATC 2026, ICD-O-3; ICD-10-GM 2026 gilt laut BfArM voraussichtlich bis Ende 2028); Instrumente ohne Code (Distress-Thermometer, Zarit, AKPS, Atemnot-NRS) als `pending-mapping` markiert |
+| KDL-Codes | ⚠ derzeit nicht verifizierbar | 2026-10-13/15 am MII TermServ verifiziert; seit 11/2026 ist die KDL dort nicht mehr abrufbar (Stand 2026-11-25, `docs/audit-log.md` §16) |
 | ICF- und MedDRA-Codes | ⚠ nicht verifizierbar | Codesysteme nicht auf dem MII TermServ (Stand 2026-10-15); ICF gemäß ICF-Browser; MedDRA gegen das MII-ValueSet `mii-vs-onko-nebenwirkung-art` (CTCAE v4.03) geprüft |
 | Genetische Marker / Drug-Indications | ✓ aus Onkopedia/NEJM-Primärquellen | Stand der aktuellen Onkologie-Leitfäden |
 | Frequenz-Code-Pattern | ✓ projekt-eigene Konvention | dokumentiert in §11 |
-| Standard-Mapping-Ziele (`standard_mappings`) | ✓ verifiziert (2026-10-14/15) | alle FHIR-Canonicals als StructureDefinition-`url` in den publizierten Paketen (MII KDS, ISiK, KBV, gematik, mCODE, Genomics Reporting); oBDS gegen Feldliste und XSD 3.0.5 — `docs/reviews/2026-10-14-zweitpruefung.md` |
+| Standard-Mapping-Ziele (`standard_mappings`) | ✓ verifiziert (2026-10-14/15) | alle FHIR-Canonicals als StructureDefinition-`url` in den publizierten Paketen (MII KDS, ISiK, KBV, gematik, mCODE, Genomics Reporting); oBDS gegen Feldliste und XSD 3.0.5, 2026-11-25 mit XSD 3.1.0 abgeglichen — `docs/reviews/2026-10-14-zweitpruefung.md`, `docs/audit-log.md` §16 |
 
 **Bei Aktualisierungen:** Der `data-element-validator`-Sub-Agent prüft pro Lauf, ob die hier aufgeführten LL-/Standard-Versionen noch aktuell sind, und schlägt Updates vor.
 
@@ -327,7 +342,7 @@ Einträge je Element möglich (ISO 13940 ContSys / HL7 HSRA Care Coordination).
 
 | Code | Bedeutung |
 | --- | --- |
-| `pvs` | Primärverwaltungssystem / Praxisverwaltungssystem (ambulant) |
+| `pvs` | Praxisverwaltungssystem (ambulant) |
 | `kis` | Krankenhausinformationssystem (KIS/AIS) |
 | `tumordokumentation` | Tumordokumentationssystem (z. B. Onkostar, GTDS, CREDOS) |
 | `krebsregister` | Klinisches/Epidemiologisches Krebsregister (oBDS §65c) |
@@ -373,6 +388,28 @@ Optionale Sortier-/Review-Hilfe je Datenelement (Taxonomie der Nachsorge-WG, Exc
 | `versorgungskontext` | Versorgungskontext | Versorgungsstufe, Phase, Status |
 | `stammdaten` | Stammdaten | Identität, Geburtsjahr, Geschlecht, Kontakt |
 | `administrativ` | Administrativ | administrative Angabe (Überweisung, AU, Kontakte) |
+
+## 21 Lesehilfe Katalogfelder — Publikationsstatus, Bindung, Kardinalität
+
+**`publication_status`** (Reifegrad je Element; ISO 13606-2; Statuswechsel nur im klinischen Review, nie durch KI):
+
+| Wert | Bedeutung |
+| --- | --- |
+| `AuthorDraft` | Entwurf der Autor:innen, noch nicht klinisch reviewt (derzeit alle Elemente) |
+| `CommitteeDraft` | in Konsultation durch klinische Reviewer:innen bzw. das Konsortium |
+| `Submitted` | zur Freigabe eingereicht |
+| `ApprovedForTesting` | für Pilotierung freigegeben; ab hier Version 1.0 (howto §C) |
+| `ApprovedForProductionUse` | für den produktiven Einsatz freigegeben |
+| `Superseded` | durch eine neuere Element-Version ersetzt (`related_elements: supersededBy`) |
+| `Withdrawn` / `Rejected` | zurückgezogen bzw. abgelehnt |
+
+**`binding_strength`** (wie streng die Codes gelten; FHIR-Semantik): `required` = nur diese Codes · `extensible` = diese Codes, andere nur, wenn keiner passt · `preferred` = empfohlen · `example` = nur Beispiele.
+
+**`standard_binding_status`**: `mapped` = Standardcodes vorhanden · `no-standard-found` = kein passender Standard, projekt-lokale Codes · `pending-mapping` = Zuordnung offen · `n/a` = Element braucht keinen Code (z. B. Datum, Ja/Nein).
+
+**`cardinality`**: `1..1` genau einmal · `0..1` höchstens einmal · `0..*` beliebig oft (auch keinmal) · `1..*` mindestens einmal.
+
+**UNSICHER** in Hinweisen oder offenen Punkten: Die Angabe konnte nicht gegen eine Primärquelle bestätigt werden und ist im Review zu prüfen.
 
 ## Pflege
 

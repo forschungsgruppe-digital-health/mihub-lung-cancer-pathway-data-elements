@@ -20,6 +20,9 @@ value_set:
   - system: kdl
     code: SD150101
     display: Follow up-Bogen
+  - system: snomed-ct
+    code: '736252007'
+    display: Cancer care plan
 standard_mappings:
 - standard: fhir-r4-base
   resource: CarePlan
@@ -102,8 +105,10 @@ provenance:
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): „schriftlich“ entfällt; Population
       über lokal ablative Therapie statt über kurativen Anspruch. Zudem Leitlinien-Resync, Terminologie-
-      und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      und Mapping-Korrekturen; Abgleich 2026-11-25: Code ergänzt: SNOMED CT 736252007 Cancer care plan;
+      offener Punkt angepasst'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -133,14 +138,20 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Codes
+      live am MII TermServ geprüft
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
-- 'Semantische Codierung prüfen: KDL SD150101 „Follow up-Bogen“ bezeichnet laut KDL-Definition ein Formular
-  zur Erfassung der Verlaufskontrolle nach Abschluss der Behandlung, nicht den Nachsorgeplan selbst. Nach
-  Katalogkonvention (audit-log §6) steht KDL für die Dokumentebene (DocumentReference.type bzw. Composition.type),
-  nicht für CarePlan.category. Option: SNOMED CT 736252007 „Cancer care plan“ (aktiv; Kind von 734163000
-  „Care plan“; breiter, nicht nachsorgespezifisch) als Konzeptcode, z. B. für CarePlan.category, erwägen;
-  KDL nur behalten, wenn der Plan als Dokument abgelegt wird. Einheitlich mit structuredSurveillancePlan
-  (ebenfalls SD150101) entscheiden.'
+- 'Semantische Codierung: SNOMED CT 736252007 „Cancer care plan“ (aktiv; Kind von 734163000 „Care plan“;
+  breiter, nicht nachsorgespezifisch) ist seit 2026-11-25 als Konzeptcode ergänzt (z. B. für CarePlan.category),
+  einheitlich mit structuredSurveillancePlan. Offen: KDL SD150101 „Follow up-Bogen“ bezeichnet laut KDL-Definition
+  ein Formular zur Erfassung der Verlaufskontrolle nach Abschluss der Behandlung, nicht den Nachsorgeplan
+  selbst; nach Katalogkonvention (audit-log §6) steht KDL für die Dokumentebene (DocumentReference.type
+  bzw. Composition.type). KDL nur behalten, wenn der Plan als Dokument abgelegt wird.'
 related_elements:
 - relation: dependsOn
   target: mihub.lung.followup.curativeTreatmentModality.v0.1

@@ -57,11 +57,12 @@ standard_mappings:
   resource: 23 Genetische Variante (XSD Menge_Genetik; bei Progression in der Meldung Verlauf oder Pathologie)
   path: 'Menge_Genetik/Genetische_Variante/Bezeichnung (23.1, Freitext) und Auspraegung (23.2: M Mutation/positiv,
     W Wildtyp, P Polymorphismus, N nicht bestimmbar, U unbekannt); optional Datum'
-  notes: 'XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd, Menge_Genetik_Typ); Feldseite
+  notes: 'XML-Schema oBDS 3.1.0 (https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd, Menge_Genetik_Typ); Feldseite
     23.1: https://basisdatensatz.de/feld/262/genetische-variante-name (Link aus der Feldliste). Ein ''Modul
     Genetische Veränderungen'' gibt es nicht. oBDS kennt nur Name und Ausprägung der Variante, keinen
     Resistenzmechanismus: Gen und Mutation (z. B. ''EGFR T790M'') als Bezeichnung mit Ausprägung M; alternativ
-    Sonstige_Auspraegung als Freitext.'
+    Sonstige_Auspraegung als Freitext. Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch die
+    Landeskrebsregister geplant ab 01.04.2027): diese Felder unverändert gegenüber 3.0.5.'
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/therapeutische-implikation
   resource: Observation
@@ -163,8 +164,10 @@ provenance:
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Wert ist jetzt der nachgewiesene
       Resistenzmechanismus (Gen + Alterationstyp) statt des Untersuchungsbefunds. Zudem Leitlinien-Resync,
-      Terminologie- und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      Terminologie- und Mapping-Korrekturen; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -194,6 +197,12 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'tumor_entity SCLC prüfen: Resistenztestung und -befund unter TKI betreffen das NSCLC. Die SCLC-Transformation
   EGFR-mutierter NSCLC ist ein histologischer Befund der Gewebe-Rebiopsie und wird leitliniengemäß im

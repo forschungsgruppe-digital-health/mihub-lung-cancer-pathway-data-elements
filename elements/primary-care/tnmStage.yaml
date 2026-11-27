@@ -39,7 +39,10 @@ standard_mappings:
     Verlauf als TNM)
   path: 'TNM_Typ: Datum (8.1), Version (8.2), c_p_u_Praefix_T/_N/_M (8.6–8.8), T (8.9), N (8.11), M (8.12),
     UICC_Stadium (8.17)'
-  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.
+  notes: 'Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd.
+    TNM-Version 9 ist seit oBDS 3.0.4 meldbar. oBDS 3.1.0 (XSD vom 14.10.2026; Annahme ab 01.04.2027)
+    ergänzt in TNM_Typ das optionale Feld LV (lymphvaskuläre Invasion: LVX, LV0, LV1) sowie B (peripheres
+    Blut) und das UICC-Stadium IB3; B und IB3 sind für das Lungenkarzinom nicht einschlägig.'
 - standard: mcode
   profile_or_url: http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-tnm-stage-group
   resource: Observation (Profil TNMStageGroup)
@@ -142,9 +145,11 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -174,6 +179,12 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Das Element bündelt T/N/M-Kategorien (Präfixe c/p/y/r), UICC-Stadiengruppe und TNM-Auflage in einem
   CodeableConcept. Die Codings sind nur Element-Codes; LOINC 21917-0 (TNM-Auflage) ist eine andere Frage.

@@ -1,8 +1,14 @@
 name: Duplicate Check (new data-element issues)
 
-# Postet bei neuen/aktualisierten "data-element"-Issues (Klinik-Spur) einen Kommentar mit
-# möglichen Dubletten aus dem Bestand — deterministischer Vorlauf zum Skill
-# `check-duplicate-data-element`. Die Letztentscheidung trifft ein Mensch.
+# Pflegt bei "data-element"-Issues (Klinik-Spur) genau EINEN Kommentar mit möglichen Dubletten
+# aus dem Bestand — deterministischer Vorlauf zum Skill `check-duplicate-data-element`.
+# Die Letztentscheidung trifft ein Mensch.
+#
+# - Läuft beim Anlegen, bei Bearbeitung und wenn das Label `data-element` gesetzt wird;
+#   andere Labels (z. B. `needs-triage`, `klinik-spur` aus dem Formular) lösen nichts aus.
+# - Der Kommentar trägt eine unsichtbare Markierung. Spätere Läufe ersetzen ihn, statt einen
+#   weiteren anzuhängen; der Issue-Text wird dabei zur Laufzeit frisch gelesen.
+# - Issue-Ereignisse nutzen immer die Fassung dieser Datei auf dem Default-Branch (`main`).
 
 on:
   issues:
@@ -14,28 +20,69 @@ permissions:
 
 jobs:
   duplicate-check:
-    # nur für Datenelement-Vorschläge (Label aus dem Issue-Template)
-    if: contains(join(github.event.issue.labels.*.name, ','), 'data-element')
+    # nur für Datenelement-Vorschläge (Label aus dem Issue-Formular); bei `labeled` nur,
+    # wenn genau dieses Label gesetzt wurde
+    if: >-
+      contains(github.event.issue.labels.*.name, 'data-element') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'data-element')
     runs-on: ubuntu-latest
+    # Läufe je Issue nacheinander, damit zeitgleiche Ereignisse (opened + labeled beim Anlegen)
+    # nicht beide einen neuen Kommentar anlegen
+    concurrency:
+      group: duplicate-check-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    env:
+      REPO: ${{ github.repository }}
+      ISSUE: ${{ github.event.issue.number }}
+      EVENT_ACTION: ${{ github.event.action }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.11'
-      - run: pip install --quiet pyyaml
-      - name: Run duplicate check on the issue body
-        id: dup
-        env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
-        run: |
-          printf '%s' "$ISSUE_BODY" > /tmp/issue_body.md
-          python scripts/check-duplicates.py --from-issue-file /tmp/issue_body.md --top 5 > /tmp/report.md || true
-          {
-            echo "🔎 **Automatische Dubletten-Prüfung** (Heuristik — Letztentscheidung durch das MI-Team / Skill \`check-duplicate-data-element\`):"
-            echo
-            cat /tmp/report.md
-          } > /tmp/comment.md
-      - name: Comment on the issue
+      - name: Fetch the current issue body
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body-file /tmp/comment.md
+        # aktuellen Text lesen (nicht den Stand aus dem Ereignis), damit auch ein
+        # nachgelagerter Lauf den neuesten Text prüft
+        run: gh api "repos/$REPO/issues/$ISSUE" --jq '.body // ""' > /tmp/issue_body.md
+      # ab hier ohne Token, bis zum Kommentar-Schritt
+      - run: pip install --quiet pyyaml
+      - name: Run duplicate check on the issue body
+        run: |
+          # Exit-Code 0 = keine Dublette, 1 = mindestens eine DUBLETTE (beides ein fertiger Bericht,
+          # erkennbar an der Schlusszeile); alles andere oder ein Bericht ohne Schlusszeile = Fehler
+          rc=0
+          python scripts/check-duplicates.py --from-issue-file /tmp/issue_body.md --top 5 > /tmp/report.md || rc=$?
+          {
+            echo '<!-- mihub-duplicate-check -->'
+            echo "🔎 **Automatische Dubletten-Prüfung** (Heuristik — Letztentscheidung durch das MI-Team / Skill \`check-duplicate-data-element\`):"
+            echo
+            if [ "$rc" -le 1 ] && grep -q '^> Heuristik (Wort-Jaccard' /tmp/report.md; then
+              cat /tmp/report.md
+            else
+              echo "⚠️ Die Prüfung ist fehlgeschlagen (Exit-Code $rc). Details im Actions-Log: $GITHUB_SERVER_URL/$REPO/actions/runs/$GITHUB_RUN_ID"
+              touch /tmp/check-failed
+            fi
+            echo
+            echo "_Stand: $(date -u '+%Y-%m-%d %H:%M') UTC (Anlass: $EVENT_ACTION). Dieser Kommentar wird bei Änderungen am Issue ersetzt._"
+          } > /tmp/comment.md
+      - name: Create or update the single bot comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # vorhandenen Kommentar dieses Workflows suchen (Markierung + Bot-Konto)
+          ids=$(gh api --paginate "repos/$REPO/issues/$ISSUE/comments" \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | contains("<!-- mihub-duplicate-check -->"))) | .id')
+          id=${ids%%$'\n'*}
+          if [ -n "$id" ]; then
+            jq -n --rawfile body /tmp/comment.md '{body: $body}' \
+              | gh api -X PATCH "repos/$REPO/issues/comments/$id" --input - > /dev/null
+            echo "Kommentar $id aktualisiert."
+          else
+            gh issue comment "$ISSUE" --repo "$REPO" --body-file /tmp/comment.md
+          fi
+          # ein Fehler der Prüfung steht im Kommentar und markiert zusätzlich den Lauf als fehlgeschlagen
+          if [ -f /tmp/check-failed ]; then exit 1; fi

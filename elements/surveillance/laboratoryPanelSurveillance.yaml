@@ -76,6 +76,20 @@ evidence:
       nach Abschluss der Behandlung durch das den Patienten betreuende Team evaluiert werden.
     accessed: '2026-10-15'
     locator: Kap. 16.4, Empf. 16.9 (EK, geprüft 2026), S. 499
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Empf. 13.3 (B, LoE 5, neu 2025, Starker Konsens) mit Tab. 99 Diagnostik im Verlauf einer
+      ICI-basierten Therapie: vor jeder Verabreichung Blutbild, Elektrolyte und Blutglukose, Kreatinin/GFR,
+      Bilirubin, AST, ALT, γGT, AP, CRP, CK und hochsensitives Troponin; vor jeder 2. Verabreichung TSH
+      und fT4'
+    recommendation_grade: B
+    evidence_level: '5'
+    quote: Im Verlauf einer ICI-basierten Therapie sollten die in Tabelle … aufgelisteten Untersuchungen
+      erfolgen und ggf. basierend auf individuellen Patient*innen-, Krankheits- oder Therapiecharakteristika
+      um weiterführende diagnostische Maßnahmen ergänzt werden … Labordiagnostik vor jeder Verabreichung
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.1.2, Empf. 13.3 (B, LoE 5, neu 2025), S. 629; Tab. 99, S. 630
 iso13972_metadata:
   type: observation
   keywords:
@@ -105,9 +119,12 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: Quelle ergänzt: S3-LL Supportive Therapie
+      bei onkologischen PatientInnen 2.1 – Kap. 13.1.1.2, Empf. 13.3 (B, LoE 5, neu 2025), S. 629; Tab.
+      99, S. 630; offener Punkt: ICI-Labormonitoring nach S3-LL Supportive Therapie Tab. 99'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -137,6 +154,13 @@ provenance:
     scope: evidence.guideline_references
     result: 2/2 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 2 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - Onkopedia nennt unter Therapie keine Laborfrequenz; „per-cycle“ ist eine Praxisableitung (UNSICHER).
 - 'Codings mit gemischten Achsen: 15220000 (Prozedur), LOINC 11502-2 (CLASS DOC.MISC = Berichts-/Dokumenttyp)
@@ -146,6 +170,13 @@ issues:
   ''INR in Blood by Coagulation assay'', 3173-2 ''aPTT in Blood by Coagulation assay''; LDH 2532-0 ist
   DISCOURAGED) oder ein Mapping auf einen Laborbefund-Bericht (DiagnosticReport) statt Observation. Die
   US-Panels ''… 2000 panel'' (Renal/Hepatic) decken sich nicht 1:1 mit ''Nieren-/Leberparameter''.'
+- 'Stand 2026-11-25: Für die Systemtherapie mit Immuncheckpoint-Inhibitoren legt die S3-LL Supportive
+  Therapie 2.1 (Empf. 13.3, B/LoE 5, Tab. 99) Zeitpunkt und Umfang fest: vor jeder Verabreichung Blutbild,
+  Elektrolyte und Blutglukose, Kreatinin/GFR, Bilirubin, AST, ALT, γGT, AP, CRP, CK und hochsensitives
+  Troponin, vor jeder 2. Verabreichung TSH und fT4. Die Aussage in definition_de („Zeitpunkt und Frequenz
+  … nicht festgelegt … nicht leitlinienbelegt“) gilt damit nur noch für andere Systemtherapien. Zu entscheiden:
+  definition_de um die ICI-spezifische Frequenz und die fehlenden Parameter (Blutglukose, CRP, CK, hs-Troponin,
+  TSH/fT4) ergänzen oder ein eigenes Element für das ICI-Monitoring führen.'
 related_elements:
 - relation: dependsOn
   target: mihub.lung.surveillance.surveillanceVisit.v0.1

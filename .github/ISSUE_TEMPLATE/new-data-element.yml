@@ -13,6 +13,9 @@ body:
         Bitte füllen Sie nur die Felder aus, zu denen Sie etwas Sinnvolles beitragen können.
         Felder, die das MI-Team selbst recherchiert (z. B. SNOMED-CT-Codes, FHIR-Profile), dürfen Sie leer lassen.
 
+        Bitte prüfen Sie vorher in der [Phasen-Übersicht](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/blob/main/docs/phases-overview.md), ob es das Element schon gibt.
+        Für Änderungen an einem bestehenden Element nutzen Sie bitte das Formular „Änderung / Rückmeldung zu bestehendem Element“.
+
   - type: dropdown
     id: phase
     attributes:
@@ -120,6 +123,7 @@ body:
         - Genau einmal (z. B. ECOG bei Aufnahme)
         - Höchstens einmal (kann fehlen)
         - Mehrfach möglich (z. B. wiederholte Symptommessungen)
+        - Mindestens einmal, ggf. mehrfach (z. B. Tumordiagnose)
     validations:
       required: true
 
@@ -169,8 +173,8 @@ body:
       label: Leitlinien-/Quellen-Bezug (Pflicht)
       description: Welche Quelle belegt das Element? Bitte Kapitel / Empfehlungs-Nr. / Tabelle angeben.
       placeholder: |
-        S3-LL Lungenkarzinom v4.0 (2025), Kap. 16, Empf. 16.x
-        ODER Onkopedia NSCLC (Stand 03/2026), Kap. 8.1 Tab. 12
+        S3-LL Lungenkarzinom 5.1 (Juli 2026), Kap. 16, Empf. 16.x
+        ODER Onkopedia NSCLC (Stand April 2025), Kap. 8.1 Tab. 12
         ODER Klein A-A et al., Die Onkologie 32:91–99 (2026)
     validations:
       required: true
@@ -179,7 +183,7 @@ body:
     id: recommendation_grade
     attributes:
       label: Empfehlungsgrad / Evidenzlevel (optional)
-      placeholder: "z. B. A / 1a, B / 2b, EK, Statement"
+      placeholder: "z. B. A / 1, B / 3, EK, Statement (wie in der Leitlinie angegeben)"
     validations:
       required: false
 
@@ -190,7 +194,7 @@ body:
       description: Bekannte SNOMED-CT- / LOINC- / ICD-10-GM- / OPS-Codes, falls vorhanden
       placeholder: |
         SNOMED CT: 267036007 (Dyspnea)
-        LOINC: 89283-6 (Dyspnea severity)
+        LOINC: 112499-9 (Shortness of breath, ESAS-Item)
     validations:
       required: false
 

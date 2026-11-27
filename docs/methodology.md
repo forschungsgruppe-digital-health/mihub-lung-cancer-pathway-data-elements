@@ -1,7 +1,7 @@
 # MiHUB Patientenpfad — Methodik & Gap-Analyse
 
 > Begleitdokument zur strukturierten Erhebung von Datenelementen entlang des onkologischen Patientenpfads (Lungenkarzinom).
-> Stand 2026-05-04 · Status der initialen Befüllung: Author Draft v0.1 · Sprache Deutsch (Inhalte) / Englisch (Feldnamen).
+> Stand 2026-11-25 · alle Elemente `AuthorDraft` (Katalog 0.2.0-rc.1 in Vorbereitung) · Sprache Deutsch (Inhalte) / Englisch (Feldnamen).
 
 ## 1 Zweck
 
@@ -16,11 +16,11 @@ Die Erhebung folgt einem **vierstufigen, iterativen Vorgehen je Versorgungsphase
 1. **Standards-/Referenzarchitektur-Sichtung.** Sichten der einschlägigen Normen und Referenzarchitekturen mit dem Ziel, die Struktur (Header/Metadaten) für jedes Datenelement von etablierten internationalen Mustern abzuleiten — *nicht* eine eigene Vorlage zu erfinden.
 2. **Leitlinien-Auswertung.** Pro Phase werden die einschlägigen nationalen Leitlinien (S3-Leitlinien des Leitlinienprogramms Onkologie, AWMF-Leitlinien, Onkopedia-Leitlinien der DGHO) sowie ergänzend internationale Leitlinien (ESMO, ASCO, NCCN, OCP) und versorgungsforscherische Primärquellen ausgewertet.
 3. **Konsolidierung.** Ableitung der Datenelemente in YAML pro Element (Single Source of Truth), Aggregation als CSV-Data-Dictionary, lesbare Phasenübersicht in Markdown — alles aus dem YAML autogeneriert.
-4. **Terminologie-Verifikation.** Alle `value_set.codings[]` werden gegen den MII TermServ geprüft (`scripts/verify-terminology.py`: `$lookup` je Coding; Ersatzcodes per `$expand` recherchiert), Anzeigetexte auf die Server-Displays synchronisiert, nicht auffindbare Codes ersetzt oder als `pending-mapping` begründet. Codesysteme ohne Server-Abdeckung (ICF, MedDRA) werden als nicht verifizierbar vermerkt.
+4. **Terminologie-Verifikation.** Alle `value_set.codings[]` werden gegen den MII TermServ geprüft (`scripts/verify-terminology.py`: `$lookup` je Coding; Ersatzcodes per `$expand` recherchiert), Anzeigetexte auf die Server-Displays synchronisiert, nicht auffindbare Codes ersetzt oder als `pending-mapping` begründet. Codesysteme ohne Server-Abdeckung (ICF, MedDRA; KDL seit 11/2026) werden als nicht verifizierbar vermerkt.
 
 Validierung gegen JSON-Schema; Konsistenzprüfung CSV ↔ YAML automatisiert (CI).
 
-Ergänzend zum dreistufigen Vorgehen wird pro Datenelement eine **Re-Verifikation gegen die Primärquelle** durchgeführt (Belegtext mit Kapitel/Empfehlungs-Nr./Tabellenverweis).
+Ergänzend zum vierstufigen Vorgehen wird pro Datenelement eine **Re-Verifikation gegen die Primärquelle** durchgeführt (Belegtext mit Kapitel/Empfehlungs-Nr./Tabellenverweis).
 
 ## 3 Vorlagenstruktur — Herleitung aus Standards
 
@@ -81,13 +81,13 @@ Pro Datenelement werden **mehrere parallele Bindings** in `standard_mappings[]` 
 
 | Code | Standard | Geltungsraum / gesetzliche Verankerung |
 | --- | --- | --- |
-| `obds` | Onkologischer Basisdatensatz, Version 3.0 (03/2022, Plattform §65c) | gesetzlich §65c SGB V — Pflichtmeldung an klinische und epidemiologische Krebsregister; verbindlicher tumortyp-übergreifender Standard, mit organspezifischen Modulen |
+| `obds` | Onkologischer Basisdatensatz (Feldliste BAnz 12.07.2021; XML-Schema 3.1.0 vom 14.10.2026, Annahme durch die Landeskrebsregister ab 01.04.2027, bis dahin 3.0.5; Plattform §65c) | gesetzlich §65c SGB V — Pflichtmeldung an klinische und epidemiologische Krebsregister; verbindlicher tumortyp-übergreifender Standard, mit organspezifischen Modulen |
 | `gekid-adt` | ADT/GEKID-Tumorbasisdokumentation | historischer Vorgänger des oBDS; weiterhin in Bestandssystemen (Onkostar, GTDS, CREDOS) verbreitet |
 | `gematik-epa-fhir` | gematik FHIR IGs für „ePA für alle" (TI Common, TI Terminologies, ePA Basic Functions, Medication Service, MHD Service) | gesetzliche ePA-Plattform; flächendeckender Patientenkontext |
 | `gematik-erezept-fhir` | gematik eRezept FHIR IG | gesetzliche elektronische Verordnung |
 | `kbv-mio` | KBV MIO-Bundles (Patientenkurzakte, Impfpass, Mutterpass, ZahnBonusheft, …) | Inhalte der ePA — strukturierte Übergabe Onko ↔ Hausarzt; relevant für Survivorship-Care-Plan-Übergabe (Klein 2026) |
 | `fhir-mii-kds` | MII-Kerndatensatz (Module Person, Diagnose, Prozedur, Labor, Medikation, Bildgebung, Onkologie, …) | Forschung / FDPG / DSF |
-| `fhir-isik` | gematik ISiK Stufen 1–4 | KIS/AIS-Primärsysteme |
+| `fhir-isik` | gematik ISiK (Mapping-Prüfung gegen Paket `de.gematik.isik` 6.0.0) | KIS/AIS-Primärsysteme |
 
 #### Internationale Mapping-Ziele
 
@@ -108,7 +108,7 @@ Beispiel-Mehrfach-Mapping siehe `elements/follow-up/recurrenceOrSecondPrimary.ya
 
 ## 4 Format-Wahl & GitHub-Eignung
 
-### 4.1 Drei kohärente Repräsentationen
+### 4.1 Vier kohärente Repräsentationen
 
 Auf Basis der Anforderungen wurde eine **kombinierte Form** gewählt:
 
@@ -128,13 +128,13 @@ GitHub ist gut geeignet, weil:
 - YAML/JSON-Diffs in PRs sind exzellent reviewbar.
 - Atomare PRs pro Element → fokussierte Diskussionen, klare Audit-Trails.
 - Branch-Protection + CODEOWNERS bilden die ISO-13606-Governance ab.
-- GitHub Actions validieren das Schema bei jedem Push.
+- GitHub Actions validieren das Schema bei jedem Pull Request und Push auf `main`.
 - Releases mit SemVer + Zenodo-DOI machen Stände zitierbar (z. B. für Manuskripte).
 - Issue-Tracker bietet Verknüpfung zu klinischen Diskussionen je Element.
 
 Risiko und Mitigation:
 
-- **Diff-Lärm bei großen Tabellen:** Wir erzeugen die CSV via CI; Reviewer:innen reviewen YAML, nicht CSV.
+- **Diff-Lärm bei großen Tabellen:** Die CSV wird lokal mit `build-catalog.py` erzeugt, die CI prüft nur, ob sie aktuell ist; Reviewer:innen reviewen YAML, nicht CSV.
 - **Mehrsprachigkeit:** Inhalte deutsch (`label_de`, `definition_de`); Feldnamen englisch — internationale Anschlussfähigkeit ohne Bruch in der Klinik-Sprache.
 - **Sensible Inhalte (z. B. Todeswunsch):** als Element-`issues` markiert; Zugriffsschutz wird in der Architektur (Consent / DSF / Broad Consent) gelöst, nicht im Schema.
 
@@ -148,9 +148,9 @@ Risiko und Mitigation:
 | Hausärztliche Versorgung / sektorenübergreifende Basisdaten (`elements/primary-care/`) | — | 38 |
 | **GESAMT** | **51** | **112** |
 
-Davon **44 Erhebungs-Datenelemente** (Prozeduren, Werte, Status, Pläne) plus **7 Ergebnis-Datenelemente** (Bildbefunde, Lungenfunktionswerte, Mutationsergebnis, CTCAE-Grad, Caregiver-Burden-Score) — siehe `audit-log.md` §4.
+Die 51 Elemente der v0.1 umfassen **44 Erhebungs-Datenelemente** (Prozeduren, Werte, Status, Pläne) und **7 Ergebnis-Datenelemente** (Bildbefunde, Lungenfunktionswerte, Mutationsergebnis, CTCAE-Grad, Caregiver-Burden-Score) — siehe `audit-log.md` §4; die 61 Elemente der v0.2 stammen aus den Klinik-Erhebungen und dem Leitlinien-Abgleich (§13).
 
-Diese Erhebung ist **bewusst kein vollständiger Datensatz**, sondern der **belegbare Kernsatz** aus den oben genannten LL-Quellen für die drei initial befüllten Phasen.
+Diese Erhebung ist **bewusst kein vollständiger Datensatz**, sondern der **belegbare Kernsatz** aus den oben genannten LL-Quellen für die befüllten Phasen.
 
 **Ausstehende Phasen** (Reihenfolge-Vorschlag):
 
@@ -181,7 +181,7 @@ Erweiterungen erfolgen iterativ; das Schema bleibt stabil (Phasen-Enum wird ggf.
 | Keine standardisierte Liste **onkologie-spezifischer Datenelemente** je Versorgungsphase | LL-Empfehlungen werden nicht konsistent codiert; jede Klinik dokumentiert anders | LL-Empfehlungen als kanonisches Set codieren (initial 51 Elemente in 3 Phasen) |
 | Kein international konsentiertes **Survivorship-Care-Plan-Schema** in deutscher Versorgung | Übergabe Onko ↔ Hausarzt fehleranfällig (Klein 2026 belegt Lücken) | Element `survivorshipCarePlan` mit Pflichtinhalten Anamnese/Therapie/Spätfolgen/Prozedere — anschlussfähig an AG-LONKO-Empfehlungen, `kbv-mio`-Mapping (Patientenkurzakte) |
 | **PROM** (Patient-Reported Outcomes) sind in MII KDS unterspezifiziert | Web-basierte Symptomerfassung (Denis 2017, Greer 2024) nicht standardisierbar | Element `patientReportedSymptomWeb` mit Hinweis auf QuestionnaireResponse; perspektivisch mCODE-PROM-Integration |
-| **Komplexitätsbewertung** der Palliativversorgung (low/medium/high + Krankheitsphasen) ist nicht in MII KDS | SPV-Indikation nicht maschinell auslesbar | Eigene Codes `complexityLevel` + `illnessPhase` (mihub-CodeSystem; SNOMED-Mapping in nachfolgender Iteration) |
+| **Komplexitätsbewertung** der Palliativversorgung (low/medium/high + Krankheitsphasen) ist nicht in MII KDS | SPV-Indikation nicht maschinell auslesbar | Projekt-lokale Codes in `complexityLevel` + `illnessPhase` (`local-no-standard-binding`; SNOMED-Mapping offen) |
 | **Sensible Datenelemente** (Todeswunsch, Sterbephase, ACP) erfordern besondere Consent-/Access-Logik | Risiko der Fehlbehandlung bei Freigabeproblemen | Markierung in `issues[]`; Governance in Architektur (Broad Consent + dedizierter Palliativ-Modul-Consent) |
 | **Onkopedia-Tabellen** sind nicht maschinenlesbar (HTML/PDF) | Nachsorgeintervalle für NSCLC/SCLC werden manuell übertragen | `followUpInterval` mit kontrolliertem Vokabular (Q3M-Y1-Y2 etc.) — direkt aus Onkopedia Tab. 12 / Tab. 9 abgeleitet |
 | **CTCAE/MedDRA-Lizenz**-Restriktionen | irAE-Erfassung nur eingeschränkt frei codierbar | `extensible`-Binding mit Beispielcodes; vollständiges ValueSet erst in implementierender Einrichtung |
@@ -190,19 +190,19 @@ Erweiterungen erfolgen iterativ; das Schema bleibt stabil (Phasen-Enum wird ggf.
 
 ### 6.3 Eigenes vs. importiertes Vokabular
 
-Wo möglich, wurden **internationale Codes** (SNOMED CT, LOINC, ICD-10-GM, OPS, ATC, UCUM) verwendet. Wo kein passender Code existiert (z. B. Krankheitsphasen *stabil/instabil/verschlechternd/sterbend*, Komplexitätsstufen, Versorgungsstufen PBP/APV/SPV, Nachsorgeintervalle Q3M-Y1-Y2), wurde ein **`mihub`-CodeSystem** als Platzhalter eingeführt; das Mapping nach SNOMED CT (z. B. Refset oder `valueset-extension`) ist Aufgabe einer nachfolgenden Iteration.
+Wo möglich, wurden **internationale Codes** (SNOMED CT, LOINC, ICD-10-GM, OPS, ATC, UCUM) verwendet. Wo kein passender Code existiert (z. B. Krankheitsphasen *stabil/instabil/verschlechternd/sterbend*, Komplexitätsstufen, Versorgungsstufen PBP/APV/SPV, Nachsorgeintervalle Q3M-Y1-Y2), werden **projekt-lokale Codes** geführt (`system: local-no-standard-binding`, `standard_binding_status: no-standard-found`, Begründung in `value_set.notes`); das Mapping nach SNOMED CT (z. B. Refset oder `valueset-extension`) ist Aufgabe einer nachfolgenden Iteration.
 
 ## 7 Pflege-Lebenszyklus & Iteration
 
 **Reife-Stufen:**
 
-- **v0.1 (Author Draft)** — initiale Befüllung der drei Phasen Nachsorge/Surveillance/Palliativ
-- **v0.2 (CommitteeDraft)** — nach interner Konsultation MiHUB-Konsortium / klinischen Reviewer:innen, Erweiterung um weitere Phasen
-- **v1.0 (ApprovedForProductionUse)** — freigegeben für nachgelagertes Profile-Authoring (FHIR-IG-Generierung, oBDS-/MIO-Mapping)
+- **v0.x (`AuthorDraft`)** — Befüllung und Erweiterung (v0.1: drei Phasen, 51 Elemente; v0.2: vier Phasen, 112 Elemente)
+- **`CommitteeDraft`** — je Element nach interner Konsultation MiHUB-Konsortium / klinischen Reviewer:innen
+- **v1.0 (ab `ApprovedForTesting`)** — Erstfreigabe nach klinischem Review (howto §C); Grundlage für nachgelagertes Profile-Authoring (FHIR-IG-Generierung, oBDS-/MIO-Mapping); `ApprovedForProductionUse` nach Pilotierung
 
 Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) — das verhindert Big-Bang-Änderungen und erlaubt ein graduelles Reifen.
 
-**Iterations-Log (Schema- und Inhalts-Änderungen während v0.1):**
+**Iterations-Log (Schema- und Inhalts-Änderungen):**
 
 | Iteration | Schema-Änderung | Inhalt |
 | --- | --- | --- |
@@ -220,6 +220,7 @@ Statuswechsel werden je Element einzeln im YAML gepflegt (`publication_status`) 
 | v0.2 Leitlinien-Resync + Terminologie-Verifikation + Klinik-Erhebungen + Phase `primarycare` (2026-10-13) | Phase-Enum + ID-Pattern `primarycare`; optionales `category` (17 klinische Kategorien); Quelle `Expert:innen-Erhebung MiHUB`; CSV nun 25 Spalten (`category`), Phasen-Übersicht 9 Spalten; Excel-Import kopfzeilenbasiert | S3-LL Lungenkarzinom auf **5.1 (Juli 2026)** gepinnt — Erratum: die „Aufwertung EK→B“ aus der v5.01-Iteration war nicht belegt (Grade B→EK in 7 Elementen, LoE-Umstellung, Tab. 42→44); Onkopedia NSCLC auf April 2025, SCLC auf August 2026; **alle Codings gegen den MII TermServ verifiziert** (141 Codings: 38 nicht auffindbar + 2 inaktiv + ≥13 semantisch falsch → 85 Coding-Änderungen, 34 Display-Synchronisationen; neues Skript `verify-terminology.py`); Excel-Erhebungen Nachsorge-WG (78 Zeilen) + Allgemeinmedizin (38 Zeilen) abgeglichen → **+61 Elemente** (16 followup, 5 surveillance, 2 palliative, 38 primarycare) → 112. Audit-Trail in `audit-log.md` §13, Berichte in `docs/reviews/`. |
 | v0.2 Zweitprüfung + Mapping-Audit (2026-10-14/15) | `related_elements[].target` als vollständige Element-ID (Pattern); Konsistenzprüfungen in `validate.py` | alle 112 Elemente gegen die Primärquellen geprüft (597 Korrekturen, je zwei unabhängige Skeptiker), S3-LL Palliativmedizin 3.0 final, Standard-Mappings gegen die publizierten Pakete korrigiert (145 Operationen) — `docs/reviews/2026-10-14-zweitpruefung.md`, `audit-log.md` §14 |
 | v0.2 Versionierung + Herkunft (2026-10-15) | optionale Felder `guideline_references[].quote/accessed/locator`, `provenance.origin/history/verification`; Validator prüft ID-Suffix ↔ `version_number` | Versionsregeln neu gefasst (howto §C) und angewendet (16 × `0.2.0`, 35 × `0.1.1`, 61 × `0.1.0`); 328 Zitate gegen die Quellen geprüft; Auszug der Klinik-Erhebungen — `audit-log.md` §14.7–14.8 |
+| v0.2 Quellen-Aktualität (2026-11-25) | unverändert | Primärquellen auf Aktualität geprüft (S3-LL Lungenkarzinom 5.1, Palliativmedizin 3.0, Psychoonkologie 2.1, Onkopedia NSCLC/SCLC/Impfungen, OCP unverändert; S3-LL Tabak ohne Nachfolgefassung); oBDS-Mappings auf XSD 3.1.0 (18 Elemente); neue Quellen S3-LL Supportive Therapie 2.1, G-BA KFE-RL (LDCT-Screening), STIKO 2026 (9 Elemente); 4 Codes ergänzt; KDL nicht mehr auf dem MII TermServ; Doku-Konsistenzprüfung — `audit-log.md` §16, `docs/reviews/2026-11-25-quellen-aktualitaet.md` |
 
 Detaillierter Audit-Trail je Element: `audit-log.md`.
 
@@ -233,16 +234,17 @@ Die Datenelemente füttern die drei Säulen des MiHUB-Zielbilds:
 
 ## 9 Quellen
 
-### Klinische Leitlinien (initiale Befüllung)
+### Klinische Leitlinien und Quellen
 
 - S3-Leitlinie **Lungenkarzinom** (Langversion **5.1, Juli 2026**, final; AWMF 020-007OL; löst Konsultationsfassung 5.01 vom 04/2026 und Erstfassung 5.0 vom 06/2026 ab — 5.0 → 5.1 nur Arzneimittelzulassungen und URLs, Kap. 15/16 unverändert; Gültigkeit maximal bis Mai 2031) — insbesondere Kap. 4.2 *Tabakrauchen* (Empf. 4.1–4.4 modifiziert, 4.5 neu 2026; alle A/LoE 1; E-Zigarette, Passivrauch, ABC-Schema, DiGA, Screening-Opt-out), Kap. 16 *Nachsorge / Verlauf / Follow-up* (Empf. 16.1–16.9 geprüft 2026: 16.1/16.2/16.4/16.7/16.8/16.9 EK, 16.3 B/LoE 3, 16.5 A/B/LoE 2, 16.6 A/LoE 2; Tabelle 44 Nachsorge-Indikationen), Kap. 15 Rehabilitation (2026 ausgesetzt), Statement 8.6 / Empf. 8.77, Kap. 11 (Psychoonkologie), Tabelle 48 (Übersicht der Änderungen v4 → v5). Zitierweise nach Kap. 1.5.
 - S3-Leitlinie **Palliativmedizin** für Patient:innen mit einer nicht heilbaren Krebserkrankung (Langversion **3.0, Juli 2026**, final; AWMF 128-001OL; gültig bis 20.07.2031; löst die Konsultationsfassung 3.01 vom 03/2026 ab — Kap.-10-Empfehlungsnummern ab 10.2 um +1 verschoben, Konsensempfehlungen als EK ausgewiesen) — Kap. 5, 6, 7.4, 9, 10, 17, 18, 19, 20, 21; Tabellen 6 und 9.
 - S3-Leitlinie **Rauchen und Tabakabhängigkeit: Screening, Diagnostik und Behandlung** (Quelle `S3-LL Tabakentwöhnung`; AWMF 076-006, Version 3.1, Stand 01/2021, Langversion 03/2021; Gültigkeit bis 31.12.2025 abgelaufen, Aktualisierung seit 12/2024 angemeldet).
 - **Onkopedia** Lungenkarzinom NSCLC, Stand April 2025 (Kap. 7 Rehabilitation, Kap. 8 Nachsorge und Kontrolluntersuchungen, Tab. 12; Kap. 6.1.6.2.1.1, 6.2.2.1). Onkopedia SCLC, Stand August 2026 (Kap. 9 Rehabilitation, Kap. 10 Verlaufskontrolle und Nachsorge, Tab. 9; Kap. 6.1.1.3/6.1.1.5/8.2.2). Online-Fassungen; Abruf 2026-10-13 (`docs/reviews/2026-10-13-leitlinien-abgleich/`).
 - **Expert:innen-Erhebungen MiHUB** (Klinik-Spur, Excel-Vorlage): Nachsorge-WG eines Lungenkrebszentrums, Stand 2026-07-30 (78 Zeilen: 51 Bestandselemente bestätigt und kategorisiert, 27 neue Zeilen) und Allgemeinmedizin / LoTeCaS-GP, Stand 2026-10-13 (38 Zeilen aus hausärztlicher Perspektive). Quelle `Expert:innen-Erhebung MiHUB` mit Mappe und Zeilen-ID in `evidence.guideline_references[].section`.
-- **MII TermServ** (Ontoserver der Medizininformatik-Initiative, mTLS): Verifikationsquelle aller Codings — SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3; ICF und MedDRA dort nicht verfügbar. Optional per MCP-Server AskMIIAnything (`lookup_code`, `validate_code`, `expand_valueset`) abfragbar.
+- **MII TermServ** (Ontoserver der Medizininformatik-Initiative, mTLS): Verifikationsquelle aller Codings — SNOMED CT 20260701 (zusätzlich SNOMED CT Germany Edition 20261115), LOINC 2.83, ICD-10-GM/OPS/ATC 2026, ICD-O-3; ICF und MedDRA dort nicht verfügbar, die KDL seit 11/2026 nicht mehr (Stand 2026-11-25). Optional per MCP-Server AskMIIAnything (`lookup_code`, `validate_code`, `expand_valueset`) abfragbar.
 - Cancer Council Victoria: **Optimal Care Pathway for People with Lung Cancer**, 2nd ed. 2021 (Update 07/2025) — Steps 3–7.
 - Ergänzend (je ein Element, Quelle `andere`): S3-Leitlinie **Psychoonkologie** 2.1 (August 2023, AWMF 032-051OL) — Empf. 7.4, Tab. 8 (Distress-Thermometer); Onkopedia **„Impfungen bei malignen Erkrankungen und Immunsuppression“** (DGHO/AGIHO, Stand Mai 2026) — Kap. 6.1, Tab. 5 (Empfehlungsstärke nach AGIHO/ESCMID, nicht AWMF); **EORTC QLQ-C30 Scoring Manual**, 3rd ed. 2001 (Fayers PM et al.) — Skalenberechnung.
+- Ergänzend seit 2026-11-25 (Quelle `andere`): S3-Leitlinie **Supportive Therapie bei onkologischen PatientInnen** 2.1 (Juni 2026, AWMF 032-054OL) — Kap. 13 (immunvermittelte Nebenwirkungen durch Immuncheckpoint-Inhibitoren; Empf. 13.2, 13.3, 13.11, 13.12) und Kap. 11.11 (radiogene Pneumonitis); **G-BA Krebsfrüherkennungs-Richtlinie** (KFE-RL, zuletzt geändert 18.12.2025, in Kraft 12.03.2026) — Abschnitt D III, § 38 (Lungenkrebsfrüherkennung mittels Niedrigdosis-CT, GKV-Leistung seit April 2026); **STIKO-Empfehlungen 2026** (Epid Bull 4/2026, 22.01.2026) — Tab. 2 und Kap. 4.9.
 - Klein A-A et al. (2026). *Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden einer Krebserkrankung. Empfehlungen zum Verfassen von onkologischen Abschlussberichten.* Die Onkologie 32(1):91–99 (online 02.12.2025). doi:10.1007/s00761-025-01867-1.
 - AG LONKO (Arbeitsgruppe „Langzeitüberleben nach Krebs“) im Nationalen Krebsplan: Empfehlungspapiere der UAG *Datenerhebung und Datenanalyse* (Stand 17.06.2021) und der UAG *Bedarfsgerechte Versorgungsmodelle* (Stand 18.06.2021); Glossar 10.11.2021.
 
@@ -255,13 +257,13 @@ Die Datenelemente füttern die drei Säulen des MiHUB-Zielbilds:
 
 ### Implementation Guides — National (DE)
 
-- **Onkologischer Basisdatensatz (oBDS)** v3.0.0 (03/2022), Plattform §65c SGB V — `https://www.basisdatensatz.de/`
+- **Onkologischer Basisdatensatz (oBDS)** — Feldliste (BAnz 12.07.2021) und XML-Schema 3.1.0 (14.10.2026; Annahme durch die Landeskrebsregister ab 01.04.2027), Plattform §65c SGB V — `https://www.basisdatensatz.de/`
 - **ADT/GEKID Tumorbasisdokumentation** — `https://www.gekid.de/adt-gekid-basisdatensatz`
 - **gematik FHIR Implementation Guides** für „ePA für alle" (TI Common, TI Terminologies, ePA Basic Functions, Medication Service, MHD Service) — `https://gemspec.gematik.de/ig/fhir/`
 - **gematik eRezept FHIR IG**.
 - **KBV MIO** Patientenkurzakte u. a. — `https://mio.kbv.de/`
 - **MII Kerndatensatz** Module — `https://www.medizininformatik-initiative.de/`
-- **gematik ISiK** Stufen 1–4.
+- **gematik ISiK** (Paket `de.gematik.isik` 6.0.0).
 
 ### Implementation Guides — International
 

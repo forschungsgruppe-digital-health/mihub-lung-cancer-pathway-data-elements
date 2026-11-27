@@ -43,12 +43,14 @@ standard_mappings:
   path: 'Verlauf/Gesamtbeurteilung_Tumorstatus (17.2 Gesamtbeurteilung des Tumorstatus); Datum: Verlauf/Untersuchungsdatum_Verlauf
     (17.1)'
   notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 17.2: https://basisdatensatz.de/feld/220/gesamtbeurteilung-des-tumorstatus
-    (Link aus der Feldliste). Wertebereich laut XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd):
+    (Link aus der Feldliste). Wertebereich laut XML-Schema oBDS 3.1.0 (https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd):
     V Vollremission (CR), T Teilremission (PR), K keine Änderung (NC = stable disease), P Progression,
     D divergentes Geschehen, B klinische Besserung (Minimal Response), R Vollremission mit residualen
     Auffälligkeiten (CRr), Y Rezidiv, U Beurteilung unmöglich, X fehlende Angaben; ''Befund unklar'' ist
     kein oBDS-Wert. Näherungsweise Abbildung RECIST 1.1: CR→V, PR→T, SD→K, PD→P, NE→U. Teilbeurteilungen
-    in 17.3–17.5 (Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen).'
+    in 17.3–17.5 (Verlauf_Lokaler_Tumorstatus, Verlauf_Tumorstatus_Lymphknoten, Verlauf_Tumorstatus_Fernmetastasen).
+    Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027):
+    diese Felder unverändert gegenüber 3.0.5.'
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-verlauf
   resource: Observation
@@ -179,8 +181,10 @@ provenance:
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Codes aus der required-Bindung
       entfernt bzw. ersetzt: [''kdl|AD060106'', ''snomed-ct|182840001'', ''snomed-ct|271879005'']. Zudem
-      Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      Leitlinien-Resync, Terminologie- und Mapping-Korrekturen; Abgleich 2026-11-25: oBDS-Mapping auf
+      XSD 3.1.0 (14.10.2026) abgeglichen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -210,6 +214,12 @@ provenance:
     scope: evidence.guideline_references
     result: 4/4 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Wertebereich vs. Definition klären: recistResponse ist als RECIST-1.1-Kategorie definiert (CR/PR/SD/PD/NE),
   required gebunden ist aber der Wertebereich des mCODE-ValueSets ConditionStatusTrend (bewusste Umstellung,

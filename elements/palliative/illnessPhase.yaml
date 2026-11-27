@@ -92,8 +92,10 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: offener Punkt aus Reviewer-Kommentar der Nachsorge-WG (2026-06-12) ergänzt'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -123,7 +125,23 @@ provenance:
     scope: evidence.guideline_references
     result: 1/1 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: 'Abgleich der Erhebungsunterlagen (TU-Datashare): Reviewer-Kommentare der Nachsorge-WG (Word-Fassung)
+      abgeglichen, Texte von Entwurf und zwei Prüfern abgestimmt'
+    scope: issues
+    result: 1 Änderung(en) übernommen
+    report: docs/audit-log.md §16.7
 issues:
 - 'KDL SD110105 (Dokumentklasse ''Palliativmedizinische Komplexbehandlungsdokumentation'') ist kein Phasenwert
   (datatype code 1..1: stable/unstable/deteriorating/dying), steht aber als valueSet.coding im Wertebereich.
   Katalogweite Entscheidung zur Rolle der KDL-Codings bei code-Elementen nötig (siehe complexityLevel).'
+- 'Reviewer-Kommentar der Nachsorge-WG (Word-Fassung der Phasen-Übersicht, 2026-06-12; von der WG in die
+  Erhebungsmappe übernommen, docs/reviews/2026-10-13-erhebungen.md#wg-de-047; docs/audit-log.md §16.7)
+  zur Phase Palliativversorgung („Datenerhebung vs. Respekt vor dem Sterbenden“) betrifft auch dieses
+  Element: frequency_pattern sieht in der Sterbephase eine tägliche Erfassung vor. „Täglich in Sterbephase“
+  meint laut GLOSSARY.md §11 die i. d. R. tägliche Überprüfung des Betreuungsplans (S3-LL Palliativmedizin
+  3.0, Tab. 6 d; Zitat in dyingPhaseDiagnosed), nicht die tägliche Dokumentation des Phasenwerts; das
+  Zitat dieses Elements (Kap. 5.3, Tab. 6) nennt keine Frequenz. Zu entscheiden: tägliche Dokumentation
+  beibehalten oder ab dyingPhaseDiagnosed = true nur Phasenänderungen dokumentieren (dyingPhaseDiagnosed:
+  Re-Evaluation spätestens nach 72 h); gemeinsam mit dem Minimaldatensatz Sterbephase (offener Punkt in
+  dyingPhaseDiagnosed) entscheiden.'

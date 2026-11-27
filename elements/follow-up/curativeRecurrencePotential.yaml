@@ -40,7 +40,9 @@ standard_mappings:
     bzw. 16.1 (SYST/Intention) = K'
   notes: 'Nur teilweise abbildbar: oBDS hat kein Feld für den kurativen Anspruch. Abschnitt 18/19 kennt
     nur 18.1 Datum, 18.2 Typ (praeth, postop, postth, ther), 19.1 Typ der Therapieempfehlung und 19.2
-    Therapieabweichung auf Wunsch des Patienten. Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd.'
+    Therapieabweichung auf Wunsch des Patienten. Feldnummern nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd.
+    Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch die Landeskrebsregister geplant ab 01.04.2027):
+    diese Felder unverändert gegenüber 3.0.5.'
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-tumorkonferenz
   resource: CarePlan
@@ -138,9 +140,11 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -170,6 +174,12 @@ provenance:
     scope: evidence.guideline_references
     result: 4/4 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - '6–8-Wochen-Intervall nur Onkopedia-gestützt: Die Folgeaussage in definition_de („Bei ja kann das Nachsorgeintervall
   auf 6–8 Wochen verkürzt werden“) stammt ausschließlich aus Onkopedia NSCLC Kap. 8.1 (Stand 04/2025),

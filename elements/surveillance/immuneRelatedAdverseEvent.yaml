@@ -2,8 +2,9 @@ id: mihub.lung.surveillance.immuneRelatedAdverseEvent.v0.1
 uuid: 80f92429-8ac9-5868-bbb5-4a6362a8d988
 name: immuneRelatedAdverseEvent
 label_de: Immunvermittelte Nebenwirkung (irAE)
-definition_de: Spezifische immunvermittelte Toxizität unter Checkpoint-Inhibitor-Therapie (Pneumonitis,
-  Kolitis, Hepatitis, Endokrinopathie, Hautreaktion).
+definition_de: Spezifische immunvermittelte Toxizität unter oder nach einer Therapie mit Immuncheckpoint-Inhibitoren
+  (u. a. Pneumonitis, Enteritis/Kolitis, Hepatitis, Endokrinopathien wie Thyreoiditis oder Hypophysitis,
+  Hautreaktion, Nephritis, Myokarditis, neurologische und rheumatische irAE).
 phase: surveillance
 tumor_entity:
 - NSCLC
@@ -32,9 +33,19 @@ value_set:
   - system: snomed-ct
     code: '28926001'
     display: Eruption caused by drug
+  - system: snomed-ct
+    code: '1360081003'
+    display: Immunotherapy induced hypophysitis
+  - system: snomed-ct
+    code: '72527006'
+    display: Myocarditis caused by drug
+  - system: snomed-ct
+    code: '439990003'
+    display: Drug-induced tubulointerstitial nephritis
   standard_binding_status: mapped
 care_process:
-  trigger: Verdachtsfall unter Checkpoint-Inhibitor
+  trigger: Verdachtsfall unter oder nach Checkpoint-Inhibitor-Therapie (irAE können auch nach Therapieende
+    auftreten)
   frequency_pattern: per-encounter
   responsible_role: Onkologe
 evidence:
@@ -99,6 +110,45 @@ evidence:
     accessed: '2026-10-15'
     locator: Kap. 12 Supportive Behandlung beim Lungenkarzinom (Verweis auf S3-LL Supportive Therapie),
       S. 471
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Empf. 13.2 (EK, neu 2025, Starker Konsens): Aufklärung über Zeichen und Symptome von irAE,
+      die während und auch nach Beendigung einer ICI-Behandlung auftreten können; niedrigschwellige Kommunikation'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Patient*innen, Angehörige und Pflegende sollen über Zeichen und Symptome von irAE, die jederzeit
+      während, aber auch nach Beendigung einer ICI-basierten Behandlung auftreten können, aufgeklärt und
+      für eine niedrigschwellige Kommunikation sensibilisiert werden.
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.1.2 Monitoring im Verlauf einer ICI-Behandlung, Empf. 13.2 (EK, neu 2025), S. 629
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Empf. 13.11 (B, LoE 4, neu 2025, Starker Konsens): Diagnostik bei Verdacht auf irAE nach
+      Tab. 100, je nach betroffenem Organ ergänzt; organspezifisches Vorgehen in Kap. 13.2 (kutan), 13.3
+      (gastrointestinal: Enteritis, Kolitis, Hepatitis), 13.4 (Pneumonitis), 13.5 (endokrin), 13.6 (rheumatisch),
+      13.7 (Nephritis), 13.8 (neurologisch), 13.9 (Auge), 13.10 (Myokarditis), 13.11 (hämatologisch)'
+    recommendation_grade: B
+    evidence_level: '4'
+    quote: Bei Verdacht auf irAE unter ICI-basierter Therapie sollten die in Tabelle … zusammengefassten
+      Maßnahmen berücksichtigt und ggf. je nach betroffenem Organ um weitere spezifische Maßnahmen ergänzt
+      werden.
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.2 Verdacht auf irAE, Empf. 13.11 (B, LoE 4, neu 2025), S. 636
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Kap. 13.1.2.2 Allgemeine therapeutische Prinzipien bei Verdacht auf irAE (Hintergrundtext:
+      Schweregrad der irAE nach der jeweils neuesten CTCAE-Version; organspezifische Kapitel 13.2–13.11)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zur Behandlung von irAE haben sich in den letzten Jahren grundsätzliche Behandlungsstrategien
+      entwickelt, die sich in der Regel dem Schweregrad und betroffenen Gewebe bzw. Organ orientieren.
+      Der Schweregrad richtet sich nach der neusten Version Common Terminology Criteria for Adverse Events
+      (CTCAE).
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.2.2, Hintergrundtext, S. 637
 iso13972_metadata:
   type: condition
   keywords:
@@ -134,8 +184,17 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: Definition und Auslöser nach S3-LL Supportive Therapie 2.1 Kap. 13 erweitert
+      (nicht brechend: bereits erfasste Werte bleiben gültig und behalten ihre Bedeutung, die Definition
+      schließt lediglich weitere Fälle ein; Einstufung durch die Maintainer:in bestätigt 2026-11-26);
+      Codes ergänzt: SNOMED CT 1360081003, 72527006, 439990003; Quelle ergänzt: S3-LL Supportive Therapie
+      bei onkologischen PatientInnen 2.1 – Kap. 13.1.1.2 Monitoring im Verlauf einer ICI-Behandlung, Empf.
+      13.2 (EK, neu 2025), S. 629; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen
+      2.1 – Kap. 13.1.2 Verdacht auf irAE, Empf. 13.11 (B, LoE 4, neu 2025), S. 636; Quelle ergänzt: S3-LL
+      Supportive Therapie bei onkologischen PatientInnen 2.1 – Kap. 13.1.2.2, Hintergrundtext, S. 637'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16; docs/audit-log.md §16.8
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -165,6 +224,13 @@ provenance:
     scope: evidence.guideline_references
     result: 5/5 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Codes
+      live am MII TermServ geprüft; neue Zitate maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 5 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 related_elements:
 - relation: specializes
   target: mihub.lung.surveillance.adverseEventCtcae.v0.1

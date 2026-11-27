@@ -12,11 +12,20 @@
 
 > 🧩 **Ergänzung/Erweiterung des Schwester-Repositorys [`mihub-lung-cancer-pathway`](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway) (AP3).** Der BPMN-Pfad beschreibt den Prozess (*wann, durch wen*); dieses Repository die Datenseite (*was wird dokumentiert/ausgetauscht*). Beide sind komplementär.
 
-> ⚠️ **Author Draft v0.1 — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte, werkzeug-unabhängige Skills/Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
+> ⚠️ **Author Draft — KI-gestützt erstellt.** Inhalte sind als Entwurf zu betrachten und vor produktivem Einsatz klinisch zu reviewen — siehe [`AI_USAGE.md`](AI_USAGE.md). Pflege erfolgt über konsens-basierte, werkzeug-unabhängige Skills/Sub-Agenten — siehe [`AGENTS.md`](AGENTS.md).
 
 > ⚠️ **Hinweis zur Zweckbestimmung / Haftungsausschluss.** Diese Datenelemente sind ein **Forschungs-, Lehr- und Interoperabilitäts-Referenzartefakt** (klinisches Informationsmodell / Datenkatalog), **nicht klinisch validiert** und **nicht** für die unmittelbare Patient:innenversorgung oder klinische Entscheidungsfindung bestimmt. Die Autor:innen weisen ihnen **keine medizinische Zweckbestimmung** im Sinne der EU-MDR (2017/745) zu. Es gelten [`DISCLAIMER.md`](DISCLAIMER.md) und Abschnitt 5 der [`LICENSE`](LICENSE).
 >
 > _These data elements are a research, education and interoperability-reference artifact — an author draft, **not** clinically validated and **not** for direct patient care. No medical intended purpose under EU MDR 2017/745. See [`DISCLAIMER.md`](DISCLAIMER.md)._
+
+> 🧭 **Schnellstart — was möchten Sie tun?**
+>
+> - **Ein Datenelement nachlesen:** [`docs/phases-overview.md`](./docs/phases-overview.md) (Übersicht je Versorgungsphase); die vollständige Beschreibung steht in `elements/<phase>/<name>.yaml`, Abkürzungen im [`GLOSSARY.md`](./GLOSSARY.md).
+> - **Rückmeldung zu einem bestehenden Element geben:** Issue-Formular [„Änderung / Rückmeldung zu bestehendem Element“](../../issues/new/choose) — ohne Git/YAML.
+> - **Ein neues Element vorschlagen:** Issue-Formular oder Excel-Vorlage, siehe [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+> - **Technisch mitarbeiten (YAML, Skripte, FHIR):** [`docs/howto-add-element.md`](./docs/howto-add-element.md).
+
+> 📊 **Reifegrad (Stand 2026-11-25):** 112 Datenelemente in vier Versorgungsphasen, **alle im Status `AuthorDraft` — noch nicht klinisch reviewt.** Maschinell geprüft sind Schema, Codes (MII TermServ), wörtliche Quellenzitate und Mapping-Ziele; die klinische Bewertung steht aus. Offene Fachfragen stehen je Element unter `issues` (125 im Katalog). Letzte Veröffentlichung: `v0.1.0-rc.2` (51 Elemente); `v0.2.0-rc.1` ist in Vorbereitung ([Release-Notes](./docs/releases/v0.2.0-rc.1.md)). **Noch nicht abgedeckt:** eigene Phasen für Früherkennung, Diagnostik/Staging und Primärtherapie; FHIR-Profile bzw. ein Implementation Guide (es gibt nur ein generiertes Logical Model).
 
 ---
 
@@ -108,7 +117,7 @@ Die Datenelemente werden als **YAML-Single-Source-of-Truth** geführt; abgeleite
 
 Eine aktuelle, autogenerierte Übersicht über alle befüllten Phasen und Datenelemente liefert [`docs/phases-overview.md`](./docs/phases-overview.md). Die maschinenlesbare Vollsicht steht unter [`catalog/data-dictionary.csv`](./catalog/data-dictionary.csv) bzw. als Markdown-Spiegel [`catalog/data-dictionary.md`](./catalog/data-dictionary.md) zur Verfügung.
 
-Jedes Datenelement ist eine eigene, versionierte `.yaml`-Datei (Versionsregeln: [`docs/howto-add-element.md`](./docs/howto-add-element.md) §C) mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL — gegen den **MII TermServ** verifiziert, siehe `scripts/verify-terminology.py` und [`docs/reviews/`](./docs/reviews/)), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen — je Fundstelle mit wörtlichem Kurzzitat, damit sie ohne Suchen nachgeprüft werden kann — sowie der **Herkunft** des Elements (`provenance`: Entstehung, Versionshistorie, Prüfläufe; siehe Abschnitt *Vorarbeiten und Grundlagen*).
+Jedes Datenelement ist eine eigene, versionierte `.yaml`-Datei (Versionsregeln: [`docs/howto-add-element.md`](./docs/howto-add-element.md) §C) mit standardisiertem Header (ISO 13972 / ISO 13606), klinischer Definition, Coding-Bindings (u. a. SNOMED CT, LOINC, ICD-10-GM, ICD-O-3, ICF, KDL — soweit dort verfügbar gegen den **MII TermServ** verifiziert; ICF und MedDRA führt der Server nicht, die KDL seit 11/2026 nicht mehr; siehe `scripts/verify-terminology.py` und [`docs/reviews/`](./docs/reviews/)), parallelen Standard-Mappings (u. a. oBDS, KBV-MIO, MII-KDS, mCODE, openEHR), der **Datennutzung entlang des Pfads** (`care_process.data_flows[]` — WO/System · WER/Rolle · WIE/Nutzung; z. B. erfasst der Hausarzt im PVS, liest die Onkolog:in im KIS) und Quellenbelegen aus den verwendeten Leitlinien und Fachpublikationen — je Fundstelle mit wörtlichem Kurzzitat, damit sie ohne Suchen nachgeprüft werden kann — sowie der **Herkunft** des Elements (`provenance`: Entstehung, Versionshistorie, Prüfläufe; siehe Abschnitt *Vorarbeiten und Grundlagen*).
 
 ### Schema und Vorlagen
 
@@ -240,10 +249,11 @@ Das Repository folgt etablierten Mustern der klinischen Modellierung:
 - **Onkopedia** Lungenkarzinom NSCLC (Stand April 2025; Kap. 7 Rehabilitation, Kap. 8 Nachsorge, Tab. 12) und SCLC (Stand August 2026; Kap. 9 Rehabilitation, Kap. 10 Nachsorge, Tab. 9).
 - **Optimal Care Pathway for People with Lung Cancer**, Cancer Council Victoria, 2nd ed. (2021, Update 07/2025).
 - Ergänzend (je ein Element): **S3-Leitlinie Psychoonkologie** 2.1 (August 2023, AWMF 032-051OL; Distress-Thermometer, Empf. 7.4) · **Onkopedia** „Impfungen bei malignen Erkrankungen und Immunsuppression“ (Stand Mai 2026; Impfstatus) · **EORTC QLQ-C30 Scoring Manual**, 3rd ed. 2001 (Skalenberechnung).
+- Ergänzend (seit 2026-11-25, Abgleich in [`docs/audit-log.md`](./docs/audit-log.md) §16): **S3-Leitlinie Supportive Therapie bei onkologischen PatientInnen** 2.1 (Juni 2026, AWMF 032-054OL; Kap. 13 immunvermittelte Nebenwirkungen, Kap. 11.11 radiogene Pneumonitis) · **G-BA Krebsfrüherkennungs-Richtlinie** (KFE-RL, Abschnitt D III Lungenkrebsfrüherkennung mittels Niedrigdosis-CT, Fassung in Kraft 12.03.2026) · **STIKO-Empfehlungen 2026** (Epid Bull 4/2026; Indikationsimpfungen bei Immundefizienz und malignen Erkrankungen).
 - **Klein A-A et al. (2026).** _Relevante Informationen aus der Onkologie für die hausärztliche Versorgung von Langzeitüberlebenden einer Krebserkrankung. Empfehlungen zum Verfassen von onkologischen Abschlussberichten._ Die Onkologie 32(1):91–99 (online 02.12.2025). doi:10.1007/s00761-025-01867-1 — Empfehlungsliste (Dos/Don'ts) im Zusatzmaterial Anhang 2.
 - **AG LONKO** (Arbeitsgruppe „Langzeitüberleben nach Krebs“ im Nationalen Krebsplan): Empfehlungspapiere der UAG „Datenerhebung und Datenanalyse“ (Stand 17.06.2021) und der UAG „Bedarfsgerechte Versorgungsmodelle“ (Stand 18.06.2021) — eigenständige Quelle, nicht mit Klein 2026 zu vermengen.
 - **Expert:innen-Erhebungen MiHUB** (Klinik-Spur, Excel-Vorlage): Nachsorge-WG eines Lungenkrebszentrums (Stand 2026-07-30; Kategorien + 27 neue Zeilen) und Allgemeinmedizin / LoTeCaS-GP (Stand 2026-10-13; 38 hausärztliche Elemente) — Quelle `Expert:innen-Erhebung MiHUB` in den YAMLs, Abgleich in [`docs/audit-log.md`](./docs/audit-log.md) §13.
-- **MII TermServ** (Ontoserver der Medizininformatik-Initiative; SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3) — Verifikationsquelle aller Codings (mTLS-Zugang über ein Funktionszertifikat; Stand 2026-10-13).
+- **MII TermServ** (Ontoserver der Medizininformatik-Initiative; SNOMED CT 20260701, LOINC 2.83, ICD-10-GM/OPS/ATC 2026, KDL, ICD-O-3) — Verifikationsquelle der Codings, außer ICF und MedDRA (nicht auf dem Server) sowie KDL (seit 11/2026 nicht mehr abrufbar); mTLS-Zugang über ein Funktionszertifikat; letzter Lauf 2026-11-25, zusätzlich gegen die SNOMED CT Germany Edition 20261115.
 
 ### Verwandte MiHUB-Artefakte
 

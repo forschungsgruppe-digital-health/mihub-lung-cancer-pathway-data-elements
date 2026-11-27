@@ -8,7 +8,7 @@ Aufruf:
 
 Zusätzlich zur Schema-Prüfung (Konsistenz über Dateien hinweg):
   - `id` = mihub.lung.<phase>.<name>.v<major>.<minor> (Phase und Name stimmen mit den Feldern überein)
-  - Dateiname = `name`, Ordner passt zur Phase (follow-up, surveillance, palliative, primary-care, screening)
+  - Dateiname = `name`, Ordner passt zur Phase (follow-up, surveillance, palliative, primary-care)
   - `id`, `name`, `uuid` sind katalogweit eindeutig
   - `related_elements[].target` ist die vollständige `id` eines existierenden Datenelements (keine Selbstreferenz)
 """

@@ -96,8 +96,10 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: offener Punkt aus Reviewer-Kommentar der Nachsorge-WG (2026-06-12) ergänzt'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -127,10 +129,27 @@ provenance:
     scope: evidence.guideline_references
     result: 3/3 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: 'Abgleich der Erhebungsunterlagen (TU-Datashare): Reviewer-Kommentare der Nachsorge-WG (Word-Fassung)
+      abgeglichen, Texte von Entwurf und zwei Prüfern abgestimmt'
+    scope: issues
+    result: 1 Änderung(en) übernommen
+    report: docs/audit-log.md §16.7
 issues:
 - 'Konsistenzregel mit illnessPhase festlegen: dyingPhaseDiagnosed = true ⇔ illnessPhase = ''dying'' (Tab.
   6 d). Zu klären ist die führende Quelle bzw. Ableitungsrichtung: kriteriengestützte Feststellung nach
   Kap. 21.2 vs. Phasen-Assessment nach Kap. 5.3.'
+- 'Reviewer-Kommentar der Nachsorge-WG (Word-Fassung der Phasen-Übersicht, 2026-06-12; von der WG in die
+  Erhebungsmappe übernommen, docs/reviews/2026-10-13-erhebungen.md#wg-de-047; docs/audit-log.md §16.7)
+  zur Phase Palliativversorgung: „Wie letztens diskutiert. Datenerhebung vs. Respekt vor dem Sterbenden“.
+  Ergebnis der erwähnten Diskussion und Reichweite (Sterbephase oder ganze Phase) sind nicht dokumentiert.
+  Offen ist, was nach Feststellung der Sterbephase noch erhoben wird: Viele Palliativ-Elemente sind per-encounter,
+  Hinweise zur Sterbephase gibt es nur vereinzelt (z. B. anxietyHadsScore, caregiverBurden); docs/methodology.md
+  §4.2 regelt sensible Elemente nur über Zugriff/Consent. Zu entscheiden: (a) Minimaldatensatz ab Feststellung
+  (z. B. dieses Element, illnessPhase, treatmentDecisionDocumentation, Symptome ggf. fremdeingeschätzt),
+  übrige Elemente aussetzen oder als „nicht erhoben“ kennzeichnen; (b) Grundsatz: nur dokumentieren, was
+  der Versorgung dient, keine Befragung Sterbender oder Angehöriger allein zu Dokumentationszwecken; (c)
+  Regel phasenweit in der Methodik festhalten. Gegen S3-LL Palliativmedizin 3.0 Kap. 21 zu prüfen.'
 related_elements:
 - relation: specializes
   target: mihub.lung.palliative.illnessPhase.v0.1

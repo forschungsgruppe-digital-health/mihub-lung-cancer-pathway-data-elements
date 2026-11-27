@@ -13,12 +13,12 @@
   /elements/primary-care/   @<lead-primarycare>
   /schemas/                 @<lead-mi>
   ```
-- **Issue-Templates** mit Pflichtfeldern: betroffene Element-ID(s), Quellen-LL-Referenz, Begründung.
+- **Issue-Formulare** (`.github/ISSUE_TEMPLATE/`): „Neues Datenelement vorschlagen“, „Änderung / Rückmeldung zu bestehendem Element“ und „Frage“; Pflichtfelder u. a. Phase, Bezeichnung und Quellen-Bezug bzw. betroffenes Element und gewünschte Änderung.
 - **PR-Template**: Checkliste (Schema valid, CSV neu generiert, LL-Referenz angegeben, Klinik-Reviewer markiert).
 
 ## 2 Branching-/Commit-Konvention
 
-- Feature-Branches: `feat/<phase>/<element-id>`, z. B. `feat/palliative/dyspneaIntensity`; **PR gegen `dev`**.
+- Feature-Branches: `feat/<phase>/<elementName>`, z. B. `feat/palliative/dyspneaIntensity`; **PR gegen `dev`**.
 - Conventional Commits: `feat(palliative): add dyspneaIntensity (NRS, S3-PalliativLL Empf. 9.1)`.
 - Pro PR ein **kohärentes thematisches Set** (z. B. „alle Bildgebungselemente Nachsorge“) — atomare Element-PRs sind besser, aber gruppierte PRs für initiale Bulk-Erfassung akzeptabel.
 - **Drei Beitrags-Wege** (Issue · Excel · YAML) — siehe [`../CONTRIBUTING.md`](../CONTRIBUTING.md); neue Kandidaten vor Aufnahme auf Dubletten prüfen (`scripts/check-duplicates.py`).
@@ -28,25 +28,29 @@
 Aktive Workflows (`.github/workflows/`):
 
 1. **`validate.yml`** — Schema-Validierung (`python scripts/validate.py`) **und** Catalog-Drift-Check
-   (`build-catalog.py`; bricht ab, wenn `catalog/data-dictionary.csv` nicht aktuell committed ist).
+   (`build-catalog.py`; bricht ab, wenn `catalog/` oder `docs/phases-overview.md` nicht aktuell committed sind).
 2. **`skill-lint.yml`** — prüft die Agent Skills + Sub-Agenten + Symlinks + Copilot-Brücke
    (`python3 .github/scripts/validate-agent-skills.py`).
-3. **`duplicate-check.yml`** — kommentiert bei neuen „data-element"-Issues mögliche Dubletten
-   (`scripts/check-duplicates.py --from-issue-file`).
+3. **`duplicate-check.yml`** — pflegt bei „data-element"-Issues genau einen Kommentar mit möglichen
+   Dubletten (`scripts/check-duplicates.py --from-issue-file`); nach einer Bearbeitung des Issues wird
+   er neu berechnet und ersetzt. Verglichen wird mit dem Stand auf `main`.
 4. **`citation-validate.yml`** — validiert `CITATION.cff` gegen das CFF-Schema (blockierend; ein
    ungültiges CFF bricht den Zenodo-Publish still ab).
 5. **`link-check.yml`** — lychee-Prüfung der Markdown-Links (intern + Attributions-/Förder-URLs;
    non-blocking, wöchentlich + bei PRs).
-6. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
+6. **`release-please.yml`** — erzeugt auf `main` aus Conventional Commits den Release-PR, Tag und
+   `CHANGELOG.md` (Ablauf: [`go-public-checklist.md`](go-public-checklist.md) §7).
+7. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
 
-> Runner: alle Workflows nutzen `ubuntu-latest`. Solange das Repo privat ist, ist GitHub-hosted
-> org-weit geblockt — siehe [`../RUNNERS.md`](../RUNNERS.md) (self-hosted-Fallback; beim
-> Public-Schalten auf `ubuntu-latest` zurück).
+> Runner: alle Workflows nutzen `ubuntu-latest` (GitHub-hosted). Self-hosted Runner sind für das
+> öffentliche Repo nicht vorgesehen, weil Pull Requests aus Forks darauf beliebigen Code ausführen
+> könnten.
 
 ## 4 Releases
 
 - SemVer-Tags je Reife-Iteration: `v0.x.y` (Author/Committee Draft), `v1.0.0` (erste freigegebene Fassung), Folgeversionen für additive Phasen-Erweiterungen.
 - **Zenodo-Hook**: jedes Tag erzeugt eine zitierbare DOI.
+- **Automatik**: `release-please` (siehe §3 Nr. 6); fachliche Release-Notes je Version unter [`releases/`](releases/).
 - `iso13972_metadata.publication_status` der einzelnen Elemente synchronisiert mit Release-Stage:
   - `AuthorDraft` (offene Bearbeitung)
   - `CommitteeDraft` (Konsultation)
@@ -63,7 +67,7 @@ AuthorDraft  ──►  CommitteeDraft  ──►  ApprovedForTesting  ──►
                                                          Withdrawn / Rejected
 ```
 
-Statuswechsel **immer** als Diff im YAML (`publication_status`, `next_revision_date`, `superseded_by`/`supersedes` über `related_elements`).
+Statuswechsel **immer** als Diff im YAML (`publication_status`, `next_revision_date`, `supersededBy`/`supersedes` über `related_elements`).
 
 ## 6 Mehrsprachigkeit & Lokalisation
 

@@ -62,8 +62,9 @@ standard_mappings:
     nicht nur das ZNS: K keine Fernmetastasen nachweisbar, T Residuen, P Progress, N No Change, R neu
     aufgetretene Fernmetastase(n) bzw. Metastasenrezidiv, F fraglicher Befund, U unbekannt, X fehlende
     Angabe. Feldseite 17.5: https://basisdatensatz.de/feld/223/tumorstatus-fernmetastasen. Feldnummern
-    nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd. Zuordnung der
-    Befundkategorien siehe offene Punkte.'
+    nach der oBDS-Feldliste, XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd. Zuordnung der
+    Befundkategorien siehe offene Punkte. Abgeglichen mit oBDS 3.1.0 (XSD vom 14.10.2026; Annahme durch
+    die Landeskrebsregister geplant ab 01.04.2027): diese Felder unverändert gegenüber 3.0.5.'
 instruction_de: 'Ein Eintrag je Schädel-MRT (Cardinality 0..*). Code-Semantik: 94225005 = Hirnmetastasen
   neu nachgewiesen (Erstnachweis bzw. Rezidiv nach metastasenfreiem Intervall); bei bestehenden Hirnmetastasen
   Verlaufswerte gemäß der Trend-Konvention von recistResponse/currentTumorStatus (mCODE ConditionStatusTrendVS):
@@ -132,8 +133,10 @@ provenance:
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): Befundkategorien neu geschnitten
       („progredient“ ergänzt, „neu“ auf Erstnachweis bzw. Rezidiv eingeengt). Zudem Leitlinien-Resync,
-      Terminologie- und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      Terminologie- und Mapping-Korrekturen; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -163,6 +166,12 @@ provenance:
     scope: evidence.guideline_references
     result: 1/1 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Zusätzliches nationales Ziel prüfen: Neben dem radiologischen Befund (MII Bildgebung, DiagnosticReport.conclusionCode)
   bildet MII KDS Onkologie den Fernmetastasen-Verlauf in mii-pr-onko-verlauf (component:Fernmetastasen_Verlauf,

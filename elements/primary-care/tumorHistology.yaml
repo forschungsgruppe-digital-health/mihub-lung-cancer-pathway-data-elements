@@ -45,8 +45,12 @@ standard_mappings:
   resource: 6 Histologie
   path: 'Histologie/Morphologie_ICD_O/Code (6.3) und /Version (6.4: 31, 32, 33, bb); Histologie/Morphologie_Freitext
     (6.5); Histologie/Tumor_Histologiedatum (6.1); zusätzlich Tumorzuordnung/Morphologie_ICD_O'
-  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd
-    (Histologie_Typ).
+  notes: Feldnummern nach der oBDS-Feldliste (BAnz 12.07.2021), XML-Namen nach https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd
+    (Histologie_Typ). Ab oBDS 3.1.0 (XSD vom 14.10.2026) alternativ Histologie/Morphologie_ICD_O_4 bzw.
+    Tumorzuordnung/Morphologie_ICD_O_4 (Code-Muster \d\d\d\d[\dA-Z]/\d; Version 40 = ICD-O-4 2026, b6
+    = neue Codes der WHO-Klassifikationen, 6. Auflage); laut Plattform § 65c sind Meldungen mit ICD-O-4
+    erst nach einer bundesweit abgestimmten deutschen Übersetzung vorgesehen (Termin offen). Bis dahin
+    ICD-O-3 (Version 31–33, bb).
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-histologie-icdo3
   resource: Observation
@@ -130,9 +134,11 @@ provenance:
   history:
   - version: 0.1.0
     date: '2026-10-13'
-    change: Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und Mapping-Audit
-      geprüft und korrigiert
-    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md
+    change: 'Erstfassung; vor der ersten Veröffentlichung (Katalog 0.2.0-rc.1) durch Zweitprüfung und
+      Mapping-Audit geprüft und korrigiert; Abgleich 2026-11-25: oBDS-Mapping auf XSD 3.1.0 (14.10.2026)
+      abgeglichen'
+    reference: docs/audit-log.md §13.5, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -162,6 +168,12 @@ provenance:
     scope: evidence.guideline_references
     result: 2/2 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 1 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'Das Profil mii-pr-onko-histologie-icdo3 verlangt eine Probenreferenz (Observation.specimen 1..1 auf
   mii-pr-onko-specimen), die in der Hausarztpraxis meist fehlt; Observation.code lässt nur LOINC 59847-4

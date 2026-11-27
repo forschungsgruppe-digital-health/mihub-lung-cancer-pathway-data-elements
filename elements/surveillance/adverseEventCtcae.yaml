@@ -12,7 +12,7 @@ datatype: CodeableConcept
 cardinality: 0..*
 value_set:
   binding_strength: extensible
-  uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+  uri: https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events
   codings:
   - system: meddra
     code: '10061229'
@@ -58,6 +58,19 @@ evidence:
       und Sozialberatung zu erkennen.
     accessed: '2026-10-15'
     locator: Kap. 16.1, Empf. 16.2 (EK, geprüft 2026, Starker Konsens), S. 492
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Kap. 13.1.2.2 Allgemeine therapeutische Prinzipien bei Verdacht auf irAE (Hintergrundtext:
+      Schweregrad der irAE nach der jeweils neuesten CTCAE-Version; organspezifische Kapitel 13.2–13.11)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zur Behandlung von irAE haben sich in den letzten Jahren grundsätzliche Behandlungsstrategien
+      entwickelt, die sich in der Regel dem Schweregrad und betroffenen Gewebe bzw. Organ orientieren.
+      Der Schweregrad richtet sich nach der neusten Version Common Terminology Criteria for Adverse Events
+      (CTCAE).
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.2.2, Hintergrundtext, S. 637
 iso13972_metadata:
   type: condition
   keywords:
@@ -93,8 +106,12 @@ provenance:
   - version: 0.1.1
     date: '2026-10-15'
     change: 'Nicht brechende Änderungen gegenüber 0.1.0: Leitlinien-Resync (S3 5.1, Onkopedia, S3-LL Palliativmedizin
-      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      3.0), Codings verifiziert bzw. korrigiert (ohne Bedeutungsänderung), Referenzen, Mappings, Hinweise;
+      Abgleich 2026-11-25: value_set.uri auf NCI-Seite „CTCAE and AE Reporting“ (CTCAE v6.0) umgestellt;
+      offener Punkt zur CTCAE-Version an oBDS 3.1.0 angepasst; Quelle ergänzt: S3-LL Supportive Therapie
+      bei onkologischen PatientInnen 2.1 – Kap. 13.1.2.2, Hintergrundtext, S. 637'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -124,16 +141,22 @@ provenance:
     scope: evidence.guideline_references
     result: 2/2 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 3 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
 - 'CTCAE-Version je Ereignis mitführen: MII KDS Onkologie 2027.0.0-ballot.1 (Extension mii-ex-onko-nebenwirkung-ctcae-version,
-  required gebunden; in 2026.0.3 noch nicht enthalten) bzw. oBDS 2021 (15.3) kennen nur die CTCAE-Versionen
-  4, 4.03, 5.0 und ''Sonstige''. CTCAE v6.0 (NCI, Juli 2025) wäre daher nur als ''Sonstige'' meldbar,
-  obwohl sich der Termbestand unterscheidet (z. B. v6.0: ''Lung infection'' 10061229 gestrichen, ersetzt
-  durch ''Pneumonia'' 10035664). Standard-Mapping auf mii-pr-onko-nebenwirkung-adverse-event ergänzen
-  (AdverseEvent.event.coding:meddra, required an mii-vs-onko-nebenwirkung-art); dieses ValueSet enthält
-  nur die MedDRA-Codes der CTCAE v4.03 (10035664 nicht enthalten). value_set.uri (ctep.cancer.gov/…/ctc.htm)
-  leitet per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
-  UNSICHER).'
+  required gebunden; in 2026.0.3 noch nicht enthalten) kennt nur die CTCAE-Versionen 4, 4.03, 5.0 und
+  ''Sonstige''; der oBDS (15.3) führt CTCAE v6.0 (NCI, Juli 2025) erst ab Version 3.1.0 (XSD vom 14.10.2026;
+  Annahme durch die Landeskrebsregister geplant ab 01.04.2027) und bis dahin nur als ''Sonstige''. Der
+  Termbestand unterscheidet sich (z. B. v6.0: ''Lung infection'' 10061229 gestrichen, ersetzt durch ''Pneumonia''
+  10035664). Standard-Mapping auf mii-pr-onko-nebenwirkung-adverse-event ergänzen (AdverseEvent.event.coding:meddra,
+  required an mii-vs-onko-nebenwirkung-art); dieses ValueSet enthält nur die MedDRA-Codes der CTCAE v4.03
+  (10035664 nicht enthalten).'
 related_elements:
 - relation: hasPart
   target: mihub.lung.surveillance.adverseEventCtcaeGrade.v0.2

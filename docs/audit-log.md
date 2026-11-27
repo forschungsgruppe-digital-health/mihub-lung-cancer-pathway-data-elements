@@ -7,7 +7,7 @@ Dieses Dokument bündelt zwei Audit-Funktionen:
 
 Beide Funktionen erfüllen gemeinsam die Audit-Pflicht aus `AGENTS.md` §3 und dienen als operative Evidenz menschlicher Aufsicht im Sinne der EU-AI-Act-Transparenzpflichten (siehe `AI_USAGE.md` §4).
 
-Stand: 2026-10-13 · Iteration v0.2.0 · **112 Datenelemente** (51 aus v0.1 + 61 aus Klinik-Erhebungen und Leitlinien-Abgleich 2026-10; siehe §13). Historischer Stand v0.1 (2026-05-04): 51 Datenelemente (44 Erhebungs- + 7 Ergebnis-Artefakte).
+Stand: 2026-11-25 · Iteration v0.2.0 (zuletzt Quellen-Aktualität, §16) · **112 Datenelemente** (51 aus v0.1 + 61 aus Klinik-Erhebungen und Leitlinien-Abgleich 2026-10; siehe §13). Historischer Stand v0.1 (2026-05-04): 51 Datenelemente (44 Erhebungs- + 7 Ergebnis-Artefakte).
 
 ## 1 Vorgehen
 
@@ -603,12 +603,211 @@ Neu: [`docs/reviews/2026-10-13-erhebungen.md`](reviews/2026-10-13-erhebungen.md)
 
 ## 15 Limitationen
 
-- Eine **Kapitel-Tiefe-Verifikation** (vollständiger Zitatvergleich Wort-für-Wort über alle 51 Elemente) wurde stichprobenartig durchgeführt; eine vollständige textliche Validierung ist Teil des klinischen Reviews in der nachfolgenden Iteration.
+- Seit 2026-10-15 trägt jede Quellenangabe ein wörtliches Kurzzitat, das maschinell gegen Textfassungen der Quellen geprüft wird (§14.8, §16). Geprüft ist damit die Fundstelle, nicht, ob das Element die Aussage klinisch angemessen abbildet — das bleibt Teil des klinischen Reviews.
 - **Onkopedia** ändert online schrittweise — die Versionen-Pins (seit 2026-10-13: NSCLC `Stand April 2025`, SCLC `Stand August 2026`) müssen bei nächster Re-Verifikation gegen die dann aktuelle Online-Fassung erneut geprüft werden; die SCLC-Archivfassung 09/2025 wurde nicht gegen 08/2026 gedifft (Kap. 0 nennt keine Nachsorge-Änderung).
 - Die **Onkopedia-Tabellen** wurden 2026-10-13 aus dem HTML-Markup verifiziert: NSCLC Tab. 12 hat die Monatsspalten 3/6/12/18/24/36/48/60 (**keine** Spalte 9 — frühere Angabe korrigiert), SCLC Tab. 9 die Spalten 3/6/9/12/18/24/36/48/60; „(X)“ ist in beiden Leitlinien nicht legendiert.
 - Die hier gewählten **Empfehlungsgrade/Evidenzlevel** spiegeln die formal in der Leitlinie ausgewiesenen Werte; bei Konsensbasierten Empfehlungen (EK) ist kein Evidenzlevel zugeordnet — als `n/a` codiert.
 - **Konsultationsfassungen** (z. B. S3-LL 5.01) sind nach Finalisierung nicht mehr abrufbar; Annahmen über ihren Inhalt bleiben UNSICHER — daher werden nur finale Fassungen gepinnt (§13.1).
-- **Terminologie-Verifikation** belegt die Existenz und den Anzeigetext eines Codes, nicht die klinische Eignung der Zuordnung; ICF und MedDRA sind auf dem MII TermServ nicht verfügbar und bleiben unverifiziert.
-- Die **Kliniker-Fundstellen** der Excel-Erhebung (S3-LL Kap. 14.x, Empf. 14.7/14.8) wurden ohne Wortlautprüfung übernommen und sind in den YAMLs entsprechend gekennzeichnet.
+- **Terminologie-Verifikation** belegt die Existenz und den Anzeigetext eines Codes, nicht die klinische Eignung der Zuordnung; ICF und MedDRA sind auf dem MII TermServ nicht verfügbar (MedDRA-Codes nur gegen das MII-ValueSet `mii-vs-onko-nebenwirkung-art` geprüft), die KDL seit 11/2026 ebenfalls nicht (§16).
+- Die **Kliniker-Fundstellen** der Excel-Erhebung (S3-LL Kap. 14.x, Empf. 14.7/14.8) wurden zunächst ohne Wortlautprüfung übernommen; seit 2026-10-15 sind sie mit wörtlichem Zitat belegt und gegen die S3-LL Lungenkarzinom 5.1 geprüft (§14.8).
 - Die **Zweitprüfung vom 2026-10-14** ist KI-gestützt (Verifizierer und je zwei Skeptiker); die konservative Regel „verwerfen, sobald eine Linse widerlegt“ kann berechtigte Korrekturen verworfen haben (88 Vorschläge, nicht angewendet). Die Primärquellen lagen als Textfassungen der PDFs vor; Tabellen- und Spaltenzuordnungen bleiben eine mögliche Fehlerquelle.
 - **Mapping-Ziele** wurden gegen lokal geladene Paketstände geprüft (MII KDS bis 2027-Ballot, ISiK 6.0.0 u. a.); neuere Paketversionen können Canonicals oder Bindungen ändern.
+
+## 16 v0.2.0 (Fortsetzung) — Aktualität der Primärquellen, oBDS 3.1.0, neue Quellen, Repo-Review
+
+**Datum:** 2026-11-25 · **Auslöser:** Maintainer-Auftrag „Aktualität der Primärquellen recherchieren, neue Primärquellen aufnehmen und die Datenelemente abgleichen; über den MII TermServ Codes vorschlagen; danach das gesamte Repo prüfen, aufräumen und offene Punkte anzeigen“ · **KI-Unterstützung:** Claude Code (Opus 5.5) mit Read-only-Recherche- und Prüfagenten · **Werkzeuge:** MII TermServ (mTLS; `$lookup`/`$expand`, SNOMED CT 20260701 und Germany Edition 20261115), oBDS-XSD 3.0.5 und 3.1.0, `pdftotext`-Fassungen der neuen Quellen, `scripts/verify-quotes.py`, `scripts/verify-terminology.py`. Bericht: [`docs/reviews/2026-11-25-quellen-aktualitaet.md`](reviews/2026-11-25-quellen-aktualitaet.md).
+
+### 16.1 Quellen und Pins
+
+Alle klinischen Pins sind aktuell (S3-LL Lungenkarzinom 5.1, Palliativmedizin 3.0, Psychoonkologie 2.1, Onkopedia NSCLC 04/2025, SCLC 08/2026, Impfungen 05/2026, OCP 2nd ed./07/2025); die S3-LL Rauchen und Tabakabhängigkeit hat keine Nachfolgefassung. Neu: **oBDS-XML-Schema 3.1.0** (14.10.2026; Annahme ab 01.04.2027). ICD-10-GM 2026 gilt laut BfArM voraussichtlich bis Ende 2028; OPS 2027 ist veröffentlicht, aber noch nicht auf dem MII TermServ. Nicht verifizierbar waren die Versionsstände von mCODE/Genomics Reporting und KBV MIO (Seiten ohne Inhalt bzw. nicht abrufbar). Details: Bericht §2.
+
+### 16.2 Neue Quellen (Freigabe der Maintainer:in, je Element bestätigt)
+
+| Quelle | Elemente | Änderungstyp |
+| --- | --- | --- |
+| S3-LL Supportive Therapie 2.1 (Juni 2026, AWMF 032-054OL), Kap. 13 und 11.11 | `immuneRelatedAdverseEvent`, `adverseEventCtcae`, `adverseEventCtcaeGrade`, `treatmentSideEffectOrComplication`, `laboratoryPanelSurveillance`, `postTherapyComplication` | Quellen; bei `immuneRelatedAdverseEvent` zusätzlich Definition, Auslöser und 3 Codes; bei `laboratoryPanelSurveillance` offener Punkt |
+| G-BA KFE-RL Abschnitt D III, § 38 (in Kraft 12.03.2026) | `screeningProgramEnrolment`, `followUpInterval` | Quelle, offene Punkte (Konflikt mit S3 Empf. 16.7) |
+| STIKO-Empfehlungen 2026 (Epid Bull 4/2026) | `immunizationStatus` | Quelle, Definition (+ RSV), offene Punkte zusammengeführt |
+
+11 neue Quellenangaben mit wörtlichem Zitat, 11/11 maschinell gegen die Quelltexte bestätigt. Quellenangaben im Katalog: 328 → 339.
+
+### 16.3 oBDS 3.1.0
+
+XSD-Vergleich 3.0.5 ↔ 3.1.0: CTCAE-Version 6.0 (15.3), `Morphologie_ICD_O_4` (Histologie, Tumorzuordnung), Topographie-Version 40, `TNM_Typ` mit `LV`, `B` und UICC `IB3`; alle übrigen referenzierten Felder unverändert. 18 Elemente mit oBDS-Mapping angepasst (Verweis auf XSD 3.1.0; inhaltliche Hinweise in `adverseEventCtcaeGrade`, `tumorHistology`, `tumorLocalisation`, `tnmStage`); zusätzlich offener Punkt in `adverseEventCtcae`.
+
+### 16.4 Terminologie
+
+434 Codings: 338 OK, 31 lokal, 65 nicht verifizierbar (KDL 58, ICF 4, MedDRA 3), 0 nicht gefunden, 0 inaktiv. **Die KDL ist auf dem MII TermServ nicht mehr abrufbar** (am 2026-10-15 noch verifiziert); die Codings bleiben unverändert. Alle SNOMED-Codes sind auch in der Germany Edition 20261115 aktiv. Ergänzt: 736252007 (`structuredFollowUpPlan`), 1360081003, 72527006, 439990003 (`immuneRelatedAdverseEvent`); Hinweis auf Teilentsprechungen in `palliativeCareTier`. `value_set.uri` der CTCAE-Elemente auf https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events umgestellt.
+
+### 16.5 Repo-Review und Aufräumen
+
+28 Elemente geändert (Liste: Bericht §6), keine Versionssprünge (nicht brechend, innerhalb des unveröffentlichten Sprungs seit `v0.1.0-rc.2`). Doku: 86 Korrekturen in 19 Dateien, Glossar-Ergänzungen (Freigabe: Regelwerke + Kodierstandards; Lesehilfe §21), neues Issue-Formular `change-data-element.yml`, README-Hinweise „Schnellstart“/„Reifegrad“, CI-Drift-Check über `catalog/` und `docs/phases-overview.md`, Excel-Vorlage neu erzeugt. Verifikation: `validate.py` 112/112 OK, Katalog neu gebaut, `skill-lint` OK, Dubletten 57/54/1 (unverändert), offene Punkte im Katalog 120 → 122.
+
+### 16.6 Offene Punkte
+
+**Fachlich (klinisches Review)**
+
+1. `screeningProgramEnrolment`/`followUpInterval`: Zugang zum LDCT-Screening nach fünf Jahren Nachsorge — KFE-RL § 38 Abs. 3 („Behandlung oder Nachbehandlung“ → kurative Versorgung) vs. S3 Empf. 16.7; Statusangabe im Element.
+2. `laboratoryPanelSurveillance`: ICI-spezifisches Monitoring (S3-LL Supportive Therapie Tab. 99) in die Definition aufnehmen oder als eigenes Element führen.
+3. `immunizationStatus`: therapiebedingte Besonderheiten (Lebendimpfungen, Impfzeitpunkt vor Immunsuppression) im Element oder in `recommendationsForPrimaryCare`/`riskFactorAndAlert`.
+4. Weiterhin offen aus §14.6: 125 `issues[]` im Katalog (Stand nach §16.8), verworfene Vorschläge der Zweitprüfung, `responsiblePrimaryCarePhysician` 0..1, Nur-Ballot-Profile, `dependsOn`-Semantik (vier Zyklen), Rolle der KDL-Codings in Code-Elementen (`complexityLevel`, `illnessPhase`, `palliativeCareTier`, `recistResponse`, `structuredFollowUpPlan`).
+
+**Terminologie und Standards**
+
+5. KDL fehlt auf dem MII TermServ — Rückfrage beim TermServ-Betrieb bzw. bei der DVMD; bis dahin 58 Codings unverifiziert.
+6. OPS 2027 (gültig ab 01.01.2027): die 18 OPS-Codes prüfen, sobald die Version auf dem MII TermServ liegt.
+7. Versionsstände mCODE/Genomics Reporting und KBV MIO (Patientenkurzakte, Impfpass) bei Erreichbarkeit nachprüfen.
+8. ICD-O-4: Umstellung von `tumorHistology`/`tumorLocalisation` erst nach abgestimmter deutscher Übersetzung; CTCAE 6.0 in MII KDS (Ballot kennt nur 4/4.03/5.0) beim nächsten Release prüfen.
+9. S3-LL Rauchen und Tabakabhängigkeit (Gültigkeit abgelaufen): Neufassung beobachten.
+
+**Repository**
+
+10. Größere Verständlichkeits-Verbesserungen (nicht umgesetzt): generierte Liste aller offenen Punkte (`docs/open-issues.md`), Spalten Definition/Status/Link in `docs/phases-overview.md` und der CSV, Steckbrief-Seiten je Element, deutsche Feldreferenz aus dem Schema, CSV-Exporte aller Mappings und Codings, englische Kurzfassung bzw. `label_en` (0/112), UTF-8-BOM oder Importhinweis für die CSV, Excel-Vorlage mit Blatt „Bestand“.
+11. `.gitattributes` schließt CONTRIBUTING, RUNNERS, `.github/` u. a. vom Zenodo-Archiv aus; Links darauf sind im Archiv tot.
+12. AGENTS.md Regel 6 („keine git-Operationen“) widerspricht `git status`/`git log` in den Skills `data-element-validator` und `ai-usage-curator` — lesende git-Aufrufe erlauben oder aus den Skills entfernen.
+13. `.github/CODEOWNERS` enthält nur Platzhalter-Teams; klinische Reviewer:innen benennen (AI_USAGE §11 Nr. 6).
+14. `provenance.git_commit` ist in 112/112 Elementen leer; `endorsing_authority` „MiHUB Konsortium AP8“ auch bei Hausarzt-Elementen; das JSON-Schema trägt keine Versionsnummer.
+15. Branch-Schutz und Sichtbarkeit des Repos sind in `docs/github-workflow.md`, `RUNNERS.md` und der go-public-Checkliste unterschiedlich beschrieben.
+16. `ai-usage-curator`-Lauf empfehlenswert (EU-Leitlinien zu Art. 50, angekündigt für Q2 2026; Nutzungsprotokoll 2026-11-25 nur knapp ergänzt).
+17. Release 0.2.0-rc.1: PR #15 (→ `dev`) und gestapelter PR #16 (Screening-Vorbereitung) offen; die Änderungen dieses Prüflaufs liegen seit 2026-11-26 in einem eigenen, auf #15 gestapelten Draft-PR (§16.8).
+18. Datenschutz: Der Mappen-Auszug `docs/reviews/2026-10-13-erhebungen.md` (als unveränderliche Momentaufnahme gekennzeichnet) nennt in der Spalte „Anmerkungen/Beziehungen“ der Nachsorge-WG (5 Zeilen) den Namen der kommentierenden Person; entscheiden, ob eine Rollenangabe genügt (§16.7).
+19. Merge-Abstimmung PR #15/#16: #16 legt ebenfalls `GLOSSARY.md` §21 an, nummeriert im Audit-Log „Limitationen“ auf §16 um und führt die Quellenwerte `G-BA KFE-RL`/`LuKrFrühErkV` ein — kollidiert mit §21 „Lesehilfe“, §16 dieses Prüflaufs und der Quelle `andere` in `screeningProgramEnrolment`.
+
+**GitHub-Issues (angelegt 2026-11-25, einheitliches Schema Problembeschreibung · Fundorte · Lösungsvorschläge/Optionen, ohne personenbezogene Angaben; Entwurf und Gegenprüfung je Issue durch zwei Agenten):**
+
+| Issue | Thema | Bezug |
+| --- | --- | --- |
+| [#17](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/17) | Übergang Nachsorge → LDCT-Früherkennung (KFE-RL § 38 Abs. 3 vs. S3 Empf. 16.7) | Nr. 1 |
+| [#18](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/18) | ICI-Labormonitoring (`laboratoryPanelSurveillance`) | Nr. 2 |
+| [#19](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/19) | KDL nicht mehr auf dem MII TermServ | Nr. 5 |
+| [#20](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/20) | Rolle der KDL-Codings in Code-Elementen | Nr. 4 |
+| [#21](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/21) | `dependsOn`-Semantik, vier Zyklen | Nr. 4 |
+| [#22](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/22) | Beobachtungsliste Standards/Terminologien | Nr. 6–9 |
+| [#23](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/23) | Kodierungslücken (lokale Codes, pending-mapping) | Nr. 4 |
+| [#24](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/24) | Lesbare generierte Sichten | Nr. 10 |
+| [#25](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/25) | AGENTS.md Regel 6 vs. git in Skills | Nr. 12 |
+| [#26](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/26) | Klinisches Review-Board, CODEOWNERS | Nr. 13, 15 |
+| [#27](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/27) | Merge-Abstimmung PR #15/#16 | Nr. 17, 19 |
+| [#28](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/28) | `followUpInterval`: flexibles Raster (WG-Kommentar) | §16.7 |
+| [#29](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/29) | Komplikation der auslösenden Therapie zuordnen | §16.7 |
+| [#30](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/30) | Datenerhebung in der Sterbephase | §16.7 |
+| [#31](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/31) | `recurrenceOrSecondPrimary` aufteilen | §16.7 |
+| [#32](https://github.com/forschungsgruppe-digital-health/mihub-lung-cancer-pathway-data-elements/issues/32) | Pflegegrad (SGB XI) als eigenes Element | §16.7 |
+
+Nicht als Issue angelegt (Entscheidung der Maintainer:in bzw. geringe Tragweite): Nr. 3 (Impfstatus-Besonderheiten), Nr. 11 (Zenodo-Archiv, tote Links), Nr. 14 (`git_commit`, `endorsing_authority`, Schema-Version), Nr. 16 (Curator-Lauf), Nr. 18 (Personenbezug im Erhebungsauszug).
+
+**Offene PRs (geprüft 2026-11-25, nicht gemergt):** #15 und #16 sind technisch mergebar (CI grün), haben aber keine Reviews und enthalten offene Punkte, die eine menschliche Entscheidung brauchen (#15: klinische Review-Checkliste, `dependsOn`-Semantik, Hinweis „Nicht mergen ohne Review“; #16: Entscheidungsfragen E1–E24, DPIA, gestapelt auf #15). Zudem untersagt AGENTS.md Agenten das Selbst-Mergen und git-Operationen, und die Änderungen dieses Prüflaufs lagen zu diesem Zeitpunkt noch nicht im PR (seit 2026-11-26 eigener Draft-PR, §16.8).
+
+### 16.7 Abgleich der Erhebungsunterlagen (TU-Datashare)
+
+**Auftrag (2026-11-25):** prüfen, inwieweit die Elemente und Kommentare der auf dem TU-Datashare abgelegten Unterlagen im Katalog berücksichtigt sind. Geprüft (read-only, Kopie nur im Sitzungs-Scratchpad): `datenelement-erhebung (1)-Amed.xlsx`, `datenelement-erhebung_Nachsorge_WG_ak.xlsx` und `Datenelemente Nachsorge_WG_ak.docx` (kommentierte Fassung der Phasen-Übersicht v0.1 mit nachverfolgten Ergänzungen und fünf Reviewer-Kommentaren vom 2026-06-12; die Word-Datei selbst war im Repo nicht erwähnt, ihre Inhalte hat die WG in die Erhebungsmappe übernommen).
+
+| Befund | Ergebnis |
+| --- | --- |
+| Excel-Mappen | inhaltlich identisch mit dem Auszug `docs/reviews/2026-10-13-erhebungen.md` (116 Zeilen, 0 Abweichungen; Allgemeinmedizin DE-040…060 leer); keine Zellkommentare, aber die fünf Word-Kommentare stehen in der Spalte „Anmerkungen/Beziehungen“ der WG-Mappe (DE-010, -011, -014, -015, -047) und damit auch im Auszug; Blätter Datennutzung/Codes nur Beispielzeilen |
+| Zeilen → Katalog | vollständig zugeordnet: Nachsorge-WG 51 bestätigt, 5 zusammengeführt, 22 neue Elemente; Allgemeinmedizin 38 Zeilen in `primary-care` (§13.4) |
+| Word: Ergänzungen (Zeilen, Absatz „Weitere Aspekte“) | Zeilen in die WG-Mappe übernommen und berücksichtigt; der Absatz „Weitere Aspekte“ steht nur im Word-Dokument; „Pflegebedarf/-grad“ nur allgemein in `socialSituation` („Pflege-/Unterstützungsbedarf“), Pflegegrad nach SGB XI nicht als eigene Angabe |
+| Word-Kommentar zu `smokingStatus` („Definieren“) | berücksichtigt (Definition 2026-10 neu gefasst, Version 0.2.0) |
+| Word-Kommentar zu `recurrenceOrSecondPrimary` (Rezidiv und Zweittumor getrennt, Lokalisation) | als offener Punkt geführt (Trennung nach MII/oBDS, Lokalisation), Entscheidung offen |
+| Word-Kommentar zu `postTherapyComplication` (für die Hausarztpraxis zu allgemein; Zuordnung zu OP/Chemo/RT; Beratungsanlass z. B. Müdigkeit) | teilweise: `reasonForEncounter` und `treatmentSideEffectOrComplication` (Phase `primarycare`) decken den Beratungsanlass bzw. die Diagnose ab; eine Zuordnung der Komplikation zur auslösenden Therapie fehlt |
+| Word-Kommentar zu `followUpInterval` (flexibel; anfangs wöchentlich/monatlich, später jährlich) | nicht berücksichtigt (weicht von S3 Empf. 16.7 und Onkopedia ab; als klinische Frage offen) |
+| Word-Kommentar zur Palliativversorgung (Datenerhebung vs. Respekt vor dem Sterbenden) | nicht als offener Punkt geführt (nur allgemein: sensible Elemente, Methodik §4.2) |
+
+Wortlaut der Reviewer-Kommentare (Word-Fassung der Phasen-Übersicht v0.1, Nachsorge-WG, 2026-06-12; in der Erhebungsmappe Spalte „Anmerkungen/Beziehungen“). Beim Abgleich am 2026-10-13 (§13.4) wurden die zugehörigen Zeilen als „Bestand bestätigt“ geführt; die Kommentare selbst wurden dabei nicht als offene Punkte umgesetzt. Der Auszug enthält in dieser Spalte den Namen der kommentierenden Person (Datenschutz prüfen, siehe §16.6).
+
+| Bezug | Kommentar |
+| --- | --- |
+| `followUpInterval` | „Flexibel gestalten. Zu Beginn der Nachsorge eher 1x wöchentlich oder monatlich. Später 1x jährlich“ |
+| `postTherapyComplication` | „Für Hausarzt sehr allgemein. Komplikation zuordnen zu Operation/Chemo/Strahlentherapie. Wenn das überhaupt möglich ist. Patient kommt mit Beratungsanlass Müdigkeit.“ |
+| `recurrenceOrSecondPrimary` | „Zwei unterschiedliche Dinge. Eher getrennt auflisten. Ebenso ist die Lokalisation relevant“ |
+| `smokingStatus` | „Definieren“ |
+| Phase Palliativversorgung | „Wie letztens diskutiert. Datenerhebung vs. Respekt vor dem Sterbenden“ |
+
+**Umsetzung (Freigabe der Maintainer:in, 2026-11-25):** Die drei nicht bzw. nur teilweise berücksichtigten Kommentare sind als offene Punkte (`issues`) eingetragen in `followUpInterval`, `postTherapyComplication`, `dyingPhaseDiagnosed` und `illnessPhase` (Querverweis wegen „täglich in Sterbephase“). Die Texte wurden je Kommentar entworfen und von zwei unabhängigen Prüfern (Treue zum Kommentar/Dubletten; Quellenbeleg) gegengeprüft und zusammengeführt. Leitlinienabweichende Wünsche sind als solche gekennzeichnet, nicht übernommen. Umsetzungsvorschläge: `docs/reviews/2026-11-25-umsetzungsvorschlag-wg-kommentare.md`. Offene Punkte im Katalog: 122 → 126.
+
+### 16.8 Commit und Review-PR (2026-11-26)
+
+**Auftrag der Maintainer:in (2026-11-26):** die Änderungen vom 2026-11-25 committen und als PR zur Review vorlegen. Für diesen Schritt gilt die ausdrückliche Anweisung anstelle der Regel „keine `git`-Operationen durch Agenten“ (AGENTS.md Nr. 6); gemergt wird nicht.
+
+- Branch `feat/source-check-2026-11-25`, abgezweigt von `feat/guideline-resync-terminology-primarycare` (PR #15, Stand `0b18f6f`).
+- Sechs Commits: Tooling (Issue-Formulare, Element-Vorlage, CI-Drift-Check, Skripte, Skills) · 30 Elemente · Audit-Log, Berichte und Glossar · Doku-Aufräumen · neu erzeugter Katalog · Korrekturen aus der Gegenprüfung (unten).
+- Draft-PR gegen `feat/guideline-resync-terminology-primarycare`, damit die Review nur die Änderungen dieses Prüflaufs zeigt; nach Freigabe fließen sie in PR #15 ein.
+- Vorab lokal geprüft: `validate.py` 112/112 OK, `build-catalog.py` ohne Drift, `validate-agent-skills.py` OK; Zitate der neuen Quellen 11/11 gefunden (die übrigen 328 Zitate ohne lokale Textfassung, in diesem Lauf nicht erneut geprüft); relative Links der geänderten Markdown-Dateien geprüft; Diff vor dem Push auf Personenbezug und Zugangsdaten geprüft.
+
+- **Gegenprüfung vor dem Push:** fünf unabhängige Prüfer (Commit-Nachrichten, PR-Text, Datenschutz und Zugangsdaten, inhaltliche Review-Risiken), deren Befunde je ein weiterer Prüfer zu widerlegen versuchte; 25 Befunde, davon 18 bestätigt, kein Datenschutzbefund. Commit-Nachrichten und PR-Text danach korrigiert (u. a. oBDS-Umstellung in 18 statt 17 Elementen).
+- **Korrekturen mit Freigabe der Maintainer:in (2026-11-26):** Zählung der oBDS-Umstellung 17 → 18 in §16.3, `docs/methodology.md` und im Prüfbericht (dort zusätzlich „12 weitere“ → 14 Elemente); KDL-Status in `docs/methodology.md` §2 und `AI_USAGE.md` §3; Hilfetext der Evidenzlevel in `scripts/_elicitation.py` (Erhebungsmappe neu erzeugt); Aufzählung der CodeSystems im Docstring von `scripts/build-fhir-logical-models.py`.
+- **`adverseEventCtcaeGrade`:** erledigten offenen Punkt zur `value_set.uri` entfernt (die URI wurde am 2026-11-25 umgestellt; im Schwester-Element `adverseEventCtcae` war der Hinweis schon entfernt); offene Punkte im Katalog 126 → 125 (README, Release-Notes, §16.6 Nr. 4, Umsetzungsvorschlag).
+- **`immuneRelatedAdverseEvent`:** Einstufung der erweiterten Definition („unter oder nach“ ICI-Therapie, offene Organliste) als nicht brechend bestätigt; Begründung im history-Eintrag 0.1.1 ergänzt. Die Regel im Umsetzungsvorschlag ist angeglichen: Minor-Sprung nur bei Verengung oder Umdeutung bereits erfasster Werte.
+- **GitHub-Labels** `data-element`, `element-feedback`, `klinik-spur`, `needs-triage` im Repo angelegt (Freigabe 2026-11-26). Die Issue-Formulare vergeben sie, sie existierten aber nicht; ohne `data-element` startete der Dubletten-Check (`.github/workflows/duplicate-check.yml`) bei Formular-Issues nie.
+- **Issues #17–#32** (Freigabe der Maintainer:in, 2026-11-26): Branch-Hinweis auf `feat/source-check-2026-11-25` (Draft-PR #33) aktualisiert; in #24 und #28 zusätzlich der Zähler offener Punkte 126 → 125; die übrigen Texte unverändert.
+
+### 16.9 Entbehrliche Dateien (2026-11-27)
+
+**Auftrag der Maintainer:in (2026-11-26):** das Repo auf entbehrliche und ungenutzte Dateien prüfen und zur Prüfung auflisten. Durchsucht wurden alle 193 versionierten Dateien (Stand Branch `feat/source-check-2026-11-25`) und die lokalen, nicht versionierten Dateien. Vier Prüfer suchten aus verschiedenen Blickwinkeln, je ein weiterer versuchte jeden Kandidaten zu widerlegen, zum Schluss folgte eine Lückensuche.
+
+**Entfernt (Freigabe der Maintainer:in, 2026-11-27):**
+
+- `RUNNERS.md` — Anleitung für self-hosted Runner als Notlösung, solange das Repo privat war. Das Repo ist öffentlich, kein self-hosted Runner ist registriert, alle sechs Workflows laufen auf `ubuntu-latest` (geprüft 2026-11-27). Verweise angepasst:
+  - `.gitattributes` (Eintrag `export-ignore` entfernt);
+  - `docs/go-public-checklist.md` §5 (Runner-Punkt als erledigt markiert, Sicherheitshinweis zu Fork-PRs übernommen) und §7 (Hinweis auf geblockte Runner entfernt);
+  - `docs/github-workflow.md` §3 (Runner-Hinweis mit demselben Sicherheitshinweis);
+  - Kommentar in `.github/workflows/release-please.yml`.
+
+  Damit sind §16.6 Nr. 11 (für `RUNNERS.md`) und Nr. 15 zum Teil erledigt; die älteren Einträge bleiben unverändert.
+- Lokal, nicht versioniert: `.DS_Store` und `derived/fhir-logical-model/_schema/MiHUBDataElement.fsh` (veraltete Ausgabe vom 2026-05-04 mit einem zweiten, alten Logical Model; der Generator räumt seinen Ausgabeordner nicht auf).
+
+**Nicht umgesetzt (Befunde zur Entscheidung):**
+
+- `skills/SKILLS_SETUP.md` in `skills/README.md` zusammenführen.
+- Excel-Spur nur einmal beschreiben (`templates/README.md` vs. howto §A2; „zweites Blatt“ in `CONTRIBUTING.md` ist das dritte).
+- `docs/go-public-checklist.md`: offene Punkte in Issues überführen, §7 nach `docs/github-workflow.md`, danach entfernen.
+- `.codex/skills` nach `.agents/skills` umziehen (Herstellerangaben vorher prüfen).
+- `docs/github-workflow.md`: Branch-Schutz und CODEOWNERS-Kopie korrigieren.
+- Dubletten-Check schreibt bei jedem `opened`/`edited`/`labeled` einen neuen Kommentar. Seit es die Labels gibt (§16.8), kommen so mehrere gleiche Kommentare je Formular-Issue zustande. → erledigt, §16.10.
+- `link-check.yml` von GitHub wegen Inaktivität deaktiviert.
+- `.github/CODEOWNERS` ohne Wirkung (unbekannte Owner); `docs/howto-add-element.md` schreibt CODEOWNERS fälschlich die Zuweisung von Issues zu.
+- Pfadfilter in `validate.yml` ohne `catalog/**` und `docs/phases-overview.md`.
+- Lücken in `.gitignore` (Office-Sperrdateien, Zertifikate/Schlüssel, Prüfberichte, Leitlinien-Textfassungen).
+- `elements/_incoming/` wird von den Skripten nicht ausgeschlossen.
+- Uneinheitliches Pinning der Actions (für `duplicate-check.yml` erledigt, §16.10); zwei vermutlich tote relative Links in Vorlagen.
+
+Einzelbelege: Antwort an die Maintainer:in vom 2026-11-26.
+
+### 16.10 Dubletten-Check repariert (2026-11-27)
+
+**Auftrag der Maintainer:in (2026-11-27):** den Dubletten-Check reparieren. Freigegeben wurden außerdem: genau ein Kommentar je Issue, der bei Bearbeitung ersetzt wird; Actions auf die aktuellen Versionen heben und per Commit-SHA fixieren.
+
+**Fehler:** `.github/workflows/duplicate-check.yml` lief bei `opened`, `edited` und jedem `labeled`, und jeder Lauf schrieb einen neuen Kommentar. Das Formular „Neues Datenelement“ vergibt drei Labels, ein neues Issue hätte also bis zu vier gleiche Kommentare bekommen und jede Bearbeitung einen weiteren. Bisher ist das nie aufgetreten, weil die Labels fehlten (alle 67 Läufe übersprungen).
+
+**Änderung** (nur `.github/workflows/duplicate-check.yml`):
+
+- `labeled` löst nur noch beim Label `data-element` aus; die Labelprüfung vergleicht exakt statt per Teilzeichenkette.
+- Der Kommentar trägt eine unsichtbare Markierung. Spätere Läufe suchen ihn (Markierung und Konto `github-actions[bot]`) und ersetzen ihn, statt einen weiteren anzulegen.
+- Läufe je Issue laufen nacheinander (`concurrency`), damit `opened` und `labeled` beim Anlegen nicht beide einen Kommentar anlegen.
+- Der Issue-Text wird zur Laufzeit frisch gelesen, nicht aus dem Ereignis übernommen.
+- Exit-Code 1 des Skripts bedeutet „Dublette gefunden“ und gilt als fertiger Bericht. Nur ein Bericht ohne Schlusszeile oder ein anderer Exit-Code gilt als Fehler: Dann steht ein Hinweis im Kommentar, und der Lauf wird als fehlgeschlagen markiert.
+- Das Token sehen nur noch die zwei Schritte, die GitHub aufrufen; `persist-credentials: false`.
+- `actions/checkout` v4 → v7.0.1 (`3d3c42e5aac5ba805825da76410c181273ba90b1`) und `actions/setup-python` v5 → v7.1.0 (`6d4fd22b20465ccc0f7354476588e8df7c9ca0e0`), beide per Commit-SHA fixiert. Die SHAs sind über die GitHub-API gegen die Tags geprüft; laut Release-Notes betreffen die v7-Änderungen die genutzten Eingaben nicht.
+
+Doku: `docs/github-workflow.md` §3 Nr. 3.
+
+**Prüfung:**
+
+- Lokal: YAML gültig, `shellcheck` ohne Befund.
+- Probeläufe mit nachgebildetem `gh` für vier Fälle:
+  - Kommentar neu anlegen;
+  - vorhandenen Kommentar ersetzen;
+  - Dublette (Exit-Code 1, Bericht bleibt sichtbar);
+  - Absturz (Hinweis im Kommentar, Lauf rot).
+- Gegenprüfung durch vier unabhängige Prüfer (GitHub-Semantik, Sicherheit, Shell/`gh`/`jq`, Zielerfüllung), deren Befunde je ein weiterer Prüfer zu widerlegen versuchte, dazu eine Lückensuche. Bestätigt und eingearbeitet:
+  - die Behandlung von Exit-Code 1 (im ersten Entwurf als Fehler gewertet);
+  - der Zuschnitt des Tokens auf die zwei GitHub-Schritte.
+- Ein Testlauf auf GitHub steht aus: Issue-Ereignisse nutzen die Workflow-Datei auf `main`, die Änderung wirkt also erst nach dem Merge dorthin.
+
+**Offen:**
+
+- Verglichen wird mit dem Stand auf `main`, nicht mit `dev`. Dort liegen derzeit 51 Elemente, die übrigen 61 nur in PR #15 (geprüft 2026-11-27); `ref: dev` beim Checkout wäre eine eigene Entscheidung.
+- Bis zum Merge nach `main` gilt dort der alte Stand mit dem Mehrfachkommentar.
+- Nicht dokumentiert ist, ob ein übersprungener Job die Warteschlange der `concurrency`-Gruppe berührt. Ausnahmefall: Ein nicht passendes Label direkt nach einer Bearbeitung könnte die Aktualisierung des Kommentars ausfallen lassen.
+
+**Commit (Auftrag der Maintainer:in, 2026-11-27):** die Änderungen aus §16.9 und §16.10 als ein Commit auf `feat/source-check-2026-11-25`; nicht gepusht, Draft-PR #33 zeigt ihn erst nach dem Push. Für diesen Schritt gilt die ausdrückliche Anweisung anstelle der Regel „keine `git`-Operationen durch Agenten“ (AGENTS.md Nr. 6).

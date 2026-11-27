@@ -31,7 +31,7 @@ value_set:
   - system: snomed-ct
     code: '399166001'
     display: Fatal
-  uri: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm
+  uri: https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events
   notes: 'Nationale Referenzkodierung (oBDS 2021, 15.1; MII KDS Onkologie 2027.0.0-ballot.1, AdverseEvent.seriousness,
     required): ValueSet https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/ValueSet/mii-vs-onko-nebenwirkung-ctcae-grad
     (CodeSystem mii-cs-onko-nebenwirkung-ctcae-grad: 1 mild, 2 moderat, 3 schwerwiegend, 4 lebensbedrohlich,
@@ -49,11 +49,12 @@ standard_mappings:
     (3, 4, 5) mit Art (15.2: MedDRA_Code oder Bezeichnung) und Version (15.3); Grad ≤ 2 nur aggregiert
     über SYST/Nebenwirkungen/Grad_maximal2_oder_unbekannt (K, 1, 2, U)'
   notes: 'Pflichtmeldung gem. § 65c SGB V. Feldseite 15.1: https://basisdatensatz.de/feld/205/nebenwirkungen-nach-ctcae-grad
-    (Link aus der Feldliste). XML-Schema oBDS 3.0.5 (https://basisdatensatz.de/xml/oBDS_v3.0.5.xsd, Nebenwirkung_Typ):
+    (Link aus der Feldliste). XML-Schema oBDS 3.1.0 (https://basisdatensatz.de/xml/oBDS_v3.1.0.xsd, Nebenwirkung_Typ):
     Einzelereignisse werden nur ab Grad 3 gemeldet, Grad 1–2 nur als Maximalgrad je Therapie; zulässige
-    CTCAE-Versionen 4, 4.03, 5.0 und ''Sonstige'' (CTCAE v6.0 → ''Sonstige''). Transformation: SNOMED-Schweregrad
-    des Elements → oBDS-Grad (255604002→1, 6736007→2, 24484000→3, 442452003→4, 399166001→5). Für Strahlentherapie
-    analog ST/Nebenwirkungen.'
+    CTCAE-Versionen bis oBDS 3.0.5: 4, 4.03, 5.0 und ''Sonstige''; ab oBDS 3.1.0 (XSD vom 14.10.2026;
+    Annahme durch die Landeskrebsregister geplant ab 01.04.2027) zusätzlich ''6.0'' (bis dahin CTCAE v6.0
+    → ''Sonstige''). Transformation: SNOMED-Schweregrad des Elements → oBDS-Grad (255604002→1, 6736007→2,
+    24484000→3, 442452003→4, 399166001→5). Für Strahlentherapie analog ST/Nebenwirkungen.'
 - standard: fhir-mii-kds
   profile_or_url: https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-nebenwirkung-adverse-event
   resource: AdverseEvent
@@ -87,6 +88,31 @@ evidence:
       nach Abschluss der Behandlung durch das den Patienten betreuende Team evaluiert werden.
     accessed: '2026-10-15'
     locator: Kap. 16.4, Empf. 16.9 (EK, geprüft 2026, Starker Konsens), S. 499
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Kap. 13.1.2.2 Allgemeine therapeutische Prinzipien bei Verdacht auf irAE (Hintergrundtext:
+      Schweregrad der irAE nach der jeweils neuesten CTCAE-Version; organspezifische Kapitel 13.2–13.11)'
+    recommendation_grade: n/a
+    evidence_level: n/a
+    quote: Zur Behandlung von irAE haben sich in den letzten Jahren grundsätzliche Behandlungsstrategien
+      entwickelt, die sich in der Regel dem Schweregrad und betroffenen Gewebe bzw. Organ orientieren.
+      Der Schweregrad richtet sich nach der neusten Version Common Terminology Criteria for Adverse Events
+      (CTCAE).
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.2.2, Hintergrundtext, S. 637
+  - source: andere
+    version: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 (Juni 2026, AWMF 032-054OL)
+    url: https://www.leitlinienprogramm-onkologie.de/leitlinien/supportive-therapie
+    section: 'Empf. 13.12 (EK, neu 2025, Starker Konsens): Vorgehen bei steroidrefraktären oder höhergradigen
+      (Grad ≥ 2) irAE interdisziplinär festlegen'
+    recommendation_grade: EK
+    evidence_level: n/a
+    quote: Das therapeutische Vorgehen bei steroidrefraktären oder höhergradigen (Grad ≥ 2) irAE sollte
+      im interdisziplinären Austausch unter Beteiligung der jeweiligen Organspezialist*innen festgelegt
+      werden.
+    accessed: '2026-11-25'
+    locator: Kap. 13.1.2.2, Empf. 13.12 (EK, neu 2025), S. 639
 iso13972_metadata:
   type: evaluation
   keywords:
@@ -124,8 +150,14 @@ provenance:
   - version: 0.2.0
     date: '2026-10-15'
     change: 'Brechende Änderung gegenüber 0.1.0 (neue ID-Version v0.2): datatype integer → CodeableConcept.
-      Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen'
-    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md
+      Zudem Leitlinien-Resync, Terminologie- und Mapping-Korrekturen; Abgleich 2026-11-25: oBDS-Mapping
+      auf XSD 3.1.0 (14.10.2026) abgeglichen; value_set.uri auf NCI-Seite „CTCAE and AE Reporting“ (CTCAE
+      v6.0) umgestellt; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen PatientInnen 2.1 –
+      Kap. 13.1.2.2, Hintergrundtext, S. 637; Quelle ergänzt: S3-LL Supportive Therapie bei onkologischen
+      PatientInnen 2.1 – Kap. 13.1.2.2, Empf. 13.12 (EK, neu 2025), S. 639; 2026-11-26: offener Punkt
+      zur value_set.uri erledigt (URI am 2026-11-25 umgestellt)'
+    reference: docs/audit-log.md §13, §14; docs/reviews/2026-10-14-zweitpruefung.md; docs/audit-log.md
+      §16; docs/audit-log.md §16.8
   verification:
   - date: '2026-10-13'
     method: Terminologie-Verifikation aller Codings per $lookup am MII TermServ
@@ -155,15 +187,19 @@ provenance:
     scope: evidence.guideline_references
     result: 1/1 Zitate gefunden
     report: docs/audit-log.md §14.8
+  - date: '2026-11-25'
+    method: Aktualitätsprüfung der Primärquellen und Standards (Leitlinienprogramm Onkologie, Onkopedia,
+      AWMF/G-BA/RKI, basisdatensatz.de) und Abgleich mit neuen bzw. aktualisierten Quellen; neue Zitate
+      maschinell gegen die Quelltexte geprüft (scripts/verify-quotes.py)
+    scope: evidence, value_set, standard_mappings, issues (soweit geändert)
+    result: 4 Änderung(en) übernommen
+    report: docs/reviews/2026-11-25-quellen-aktualitaet.md; docs/audit-log.md §16
 issues:
-- 'value_set.uri prüfen: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm leitet
-  per HTTP 301 auf https://dctd.cancer.gov/research/ctep-trials/trial-development um (Abruf 2026-10-14,
-  UNSICHER); ggf. auf die aktuelle CTCAE-Seite des NCI umstellen.'
 - 'Repräsentation CTCAE-Grad: Das Element kodiert den Grad als CodeableConcept mit fünf SNOMED-Schweregraden
   (255604002, 6736007, 24484000, 442452003, 399166001). Die nationale Referenzkodierung (MII-CodeSystem
   mii-cs-onko-nebenwirkung-ctcae-grad: 1–5, U, K) steht nur in value_set.notes. MII Onkologie 2026.0.3
   verlangt in AdverseEvent.seriousness (1..1, REQUIRED) einen Code dieses CodeSystems; SNOMED ist dort
-  nur als zusätzliches Coding möglich. oBDS 3.0.5 meldet Grad 3–5 je Ereignis (Menge_Nebenwirkung/Nebenwirkung/Grad)
+  nur als zusätzliches Coding möglich. oBDS (3.0.5 und 3.1.0) meldet Grad 3–5 je Ereignis (Menge_Nebenwirkung/Nebenwirkung/Grad)
   und Grad ≤ 2 nur aggregiert als Maximalgrad je Therapie (Grad_maximal2_oder_unbekannt: K/1/2/U). Zu
   entscheiden: (a) ob die MII-Codes 1–5 als zusätzliche Codings ins Element aufgenommen werden oder die
   Abbildung SNOMED → MII-Code nur als Transformation im Mapping dokumentiert bleibt; (b) wie U (unbekannt)

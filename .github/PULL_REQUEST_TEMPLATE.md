@@ -27,7 +27,7 @@
 ## Checkliste
 
 - [ ] `python scripts/validate.py` lokal grün
-- [ ] `python scripts/build-catalog.py` ausgeführt; CSV committed
+- [ ] `python scripts/build-catalog.py` ausgeführt; `catalog/` und `docs/phases-overview.md` committed
 - [ ] `python scripts/check-duplicates.py` ausgeführt — keine ungelöste DUBLETTE/NAH-DUBLETTE
 - [ ] LL-Referenz in `evidence.guideline_references[]` mit Section + Empfehlungsgrad/Evidenzlevel
 - [ ] Datennutzung erfasst, sofern bekannt (`care_process.data_flows[]` — WO/WER/WIE)

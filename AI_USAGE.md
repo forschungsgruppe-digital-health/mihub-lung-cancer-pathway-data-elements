@@ -28,7 +28,7 @@
 > Die Datei ist bei wesentlichen Änderungen im KI-Einsatz zu aktualisieren.
 
 **Verantwortliche Person (Human Oversight):** Marcel Susky, Forschungsgruppe Digital Health (FGDH), Technische Universität Dresden — `marcel.susky@tu-dresden.de`
-**Letzte Aktualisierung:** 2026-10-13
+**Letzte Aktualisierung:** 2026-11-25
 **Geltungsbereich:** Repository `data-elements/` — Erhebung, Strukturierung und Pflege der klinischen Datenelemente entlang der Lungenkrebs-Patient Journey im Rahmen von MiHUB (AP6/AP7/AP8 in Bezug auf AP3); umfasst auch die Erhebungs-/Import-Werkzeuge (Excel), die Dubletten-Prüfung und die werkzeug-unabhängigen Agent Skills. Alle Branches.
 
 ---
@@ -77,9 +77,9 @@
 | **Claude (via Cowork mode, Claude Desktop)** | Anthropic | `claude-opus-4-7` | 2026-05 (Glossar-Verifikation, AI_USAGE-Befüllung, Curator-Sub-Agent) | Quellen-Verifikation, Compliance-Dokumentation, Sub-Agent-Architektur |
 | **Claude Code (Opus 4.8, 1M-Kontext)** | Anthropic | `claude-opus-4-8` | 2026-06 (Schema-`data_flows`, Excel-Erhebungs-Tooling, Dubletten-Checker, vendor-neutrale Skills-Refaktor, Go-public-Artefakte) | Schema-Erweiterung, Skript-/Skill-Entwicklung, Doku-Überarbeitung |
 | **Claude Code (Fable 5.1)** | Anthropic | `claude-fable-5-1` | 2026-10 (Leitlinien-Resync S3-LL 5.1 / Onkopedia NSCLC 04-2025 + SCLC 08-2026 mit drei Read-only-Recherche-Agenten; Terminologie-Verifikation aller Codings gegen den MII TermServ; Abgleich zweier Excel-Erhebungen; Phase `primarycare`; 61 neue Elemente; Doku/Audit-Log) | Recherche, Code-Verifikation, YAML-Generierung, Skript-/Doku-Entwicklung |
-| **Claude Code (Opus 5.5)** | Anthropic | `claude-opus-5-5` | 2026-10-14 (Zweitprüfung der Nachsorge-, Surveillance-, Palliativ- und Hausarzt-Elemente gegen lokal beschaffte Primärquellen mit Multi-Agenten-Workflows: Quellenbeschaffung, 22 Verifizierer-Gruppen, je zwei Skeptiker mit unterschiedlicher Linse, Zusammenführung von Teilkorrekturen; Mapping-Audit gegen MII-KDS-/ISiK-/KBV-/gematik-/mCODE-Pakete; Quellenrecherche Screening-Episode; Release-Vorbereitung 0.2.0-rc.1) | Recherche, adversariale Verifikation, YAML-Korrekturen, Skript-/Doku-Entwicklung |
-| **MII TermServ (Ontoserver) + AskMIIAnything MCP-Server v0.9.0** | Medizininformatik-Initiative (kein KI-Modell) | FHIR-Terminologie-API (`$lookup`, `$expand`, mTLS); MCP-Werkzeuge `lookup_code` / `validate_code` / `expand_valueset` | 2026-10 | deterministische Verifikation von SNOMED-CT-/LOINC-/ICD-10-GM-/OPS-/ATC-/KDL-/ICD-O-3-Codes (Ergebnisse in `docs/reviews/2026-10-13-terminologie-verifikation.md`) |
-| **Repo-eigene Sub-Agenten** (`.claude/agents/`) | basierend auf Claude | `data-element-analyzer`, `data-element-validator`, `ai-usage-curator` — siehe [`AGENTS.md`](AGENTS.md) | 2026-05 – laufend | Datenelementweise Analyse + Validation + KI-Nutzungs-Pflege |
+| **Claude Code (Opus 5.5)** | Anthropic | `claude-opus-5-5` | 2026-10-14 (Zweitprüfung der Nachsorge-, Surveillance-, Palliativ- und Hausarzt-Elemente gegen lokal beschaffte Primärquellen mit Multi-Agenten-Workflows: Quellenbeschaffung, 22 Verifizierer-Gruppen, je zwei Skeptiker mit unterschiedlicher Linse, Zusammenführung von Teilkorrekturen; Mapping-Audit gegen MII-KDS-/ISiK-/KBV-/gematik-/mCODE-Pakete; Quellenrecherche Screening-Episode; Release-Vorbereitung 0.2.0-rc.1); 2026-11-25 (Aktualitätsprüfung der Primärquellen und Standards, oBDS-3.1.0-Abgleich, drei neue Quellen mit maschineller Zitatprüfung, Doku-Konsistenzprüfung mit zwei Read-only-Prüfagenten) | Recherche, adversariale Verifikation, YAML-Korrekturen, Skript-/Doku-Entwicklung |
+| **MII TermServ (Ontoserver) + AskMIIAnything MCP-Server v0.9.0** | Medizininformatik-Initiative (kein KI-Modell) | FHIR-Terminologie-API (`$lookup`, `$expand`, mTLS); MCP-Werkzeuge `lookup_code` / `validate_code` / `expand_valueset` | 2026-10, 2026-11 | deterministische Verifikation von SNOMED-CT-/LOINC-/ICD-10-GM-/OPS-/ATC-/ICD-O-3-Codes, KDL nur 2026-10 (seit 11/2026 nicht mehr auf dem Server) (Ergebnisse in `docs/reviews/2026-10-13-terminologie-verifikation.md`) |
+| **Repo-eigene Sub-Agenten** (`.claude/agents/`) | basierend auf Claude | `data-element-analyzer`, `data-element-validator`, `check-duplicate-data-element`, `ai-usage-curator` — siehe [`AGENTS.md`](AGENTS.md) | 2026-05 – laufend | Datenelementweise Analyse + Validation + KI-Nutzungs-Pflege |
 
 > **Hinweis zur Modellversionierung:** Die hier aufgeführten Modellkennungen entsprechen
 > den zum Nutzungszeitpunkt verfügbaren Cowork-Mode-Modellen. Da Modelle ohne Versionsangabe
@@ -122,9 +122,10 @@ Der Prüfprozess ist mehrschichtig im Repository operationalisiert:
 5. **Iterations-Log**: [`docs/methodology.md`](docs/methodology.md) §7 protokolliert die übergeordneten Entwicklungs-Iterationen.
 6. **Glossar-Pflege**: Neu auftretende Akronyme/Skalen/Codes werden in [`GLOSSARY.md`](GLOSSARY.md) aufgenommen (siehe Analyzer-Agent-Workflow Schritt 8).
 7. **Doku-Konsistenz**: Vor Beendigung jeder Aufgabe prüfen die Sub-Agenten, ob `README.md`, `docs/methodology.md`, `docs/phases-overview.md` und `docs/audit-log.md` mit dem Ergebnis konsistent sind.
-8. **Pull-Request-Template** ([`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md): klinisch/methodische Begründung, LL-Referenz, klinische:r Reviewer:in. _Empfohlene Erweiterung (offen):_ explizites Feld zur KI-Nutzungs-Disklosure auf PR-Ebene (siehe §11 Offene Punkte).
-9. **Zwei Beitrags-Spuren** (siehe [`CONTRIBUTING.md`](CONTRIBUTING.md)):
+8. **Pull-Request-Template** ([`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md): klinisch/methodische Begründung, LL-Referenz, klinische:r Reviewer:in. Abschnitt „KI-Nutzung“ zur KI-Nutzungs-Disklosure auf PR-Ebene (umgesetzt, siehe §11 Nr. 1).
+9. **Drei Beitrags-Spuren** (siehe [`CONTRIBUTING.md`](CONTRIBUTING.md)):
    - **Klinik-Spur** (niederschwellig): Web-Formular auf GitHub Issues — die KI unterstützt das MI-Team bei der Konvertierung in YAML, die klinische Person reviewt den fertigen PR-Diff.
+   - **Excel-Spur**: Erhebungs-Mappe (`templates/`); das MI-Team importiert sie per Skript zu YAML-Entwürfen und prüft auf Dubletten.
    - **MI-Spur** (vollständig): YAML + Git + PR; Maintainer prüft KI-assistierte Änderungen vor Merge.
 
 ---
@@ -194,7 +195,7 @@ Folgende Bereiche unterliegen **bewusst nicht** dem KI-Workflow (entspricht Scop
 
 - **Klinische Endfreigabe vor produktiver Nutzung** — Übergang von `AuthorDraft` zu `CommitteeDraft` und schließlich `ApprovedForProductionUse` erfolgt ausschließlich durch klinische und medizininformatische Reviewer:innen. KI darf den Status nicht autonom heben.
 - **Rechtsverbindliche Konformitätsprüfungen** — die Beurteilung, ob ein Element die Anforderungen von §65c SGB V (oBDS-Krebsregistermeldung), KDL-Pflicht (seit 01.01.2024), MDR/IVDR oder GDPR/DSGVO erfüllt, liegt außerhalb der KI-Verantwortung.
-- **Terminologie-Server-Validierung** — die Korrektheit konkreter SNOMED-CT-/LOINC-/ICD-Codes wurde **plausibilitätsgestützt** durch KI vorgeschlagen, aber **nicht** gegen Snowstorm/IHTSDO-/LOINC-FHIR-/IARC-Server endgültig verifiziert. Dies bleibt klinischem Review überlassen (siehe `GLOSSARY.md` §18).
+- **Klinische Eignung der Codes** — Existenz und Anzeigetext der Codings sind gegen den MII TermServ geprüft (Ausnahmen: ICF, MedDRA; KDL seit 11/2026 nicht mehr auf dem Server; siehe `GLOSSARY.md` §18). Ob ein Code die klinische Bedeutung des Elements trifft, bleibt dem klinischen Review überlassen.
 - **Festlegung des Repository-Förderkennzeichens und der Konsortial-Verantwortlichkeiten** — diese folgen dem MiHUB-Antrag und werden vom Konsortium freigegeben, nicht von der KI.
 - **Personenbezogene oder vertrauliche Daten** — keinerlei Eingabe in KI-Werkzeuge.
 
@@ -208,10 +209,10 @@ Folgende Bereiche unterliegen **bewusst nicht** dem KI-Workflow (entspricht Scop
 > übereinstimmend). Dieser Abschnitt macht die Risikowahrnehmung und die ergriffenen
 > Gegenmaßnahmen explizit und dient damit der Dokumentation angemessener Sorgfalt.
 
-- KI-Werkzeuge können **halluzinieren** — alle fachlichen Aussagen (klinische Definitionen, Empfehlungsgrade, Score-Cut-offs, Code-Bindings) wurden gegen die in `evidence.guideline_references[]` zitierten Primärquellen gegengelesen. Stichprobenartige Verifikation ist in `docs/audit-log.md` dokumentiert; eine **vollständige Wort-für-Wort-Verifikation** ist Teil des klinischen Reviews der nächsten Iteration.
+- KI-Werkzeuge können **halluzinieren** — alle fachlichen Aussagen (klinische Definitionen, Empfehlungsgrade, Score-Cut-offs, Code-Bindings) wurden gegen die in `evidence.guideline_references[]` zitierten Primärquellen gegengelesen. Jede Quellenangabe trägt ein wörtliches Kurzzitat, das maschinell gegen die Quelltexte geprüft ist (`docs/audit-log.md` §14.8, §16); die klinische Bewertung der Inhalte ist Teil des klinischen Reviews.
 - KI-Werkzeuge können **veraltete Informationen** enthalten — inhaltliche Referenzen wurden gegen die jeweils zum Stichtag aktuelle Leitlinien-/Onkopedia-Fassung geprüft (Versionspin in `evidence.guideline_references[].version`).
 - KI-Werkzeuge können **Bias** aufweisen — die Quellen-Reihenfolge (national vor international, Leitlinie vor Sekundärliteratur) und die Konsultations-Pflicht der Sub-Agenten reduzieren das Risiko unbeobachteter Schief-Gewichtung.
-- Die KI-generierten Inhalte ersetzen **keine** klinische Expertise, **keine** Terminologie-Server-Validierung und **keine** rechtsverbindliche Konformitätsprüfung. Gesetzliche Pflichten (z. B. oBDS-Krebsregistermeldung gem. §65c SGB V, KDL-Pflicht seit 01.01.2024) bleiben in der Verantwortung der einsetzenden Organisation.
+- Die KI-generierten Inhalte ersetzen **keine** klinische Expertise und **keine** rechtsverbindliche Konformitätsprüfung. Gesetzliche Pflichten (z. B. oBDS-Krebsregistermeldung gem. §65c SGB V, KDL-Pflicht seit 01.01.2024) bleiben in der Verantwortung der einsetzenden Organisation.
 - Die Nutzung kommerzieller KI-Dienste (Anthropic Claude über Cowork-Mode) unterliegt den Nutzungsbedingungen von Anthropic. Keine vertraulichen oder personenbezogenen Daten wurden eingegeben.
 - Diese Datei gibt den Stand zum Zeitpunkt der letzten Aktualisierung wieder. Bei wesentlichen Änderungen im KI-Einsatz wird sie aktualisiert.
 
@@ -250,6 +251,7 @@ Folgende Bereiche unterliegen **bewusst nicht** dem KI-Workflow (entspricht Scop
 | 2026-06-30 | Modell `claude-opus-4-8` ergänzt (§3); Schema-Erweiterung `care_process.data_flows[]`; Excel-Erhebungs-Werkzeuge + Importer; Dubletten-Prüfung + neues Skill `check-duplicate-data-element`; vendor-neutrale Skills-Refaktorierung (`skills/` als SSoT, `.claude`/`.codex`-Symlinks, Copilot-Brücke, `skill-lint`); Go-public-Artefakte (LICENSE/Apache, DISCLAIMER, CITATION, CoC); `dev`/`main`-Branching. Hinweis: eigenständige `DISCLAIMER.md` (Zweckbestimmung/MDR/Haftung) neu angelegt — ergänzt, ersetzt **nicht** diese KI-Disklosure. | Marcel Susky (Repository-Maintainer), KI-assistiert (Opus 4.8) |
 | 2026-10-13 | Modell `claude-fable-5-1` ergänzt (§3); MII TermServ + AskMIIAnything-MCP als deterministische Verifikationswerkzeuge aufgenommen (§3); Scope-Erweiterung: Leitlinien-Resync (S3-LL 5.1, Onkopedia), Terminologie-Korrekturen, Excel-Erhebungen (Nachsorge-WG, Allgemeinmedizin), Phase `primarycare`, 61 neue Elemente, `scripts/verify-terminology.py`, `docs/reviews/` (§2). Erratum zum Analyzer-Lauf 2026-05-05 dokumentiert in `docs/audit-log.md` §13.1. | Marcel Susky (Repository-Maintainer), KI-assistiert (Fable 5.1) |
 | 2026-10-14 | Modell `claude-opus-5-5` ergänzt (§3); Scope-Erweiterung (§2): Zweitprüfung aller 112 Elemente gegen die Primärquellen mit adversarialer Gegenprüfung (ein Vorschlag wird nur übernommen, wenn ihn keiner von zwei unabhängigen Skeptikern widerlegt; jede Code-Änderung live am MII TermServ geprüft), Korrektur der Standard-Mappings gegen die publizierten Pakete, Konsistenzprüfungen in `validate.py`. Bericht: `docs/reviews/2026-10-14-zweitpruefung.md`, Audit-Log §14. 2026-10-15: Element-Versionierung (zwei unabhängige KI-Prüfer je geänderter Definition), Herkunftsfelder und Zitate je Quellenangabe (KI-extrahiert, maschinell gegen die Quelltexte geprüft), Audit-Log §14.7–14.8. | Marcel Susky (Repository-Maintainer), KI-assistiert (Opus 5.5) |
+| 2026-11-25 | Scope-Erweiterung (§3, Opus 5.5): Aktualitätsprüfung der Primärquellen und Standards, Abgleich mit oBDS 3.1.0 und drei neuen Quellen (S3-LL Supportive Therapie 2.1, G-BA KFE-RL, STIKO 2026; Zitate maschinell gegen die Quelltexte geprüft), Doku-Konsistenzprüfung mit zwei Read-only-Prüfagenten; jede inhaltliche Element-Änderung datenelementweise freigegeben. Faktenkorrekturen in dieser Datei (Beitrags-Spuren, Sub-Agenten, Terminologie-Status, PR-Template). Audit-Log §16. | Marcel Susky (Repository-Maintainer), KI-assistiert (Opus 5.5) |
 
 ---
 
@@ -273,13 +275,13 @@ Die folgenden Punkte sind **noch nicht umgesetzt** und werden im Laufe der weite
 
 | # | Maßnahme | Begründung | Priorität |
 |---|---|---|---|
-| 1 | `.github/PULL_REQUEST_TEMPLATE.md` um KI-Disclosure-Feld erweitern (z. B. Checkbox „KI-assistiert (Werkzeug/Modell): _____") | Macht KI-Anteil pro PR sichtbar; harmonisiert mit Commit-Trailer | hoch |
+| 1 | ~~`.github/PULL_REQUEST_TEMPLATE.md` um KI-Disclosure-Feld erweitern~~ — **erledigt** (Abschnitt „KI-Nutzung“ im PR-Template) | Macht KI-Anteil pro PR sichtbar; harmonisiert mit Commit-Trailer | hoch |
 | 2 | `Assisted-by:`-Commit-Trailer-Konvention in CONTRIBUTING.md aufnehmen und ab Datum X verbindlich | Maschinenlesbare Markierung gemäß Linux-Kernel-Konvention | hoch |
 | 3 | GitHub-Repository-Topic `ai-assisted` setzen (Veröffentlichungs-Checkliste FGDH) | Erkennbarkeit auf Repo-Ebene | mittel |
 | 4 | Datei-Header-Konvention `<!-- AI-Assisted: ... -->` für Markdown-Dateien außerhalb der YAMLs definieren | Einheitliche Datei-Ebene-Markierung | mittel |
 | 5 | Rückwirkende `git notes`-Annotation für bisherige Commits prüfen | Vollständige historische Disclosure | niedrig |
 | 6 | Klinisches Review-Board konstituieren und in CODEOWNERS pflegen | Voraussetzung für Statuswechsel `AuthorDraft → CommitteeDraft → ApprovedForProductionUse` | hoch (außerhalb KI-Disclosure, hier nur erwähnt, da §6 darauf verweist) |
-| 7 | Bei finaler Veröffentlichung der EU-Kommissions-Guidance zu Art. 50 (angekündigt Q2 2026): Datei gegen die Guidance gegenprüfen | Compliance-Fortschreibung | laufend |
+| 7 | Bei finaler Veröffentlichung der EU-Kommissions-Guidance zu Art. 50 (angekündigt für Q2 2026; Stand prüfen, der Termin ist verstrichen): Datei gegen die Guidance gegenprüfen | Compliance-Fortschreibung | laufend |
 
 ---
 
