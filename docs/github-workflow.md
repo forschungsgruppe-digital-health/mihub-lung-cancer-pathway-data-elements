@@ -31,8 +31,9 @@ Aktive Workflows (`.github/workflows/`):
    (`build-catalog.py`; bricht ab, wenn `catalog/` oder `docs/phases-overview.md` nicht aktuell committed sind).
 2. **`skill-lint.yml`** — prüft die Agent Skills + Sub-Agenten + Symlinks + Copilot-Brücke
    (`python3 .github/scripts/validate-agent-skills.py`).
-3. **`duplicate-check.yml`** — kommentiert bei neuen „data-element"-Issues mögliche Dubletten
-   (`scripts/check-duplicates.py --from-issue-file`).
+3. **`duplicate-check.yml`** — pflegt bei „data-element"-Issues genau einen Kommentar mit möglichen
+   Dubletten (`scripts/check-duplicates.py --from-issue-file`); nach einer Bearbeitung des Issues wird
+   er neu berechnet und ersetzt. Verglichen wird mit dem Stand auf `main`.
 4. **`citation-validate.yml`** — validiert `CITATION.cff` gegen das CFF-Schema (blockierend; ein
    ungültiges CFF bricht den Zenodo-Publish still ab).
 5. **`link-check.yml`** — lychee-Prüfung der Markdown-Links (intern + Attributions-/Förder-URLs;
@@ -41,9 +42,9 @@ Aktive Workflows (`.github/workflows/`):
    `CHANGELOG.md` (Ablauf: [`go-public-checklist.md`](go-public-checklist.md) §7).
 7. **Optional/geplant**: Markdown-Lint für `docs/*.md`; Pages-Deploy (mkdocs/Material) als Browse-Oberfläche.
 
-> Runner: alle Workflows nutzen `ubuntu-latest`. Solange das Repo privat ist, ist GitHub-hosted
-> org-weit geblockt — siehe [`../RUNNERS.md`](../RUNNERS.md) (self-hosted-Fallback; beim
-> Public-Schalten auf `ubuntu-latest` zurück).
+> Runner: alle Workflows nutzen `ubuntu-latest` (GitHub-hosted). Self-hosted Runner sind für das
+> öffentliche Repo nicht vorgesehen, weil Pull Requests aus Forks darauf beliebigen Code ausführen
+> könnten.
 
 ## 4 Releases
 

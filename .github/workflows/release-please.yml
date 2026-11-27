@@ -16,8 +16,7 @@ name: release-please
 #   - A tagged release should drive the Zenodo archive (concept DOI → CITATION.cff).
 #
 # NOTE: PRs opened by GITHUB_TOKEN do not themselves trigger other workflows, so the
-# release PR will not re-run CI — that is expected. While the repo is private the
-# org's GitHub-hosted runners are blocked (see RUNNERS.md).
+# release PR will not re-run CI — that is expected.
 
 on:
   push:

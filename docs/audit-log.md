@@ -740,3 +740,74 @@ Wortlaut der Reviewer-Kommentare (Word-Fassung der Phasen-Übersicht v0.1, Nachs
 - **`immuneRelatedAdverseEvent`:** Einstufung der erweiterten Definition („unter oder nach“ ICI-Therapie, offene Organliste) als nicht brechend bestätigt; Begründung im history-Eintrag 0.1.1 ergänzt. Die Regel im Umsetzungsvorschlag ist angeglichen: Minor-Sprung nur bei Verengung oder Umdeutung bereits erfasster Werte.
 - **GitHub-Labels** `data-element`, `element-feedback`, `klinik-spur`, `needs-triage` im Repo angelegt (Freigabe 2026-11-26). Die Issue-Formulare vergeben sie, sie existierten aber nicht; ohne `data-element` startete der Dubletten-Check (`.github/workflows/duplicate-check.yml`) bei Formular-Issues nie.
 - **Issues #17–#32** (Freigabe der Maintainer:in, 2026-11-26): Branch-Hinweis auf `feat/source-check-2026-11-25` (Draft-PR #33) aktualisiert; in #24 und #28 zusätzlich der Zähler offener Punkte 126 → 125; die übrigen Texte unverändert.
+
+### 16.9 Entbehrliche Dateien (2026-11-27)
+
+**Auftrag der Maintainer:in (2026-11-26):** das Repo auf entbehrliche und ungenutzte Dateien prüfen und zur Prüfung auflisten. Durchsucht wurden alle 193 versionierten Dateien (Stand Branch `feat/source-check-2026-11-25`) und die lokalen, nicht versionierten Dateien. Vier Prüfer suchten aus verschiedenen Blickwinkeln, je ein weiterer versuchte jeden Kandidaten zu widerlegen, zum Schluss folgte eine Lückensuche.
+
+**Entfernt (Freigabe der Maintainer:in, 2026-11-27):**
+
+- `RUNNERS.md` — Anleitung für self-hosted Runner als Notlösung, solange das Repo privat war. Das Repo ist öffentlich, kein self-hosted Runner ist registriert, alle sechs Workflows laufen auf `ubuntu-latest` (geprüft 2026-11-27). Verweise angepasst:
+  - `.gitattributes` (Eintrag `export-ignore` entfernt);
+  - `docs/go-public-checklist.md` §5 (Runner-Punkt als erledigt markiert, Sicherheitshinweis zu Fork-PRs übernommen) und §7 (Hinweis auf geblockte Runner entfernt);
+  - `docs/github-workflow.md` §3 (Runner-Hinweis mit demselben Sicherheitshinweis);
+  - Kommentar in `.github/workflows/release-please.yml`.
+
+  Damit sind §16.6 Nr. 11 (für `RUNNERS.md`) und Nr. 15 zum Teil erledigt; die älteren Einträge bleiben unverändert.
+- Lokal, nicht versioniert: `.DS_Store` und `derived/fhir-logical-model/_schema/MiHUBDataElement.fsh` (veraltete Ausgabe vom 2026-05-04 mit einem zweiten, alten Logical Model; der Generator räumt seinen Ausgabeordner nicht auf).
+
+**Nicht umgesetzt (Befunde zur Entscheidung):**
+
+- `skills/SKILLS_SETUP.md` in `skills/README.md` zusammenführen.
+- Excel-Spur nur einmal beschreiben (`templates/README.md` vs. howto §A2; „zweites Blatt“ in `CONTRIBUTING.md` ist das dritte).
+- `docs/go-public-checklist.md`: offene Punkte in Issues überführen, §7 nach `docs/github-workflow.md`, danach entfernen.
+- `.codex/skills` nach `.agents/skills` umziehen (Herstellerangaben vorher prüfen).
+- `docs/github-workflow.md`: Branch-Schutz und CODEOWNERS-Kopie korrigieren.
+- Dubletten-Check schreibt bei jedem `opened`/`edited`/`labeled` einen neuen Kommentar. Seit es die Labels gibt (§16.8), kommen so mehrere gleiche Kommentare je Formular-Issue zustande. → erledigt, §16.10.
+- `link-check.yml` von GitHub wegen Inaktivität deaktiviert.
+- `.github/CODEOWNERS` ohne Wirkung (unbekannte Owner); `docs/howto-add-element.md` schreibt CODEOWNERS fälschlich die Zuweisung von Issues zu.
+- Pfadfilter in `validate.yml` ohne `catalog/**` und `docs/phases-overview.md`.
+- Lücken in `.gitignore` (Office-Sperrdateien, Zertifikate/Schlüssel, Prüfberichte, Leitlinien-Textfassungen).
+- `elements/_incoming/` wird von den Skripten nicht ausgeschlossen.
+- Uneinheitliches Pinning der Actions (für `duplicate-check.yml` erledigt, §16.10); zwei vermutlich tote relative Links in Vorlagen.
+
+Einzelbelege: Antwort an die Maintainer:in vom 2026-11-26.
+
+### 16.10 Dubletten-Check repariert (2026-11-27)
+
+**Auftrag der Maintainer:in (2026-11-27):** den Dubletten-Check reparieren. Freigegeben wurden außerdem: genau ein Kommentar je Issue, der bei Bearbeitung ersetzt wird; Actions auf die aktuellen Versionen heben und per Commit-SHA fixieren.
+
+**Fehler:** `.github/workflows/duplicate-check.yml` lief bei `opened`, `edited` und jedem `labeled`, und jeder Lauf schrieb einen neuen Kommentar. Das Formular „Neues Datenelement“ vergibt drei Labels, ein neues Issue hätte also bis zu vier gleiche Kommentare bekommen und jede Bearbeitung einen weiteren. Bisher ist das nie aufgetreten, weil die Labels fehlten (alle 67 Läufe übersprungen).
+
+**Änderung** (nur `.github/workflows/duplicate-check.yml`):
+
+- `labeled` löst nur noch beim Label `data-element` aus; die Labelprüfung vergleicht exakt statt per Teilzeichenkette.
+- Der Kommentar trägt eine unsichtbare Markierung. Spätere Läufe suchen ihn (Markierung und Konto `github-actions[bot]`) und ersetzen ihn, statt einen weiteren anzulegen.
+- Läufe je Issue laufen nacheinander (`concurrency`), damit `opened` und `labeled` beim Anlegen nicht beide einen Kommentar anlegen.
+- Der Issue-Text wird zur Laufzeit frisch gelesen, nicht aus dem Ereignis übernommen.
+- Exit-Code 1 des Skripts bedeutet „Dublette gefunden“ und gilt als fertiger Bericht. Nur ein Bericht ohne Schlusszeile oder ein anderer Exit-Code gilt als Fehler: Dann steht ein Hinweis im Kommentar, und der Lauf wird als fehlgeschlagen markiert.
+- Das Token sehen nur noch die zwei Schritte, die GitHub aufrufen; `persist-credentials: false`.
+- `actions/checkout` v4 → v7.0.1 (`3d3c42e5aac5ba805825da76410c181273ba90b1`) und `actions/setup-python` v5 → v7.1.0 (`6d4fd22b20465ccc0f7354476588e8df7c9ca0e0`), beide per Commit-SHA fixiert. Die SHAs sind über die GitHub-API gegen die Tags geprüft; laut Release-Notes betreffen die v7-Änderungen die genutzten Eingaben nicht.
+
+Doku: `docs/github-workflow.md` §3 Nr. 3.
+
+**Prüfung:**
+
+- Lokal: YAML gültig, `shellcheck` ohne Befund.
+- Probeläufe mit nachgebildetem `gh` für vier Fälle:
+  - Kommentar neu anlegen;
+  - vorhandenen Kommentar ersetzen;
+  - Dublette (Exit-Code 1, Bericht bleibt sichtbar);
+  - Absturz (Hinweis im Kommentar, Lauf rot).
+- Gegenprüfung durch vier unabhängige Prüfer (GitHub-Semantik, Sicherheit, Shell/`gh`/`jq`, Zielerfüllung), deren Befunde je ein weiterer Prüfer zu widerlegen versuchte, dazu eine Lückensuche. Bestätigt und eingearbeitet:
+  - die Behandlung von Exit-Code 1 (im ersten Entwurf als Fehler gewertet);
+  - der Zuschnitt des Tokens auf die zwei GitHub-Schritte.
+- Ein Testlauf auf GitHub steht aus: Issue-Ereignisse nutzen die Workflow-Datei auf `main`, die Änderung wirkt also erst nach dem Merge dorthin.
+
+**Offen:**
+
+- Verglichen wird mit dem Stand auf `main`, nicht mit `dev`. Dort liegen derzeit 51 Elemente, die übrigen 61 nur in PR #15 (geprüft 2026-11-27); `ref: dev` beim Checkout wäre eine eigene Entscheidung.
+- Bis zum Merge nach `main` gilt dort der alte Stand mit dem Mehrfachkommentar.
+- Nicht dokumentiert ist, ob ein übersprungener Job die Warteschlange der `concurrency`-Gruppe berührt. Ausnahmefall: Ein nicht passendes Label direkt nach einer Bearbeitung könnte die Aktualisierung des Kommentars ausfallen lassen.
+
+**Commit (Auftrag der Maintainer:in, 2026-11-27):** die Änderungen aus §16.9 und §16.10 als ein Commit auf `feat/source-check-2026-11-25`; nicht gepusht, Draft-PR #33 zeigt ihn erst nach dem Push. Für diesen Schritt gilt die ausdrückliche Anweisung anstelle der Regel „keine `git`-Operationen durch Agenten“ (AGENTS.md Nr. 6).

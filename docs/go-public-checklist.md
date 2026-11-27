@@ -41,9 +41,9 @@ folgenden Punkte zu erfüllen. Reihenfolge ist Empfehlung; **fett** = Blocker.
 - [ ] `.github/CODEOWNERS`-Teams existieren in der Organisation (`@mihub-ap8/*`).
 - [ ] CI grün: `validate.yml` (Schema + Catalog-Drift), `skill-lint.yml`, `duplicate-check.yml`,
       `citation-validate.yml`, `link-check.yml`.
-- [ ] **CI-Runner geklärt** ([`RUNNERS.md`](../RUNNERS.md)): solange privat ist GitHub-hosted org-weit
-      geblockt → self-hosted Runner *oder* lokal verifizieren; **beim Public-Schalten auf
-      `ubuntu-latest` (kostenlos + sandboxed) zurück** und self-hosted Runner entfernen.
+- [x] **CI-Runner:** alle Workflows laufen auf `ubuntu-latest` (GitHub-hosted, sandboxed); kein
+      self-hosted Runner registriert (geprüft 2026-11-27). Self-hosted Runner sind für das öffentliche
+      Repo nicht vorgesehen, weil Pull Requests aus Forks darauf beliebigen Code ausführen könnten.
 
 ## 6. Inhaltlicher Reifegrad (Hinweis, kein Blocker)
 
@@ -60,8 +60,7 @@ Releases entstehen reproduzierbar aus Conventional Commits (`feat`/`fix`/… →
       Versionsquelle; `CITATION.cff` `version` setzt release-please mit (`extra-files`); `date-released` und
       der Versions-DOI in README/`CITATION.cff` werden **manuell in der Release-PR** nachgezogen.
 - [x] Workflow `.github/workflows/release-please.yml` (googleapis/release-please-action; Release-PRs
-      gegen **`main`**, Entwicklung auf `dev`). ⚠ `ubuntu-latest` ist im privaten Zustand geblockt
-      (siehe [`../RUNNERS.md`](../RUNNERS.md)); greift erst, wenn Commits `main` erreichen (dev→main).
+      gegen **`main`**, Entwicklung auf `dev`). Greift erst, wenn Commits `main` erreichen (dev→main).
 - [x] SemVer an die Element-Reife gekoppelt: `v0.x` (AuthorDraft/CommitteeDraft) → `v1.0`
       (ApprovedForProductionUse); siehe `docs/github-workflow.md` §4.
 - [x] Konvention dokumentiert: RCs/konkrete Versionen über einen **`Release-As:`-COMMIT-FOOTER** auf
